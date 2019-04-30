@@ -1,0 +1,327 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<head>
+
+    <link rel="stylesheet" href="#{request.contextPath}/includes/dijit/themes/claro/claro.css"/>
+
+    <script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+<script type="text/javascript">
+
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/StackedAreas", "dojox/charting/SimpleTheme", "dojo/ready"],
+            function(Chart, Default, StackedAreas, SimpleTheme, ready ){
+                ready(function(){
+                    var myTheme = new SimpleTheme({
+                        markers: {
+                            CIRCLE:               "m-3,0 c0,-4 6,-4 6,0 m-6,0 c0,4 6,4 6,0",
+                            SQUARE:               "m-3,-3 l0,6 6,0 0,-6 z",
+                            DIAMOND:      "m0,-3 l3,3 -3,3 -3,-3 z",
+                            CROSS:                "m0,-3 l0,6 m-3,-3 l6,0",
+                            X:            "m-3,-3 l6,6 m0,-6 l-6,6",
+                            TRIANGLE:     "m-3,3 l3,-6 3,6 z",
+                            TRIANGLE_INVERTED:"m-3,-3 l3,6 3,-6 z"
+                        },
+                        colors: [
+                            "#ff6600",
+                            "#fe9900",
+                            "#f06eaa",
+                            "#999800",
+                            "#0272be"
+                        ],
+                        background_color: ["#000000"]
+                    });
+
+                    var c = new Chart("chartOne")
+                    c.addPlot("default", {type: StackedAreas, tension:3, shadow: {dx: 2, dy: 2}})
+                            .addAxis("x", {fixLower: "major", fixUpper: "major"})
+                            .addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
+                            .setTheme(myTheme)
+                            .addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+                            .addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+                            .addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+                            .render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/StackedAreas", "dojox/charting/themes/Wetland", "dojo/ready"],
+            function(Chart, Default, StackedAreas, Wetland, ready){
+                ready(function(){
+                    var c = new Chart("chartOneBlue")
+                    c.addPlot("default", {type: StackedAreas, tension:3, shadow: {dx: 2, dy: 2}})
+                            .addAxis("x", {fixLower: "major", fixUpper: "major"})
+                            .addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
+                            .setTheme(Wetland)
+                            .addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+                            .addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+                            .addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+                            .render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/ClusteredColumns", "dojox/charting/themes/ThreeD", "dojo/ready"],
+            function(Chart, Default, ClusteredColumns, ThreeD, ready){
+                ready(function(){
+                    var c = new Chart("chartOneTom")
+                    c.addPlot("default", {type: ClusteredColumns, tension:3, shadow: {dx: 2, dy: 2}})
+                            .addAxis("x", {fixLower: "major", fixUpper: "major"})
+                            .addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
+                            .setTheme(ThreeD)
+                            .addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+                            .addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+                            .addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+                            .render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Lines", "dojo/ready"],
+            function(Chart, Default, Lines, ready){
+                ready(function(){
+                    var c = new Chart("simplechart", {
+                        title: "Production(Quantity)",
+                        titlePos: "top",
+                        titleGap: 25,
+                        titleFont: "normal normal normal 30pt Arial",
+                        titleFontColor: "orange"
+                    });
+                    c.addPlot("default", {type: Lines, markers:true});
+                    c.addAxis("x");
+                    c.addAxis("y", {vertical: true});
+                    c.addSeries("Series 1", [1, 2, 2, 3, 4, 5, 5, 7]);
+                    c.addSeries("Series 2", [5, 3, 5, 7, 8, 1, 2, 2]);
+                    c.render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Base", "dojo/ready"],
+            function(Chart, Default, Base, ready){
+                ready(function(){
+                    var c = new Chart("basechart");
+                    c.addPlot("default", {type: Base});
+                    c.addAxis("GDP", { type: Base, min: 0, max: 5 });
+                    c.addSeries("China", {data: {"GDP": 2, "area": 6, "population": 2000 }}, { fill: "blue" });
+                    c.addSeries("USA", {data: {"GDP": 3, "area": 20, "population": 1500 }}, { fill: "green" });
+                    c.render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Scatter", "dojox/charting/themes/Julie", "dojo/ready"],
+            function(Chart, Default, Scatter, Julie, ready){
+                ready(function(){
+                    var c = new Chart("scatter");
+                    c.addPlot("default", {type: Scatter})
+                            .addAxis("x", {fixLower: "major", fixUpper: "major"})
+                            .addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
+                            .setTheme(Julie)
+                            .addSeries("Series A", [1, 2, 0.5, 1.5, 1, 2.8, 0.4])
+                            .addSeries("Series B", [2.6, 1.8, 2, 1, 1.4, 0.7, 2])
+                            .addSeries("Series C", [6.3, 1.8, 3, 0.5, 4.4, 2.7, 2])
+                            .render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/StackedLines", "dojox/charting/themes/Julie", "dojo/ready"],
+            function(Chart, Default, StackedLines, Julie, ready){
+                ready(function(){
+                    var c = new Chart("stacked");
+                    c.addPlot("default", {type: StackedLines})
+                            .addAxis("x", {fixLower: "major", fixUpper: "major"})
+                            .addAxis("y", {vertical: true, fixLower: "major", fixUpper: "major", min: 0})
+                            .setTheme(Julie)
+                            .addSeries("Series 1", [1, 2, 3, 4, 5])
+                            .addSeries("Series 2", [1, 1, 1, 1, 1], {stroke: {color: "red"}})
+                            .render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/Pie", "dojox/charting/themes/Julie", "dojo/ready"],
+            function(Chart, Default, Pie, Julie, ready){
+                ready(function(){
+                    var c = new Chart("piepie");
+                    c.addPlot("default", { type: Pie, // our plot2d/Pie module reference as type value
+                        radius: 200,
+                        fontColor: "black",
+                        labelOffset: -20})
+                            .addSeries("Series A", [
+                                {y: 4, color: "red"},
+                                {y: 2, color: "green"},
+                                {y: 1, color: "blue"},
+                                {y: 1, text: "Other", color: "white", fontColor: "red"}])
+                            .render();
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/ClusteredColumns", "dojox/charting/themes/SitePenFTW", "dojo/ready", "dojox/charting/action2d/Tooltip"],
+            function(Chart, Default, Columns, chartTheme, ready, Tooltip){
+                ready(function(){
+                    var c = new Chart("tooltip1");
+                    c.setTheme(chartTheme)
+                    c.addPlot("default", {type: Columns, gap:5});
+                    c.addAxis("x");
+                    c.addAxis("y", {
+                        vertical: true,
+                        includeZero: true,
+                        min: 0,
+                        majorTick: {length:3},
+                        minorTicks: false,
+                        minorLabels: true,
+                        microTicks: false
+                    });
+
+//                    c.addSeries("Series A", [{y:5, tooltip:"5"},{y:6, tooltip:"6"},{y:7, tooltip:"7"},{y:8, tooltip:"8"},{y:9, tooltip:"9"}]);
+//                    c.addSeries("Series B", [{y:5, tooltip:"5"},{y:6, tooltip:"6"},{y:7, tooltip:"7"},{y:8, tooltip:"8"},{y:9, tooltip:"9"}]);
+//                    c.addSeries("Series C", [{y:5, tooltip:"5"},{y:6, tooltip:"6"},{y:7, tooltip:"7"},{y:8, tooltip:"8"},{y:9, tooltip:"9"}]);
+
+                    c.addSeries("Series A", [5,6,7,8]);
+                    c.addSeries("Series A", [5,6,7,8]);
+                    c.addSeries("Series A", [5,6,7,8]);
+
+                    new Tooltip(c, "default");
+                    c.render()
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/plot2d/Pie", "dojox/charting/themes/ThreeD",
+        "dojox/charting/action2d/Highlight", "dojox/charting/action2d/MoveSlice", "dojox/charting/action2d/Tooltip", "dojox/charting/widget/Legend",
+        "dojo/ready", "dojox/charting/action2d/Magnify"],
+            function(Chart, chartType, chartTheme, Highlight, MoveSlice, Tooltip, Legend, ready, Magnify){
+                ready(function(){
+                    var c = new Chart("chartTwo");
+                    c.setTheme(chartTheme);
+                    c.addPlot("default", {
+                        type: chartType,
+                        font: "normal normal 11pt Tahoma",
+                        fontColor: "black",
+                        labelOffset: -30,
+                        radius: 80
+                    }).addSeries("Series A", [
+                                {y: 4, text: "Data1",   stroke: "black", tooltip: "Red is 50%"},
+                                {y: 2, text: "Data2", stroke: "black", tooltip: "Green is 25%"},
+                                {y: 1, text: "Data3",  stroke: "black", tooltip: "I am feeling Blue!"},
+                                {y: 1, text: "Other", stroke: "black", tooltip: "Mighty strong With two lines!"}
+                            ]);
+                    var anim_a = new MoveSlice(c, "default");
+                    var anim_b = new Highlight(c, "default");
+                    var anim_c = new Tooltip(c, "default");
+                    var anim_d = new Magnify(c, "default");
+                    c.render();
+                    var legendTwo = new Legend({chart: c}, "legendTwo");
+                });
+            });
+
+    require(["dojox/charting/Chart", "dojox/charting/plot2d/Pie", "dojox/charting/themes/Wetland",
+        "dojox/charting/action2d/Highlight", "dojox/charting/action2d/MoveSlice", "dojox/charting/action2d/Tooltip", "dojox/charting/widget/Legend",
+        "dojo/ready"],
+            function(Chart, chartType, chartTheme, Highlight, MoveSlice, Tooltip, Legend, ready){
+                ready(function(){
+                    var c = new Chart("chartThree");
+                    c.setTheme(chartTheme);
+                    c.addPlot("default", {
+                        type: chartType,
+                        font: "normal normal 11pt Tahoma",
+                        fontColor: "black",
+                        labelOffset: -30,
+                        radius: 80,
+                        pageStyle: {
+                            backgroundColor: "#000",
+                            color: "#fff"
+                        }
+                    }).addSeries("Series A", [
+                                {y: 4, text: "Data1",   stroke: "black", tooltip: "Red is 50%"},
+                                {y: 2, text: "Data2", stroke: "black", tooltip: "Green is 25%"},
+                                {y: 1, text: "Data3",  stroke: "black", tooltip: "I am feeling Blue!"},
+                                {y: 1, text: "Other", stroke: "black", tooltip: "Mighty strong With two lines!"}
+                            ]);
+                    var anim_a = new MoveSlice(c, "default");
+                    var anim_b = new Highlight(c, "default");
+                    var anim_c = new Tooltip(c, "default");
+                    c.render();
+                    var ll = new Legend({chart: c}, "legendThree");
+                });
+            });
+
+    require([
+        // Require the basic chart class
+        "dojox/charting/Chart",
+
+        // Require the theme of our choosing
+        "dojox/charting/themes/MiamiNice",
+
+        //  We want to plot Columns
+        "dojox/charting/plot2d/Columns",
+
+        // Require the highlighter
+        "dojox/charting/action2d/Highlight",
+
+        //  We want to use Markers
+        "dojox/charting/plot2d/Markers",
+
+        //  We'll use default x/y axes
+        "dojox/charting/axis2d/Default",
+
+        // Wait until the DOM is ready
+        "dojo/domReady!"
+    ], function(Chart, theme, ColumnsPlot, Highlight) {
+
+        // Define the data
+        var chartData = [10000,9200,11811,12000,7662,13887,14200,12222,12000,10009,11288,12099];
+
+        // Create the chart within it's "holding" node
+        var chart = new Chart("chartNode");
+
+        // Set the theme
+        chart.setTheme(theme);
+
+        // Add the only/default plot
+        chart.addPlot("default", {
+            type: ColumnsPlot,
+            markers: true,
+            gap: 5
+        });
+
+        // Add axes
+        chart.addAxis("x");
+        chart.addAxis("y", { vertical: true, fixLower: "major", fixUpper: "major" });
+
+        // Add the series of data
+        chart.addSeries("Monthly Sales",chartData);
+
+        // Highlight!
+        new Highlight(chart,"default");
+
+        // Render the chart!
+        chart.render();
+    });
+
+</script>
+
+
+</head>
+<body class="claro">
+
+<!--<div id="chartOne" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+<!--<div id="chartOneBlue" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+<!--<div id="chartOneTom" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+
+<!--<div id="simplechart" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+<!--<div id="basechart" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+<!--<div id="scatter" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+<!--<div id="stacked" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>-->
+<!--<div id="piepie"></div>-->
+
+<div id="tooltip1" style="width: 400px; height: 240px; margin: 10px auto 0px auto;"></div>
+
+<!--<div id="chartTwo" style="width: 300px; height: 300px;"></div>-->
+<!--<div id="legendTwo"></div>-->
+<div id="chartThree" style="width: 300px; height: 300px;"></div>
+<div id="legendThree"></div>
+
+<div id="chartNode" style="width:800px;height:400px;"></div>
+
+</body>
+</html>

@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="popupTitle">Fail List</ui:define>
+    <ui:param name="modalId" value="productPlanFailList"/>
+    <ui:param name="width" value="1000"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup id="productPlanFailListPanel">
+            <div style="height: 450px;width: 970px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                <rich:dataTable id="dataList3" style="width: 100%" styleClass="tableline01" headerClass="subh01" 
+                                value="#{productPlanImportController.productPlanFail}" rows="10" var="pfLog">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column><h:outputText value="Plan No"/></rich:column>
+                            <rich:column><h:outputText value="Plan Code"/></rich:column>
+                            <rich:column><h:outputText value="Plan Name"/></rich:column>
+                            <rich:column><h:outputText value="Sum Insured"/></rich:column>
+                            <rich:column><h:outputText value="Payment Mode"/></rich:column>
+                            <rich:column><h:outputText value="Master Plan"/></rich:column>
+                            <rich:column><h:outputText value="Reason"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText rendered="#{pfLog.no ne null}" value="#{pfLog.no}"/>
+                        <h:outputText rendered="#{pfLog.no eq null}" value="#{pfLog.planNo}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pfLog.code}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pfLog.name}" />
+                    </rich:column>
+                    <rich:column style="text-align: center" >
+                        <h:outputText rendered="#{pfLog.sumInsured ne null}" value="#{pfLog.sumInsured}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pfLog.sumInsured eq null}" value="#{pfLog.sumInsuredTemp}" />
+                    </rich:column>
+                    <rich:column style="text-align: center">
+                        <h:outputText value="#{pfLog.paymentMode}"/>
+                    </rich:column>
+                    <rich:column style="text-align: center" >
+                        <h:outputText rendered="#{pfLog.masterPlan ne null and pfLog.masterPlan}" value="True"/>
+                        <h:outputText rendered="#{pfLog.masterPlan ne null and (not pfLog.masterPlan)}" value="False"/>
+                        <h:outputText rendered="#{pfLog.masterPlan eq null}" value="#{pfLog.masterPlanTemp}"/>
+                    </rich:column>
+                    <rich:column style="text-align: center" >
+                        <h:outputText value="#{pfLog.reason}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                    </f:facet>
+                </rich:dataTable>
+                <rich:dataTable id="dataList4" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{productPlanImportController.productPlanDetailFail}" rows="10" var="pdfLog">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column><h:outputText value="Plan No"/></rich:column>
+                            <rich:column><h:outputText value="From Value"/></rich:column>
+                            <rich:column><h:outputText value="To Value"/></rich:column>
+                            <rich:column><h:outputText value="Gender"/></rich:column>
+                            <rich:column><h:outputText value="Price"/></rich:column>
+                            <rich:column><h:outputText value="Stamp Duty"/></rich:column>
+                            <rich:column><h:outputText value="Vat"/></rich:column>
+                            <rich:column><h:outputText value="Net Premium"/></rich:column>
+                            <rich:column><h:outputText value="Annual Net Premium"/></rich:column>
+                            <rich:column><h:outputText value="Annual Price"/></rich:column>
+                            <rich:column><h:outputText value="Reason"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.planNo ne null}" value="#{pdfLog.planNo}"/>
+                        <h:outputText rendered="#{pdfLog.planNo eq null}" value="#{pdfLog.planNoTemp}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.fromVal ne null}" value="#{pdfLog.fromVal}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.fromVal eq null}" value="#{pdfLog.fromValTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.toVal ne null}" value="#{pdfLog.toVal}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.toVal eq null}" value="#{pdfLog.toValTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdfLog.gender}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.price ne null}" value="#{pdfLog.price}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.price eq null}" value="#{pdfLog.priceTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.stampDuty ne null}" value="#{pdfLog.stampDuty}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.stampDuty eq null}" value="#{pdfLog.stampDutyTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.vat ne null}" value="#{pdfLog.vat}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.vat eq null}" value="#{pdfLog.vatTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.netPremium ne null}" value="#{pdfLog.netPremium}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.netPremium eq null}" value="#{pdfLog.netPremiumTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.annualNetPremium ne null}" value="#{pdfLog.annualNetPremium}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.annualNetPremium eq null}" value="#{pdfLog.annualNetPremiumTemp}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText rendered="#{pdfLog.annualPrice ne null}" value="#{pdfLog.annualPrice}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText rendered="#{pdfLog.annualPrice eq null}" value="#{pdfLog.annualPriceTemp}" />
+                    </rich:column>
+                    <rich:column style="text-align: center" >
+                        <h:outputText value="#{pdfLog.reason}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                    </f:facet>
+                </rich:dataTable>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

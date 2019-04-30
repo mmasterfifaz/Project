@@ -1,0 +1,108 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich">
+
+<style>
+    .colStyle1 { width: 30%;
+                 text-align: right; }
+    .colStyle2 { width: 70%;}
+    .colStyle3 { width: 50%;}
+    .colPrice1 { text-align: right;
+                 font-weight: bold}
+    .colPrice2 { text-align: right; }
+    
+    .capitalized {
+    text-transform: capitalize;
+    }
+</style>
+
+<!-- BEGIN : jquery calendar -->
+<!--   <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" /> -->
+<script src="#{request.contextPath}/jquery/calendar2/jquery-1.9.1.js"></script>
+<script src="#{request.contextPath}/jquery/calendar2/jquery-ui-1.10.3.custom.js"></script>
+<script src="#{request.contextPath}/jquery/calendar2/calendar.js"></script>
+<link rel="stylesheet" href="#{request.contextPath}/jquery/calendar2/jquery-ui-1.10.3.custom.css" />
+<link rel="stylesheet" href="#{request.contextPath}/jquery/calendar2/SpecialDateSheet.css" />
+
+<script>
+    $.datepicker.regional['th'] = {
+        //changeMonth: true,
+        //changeYear: true,
+        yearOffSet: 543,
+        //showOn: "button",
+        buttonImage: '#{request.contextPath}/jquery/calendar2/calendar.gif',
+        //buttonImageOnly: true,
+        //dateFormat: 'dd M yy',
+        //dayNames: ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'],
+        //dayNamesMin: ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'],
+        //monthNames: ['มกราคม', 'กุมภาพันธ์', 'มีนาคม', 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'],
+        //monthNamesShort: ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'],
+        //constrainInput: true,
+
+        //prevText: 'ก่อนหน้า',
+        //nextText: 'ถัดไป',
+        yearRange: '-80:+80',
+        //buttonText: 'เลือก'
+    };
+    $.datepicker.setDefaults($.datepicker.regional['th']);
+
+    $(function() {
+        $( "#datepicker" ).datepicker( $.datepicker.regional["th"] ); // Set ภาษาที่เรานิยามไว้ด้านบน
+        //$( "#datepicker" ).datepicker("setDate", new Date()); //Set ค่าวันปัจจุบัน
+    });
+
+</script>
+<!-- END : jquery calendar -->
+
+<h:inputHidden id="pageFrom" value="#{registrationPoController.pageFrom}"></h:inputHidden>
+<a4j:queue name="regQueue" ignoreDupResponses="true"/>
+
+<h:panelGroup rendered="#{registrationPoController.product.registrationForm.qcQaForm ne null or registrationPoController.purchaseOrder.qaTransQc ne null}">
+<table width="1200" border="0" cellpadding="4" cellspacing="0">
+    <tr>
+        <td bgcolor="#DBDD84" class="line01">
+            <a name="a2" id="a2"/><div id="hproduct2"><h4 class="style3">Sale Approval</h4></div>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left:10%">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="100%" rowspan="2" valign="top">
+                        <h:panelGroup id="qcQaForm">
+                            <ui:include src="../../templates/qcqaform.xhtml" />
+                        </h:panelGroup>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <h:panelGroup id="panelSave">
+                <a4j:commandButton id="cmdSave"
+                                   image="/img/b_save.png" 
+                                   action="#{registrationPoController.saveQcQaTransAction}"
+                                   actionListener="#{qaFormController.saveQcQaTrans}"
+                                   onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})"
+                                   rendered="#{registrationPoController.product.registrationForm.qcQaForm ne null and not registrationPoController.showSaveRemark}"
+                                   oncomplete="#{rich:component('waitPopup')}.hide();" render="panelSave, msgSaveRemark" >
+                </a4j:commandButton><br/>
+                <h:outputText id="msgSaveRemark" value="#{registrationPoController.msgSaveRemark}" style="color: blue" rendered="#{registrationPoController.showSaveRemark}" />
+            </h:panelGroup>
+        </td>
+    </tr>
+    <tr>
+        <td align="center">
+            <h:outputText id="msgSaveRemark2" value="#{registrationPoController.msgSaveRemark}" style="color: blue" rendered="#{registrationPoController.showSaveRemark}" />
+        </td>
+    </tr>
+</table>
+</h:panelGroup>
+
+</ui:composition>

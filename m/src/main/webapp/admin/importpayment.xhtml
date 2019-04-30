@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Sales Management</ui:define>
+            <ui:define name="title2">Settlement: Import Payment</ui:define>
+            <ui:define name="head">
+            </ui:define>
+            <ui:define name="panel">
+                    <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td class="gray03">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Filename:</td>
+                            <td align="left">
+                                <rich:fileUpload id="fileUpload" fileUploadListener="#{importPaymentController.uploadListener}"
+                                                 ontyperejected="alert('Only xlsx and xls files are accepted');" 
+                                                 acceptedTypes="xlsx,xls" 
+                                                 maxFilesQuantity="1" immediateUpload="true"
+                                                 listHeight="63px">
+                                    <a4j:ajax event="clear" render="fileUpload" limitRender="true" execute="@this"/>
+                                </rich:fileUpload><h:outputText id="message" value="#{importPaymentController.message}" style="color:red"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;</td>
+                            <td><a4j:commandButton image="/img/b_proceed.png" >
+                                    <a4j:ajax event="click" limitRender="true" render="fileUpload, message, dataList" execute="@this"
+                                              listener="#{importPaymentController.saveAction()}" status="actionStatus"/>
+                                </a4j:commandButton>
+                            </td>
+                        </tr>
+                        <tr><td colspan="2">
+                            <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{importPaymentController.settlementList}" rows="#{global.maxrows}" var="dataList">
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Date"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Total Record"/></rich:column>
+                                    <rich:column style="width: 60%;text-align: left;"><h:outputText value="Complete Record"/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <a4j:commandLink title="View Detail" 
+                                                 actionListener="#{importPaymentController.settlementDetailListener}" 
+                                                 render="settlementDetail" limitRender="true"
+                                                 oncomplete="#{rich:component('settlementDetail')}.show();">
+                                    <h:outputText value="#{dataList.createDate}">
+                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                   <f:param name="settlementId" value="#{dataList.id}"/>
+                               </a4j:commandLink>
+                               
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{dataList.totalRecord}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{dataList.completeRecord}"/>
+                            </rich:column>
+                            <f:facet name="footer">
+                                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                            </f:facet>
+                        </rich:dataTable>
+                        </td></tr>
+                </table>
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />  
+
+                <rich:popupPanel id="settlementDetail" width="800" autosized="true" style="padding: 0 0 0 0; border-style: none " 
+                                domElementAttachment="parent">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Settlement Result</h2></td>
+                                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                    <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('settlementDetail')}.hide();">#{msg.close}</a></td>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="5" background="#{request.contextPath}/img/box08.png">
+                                    <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                <td valign="top" bgcolor="#FFFFFF" >
+                                   <ui:insert name="popupDetail">
+                                    <table border="0" cellpadding="3" cellspacing="1" width="100%">
+                                        <tr>
+                                            <td valign="top">
+                                                <rich:dataTable id="settlementDetailList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                value="#{importPaymentController.settlementDetailList}" rows="#{global.maxrows}" var="detailList">
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column style="width: 25%;text-align: left;"><h:outputText value="Ref No.1"/></rich:column>
+                                                        <rich:column style="width: 30%;text-align: left;"><h:outputText value="Ref No.2"/></rich:column>
+                                                        <rich:column style="width: 20%;text-align: left;"><h:outputText value="Transaction Date"/></rich:column>
+                                                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="Amount"/></rich:column>
+                                                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Result"/></rich:column>
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:column>
+                                                    <h:outputText value="#{detailList.saleRefNo}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{detailList.customerRefNo}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{detailList.transDate}">
+                                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{detailList.amount}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{detailList.result}"/>
+                                                </rich:column>
+                                                <f:facet name="footer">
+                                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                                </f:facet>
+                                            </rich:dataTable>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top" align="center"><a4j:commandButton image="../img/b_close.png" immediate="true" oncomplete="#{rich:component('settlementDetail')}.hide();"/></td>
+                                        </tr>
+                                    </table>
+                                </ui:insert>
+                                </td>
+                                <td width="4" class="bg_right"></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                            </tr>
+                        </table>
+                </rich:popupPanel>
+             </ui:define>    
+        </ui:composition>
+    </h:body>
+</html>

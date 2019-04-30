@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="KnowledgebaseStructure" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="669773d0-0971-44d6-b636-8e4bdb4bf2ca">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<queryString>
+		<![CDATA[select kb1.topic as topic1, kb2.topic as topic2, kb3.topic as topic3, kb4.topic as topic4, kb5.topic as topic5 from knowledgebase kb1
+left join knowledgebase kb2 on kb1.id = kb2.ref_id
+left join knowledgebase kb3 on kb2.id = kb3.ref_id
+left join knowledgebase kb4 on kb3.id = kb4.ref_id
+left join knowledgebase kb5 on kb4.id = kb5.ref_id
+where kb1.ref_id is null and kb1.enable = 1
+order by kb1.topic, kb2.topic, kb3.topic, kb4.topic, kb5.topic]]>
+	</queryString>
+	<field name="topic1" class="java.lang.String"/>
+	<field name="topic2" class="java.lang.String"/>
+	<field name="topic3" class="java.lang.String"/>
+	<field name="topic4" class="java.lang.String"/>
+	<field name="topic5" class="java.lang.String"/>
+	<variable name="level1" class="java.lang.Integer" incrementType="Group" incrementGroup="topic_level1" calculation="Count">
+		<variableExpression><![CDATA[$V{level1}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="level2" class="java.lang.Integer" resetType="Group" resetGroup="topic_level1" incrementType="Group" incrementGroup="topic_level2" calculation="Count">
+		<variableExpression><![CDATA[$V{level2}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="level3" class="java.lang.Integer" resetType="Group" resetGroup="topic_level2" incrementType="Group" incrementGroup="topic_level3" calculation="Count">
+		<variableExpression><![CDATA[$V{level3}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="level4" class="java.lang.Integer" resetType="Group" resetGroup="topic_level3" incrementType="Group" incrementGroup="topic_level4" calculation="Count">
+		<variableExpression><![CDATA[$V{level4}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="level5" class="java.lang.Integer" resetType="Group" resetGroup="topic_level4" incrementType="Group" incrementGroup="topic_level5" calculation="Count">
+		<variableExpression><![CDATA[$V{level5}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<group name="topic_level1">
+		<groupExpression><![CDATA[$F{topic1}]]></groupExpression>
+		<groupHeader>
+			<band height="20">
+				<textField evaluationTime="Group" evaluationGroup="topic_level1">
+					<reportElement uuid="67cc02d6-600c-48f0-9d3f-7642e1e62171" x="0" y="0" width="230" height="20"/>
+					<textElement>
+						<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{level1}+". "+$F{topic1}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="topic_level2">
+		<groupExpression><![CDATA[$F{topic2}]]></groupExpression>
+		<groupHeader>
+			<band height="22">
+				<textField evaluationTime="Group" evaluationGroup="topic_level2" isBlankWhenNull="true">
+					<reportElement uuid="4f67ba61-6839-4c9a-903c-092df1eb321e" x="20" y="0" width="215" height="20" isRemoveLineWhenBlank="true">
+						<printWhenExpression><![CDATA[$F{topic2} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{level1}+"."+$V{level2}+". "+$F{topic2}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="topic_level3">
+		<groupExpression><![CDATA[$F{topic3}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField evaluationTime="Group" evaluationGroup="topic_level3" isBlankWhenNull="true">
+					<reportElement uuid="0a5323bb-fa25-41c7-8a5c-a90e30d1e687" x="50" y="0" width="276" height="20" isRemoveLineWhenBlank="true">
+						<printWhenExpression><![CDATA[$F{topic3} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{level1}+"."+$V{level2}+"."+$V{level3}+". "+$F{topic3}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="topic_level4">
+		<groupExpression><![CDATA[$F{topic4}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField evaluationTime="Group" evaluationGroup="topic_level4" isBlankWhenNull="true">
+					<reportElement uuid="afd8e279-d2e2-4ec8-95f8-32d86ef74b23" x="78" y="0" width="358" height="20" isRemoveLineWhenBlank="true">
+						<printWhenExpression><![CDATA[$F{topic4} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{level1}+"."+$V{level2}+"."+$V{level3}+"."+$V{level4}+". "+$F{topic4}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<group name="topic_level5">
+		<groupExpression><![CDATA[$F{topic5}]]></groupExpression>
+		<groupHeader>
+			<band height="21">
+				<textField evaluationTime="Group" evaluationGroup="topic_level5" isBlankWhenNull="true">
+					<reportElement uuid="7f1de68d-e971-41b2-bbc1-f8ce4558d575" x="117" y="0" width="375" height="20" isRemoveLineWhenBlank="true">
+						<printWhenExpression><![CDATA[$F{topic5} != null]]></printWhenExpression>
+					</reportElement>
+					<textElement>
+						<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$V{level1}+"."+$V{level2}+"."+$V{level3}+"."+$V{level4}+"."+$V{level5}+". "+$F{topic5}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="97" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Right" isUsingCache="false">
+				<reportElement uuid="79043b79-c920-42c7-9876-52abc237defc" x="438" y="0" width="117" height="37"/>
+				<imageExpression><![CDATA["maxarlogo.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="42ce44da-0e85-4542-b6d0-b2edfd8916c2" x="0" y="0" width="366" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="24" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Knowledge Base Structure]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="516056c5-4712-4656-b7a3-fe1c36e58ddc" x="0" y="37" width="555" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement uuid="959fb55b-736a-48b6-b5ad-ac7cafe618be" x="0" y="41" width="555" height="50" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<line>
+				<reportElement uuid="dd4c6638-7be2-4374-ab2f-39eb09d3730e" x="0" y="94" width="555" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="7e1197b0-7de6-419b-b9c6-b4d41278b767" x="0" y="2" width="230" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Topic]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3843c4de-b54a-47a7-a9a3-4dae8cffd686" x="0" y="0" width="180" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed Date "+ (new SimpleDateFormat("dd MMM yyyy HH:mm")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="30ddda9b-9b38-4a47-a1d6-cea987a8efde" x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+ String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="5" splitType="Stretch">
+			<elementGroup/>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="8eb3d325-6d2c-48e5-a389-2c124c62078b" x="0" y="0" width="555" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="20" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

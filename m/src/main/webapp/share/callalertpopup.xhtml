@@ -1,0 +1,124 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+<rich:popupPanel id='callAlertPopup' width="615" height="497" style="border-style: none" onbeforeshow="callAlertSetData();">
+    <h:form id="callAlertPopupForm">
+        <h:inputHidden id="callAlertTelephoneNo" value="#{callAlertPopupController.telephoneNo}"/>
+        <h:inputHidden id="manualCall" value="#{callAlertPopupController.manualCall}"/>
+        <h:inputHidden id="serviceName" value="#{callAlertPopupController.serviceName}"/>
+        <h:inputHidden id="dnis" value="#{callAlertPopupController.dnis}"/>
+        <h:inputHidden id="callCount" value="#{callAlertPopupController.callCount}"/>
+        <h:inputHidden id="uniqueId" value="#{callAlertPopupController.uniqueId}"/>
+        <h:inputHidden id="callCategory" value="#{callAlertPopupController.callCategory}"/>
+        <h:inputHidden id="callParam1" value="#{callAlertPopupController.callParam1}"/>
+        <h:inputHidden id="param1" value="#{userSession.param1}"/>
+        <a4j:commandButton id="callAlertRefreshButton" render="customerData" limitRender="true" 
+                           action="#{callAlertPopupController.refreshAction}" style="visibility: hidden;"/>
+
+        <table width="605" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="605" height="397" align="center" valign="top" 
+                    background="#{request.contextPath}/img/call_alert_bg.png">
+                    <br/>
+                    <table width="98%" border="0" cellpadding="3" cellspacing="0" id="hbox01">
+                        <tr>
+                            <td align="left" valign="middle" ></td>
+                            <td width="60" valign="middle" align="right"></td>
+                        </tr>
+                    </table>
+                    <h:panelGroup id="customerData">
+                        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+                            <tr height="100" ><td colspan="3"></td></tr>
+                            <tr>
+                                <td width="10" ></td>
+                                <td align="center" valign="top">
+                                    <table width="80%" border="0" cellspacing="1" cellpadding="3">
+                                        <tr>
+                                            <td align="left" valign="top" colspan="2" >
+                                                <br/><h2><h:outputText style="color: #FF4D25" value="#{callAlertPopupController.customerName}"/></h2><br/></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top" style="color: #ffffff" width="150">Phone Number : </td>
+                                            <td align="left" valign="top">
+                                                <h2><h:outputText style="color: #ffffff" value="#{callAlertPopupController.telephoneNo}"/></h2></td>
+                                        </tr>
+                                         <tr>
+                                            <td align="right" valign="top" style="color: #ffffff">Service : </td>
+                                            <td align="left" valign="top">
+                                                <h2><h:outputText style="color: #ffffff" value="#{callAlertPopupController.serviceName}"/></h2>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top" style="color: #ffffff">Type :</td>
+                                            <td align="left"><h2><h:outputText style="color: #ffffff" value="#{callAlertPopupController.customerType}"/></h2></td>
+                                        </tr>
+                                        <tr>
+                                        <td align="center" valign="top" colspan="2">
+                                        <p>
+                                             <!-- BEGIN AUTO ANSWER -->
+                                             <h:panelGroup id="autoAnswer" rendered="#{callAlertPopupController.manualCall eq 'false'}" >
+                                                <h:commandButton id="callAlertButton" image="/img/ok_button.png" 
+                                                                action="#{callAlertPopupController.unqinueCustomerAction}"
+                                                                rendered="#{callAlertPopupController.foundUniqueCustomer}">
+                                                       <f:setPropertyActionListener target="#{customerHandlingDetailController.customerId}" 
+                                                                                    value="#{callAlertPopupController.customerId}" />
+                                                       <f:param name="selectId" value ="#{callAlertPopupController.customerId}"/>                                             
+                                                </h:commandButton>
+                                                <a4j:commandButton id="callAlertButtonMultiple" image="/img/ok_button.png"
+                                                                  action="#{callAlertPopupController.mulipleCustomerAction}"
+                                                                  actionListener="#{searchCustomerController.telephoneListener}"
+                                                                  rendered="#{not callAlertPopupController.foundUniqueCustomer}">
+                                                    <f:param name="telephoneno" value="#{callAlertPopupController.telephoneNo}"/>
+                                                </a4j:commandButton>     
+                                             </h:panelGroup>
+                                             <!-- END AUTO ANSWER -->
+
+                                             <!-- BEGIN MANUAL ANSWER -->
+                                             <h:panelGroup id="manualAnswer" rendered="#{callAlertPopupController.manualCall eq 'true'}" >
+                                             <table width="98%" border="0" cellspacing="2" cellpadding="2">
+                                                <tr>
+                                                    <td align="right" valign="top" > 
+                                                        <h:commandButton id="callAlertAnswerButton" image="/img/answer_button.png" 
+                                                                        action="#{callAlertPopupController.unqinueCustomerAction}"
+                                                                        rendered="#{callAlertPopupController.foundUniqueCustomer}">
+                                                               <f:setPropertyActionListener target="#{customerHandlingDetailController.customerId}" 
+                                                                                            value="#{callAlertPopupController.customerId}" />
+                                                               <f:param name="selectId" value ="#{callAlertPopupController.customerId}"/>                                             
+                                                        </h:commandButton>
+                                                        <a4j:commandButton id="callAlertAnswerButtonMultiple" image="/img/answer_button.png"
+                                                                          action="#{callAlertPopupController.mulipleCustomerAction}"
+                                                                          actionListener="#{searchCustomerController.telephoneListener}"
+                                                                          rendered="#{not callAlertPopupController.foundUniqueCustomer}">
+                                                            <f:param name="telephoneno" value="#{callAlertPopupController.telephoneNo}"/>
+                                                        </a4j:commandButton>
+                                                    </td>
+                                                    <td align="center">                                            
+                                                        <a4j:commandButton id="rejectAnswerButton" image="/img/reject_button.png" 
+                                                                           actionListener="#{callAlertPopupController.rejectAnswerCall}"
+                                                                           onclick="rejectCall();" />
+                                                    </td>
+                                                </tr>
+                                             </table>     
+                                             </h:panelGroup>
+                                             <!-- END MANUAL ANSWER -->
+
+                                        </p>
+                                        </td>
+                                        </tr>
+                                </table>
+                                </td>
+                                <td width="250"></td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</rich:popupPanel>
+</ui:composition>

@@ -1,0 +1,729 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Agent Performance by Sale Status" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="830" leftMargin="6" rightMargin="6" topMargin="6" bottomMargin="6">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="to" class="java.util.Date"/>
+	<parameter name="user_group_id" class="java.lang.Integer"/>
+	<parameter name="user_group_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_id" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Oat\\Documents\\NetBeansProjects\\MaxarCRM\\web\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="markeing_id" class="java.lang.Integer"/>
+	<parameter name="marketing_name" class="java.lang.String"/>
+	<parameter name="campaign_id" class="java.lang.Integer"/>
+	<parameter name="campaign_name" class="java.lang.String"/>
+	<parameter name="product_id" class="java.lang.Integer"/>
+	<parameter name="product_name" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select
+ad.user_id as id
+,(u.name+' '+u.surname) as fullname
+,CASE WHEN  u.status = 1 THEN 'Active' ELSE 'Resigned'  END as userstatus
+,sum(CASE WHEN  ad.new_list=1 THEN 1 ELSE 0  END) AS  ass_new
+,sum(CASE WHEN  ad.new_list<>1 THEN 1 ELSE 0  END) AS  ass_old
+,sum(CASE WHEN  ad.status not in ('assigned','viewed') THEN 1 ELSE 0  END) AS  ass_used
+,isnull((select count(ss.wd) as wd2 from (select ut.user_id,CONVERT(date,ut.timestamp) as wd from [maxar2].[dbo].users_time_attendance ut  where  ut.type = 'login' group by ut.user_id,CONVERT(date,ut.timestamp)) ss where ss.user_id = ad.user_id group by ss.user_id),0)  AS workingday
+
+, sum(po.total_amount) AS  total_app
+, sum(isnull(po.total_amount,0)) AS  total_tarp
+
+, sum(CASE WHEN  po.approval_status = 'approved' and po.qc_status = 'approved' and po.payment_status = 'approved' THEN 1 ELSE 0  END) AS  succ_app
+, sum(CASE WHEN  po.approval_status = 'approved' and po.qc_status = 'approved' and po.payment_status = 'approved' THEN isnull(po.total_amount,0) ELSE 0  END) AS  succ_tarp
+
+, sum(CASE WHEN po.approval_status in ('waiting' , 'pending') and po.payment_status not in ('waiting' , 'pending') and po.qc_status not in ('waiting' , 'pending') THEN 1 ELSE 0  END) AS  pending_uw_app
+, sum(CASE WHEN po.approval_status in ('waiting' , 'pending') and po.payment_status not in ('waiting' , 'pending') and po.qc_status not in ('waiting' , 'pending') THEN isnull(po.total_amount,0) ELSE 0  END) AS  pending_uw_tarp
+
+, sum(CASE WHEN po.payment_status in ('waiting' , 'pending')  and po.qc_status not in ('waiting' , 'pending') THEN 1 ELSE 0  END) AS  pending_pm_app
+, sum(CASE WHEN po.payment_status in ('waiting' , 'pending')  and po.qc_status not in ('waiting' , 'pending') THEN isnull(po.total_amount,0) ELSE 0  END) AS  pending_pm_tarp
+
+, sum(CASE WHEN po.qc_status in ('waiting' , 'pending')   THEN 1 ELSE 0  END) AS  pending_qa_app
+, sum(CASE WHEN po.qc_status in ('waiting' , 'pending')   THEN isnull(po.total_amount,0) ELSE 0  END) AS  pending_qa_tarp
+
+, sum(CASE WHEN po.approval_status ='rejected'   THEN 1 ELSE 0  END) AS  reject_uw_app
+, sum(CASE WHEN po.approval_status ='rejected'   THEN isnull(po.total_amount,0) ELSE 0  END) AS  reject_uw_tarp
+
+, sum(CASE WHEN po.payment_status ='rejected'   THEN 1 ELSE 0  END) AS  reject_pm_app
+, sum(CASE WHEN po.payment_status ='rejected'   THEN isnull(po.total_amount,0) ELSE 0  END) AS  reject_pm_tarp
+
+, sum(CASE WHEN po.qc_status ='rejected' THEN 1 ELSE 0  END) AS  reject_qa_app
+, sum(CASE WHEN po.qc_status ='rejected' THEN isnull(po.total_amount,0) ELSE 0  END) AS  reject_qa_tarp
+
+from assignment_detail ad
+inner join users u on u.id = ad.user_id
+inner join purchase_order po on po.assignment_detail_id = ad.id
+
+where   po.sale_result = 'Y'
+
+
+ group by ad.user_id,u.name,u.surname,u.status
+order by  ad.user_id asc]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="fullname" class="java.lang.String"/>
+	<field name="userstatus" class="java.lang.String"/>
+	<field name="ass_new" class="java.lang.Integer"/>
+	<field name="ass_old" class="java.lang.Integer"/>
+	<field name="ass_used" class="java.lang.Integer"/>
+	<field name="workingday" class="java.lang.Integer"/>
+	<field name="total_app" class="java.math.BigDecimal"/>
+	<field name="total_tarp" class="java.math.BigDecimal"/>
+	<field name="succ_app" class="java.lang.Integer"/>
+	<field name="succ_tarp" class="java.math.BigDecimal"/>
+	<field name="pending_uw_app" class="java.lang.Integer"/>
+	<field name="pending_uw_tarp" class="java.math.BigDecimal"/>
+	<field name="pending_pm_app" class="java.lang.Integer"/>
+	<field name="pending_pm_tarp" class="java.math.BigDecimal"/>
+	<field name="pending_qa_app" class="java.lang.Integer"/>
+	<field name="pending_qa_tarp" class="java.math.BigDecimal"/>
+	<field name="reject_uw_app" class="java.lang.Integer"/>
+	<field name="reject_uw_tarp" class="java.math.BigDecimal"/>
+	<field name="reject_pm_app" class="java.lang.Integer"/>
+	<field name="reject_pm_tarp" class="java.math.BigDecimal"/>
+	<field name="reject_qa_app" class="java.lang.Integer"/>
+	<field name="reject_qa_tarp" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Right" isUsingCache="false">
+				<reportElement x="713" y="1" width="117" height="37"/>
+				<imageExpression><![CDATA["maxarlogo.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="290" height="37"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Browallia New" size="24" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Agent Performance by Sale Status]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="37" width="830" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="0" y="41" width="830" height="32" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="20" y="57" width="92" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Product: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="41" width="92" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Campaign: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="634" y="57" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="634" y="41" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Group: ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="76" width="830" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="349" y="41" width="73" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[From Sale Date: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="349" y="57" width="73" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[To Sale Date: ]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy" isBlankWhenNull="false">
+				<reportElement x="423" y="41" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy" isBlankWhenNull="false">
+				<reportElement x="422" y="57" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{to}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="703" y="41" width="125" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_group_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="703" y="57" width="126" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="57" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="41" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{campaign_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="52" splitType="Stretch">
+			<staticText>
+				<reportElement x="2" y="1" width="233" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Information]]></text>
+			</staticText>
+			<line>
+				<reportElement x="3" y="21" width="230" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="135" y="22" width="50" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="357" y="1" width="62" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Total (Gross Sale)]]></text>
+			</staticText>
+			<line>
+				<reportElement x="359" y="21" width="59" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="185" y="22" width="50" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Working Days]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="22" width="44" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Total Assigned]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="303" y="22" width="23" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Old]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="326" y="22" width="31" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Used]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="357" y="22" width="30" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="387" y="22" width="32" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="57" y="22" width="78" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TMR Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="2" y="22" width="55" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="279" y="22" width="24" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<line>
+				<reportElement x="237" y="21" width="119" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="235" y="1" width="122" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Assignment Record]]></text>
+			</staticText>
+			<line>
+				<reportElement x="481" y="21" width="48" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="480" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Pending-UW]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="505" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="480" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<line>
+				<reportElement x="531" y="21" width="48" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="530" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Pending-PM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="555" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="530" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<line>
+				<reportElement x="581" y="21" width="48" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="655" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="755" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<line>
+				<reportElement x="731" y="21" width="48" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="680" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="705" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="605" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="730" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<line>
+				<reportElement x="681" y="21" width="48" height="1"/>
+			</line>
+			<line>
+				<reportElement x="631" y="21" width="48" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="580" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="730" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Reject-QA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="580" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Pending-QA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="680" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Reject-PM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="630" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Reject-UW]]></text>
+			</staticText>
+			<line>
+				<reportElement x="421" y="21" width="57" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="419" y="1" width="61" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Success (Net Sale)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="450" y="22" width="30" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="419" y="22" width="31" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<line>
+				<reportElement x="781" y="21" width="48" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="805" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[TARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="780" y="22" width="25" height="29"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[APPs]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="780" y="1" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="10" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Cancelled]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<textField pattern="">
+				<reportElement isPrintRepeatedValues="false" x="2" y="1" width="55" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement isPrintRepeatedValues="false" x="57" y="1" width="78" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fullname}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="135" y="1" width="50" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{userstatus}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="185" y="1" width="50" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{workingday}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="235" y="1" width="44" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ass_new}+$F{ass_old}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="279" y="1" width="24" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ass_new}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="303" y="1" width="23" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ass_old}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="326" y="1" width="31" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ass_used}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="419" y="1" width="31" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{succ_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="450" y="1" width="30" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{succ_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="480" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_uw_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="505" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_uw_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="530" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_pm_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="555" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_pm_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="580" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_qa_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="605" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{pending_qa_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="630" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reject_uw_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="655" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reject_uw_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="680" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reject_pm_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="705" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reject_pm_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="730" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reject_qa_app}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="755" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{reject_qa_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="780" y="1" width="25" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="805" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[0.00]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="387" y="1" width="32" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_tarp}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement x="357" y="1" width="30" height="16"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_app}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="1" y="0" width="180" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed Date "+ (new SimpleDateFormat("dd MMM yyyy HH:mm")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="727" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+ String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="23"/>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="830" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="20" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

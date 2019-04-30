@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Product Source</ui:define>
+            <ui:define name="search">
+                <table width="" border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="right">Product Sponsor Name :</td>
+                        <td>
+                            <h:inputText styleClass="textfield" value="#{productSponsorController.keyword}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td>
+                            <a4j:commandButton image="/img/b_search.png" 
+                                               actionListener="#{productSponsorController.searchActionListener}" 
+                                               render="dataList"
+                                               limitRender="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="button">
+               <h:commandButton image="../img/b_add.png" action="#{productSponsorController.editAction}"  rendered="#{productSponsorController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{productSponsorController.deleteAction}" rendered="#{productSponsorController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{productSponsorController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="Product Sponsor Name" /></rich:column>
+                            <rich:column style="width: 67%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{productSponsorController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{productSponsorController.editAction}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.remark}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

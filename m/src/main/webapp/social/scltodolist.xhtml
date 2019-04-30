@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+    <h:outputStylesheet>
+
+        .even-row {
+            color: #434749;
+            background-color: #E6E6E6;
+            text-decoration: none;
+        }
+
+        .odd-row {
+            color: #434749;
+            background-color: #E6E6E6;
+            text-decoration: none;
+        }
+
+        .active-row {
+            background-color: #434749 !important;
+            cursor: pointer;
+            color: #FFFFFF;
+        }
+
+        .active-row td a, #aAcount a {
+            color: #FFFFFF;
+        }
+        
+        .columnAccount {
+            height: 40px;
+            font-size: 14px; 
+            font-weight: bold; 
+            color: #434749
+        }
+        
+        .linkAccount {
+            color: #434749
+        }
+    </h:outputStylesheet>
+    <style type="text/css">
+        <!--
+        .rich-tabhdr-side-cell {
+            border:none;
+        }
+        .rich-tab-inactive {
+            cursor: pointer;
+            background-image : url(../img/tb_01.png);
+            border:none;
+            height: 20px;
+            color: #000000;
+        }
+        .rich-tab-active {
+            background-image : url(../img/tb_02.png);
+            border:none;
+            height: 20px;
+            color: #FFFFFF;
+        }
+        .rich-tabpanel-content {
+            border-width: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+        .rich-tab-bottom-line {
+            border-color: #75b8d1;
+            border-width: 2px;
+        }
+
+        a.sj {
+            color: #000000;
+            font-size: 15px;
+            padding-top: 5px;
+            vertical-align: top;
+            text-decoration: none;
+        }
+        a.sj:hover {
+            text-decoration: underline;
+        }
+        -->
+    </style>
+    <script type="text/javascript" >
+        function onLoad() {
+            //alert('onloaddd');
+        }
+        
+        function clickTab31() {
+            var tab11 = document.getElementById('frm:tab11');
+            var tab12 = document.getElementById('frm:tab12');
+            var tab21 = document.getElementById('frm:tab21');
+            var tab22 = document.getElementById('frm:tab22');
+        }
+        
+    </script>
+    <script type="text/javascript" src="#{request.contextPath}/includes/setcontrollerproperty.js"/>
+</h:head>
+<h:body>
+    <br/>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td valign="top" style="min-width: 20px">
+        <rich:togglePanel id="toggle1" 
+                          activeItem="tab12" 
+                          switchType="client" 
+                          cycledSwitching="tab11,tab12" 
+                          style="border: 0; padding: 0; margin: 0; display: inline">
+            <rich:togglePanelItem id="tab11" name="tab11" style="float:left; width: 20px; position: relative">
+                <h:commandLink>
+                    <rich:toggleControl targetPanel="toggle1" targetItem="tab12"/>
+                    <img src="#{request.contextPath}/img/bplus.png" 
+                         name="CustomerMenuImage" alt="" border="0" 
+                         id="img11" />
+                </h:commandLink>
+            </rich:togglePanelItem>
+            <rich:togglePanelItem id="tab12" name="tab12" style="float:left; position: relative">
+                <h:commandLink style="float: right">
+                    <rich:toggleControl targetPanel="toggle1" targetItem="tab11"/> 
+                    <img src="#{request.contextPath}/img/b_subtract.png" alt=""/>
+                </h:commandLink><br/>
+                <table width="200">
+                    <tr>
+                        <td>
+                            <div class="scroll" >
+                                <table border="0" cellpadding="2" cellspacing="1">
+                                    <tr>
+                                        <td style="vertical-align: middle">Account List</td>
+                                        <td>
+                                            <h:panelGroup style="display: inline">
+                                                <a4j:repeat value="#{sclAssignmentController.soChannelList}" var="soChannel" >
+                                                    <a4j:commandButton image="/img/social/#{soChannel.pictureLarge}"
+                                                                       execute="@this" limitRender="true" render="pngAccountList, panelListSelectsMain"
+                                                                       actionListener="#{sclAssignmentController.selectedChannelActionListener}">
+                                                        <f:param name="soChannelId" value="#{soChannel.id}"/>
+                                                    </a4j:commandButton>
+                                                </a4j:repeat>
+                                            </h:panelGroup>
+                                            <script>refreshSubMenu()</script>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h:panelGroup id="pngAccountList">
+                                <rich:dataTable id="dtAccountList" value="#{sclAssignmentController.soAccountList}" var="list" 
+                                                style="border: 0; width: 100%">
+                                    <rich:column style="border: 0; height: 40px" id="cAccount1" styleClass="columnAccount">
+                                        <a4j:commandLink value="#{list.name}" styleClass="linkAccount"
+                                                         execute="@this" limitRender="true" render="panelListSelectsMain"
+                                                         actionListener="#{sclAssignmentController.selectedAccountActionListener}">
+                                            <f:param name="accountId" value="#{list.id}"/>
+                                        </a4j:commandLink>
+                                    </rich:column>
+                                    <rich:column style="border: 0; height: 40px" id="cAccount2" styleClass="columnAccount">
+                                        <a4j:commandButton id="btnAccount" image="/img/arrow_gray.png" value="#{list.name}"
+                                                         execute="@this" limitRender="true" render="panelListSelectsMain"
+                                                         actionListener="#{sclAssignmentController.selectedAccountActionListener}">
+                                            <f:param name="accountId" value="#{list.id}"/>
+                                        </a4j:commandButton>
+                                    </rich:column>
+                                </rich:dataTable>
+                                <rich:jQuery selector="#dtAccountList tr:odd" query="addClass('odd-row')" />
+                                <rich:jQuery selector="#dtAccountList tr:even" query="addClass('even-row')" />
+                                <rich:jQuery selector="#dtAccountList tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
+                                <rich:jQuery selector="#dtAccountList tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
+                                </h:panelGroup>
+                                
+                            </div>
+                            <br/>
+                            
+                        </td>
+                    </tr>
+                </table>
+                
+            </rich:togglePanelItem>
+        </rich:togglePanel>
+            </td>
+            <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="20" height="480"/></td>
+            <td valign="top" style="width: 100%">
+                
+                <table style="width: 100%">
+                    <tr>
+                        <td>                 
+                            
+                            <a4j:jsFunction name="refreshNewMail" execute="true" limitRender="true"
+                                            immediate="true" render="panelListSelectsMain" actionListener="#{sclAssignmentController.initialize}">
+                            </a4j:jsFunction>
+                                <h:inputHidden id="hSubPage" value="#{userSession.subPage}"/>
+                                <div id="alertEmail" style="display: none; height: 33px"><img src="../img/social/email_warning.png" style="border: 0"/></div>
+                            <h:panelGroup id="panelListSelectsMain">
+                                <div class="scroll" >   
+                                    <rich:dataTable id="listEmail" value="#{sclAssignmentController.soMessageAssignments}" var="list"
+                                                    style="border: 0; width: 100%; vertical-align: top" rows="10">
+                                        <rich:column style="padding-top: 10px; border-right: 0; border-bottom: 2px dotted #CCCCCC;vertical-align: text-top">
+                                            <h:panelGroup>
+                                                <h:graphicImage url="/img/social/#{list.priority_enum_id}_small.png" style="display: inline; margin-right: 8px"/>
+                                                <h:graphicImage url="/img/social/logo_#{list.source_type_enum_id}_small.png" width="14" height="14" style="display: inline; margin-right: 8px"/>
+                                                <h:outputText value="#{list.user_name} : " rendered="#{list.source_type_enum_id ne 'EM'}" style="display: inline; font-size: 14px; color: #01a0c0; font-weight: bold"/>
+                                                <h:outputText value="#{list.soEmailMessage.emailFrom} : " rendered="#{list.source_subtype_enum_id eq 'EM_IN'}" style="display: inline; font-size: 14px; color: #01a0c0; font-weight: bold"/>
+                                                <h:outputText value="#{list.soEmailMessage.emailTo} : " rendered="#{list.source_subtype_enum_id eq 'EM_OUT'}" style="display: inline; font-size: 14px; color: #01a0c0; font-weight: bold"/>
+                                                <h:panelGroup id="panelList2" rendered="#{not (list.source_subtype_enum_id eq 'EM_OUT' and (list.case_status eq 'DF' or list.case_status eq 'WF' or list.case_status eq 'IG'))}" style="display: inline">
+                                                    <h:commandButton value="#{list.id}" 
+                                                                     image="/img/bnext02.png"
+                                                                     style="padding-left: 8px; vertical-align: middle"
+                                                                     action="scldetail.jsf">
+                                                        <f:param name="soMessageId" value="#{list.id}"/>
+                                                    </h:commandButton>
+                                                </h:panelGroup>
+                                                <h:panelGroup id="panelListCompose" rendered="#{list.source_subtype_enum_id eq 'EM_OUT' and (list.case_status eq 'DF' or list.case_status eq 'WF' or list.case_status eq 'IG')}" style="display: inline">
+                                                    <a4j:commandButton value="#{list.id}" 
+                                                                     image="/img/bnext02.png"
+                                                                     style="padding-left: 8px; vertical-align: middle"
+                                                                     actionListener="#{sclAssignmentController.checkStatusComposeListener}"
+                                                                     oncomplete="window.open('#{request.contextPath}/social/compose.jsf?soMessageId=#{list.id}','','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;">
+                                                        <f:param name="soMessageId" value="#{list.id}"/>
+                                                    </a4j:commandButton>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                            <h:panelGrid columns="2" style="border: 0; vertical-align: text-top">
+                                                <h:panelGroup style="border: 0; vertical-align: text-top">
+                                                    <h:graphicImage url="#{list.user_pic}" style="width:50px;height:31px;padding-right: 10px; vertical-align: text-top" rendered="#{list.user_pic ne null}"/>
+                                                    <h:graphicImage url="/img/social/white_man.jpg" style="width:50px;height:31px; padding-right: 10px; vertical-align: text-top; " rendered="#{list.user_pic eq null}"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup style="border: 0; vertical-align: top; white-space: nowrap">
+                                                    <h:commandLink  value="#{list.soEmailMessage.subject}" 
+                                                                    styleClass="sj"
+                                                                    action="scldetail.jsf"
+                                                                    rendered="#{not (list.source_subtype_enum_id eq 'EM_OUT' and (list.case_status eq 'DF' or list.case_status eq 'WF' or list.case_status eq 'IG'))}">
+                                                        <f:param name="soMessageId" value="#{list.id}"/>
+                                                    </h:commandLink>
+                                                    <a4j:commandLink  value="#{list.soEmailMessage.subject}" 
+                                                                    styleClass="sj"
+                                                                    actionListener="#{sclAssignmentController.checkStatusComposeListener}"
+                                                                    rendered="#{list.source_subtype_enum_id eq 'EM_OUT' and (list.case_status eq 'DF' or list.case_status eq 'WF' or list.case_status eq 'IG')}" 
+                                                                    oncomplete="window.open('#{request.contextPath}/social/compose.jsf?soMessageId=#{list.id}','','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;">
+                                                        <f:param name="soMessageId" value="#{list.id}"/>
+                                                    </a4j:commandLink>
+                                                    <h:graphicImage url="/img/icon_compose.png" alt="Compose" title="Compose" 
+                                                                    style="display: inline; vertical-align: middle; white-space: nowrap; margin-left: 5px"
+                                                                    rendered="#{list.source_subtype_enum_id eq 'EM_OUT' and (list.case_status eq 'DF' or list.case_status eq 'WF' or list.parentSoMessage eq null)}"/>
+                                                    <h:graphicImage url="/icon/clip.png" style="width: 20px; height: 20px; display: inline; margin-right: 5px; margin-left: 5px; white-space: nowrap" rendered="#{list.soEmailMessage.attachment ne null and list.soEmailMessage.attachment ne ''}"/>
+                                                    <h:panelGroup rendered="#{list.case_status eq 'IG'}" style="display: inline; vertical-align: middle; margin-left: 5px; white-space: nowrap">
+                                                    <h:graphicImage url="/icon/reject.png" style="display: inline; white-space: nowrap" alt="Ignored" title="Ignored"/>
+                                                    </h:panelGroup><br/>
+                                                    <h:outputText value="Message ID : #{list.id}" style="font-size: 14px;color: #c0c0c0; vertical-align: top"/>
+                                                    <h:outputText value=" [Related Message ID : #{list.parentSoMessage.id}]" rendered="#{list.parentSoMessage ne null and list.source_subtype_enum_id eq 'EM_OUT'}" style="font-size: 14px;color: #c0c0c0; vertical-align: top"/><br/>
+                                                    <h:outputText value="Ticket ID : #{list.ticketId}" style="font-size: 14px;color: #c0c0c0; vertical-align: top"/><br/>  
+                                                    <h:outputText value="#{list.activity_time_format}" style="font-size: 14px;color: #c0c0c0; vertical-align: top">
+                                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText>
+                                                </h:panelGroup>
+                                            </h:panelGrid>
+                                        </rich:column>
+                                        
+                                        <rich:column style="width: 50%;padding-top: 10px; border-right: 0; border-bottom: 2px dotted #CCCCCC; vertical-align: text-top">
+                                            <h:panelGroup rendered="#{list.case_status eq 'WF'}">
+                                                <h:outputText value="remark : " style="font-weight: normal;font-size: 13px"/>
+                                                <h:outputText value="#{list.soWorkflowInstance.note}" style="font-weight: normal;font-size: 13px"/>
+                                            </h:panelGroup>
+                                        </rich:column>
+                                        
+                                        <f:facet name="footer">
+                                            <rich:dataScroller id="listEmailDataScroller" fastControls="hide"
+                                                               for="listEmail"
+                                                               maxPages="10"
+                                                               renderIfSinglePage="false"/>
+                                        </f:facet>
+                                    </rich:dataTable>
+                                    
+                                
+                                    </div>
+                                
+                                
+                                
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="20" valign="top"></td>
+            <td valign="top" align="right" style="min-width: 20px; max-width: 500px"></td>
+            </tr>
+    </table>
+<script type="text/javascript">
+    onLoad();
+
+</script>
+
+<script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+
+</h:body>
+</html>

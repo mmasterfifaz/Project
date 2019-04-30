@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">File Upload</ui:define>
+    <ui:param name="modalId" value="fileUpload"/>
+    <ui:param name="width" value="800"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <rich:fileUpload fileUploadListener="#{fileUploadBean1.listener}"
+                         maxFilesQuantity="#{fileUploadBean1.uploadsAvailable}"
+                         id="fileUpload"
+                         immediateUpload="#{fileUploadBean1.autoUpload}"
+                         acceptedTypes="jpg, gif, png, bmp" 
+                         ontyperejected="alert('Only pg, gif, png and bmp files are accepted');" >
+            <a4j:ajax event="uploadcomplete" render="pictureUpload" />
+        </rich:fileUpload>
+
+    </ui:define>
+</ui:composition>

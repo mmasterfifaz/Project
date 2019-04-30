@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="javascript">
+    </ui:define>
+    <ui:define name="title1">#{msg.campaign}</ui:define>
+    <ui:define name="title2">#{msg.pendingList}</ui:define>
+    <ui:define name="type">#{msg.pendingList}</ui:define>
+
+    <ui:define name="detail">
+        <style>
+            .tooltip {
+                background-color:window;
+                border:1px inset windowframe;
+                font-family: Arial, Helvetica, sans-serif, Tahoma;
+                font-size: 12px;
+            }
+        </style>        
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.pendingList}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                        <td><a href="#{request.contextPath}/campaign/assignmentList.jsf"><img src="#{request.contextPath}/img/tb_assign01.png" id="sub01" name="sub01" border="0" onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_assign01.png')" onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_assign02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/openedList.jsf"><img src="#{request.contextPath}/img/tb_open01.png" id="sub02" name="sub02" border="0" onmouseout="changeImage('sub02', '#{request.contextPath}/img/tb_open01.png')" onmouseover="changeImage('sub02', '#{request.contextPath}/img/tb_open02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/followupList.jsf"><img src="#{request.contextPath}/img/tb_tofollow01.png" id="sub03" name="sub03" border="0" onmouseout="changeImage('sub03', '#{request.contextPath}/img/tb_tofollow01.png')" onmouseover="changeImage('sub03', '#{request.contextPath}/img/tb_tofollow02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/pendingList.jsf"><img src="#{request.contextPath}/img/tb_pending02.png" id="sub04" name="sub05" border="0" onmouseout="changeImage('sub04', '#{request.contextPath}/img/tb_pending02.png')" onmouseover="changeImage('sub04', '#{request.contextPath}/img/tb_pending02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/closedList.jsf"><img src="#{request.contextPath}/img/tb_upclosed01.png" id="sub05" name="sub04" border="0" onmouseout="changeImage('sub05', '#{request.contextPath}/img/tb_upclosed01.png')" onmouseover="changeImage('sub05', '#{request.contextPath}/img/tb_upclosed02.png')"/></a></td>
+                                    </tr>
+                                </table></td>
+                            <td width="330" align="left">
+                                <!-- Contact Record, News&Update, Make Note-->
+                                <ui:include id="search"
+                                            src="includeSearch.xhtml">
+                                </ui:include>
+                                <!-- Contact Record, News&Update, Make Note-->
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="160" valign="top">
+                    <table width="" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="430" height="30"></td>
+                            <td align="right"><h:graphicImage library="icon" name="over-due-accept_key.png" title="All" alt="All Case" style="padding: 0px; border: 0px"/></td>
+                            <td align="left">
+                                <a4j:commandLink value="All" styleClass="gray03bold"
+                                                 actionListener="#{campaignFrontController.searchListener}"
+                                                 render="dataList, totalRec" >
+                                    <f:param name="subPage" value=""/>
+                                </a4j:commandLink> (#{campaignFrontController.countAll})
+                            </td>
+                            <td width="40" align="right"><h:graphicImage library="icon" name="reject.png" title="Reject" alt="Reject Case" style="padding: 0px; border: 0px"/></td>
+                            <td align="left">
+                                <a4j:commandLink value="Reject" styleClass="gray03bold"
+                                                 actionListener="#{campaignFrontController.searchListener}"
+                                                 render="dataList, totalRec">
+                                    <f:param name="subPage" value="reject"/> 
+                                </a4j:commandLink> (#{campaignFrontController.countReject})
+                            </td>
+                            <td width="40" align="right"><h:graphicImage library="icon" name="ApprovalStatus.png" title="Underwriting" alt="Underwriting" style="padding: 0px; border: 0px"/></td>
+                            <td align="left">
+                                <a4j:commandLink value="Underwriting" styleClass="gray03bold"
+                                                 actionListener="#{campaignFrontController.searchListener}"
+                                                 render="dataList, totalRec">
+                                    <f:param name="subPage" value="uw"/>
+                                </a4j:commandLink> (#{campaignFrontController.countUw})
+                            </td>
+                            <td width="40" align="right"><h:graphicImage library="icon" name="SettlementStatus.png" title="Payment" alt="Payment" style="padding: 0px; border: 0px"/></td>
+                            <td align="left">
+                                <a4j:commandLink value="Payment" styleClass="gray03bold"
+                                                 actionListener="#{campaignFrontController.searchListener}"
+                                                 render="dataList, totalRec">
+                                    <f:param name="subPage" value="payment"/>
+                                </a4j:commandLink> (#{campaignFrontController.countPayment})
+                            </td>
+                            <td width="40" align="right"><h:graphicImage library="icon" name="QCStatus.png" height="20" width="20" title="QC" alt="QC Case" style="padding: 0px; border: 0px"/></td>
+                            <td align="left">
+                                <a4j:commandLink value="QC" styleClass="gray03bold"
+                                                 actionListener="#{campaignFrontController.searchListener}"
+                                                 render="dataList, totalRec">
+                                    <f:param name="subPage" value="qc"/>
+                                </a4j:commandLink> (#{campaignFrontController.countQc})
+                            </td>
+                        </tr>
+                    </table>
+
+                    <rich:dataTable id="dataList" style="width: 100%" 
+                                    styleClass="tableline01" 
+                                    value="#{campaignFrontController.purchaseOrderList}" 
+                                    rows="#{global.maxrows}" 
+                                    var="list"
+                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                    onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.campaign}" /></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 12%;"><h:outputText value="Ref. No."/></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 12%;"><h:outputText value="Purchase Date"/></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 12%;"><h:outputText value="Customer Name"/></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 12%;"><h:outputText value="Insured Person"/></rich:column>
+                                <!-- BEGIN : 2015/11/13 show  agent name of tx when login user is supervisor -->
+                                <rich:column styleClass="subh01" style="text-align: left;width: 15%;" rendered="#{campaignFrontController.supervisorViewListMode}">
+                                    <h:outputText value="Create By"/>
+                                </rich:column>
+                                <!-- END : 2015/11/13  -->
+                                <rich:column styleClass="subh01" style="text-align: left;width: 8%;"><h:outputText value="Underwriting"/></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 8%;"><h:outputText value="Payment Status"/></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 8%;"><h:outputText value="QC Status"/></rich:column>
+                                <rich:column styleClass="subh01" style="text-align: left;width: 8%;"><h:outputText value="Latest Status"/></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="Latest Reason"/></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="Remark"/></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        <rich:column>
+                            <h:outputText value="#{list.campaingName}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.refNo}"/> 
+                        </rich:column>
+                        <rich:column style="width:200px;overflow-x: visible;">
+                            <h:outputText value="#{list.purchaseDate}" >
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:commandLink title="#{list.customerName}" value="#{list.customerName}" action="#{campaignFrontController.toSaleApprove}" rendered="#{list.mainPoId ne null and list.mainPoId ne '' }" >
+                                <f:param name="poId" value="#{list.id}"/>
+                                <f:param name="fromPage" value="front"/>
+                                <f:param name="ckSpouse" value="spouse" />
+                                <f:param name="mainPoId" value ="#{list.mainPoId}"/>
+                                <f:param name="productId" value="#{list.productId}"/>
+                                <f:param name="contactResultPlanId" value="#{list.contactResultPlanId}"/>
+                            </h:commandLink>
+                            <h:commandLink title="#{list.customerName}" value="#{list.customerName}" action="#{campaignFrontController.toSaleApprove}" rendered="#{list.mainPoId eq null or list.mainPoId eq ''}" >
+                                <f:param name="poId" value="#{list.id}"/>
+                                <f:param name="fromPage" value="front"/>
+                                <f:param name="productId" value="#{list.productId}"/>
+                                <f:param name="contactResultPlanId" value="#{list.contactResultPlanId}"/>
+                            </h:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.insurePerson}"/>
+                        </rich:column>
+                        <!-- BEGIN : 2015/11/13 show  agent name of tx when login user is supervisor -->
+                        <rich:column rendered="#{campaignFrontController.supervisorViewListMode}">
+                            <h:outputText value="#{list.createByAgentName}"/>
+                        </rich:column>
+                        <!-- END : 2015/11/13  -->
+                        <rich:column>
+                            <h:outputText value="#{list.approvalStatus}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.paymentStatus}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.qcStatus}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.latestStatus}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.latestReason}"/>
+                        </rich:column>
+                        <rich:column>
+                            #{(list.remark ne null and list.remark.length() gt 15)?list.remark.substring(0,15):list.remark}
+                            <rich:tooltip styleClass="tooltip" mode="client" title="Remark" horizontalOffset="-1" verticalOffset="0" layout="block">
+                                <b>Remark:</b>
+                                <pre style="width:420px;height:220px;overflow-wrap:break-word;overflow-style:panner;overflow-y: scroll;">
+                                    #{list.remark eq null ? "no remark":list.remark}
+                                </pre>
+                            </rich:tooltip>
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller for="dataList" fastControls="hide" maxPages="${global.maxpages}" 
+                                               renderIfSinglePage="false" render="dataList" />
+                        </f:facet>
+                    </rich:dataTable>
+                    <table border="0" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <td></td>
+                            <td width="100%" align="right">
+                                <h:outputText class="gray03" value="Total Records: "/>
+                                <h:outputText id="totalRec" style="color: orange;font-weight: bold" value="#{campaignFrontController.purchaseOrderList.size()}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        <!-- Contact Record, News&Update, Make Note-->
+        <ui:include id="campaign"
+                    src="includeCampaign.xhtml">
+        </ui:include>
+        <!-- Contact Record, News&Update, Make Note-->
+    </ui:define>
+
+    <ui:define name="popupModal">
+        <ui:include id="popupNews"
+                    src="/campaign/popupNews.xhtml">
+        </ui:include>
+    </ui:define>
+</ui:composition>

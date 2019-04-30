@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">User Management</ui:define>
+            <ui:define name="title2">Users</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="User Group"/>
+                    <h:selectOneMenu value="#{usersController.userGroupId}" styleClass="select08">
+                        <f:selectItem itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{usersController.userGroupList}"/>
+                    </h:selectOneMenu>
+
+                    <h:outputText value="User Name"/>
+                    <h:inputText value="#{usersController.keyword}" styleClass="textfield"/>
+                    
+                    <h:outputText value="License No"/>
+                    <h:inputText value="#{usersController.license}" styleClass="textfield"/>
+                    
+                    <h:outputText value="Hired Date"/>
+                    <h:panelGroup><rich:calendar id="dateFrom"
+                                           value="#{usersController.dateFrom}"
+                                           inputClass="textfield" inputSize="10" 
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}" buttonClass="rfcalbtn"/>
+                            To <span style="width: 5px"/> 
+                            <rich:calendar id="dateTo"
+                                           value="#{usersController.dateTo}"
+                                           inputClass="textfield" inputSize="10" 
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}" buttonClass="rfcalbtn"/>
+                    </h:panelGroup>
+                    
+                    <h:outputText value="Log in Name"/>
+                    <h:inputText value="#{usersController.login}" styleClass="textfield"/>
+                    
+                    <h:outputText value="Log in Telephony"/>
+                    <h:inputText value="#{usersController.telephony}" styleClass="textfield"/>
+                    
+                    <h:outputText value="Log in LDAP"/>
+                    <h:inputText value="#{usersController.ldap}" styleClass="textfield"/>
+                    
+                    <h:outputText value="Status"/>
+                    <h:selectOneMenu value="#{usersController.status}">
+                        <f:selectItem itemLabel="All" itemValue="all"/>
+                        <f:selectItem itemLabel="Enable" itemValue="enable"/>
+                        <f:selectItem itemLabel="Disable" itemValue="disable"/>
+                    </h:selectOneMenu>
+                    
+                    <h:outputText value=""/>
+                    <a4j:commandButton actionListener="#{usersController.searchActionListener}" render="data" limitRender="true" image="/img/b_search.png"/>
+
+                </h:panelGrid>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_adduser.png" action="#{usersController.editAction}" 
+                                 actionListener="#{usersEditController.initializeListener}" rendered="#{usersController.addPermitted}">
+                    <f:param name="usertype" value="user"/>
+                </h:commandButton>
+                <h:commandButton image="../img/b_addteam.png" action="#{usersController.editAction}" 
+                                 actionListener="#{usersEditController.initializeListener}" rendered="#{usersController.addPermitted}">
+                    <f:param name="usertype" value="team"/>
+                </h:commandButton>
+                
+                <h:commandButton image="../img/b_delete.png" action="#{usersController.deleteAction}" rendered="#{usersController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{usersController.usersList}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;width: 3%;">&nbsp;</rich:column>
+                            <rich:column style="text-align: left;width: 10%;"><h:outputText value="Type"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%;"><h:outputText value="Surname"/></rich:column>
+                            <rich:column style="text-align: left;width: 17%;"><h:outputText value="User Group"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%;"><h:outputText value="Login Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%;"><h:outputText value="Telephony Login Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 10%;"><h:outputText value="Status"/></rich:column>
+
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{usersController.selectedIds[list.id]}"/>
+                    </rich:column>
+                     <rich:column >
+                         <h:outputText value="#{list.userType eq 'user'?'User':list.userType eq 'team'?'Team':''}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{usersController.editAction}"
+                                       actionListener="#{usersEditController.initialize}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.surname}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.userGroup.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.loginName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.telephonyLoginName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/>
+                        <h:outputText value="Disable" rendered="#{not list.status}" style="color:red"/>
+                    </rich:column>
+                    
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

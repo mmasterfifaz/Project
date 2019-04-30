@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">Agent Performance</ui:define>
+            <ui:define name="panel">
+                
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                     
+                    <tr>
+                        <td width="200" align="right" valign="top">From:</td>
+                        <td><rich:calendar value="#{agentPerformanceReport.fromDate}" inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{agentPerformanceReport.toDate}" inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr> 
+                    
+                    <tr>
+                        <td align="right" valign="top">Campaign:</td>
+                        <td valign="top"><h:selectOneMenu id="campaign" value="#{agentPerformanceReport.campaignId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceReport.campaignList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Channel:</td>
+                        <td valign="top"><h:selectOneMenu id="channelType" value="#{agentPerformanceReport.channelType}" styleClass="select08">
+                                <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceReport.channelTypeList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Product:</td>
+                        <td valign="top"><h:selectOneMenu id="product" value="#{agentPerformanceReport.productId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceReport.productList}"/>
+                            </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User Group:</td>
+                        <td valign="top"><h:selectOneMenu id="usergroup" value="#{agentPerformanceReport.userGroupId}"
+                                                          valueChangeListener="#{agentPerformanceReport.userGroupListener}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceReport.usergroupList}"/>
+                                <a4j:ajax event="change" render="usergroup, user" execute="@this"/>
+                            </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User:</td>
+                        <td valign="top"><h:selectOneMenu id="user" value="#{agentPerformanceReport.userId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceReport.usersList}"/>
+                            </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Output Type:</td>
+                        <td valign="top"><h:selectOneRadio value="#{agentPerformanceReport.outputFormat}">
+                                <f:selectItems value="#{agentPerformanceReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandLink  action="blank.xhtml" actionListener="#{agentPerformanceReport.reportListener}" target="_blank">
+                                                        <img alt="Report" src="../img/b_report.png" style="display: inline"/>
+
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

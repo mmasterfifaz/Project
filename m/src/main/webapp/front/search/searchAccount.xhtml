@@ -1,0 +1,184 @@
+<ui:composition template="../../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="13"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/search/searchAccount.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="title1">#{msg.search}</ui:define>
+    <ui:define name="title2">#{msg.accountSearch}</ui:define>
+    <ui:define name="type">#{msg.accountSearch}</ui:define>
+    <ui:define name="detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.accountSearch}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                        <h:panelGroup rendered="#{searchTab.searchCustomerPermitted}"><td>
+                                              <a href="#{request.contextPath}/front/search/searchCustomer.jsf">
+                                                <img src="#{request.contextPath}/img/tb_customersearch01.png" id="sub01" name="sub01" border="0" 
+                                                     onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_customersearch01.png')" 
+                                                     onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_customersearch02.png')"/></a>
+                                            </td></h:panelGroup>
+                                        <h:panelGroup rendered="#{searchTab.searchCasePermitted}"><td>
+                                                <a href="#{request.contextPath}/front/search/searchCase.jsf">
+                                                <img src="#{request.contextPath}/img/tb_casesearch01.png" id="sub02" name="sub02" border="0" 
+                                                     onmouseout="changeImage('sub02', '#{request.contextPath}/img/tb_casesearch01.png')" 
+                                                     onmouseover="changeImage('sub02', '#{request.contextPath}/img/tb_casesearch02.png')"/></a>
+                                            </td></h:panelGroup>
+                                        <h:panelGroup rendered="#{searchTab.searchAccountPermitted}"><td>
+                                                <a href="#{request.contextPath}/front/search/searchAccount.jsf">
+                                                <img src="#{request.contextPath}/img/tb_acc02.png" id="sub03" name="sub03" border="0"/></a>
+                                            </td></h:panelGroup>
+                                        <h:panelGroup rendered="#{searchTab.searchMessagePermitted}"><td>
+                                            <a href="#{request.contextPath}/front/search/searchMessage.jsf">
+                                                <img src="#{request.contextPath}/img/tb_msgsearch01.png" id="sub04" name="sub04" border="0" 
+                                                     onmouseout="changeImage('sub04', '#{request.contextPath}/img/tb_msgsearch01.png')" 
+                                                     onmouseover="changeImage('sub04', '#{request.contextPath}/img/tb_msgsearch02.png')"/></a>
+                                            </td></h:panelGroup>
+                                    </tr>
+                                </table></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#e4e4d6">
+                        <tr>
+                            <td width="50%" align="center" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px; background-color: #CACAAB">
+                                    <tr>
+                                        <td width="1"><img src="../../img/b101.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="../../img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td width="1"><img src="../../img/b102.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#CACAAB"></td>
+                                        <td bgcolor="#CACAAB">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td align="left"><h4>#{msg.accountInformation}</h4></td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="2" class="customer_search">
+                                                <tr>
+                                                    <td align="right">#{msg.accountName}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" id="accountName"  value="#{searchAccountController.accountName}"/></td>
+                                                    <td align="right"></td>
+                                                    <td align="left"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">#{msg.accountId}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" id="accountId"  value="#{searchAccountController.accountId}"/></td>
+                                                    <td align="right"></td>
+                                                    <td align="left"></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td bgcolor="#CACAAB"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="../../img/b103.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="../../img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td><img src="../../img/b104.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="10" valign="top" style="border-left: 1px dotted #cbcbc3;"></td>
+                            <td width="50%" align="center" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px">
+                                    <tr>
+                                        <td height="12"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><h4>#{msg.relatedInfoAccountSearch}</h4></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                                    <tr>
+                                        <td align="right">#{msg.customerNameSearch}</td>
+                                        <td align="left"><h:inputText styleClass="textfield" id="customerName" value="#{searchAccountController.customerName}"/></td>
+                                        <td align="right">#{msg.customerTypeSearch}</td>
+                                        <td align="left">
+                                            <h:selectOneMenu id="customerTypeId" value="#{searchAccountController.customerTypeId}">
+                                                <f:selectItems value="#{searchAccountController.customerTypeList}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">#{msg.phoneSearch}</td>
+                                        <td align="left"><h:inputText styleClass="textfield" id="phoneNo" value="#{searchAccountController.phoneNo}"/></td>
+                                        <td align="right"></td>
+                                        <td align="left"></td>
+                                    </tr>
+                                </table></td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" align="center"><h:commandButton image="/resources/img/bb_search.png" action="#{searchAccountController.searchAccountAction}" style="margin-top: 5px; margin-bottom: 5px" /></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="2" cellpadding="0">
+                            <tr>
+                                <td align="left">
+                            <h:outputLink value="#{request.contextPath}/front/customerHandling/accountEdit.jsf"><h:graphicImage library="img" name="b_add.png" alt="Add" rendered="#{searchAccountController.addPermitted}"/></h:outputLink>
+                                </td>
+                            </tr>
+                        </table>
+
+            <rich:dataTable style="width: 100%" id="accountList" styleClass="tableline01" value="#{searchAccountController.searchAccountValues}" 
+                            rows="${global.maxrows}" var="list">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column styleClass="subh01"></rich:column>
+                        <rich:column styleClass="subh01"><h:outputText value="#{msg.accountNameTitle}"/></rich:column>
+                        <rich:column styleClass="subh01"><h:outputText value="#{msg.accountAddressTitle}"/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column>
+                    <h:selectBooleanCheckbox />
+                </rich:column>
+                <rich:column>
+                    <h:commandLink title="#{list.accountName}" value="#{list.accountName}" action="#{accountEditController.editAction}">
+                        <f:param name="selectId" value="#{list.accountId}"/>
+                    </h:commandLink>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.addressLine1}"/>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" id="sc2"
+                                   for="accountList"
+                                   maxPages="#{global.maxpages}"
+                                   renderIfSinglePage="false" />
+                </f:facet>
+            </rich:dataTable>
+    </td>
+    <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+    </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+            <td background="#{request.contextPath}/img/box07.png"></td>
+            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+        </tr>
+    </table>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,905 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:head>
+    <style type="text/css">
+        <!--
+        .rich-tabhdr-side-cell {
+            border:none;
+        }
+        .rich-tab-inactive {
+            cursor: pointer;
+            background-image : url(../img/tb_01.png);
+            border:none;
+            height: 20px;
+            color: #000000;
+        }
+        .rich-tab-active {
+            background-image : url(../img/tb_02.png);
+            border:none;
+            height: 20px;
+            color: #FFFFFF;
+        }
+        .rich-tabpanel-content {
+            border-width: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+        .rich-tab-bottom-line {
+            border-color: #75b8d1;
+            border-width: 2px;
+        }
+        -->
+    </style>
+    <script type="text/javascript" >
+        function onLoad() {
+            //alert('onloaddd');
+        }
+        
+    </script>
+    <script type="text/javascript" src="#{request.contextPath}/includes/setcontrollerproperty.js"/>
+</h:head>
+<h:body>
+<table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+<!-- ตารางแถวกลาง  -->
+<tr>
+<!-- Column1  -->
+<td width="30%" valign="top">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree1">
+        <tr>
+            <td width="80" align="center">
+                <div class="scroll" >
+                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                        <tr>
+                            <td>
+                                <a4j:repeat value="#{sclAssignmentController.soMessageAssignments}" var="list">
+                                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                        <tr>
+                                            <td width="10" align="left">
+                                                <h:graphicImage url="/img/social/#{list.priority_enum_id}_small.png" />
+                                            </td>
+                                            <td width="10" align="right">
+                                                <h:graphicImage url="/img/social/logo_#{list.source_type_enum_id}_small.png" width="14" height="14"/>
+                                            </td>
+                                            <td align="left">
+                                                <b><font size="2" color="#01a0c0">
+                                                        <h:outputText value="#{list.user_name} : " rendered="#{list.source_type_enum_id ne 'EM'}"/>
+                                                        <h:outputText value="#{list.soEmailMessage.emailFrom} : " rendered="#{list.source_type_enum_id eq 'EM'}"/>
+                                                    </font></b>
+                                                <h:panelGroup id="panelList1" rendered="#{list.source_type_enum_id ne 'EM'}">
+                                                    <b><font size="2" color="#34c800"><h:outputText value="post" rendered="#{list.source_subtype_enum_id eq 'FB_STM'}"/></font></b>
+                                                    <b><font size="2" color="#ff9601"><h:outputText value="comment" rendered="#{list.source_subtype_enum_id ne 'FB_STM'}"/></font></b>
+
+                                                    <a4j:commandButton value="#{list.id}" 
+                                                                       image="/img/bnext02.png"
+                                                                       style="padding-left: 8px; vertical-align: middle"
+                                                                       actionListener="#{sclAssignmentController.selectActionListener}" 
+                                                                       immediate="true" limitRender="true" execute="@this"
+                                                                       render="panelListSelectsMain,panelUserMain,panelListSelects2,panelReplyHead,panelReplyDetail,panelUser,pngNotEmail">
+                                                        <f:param name="selectedMsgID" value="#{list.id}"/>
+                                                    </a4j:commandButton>
+                                                </h:panelGroup>
+                                                <h:panelGroup id="panelList2" rendered="#{list.source_type_enum_id eq 'EM'}">
+                                                    <a4j:commandButton value="#{list.id}" 
+                                                                       image="/img/bnext02.png"
+                                                                       style="padding-left: 8px; vertical-align: middle"
+                                                                       actionListener="#{sclAssignmentController.selectActionEmailListener}" 
+                                                                       immediate="true" limitRender="true" execute="@this"
+                                                                       render="panelListSelectsMain,panelUserMain,panelListSelects2,panelReplyHead,panelReplyDetail,panelUser,pngNotEmail">
+                                                        <f:param name="selectedMsgID" value="#{list.id}"/>
+                                                    </a4j:commandButton>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" colspan="2" valign="top">
+                                                <!--<img alt="" src="#{list.user_pic}" width="30" height="30"/>-->
+                                                <h:graphicImage url="#{list.user_pic}" style="width:30px;height:30px;" rendered="#{list.user_pic ne null}"/>
+                                                <h:graphicImage url="/img/social/white_man.jpg" style="width:30px;height:30px;" rendered="#{list.user_pic eq null}"/>
+                                            </td>
+                                            <td align="left" valign="top">
+                                                <h:outputText value="#{list.soEmailMessage.subject}"/>
+                                            </td>
+                                        </tr>
+                                        <tr align="left">
+                                            <td></td>
+                                            <td></td>
+                                            <td>
+                                                <font color="#c0c0c0">
+                                                    <h:outputText value="#{list.activity_time_format}">
+                                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText></font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="4" style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; height: 6px"></td>
+                                        </tr>
+                                    </table>
+                                </a4j:repeat>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <h:graphicImage url="/img/clear.gif" height="15"/>
+                <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                    <tr>
+                        <td align="left">
+                            <h:outputText style="font-size:medium;font-weight:bolder;color:#656565" value="total "/>
+                            <h:outputText style="font-size:large;font-weight:bolder;color:#000000" value="#{sclAssignmentController.soMessageAssignments.size()}"/>
+                            <h:outputText style="font-size:medium;font-weight:bolder;color:#656565" value=" Jobs"/>
+                        </td>
+                        <td align="right"></td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</td>
+<td width="20px" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+<td width="40%" valign="top">
+<h:panelGroup id="panelListSelectsMain">
+    <h:panelGroup rendered="#{sclAssignmentController.selectedMsgID eq ''}">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td align="center" valign="middle" style="height:480px">
+                    <h:graphicImage url="/img/social/img_noItem.png"/>
+                </td>
+            </tr>
+        </table>
+    </h:panelGroup>
+    <h:panelGroup rendered="#{sclAssignmentController.selectedMsgID ne ''}">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="60">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td align="left">
+                                <b><font size="2" color="#656565"><h:outputText value="Priority"/></font></b>
+                            </td>
+                        </tr>
+                        <tr style="height:25px">
+                            <td align="left">
+                                <h:graphicImage url="/img/social/#{sclAssignmentController.soMessage.priority_enum_id}_large.png" />
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td valign="top">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td valign="middle" width="30" align="left">
+                                <h:graphicImage url="/img/social/logo_#{sclAssignmentController.soMessage.source_type_enum_id}_large.png"/>
+                            </td>
+                            <td valign="middle" align="left">
+                                <font size="4" color="#01a0c0">
+                                    <h:outputText value="#{sclAssignmentController.soMessage.source_id}" rendered="#{sclAssignmentController.soMessage.source_type_enum_id ne 'EM'}"/>
+                                    <h:outputText value="#{sclAssignmentController.emailFrom} : " rendered="#{sclAssignmentController.soMessage.source_type_enum_id eq 'EM'}"/></font>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td colspan="2" style="width:30%"></td>
+            </tr>
+        </table>
+        <h:graphicImage url="/img/clear.gif" height="5"/>
+    </h:panelGroup>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree2">
+        <tr>
+            <td align="left">
+                <div class="scroll" >
+                    <h:panelGroup id="panel1" rendered="#{sclAssignmentController.soMessage.source_type_enum_id ne 'EM'}">                       
+                        <h:panelGroup id="panelListSelects2" rendered="#{sclAssignmentController.selectedMsgID ne ''}">
+                            <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                                <tr><td colspan="4" style="height: 5px">&nbsp;</td></tr>
+                                <tr>
+                                    <td colspan="4" style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; height: 6px"></td>
+                                </tr>
+                                <tr ><td colspan="4" style="height: 5px">&nbsp;</td></tr>
+                                <tr>
+                                    <td valign="top" align="left" style="width: 60px">
+                                        <h:graphicImage class="marginRight" url="#{sclAssignmentController.postInfo.user_pic}" style="width:50px;height:50px;" rendered="#{sclAssignmentController.postInfo.user_pic ne null}"/>
+                                        <h:graphicImage class="marginRight" url="/img/social/white_man.jpg" style="width:50px;height:50px;" rendered="#{sclAssignmentController.postInfo.user_pic eq null}"/>
+                                    </td>
+                                    <td valign="top" align="left" colspan="3" width="100%">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr><td align="left">
+                                                    <h:outputText style="font-size:small;font-weight:bold;color:#01a0c0" value="#{sclAssignmentController.postInfo.user_name}"/>
+                                                </td></tr>
+                                            <tr ><td height="2"></td></tr>
+                                            <tr><td align="left">
+                                                    <h:outputText style="font-size:small;font-weight:normal;color:#c0c0c0" value="#{sclAssignmentController.postInfo.activity_time_format}" >
+                                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText>
+                                                </td></tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr ><td style="height: 5px" colspan="4">&nbsp;</td></tr>
+                                <tr >
+                                    <td colspan="4" style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; height: 6px"></td>
+                                </tr>
+                                <tr ><td style="height: 5px" colspan="4">&nbsp;</td></tr>
+                                <tr >
+                                    <td align="left" colspan="4">
+                                        <h:outputText value="#{sclAssignmentController.postInfo.content}"/>
+                                    </td>
+                                </tr>
+                                <tr ><td height="5" colspan="4"></td></tr>
+                            </table>
+                            <a4j:repeat value="#{sclAssignmentController.commentInfos}" var="list">
+                                <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr >
+                                        <td height="5" colspan="4" style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; height: 5px"></td>
+                                    </tr>
+                                    <tr>
+                                        <td width="75" align="right" >
+                                            <!--<img alt="" src="#{list.user_pic}" width="50" height="50"/>-->
+                                            <h:graphicImage class="marginRight" url="#{list.user_pic}" style="width:50px;height:50px;" rendered="#{list.user_pic ne null}"/>
+                                            <h:graphicImage class="marginRight" url="/img/social/white_man.jpg" style="width:50px;height:50px;" rendered="#{list.user_pic eq null}"/>
+                                        </td>
+                                        <td valign="top" colspan="3">
+                                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                <tr>
+                                                    <td align="left">
+                                                        <b><font size="2" color="#01a0c0"><h:outputText value="#{list.user_name}"/></font></b>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left">
+                                                        <h:outputText value="#{list.content}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr ><td height="5" colspan="4">&nbsp;</td></tr>
+                                </table>
+                            </a4j:repeat>
+                            <h:graphicImage url="/img/clear.gif" height="10"/>
+                        </h:panelGroup>
+                        <h:panelGroup id="panelReplyHead" rendered="#{sclAssignmentController.selectedMsgID ne ''}">
+                            <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_01.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_02.png'); background-repeat: repeat; height: 5px"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_03.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_04.png'); background-repeat: repeat"></td>
+                                    <td bgcolor="#54bbc8">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" height="40">
+                                            <tr>
+                                                <td align="center">
+                                                    <h:selectOneRadio style="font-size:large;font-weight:bold;color:#FFFFFF" value="#{sclAssignmentController.replyMode}" >
+                                                        <f:selectItem itemLabel="Reply" itemValue="REPLY"/>
+                                                        <f:selectItem itemLabel="Ignore" itemValue="IGNORE"/>
+                                                        <a4j:ajax event="click" render="panelReplyDetail"/>
+                                                    </h:selectOneRadio>
+                                                </td>
+                                                <td align="left">
+                                                    <h:graphicImage url="/img/social/clock.png"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_05.png'); background-repeat: repeat"></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_06.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_07.png'); background-repeat: repeat; height: 5px"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/blue_box_08.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                        <h:panelGroup id="panelReplyDetail" rendered="#{sclAssignmentController.selectedMsgID ne ''}">
+                            <h:inputHidden id="emotion" value="#{sclAssignmentController.emotion}"/>
+                            <h:inputHidden id="priority" value="#{sclAssignmentController.priority}"/>
+                            <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_01.png'); background-repeat: no-repeat; width: 8px; height: 8px"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_02.png'); background-repeat: repeat-x"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_03.png'); background-repeat: no-repeat; width: 8px; height: 8px"></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_04.png'); background-repeat: repeat-y; width: 8px"></td>
+                                    <td style="background-color: #d0e6e9" align="center">
+                                        <br/>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td width="30%" align="left">
+                                                    <span style="font-size:small;font-weight:bold;color:#656565">Emotion</span>
+                                                </td>
+                                                <td width="30%" align="left">
+                                                    <span style="font-size:small;font-weight:bold;color:#656565">Priority</span>
+                                                </td>
+                                                <td width="40%" align="right">
+                                                    <span style="font-size:small;font-weight:bold;color:#656565">Message Status</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" align="left">
+                                                    <table border="0" cellpadding="1" cellspacing="0">
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="height: 25px">
+                                                                <img src="#{request.contextPath}/img/social/emo_positive_small.png"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <img src="#{request.contextPath}/img/social/emo_neutral_small.png"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <img src="#{request.contextPath}/img/social/emo_negative_small.png"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="emotionFrm" value="SN01" onclick="setControllerRadioObject('frm:emotion','emotionFrm');"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="emotionFrm" value="SN02" onclick="setControllerRadioObject('frm:emotion','emotionFrm');"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="emotionFrm" value="SN03" onclick="setControllerRadioObject('frm:emotion','emotionFrm');"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td width="30%" align="left">
+                                                    <table border="0" cellpadding="1" cellspacing="0">
+                                                        <tr>
+                                                            <td align="left" valign="middle" style="height: 25px">
+                                                                <h:graphicImage url="/img/social/PRIORITY_LOW_small.png"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <h:graphicImage url="/img/social/PRIORITY_MED_small.png"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <h:graphicImage url="/img/social/PRIORITY_HI_small.png"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <h:graphicImage url="/img/social/PRIORITY_IMM_small.png"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="priorityFrm" value="PRIORITY_LOW" onclick="setControllerRadioObject('frm:priority','priorityFrm');"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="priorityFrm" value="PRIORITY_MED" onclick="setControllerRadioObject('frm:priority','priorityFrm');"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="priorityFrm" value="PRIORITY_HI" onclick="setControllerRadioObject('frm:priority','priorityFrm');"/>
+                                                            </td>
+                                                            <td align="left" valign="middle">
+                                                                <input type="radio" name="priorityFrm" value="PRIORITY_IMM" onclick="setControllerRadioObject('frm:priority','priorityFrm');"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td align="right" valign="top" style="width: 40%;">
+                                                    <h:selectOneMenu styleClass="bgSelectboxSocialS" value="#{sclAssignmentController.caseStatus}"
+                                                                     style="width: 100px; margin-top: 5px">
+                                                        <f:selectItems value="#{sclAssignmentController.messageStatusList}"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <h:graphicImage url="/img/clear.gif" height="10"/>
+                                        <table width="93%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr style="height:30px;">
+                                                <td width="90" align="right" style="font-size:small;font-weight:bold;color:#656565">Case Type</td>
+                                                <td width="30%" align="left">
+                                                    <h:selectOneMenu styleClass="bgSelectboxSocialL" value="#{sclAssignmentController.caseType}" style="width:250px; margin-left: 5px">
+                                                        <f:selectItem itemValue="" itemLabel="#{msg.pleaseSelect}"/>
+                                                        <f:selectItems value="#{sclAssignmentController.caseTypeList}"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                                <td></td>
+                                                <td align="right"></td>
+                                            </tr>
+                                        </table>
+                                        <h:graphicImage url="/img/clear.gif" height="10"/>
+                                    </td>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_05.png'); background-repeat: repeat-y; width: 8px"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" align="center">
+
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_01.png'); width: 8px; height: 8px"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_02.png'); background-repeat: repeat-x"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_03.png'); width: 8px; height: 8px"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_04.png'); background-repeat: repeat-y"></td>
+                                                <td style="background-color: #54bbc8" align="center">
+                                                    <h:graphicImage url="/img/clear.gif" height="5"/>
+                                                    <table width="95%" border="0" cellpadding="0" cellspacing="0" height="30">
+                                                        <tr>
+                                                            <td align="right" style="font-size:small;font-weight:bold;color:#FFFFFF">User Reply</td>
+                                                            <td align="left">
+                                                                <h:selectOneMenu styleClass="bgSelectboxSocialM" 
+                                                                                 value="#{sclAssignmentController.accountUserId}" 
+                                                                                 rendered="#{sclAssignmentController.selectedMsgID ne ''}"
+                                                                                 style="margin-left: 5px">
+                                                                    <f:selectItem itemValue="" itemLabel="#{msg.pleaseSelect}"/>
+                                                                    <f:selectItems value="#{sclAssignmentController.accountUserList}"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                            <td align="right" valign="middle">
+                                                                <a4j:commandButton image="/img/social/b_template.png"
+                                                                                   oncomplete="#{rich:component('selectMessageTemplate')}.show()"
+                                                                                   style="margin: 10px 0px 0px 10px; vertical-align: bottom"
+                                                                                   render="popupSelectTemplate" 
+                                                                                   execute="@this" limitRender="true">
+                                                                </a4j:commandButton>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <h:graphicImage url="/img/clear.gif" height="10"/>
+                                                    <table width="95%" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td align="left">
+                                                                <h:inputTextarea id="replyDesc" rows="5"  value="#{sclAssignmentController.replyDesc}" style="width:100%"></h:inputTextarea>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <br/>
+                                                    <table width="95%" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td align="left" valign="middle">
+                                                                <h:commandButton action="#{sclAssignmentController.save}" image="/img/b_send.png" rendered="#{sclAssignmentController.selectedMsgID ne ''}"/>
+                                                            </td>
+                                                            <td align="right" valign="middle">
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <h:graphicImage url="/img/clear.gif" height="30"/>
+                                                </td>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_05.png'); width: 8px"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_06.png'); width: 8px; height: 8px"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_07.png'); background-repeat: repeat-x"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/inner_box_08.png'); width: 8px; height: 8px"></td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_04.png'); width: 8px"></td>
+                                    <td style="background-color: #d0e6e9" align="center">
+                                        <h:graphicImage url="/img/clear.gif" height="20"/>
+                                    </td>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_05.png'); width: 8px"></td>
+                                </tr>
+                                <tr>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_06.png'); background-repeat: no-repeat; width: 8px; height: 8px"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_07.png'); background-repeat: repeat-x; height: 8px;"></td>
+                                    <td style="background-image: url('#{request.contextPath}/img/light_blue_box_08.png'); background-repeat: no-repeat; width: 8px; height: 8px"></td>
+                                </tr>
+                            </table>
+
+                            <h:graphicImage url="/img/clear.gif" height="5"/>
+                            <script type="text/javascript">
+                                setWebRadioObject('frm:emotion','emotionFrm');
+                                setWebRadioObject('frm:priority','priorityFrm');
+                            </script>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                    <h:panelGroup id="panel2" rendered="#{sclAssignmentController.soMessage.source_type_enum_id eq 'EM'}">
+                        <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; background-position: center; height: 20px; vertical-align: middle"></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="1">
+                                        <tr>
+                                            <td valign="top">
+                                                <h:graphicImage class="marginRight" url="/img/social/white_man.jpg" style="width:50px;height:50px;"/>
+                                            </td>
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="1">
+                                                    <tr>
+                                                        <td align="left" valign="top">
+                                                            <h:outputText style="font-size:small;font-weight:bold;color:#01a0c0" value="#{sclAssignmentController.emailFrom}"/>
+                                                        </td>
+                                                        <td align="right" valign="top">
+                                                            <h:outputText style="font-size:small;font-weight:normal;color:#c0c0c0;white-space: nowrap" value="#{sclAssignmentController.emailDate}" >
+                                                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                
+                                                
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="1">
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap; width: 50px">to :</td>
+                                                        <td align="left" valign="top"><h:outputText value="#{sclAssignmentController.emailTo}"/></td>
+                                                    </tr>
+                                                    <h:panelGroup rendered="#{not (sclAssignmentController.emailCc eq null)}">
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap">cc :</td>
+                                                        <td align="left" valign="top"><h:outputText value="#{sclAssignmentController.emailCc}"/></td>
+                                                    </tr>
+                                                    </h:panelGroup>
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap;">subject :</td>
+                                                        <td align="left" valign="top"><h:outputText value="#{sclAssignmentController.emailSubject}"/></td>
+                                                    </tr>
+                                                    <h:panelGroup rendered="#{not (sclAssignmentController.attachmentList eq null)}">
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap">attachments :</td>
+                                                        <td align="left" valign="top">
+                                                            <a4j:repeat value="#{sclAssignmentController.attachmentList}" var="list">
+                                                                
+                                                                <h:commandLink value="#{list}"
+                                                                               actionListener="#{sclAssignmentController.viewFileListener}" 
+                                                                               target="_blank">
+                                                                    <f:param name="fileName" value="#{list}"/>
+                                                                </h:commandLink><br/>
+                                                            </a4j:repeat>
+                                                        </td>
+                                                    </tr>
+                                                    </h:panelGroup>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; background-position: center; height: 20px; vertical-align: middle"></td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="1">
+                                        <a4j:repeat value="#{sclAssignmentController.bodyList}" var="list">
+                                        <tr>
+                                            <td><h:outputText value="#{list}" escape="false"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; background-position: center; height: 20px; vertical-align: middle"></td>
+                                        </tr>
+                                        </a4j:repeat>
+                                    </table>
+                                    
+                                    
+                                    
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left">
+                                    
+                                </td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td>
+                                                <a4j:commandButton image="../img/social/btn_reply_over.png" 
+                                                                   value="Reply"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="pTo, pCc, pSubject"
+                                                                   actionListener="#{sclAssignmentController.replyActionListener}"
+                                                                   style="margin-bottom: -3px; margin-left: 1px"/>
+
+                                                <a4j:commandButton image="../img/social/btn_replyall_over.png" 
+                                                                   value="Reply All"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="pTo, pCc, pSubject"
+                                                                   actionListener="#{sclAssignmentController.replyAllActionListener}"
+                                                                   style="margin-bottom: -3px"/>
+
+                                                <a4j:commandButton image="../img/social/btn_forward_over.png"  
+                                                                   value="Forward"
+                                                                   execute="@this"
+                                                                   limitRender="true"
+                                                                   render="pTo, pCc, pSubject"
+                                                                   actionListener="#{sclAssignmentController.forwardActionListener}"
+                                                                   style="margin-bottom: -3px"/>
+
+                                                <a4j:commandButton image="../img/social/btn_ignore.png"  
+                                                                   value="Ignore"
+                                                                   style="margin-bottom: -3px"/>
+
+                                                <a4j:commandButton image="../img/social/btn_createCase.png"  
+                                                                   value="Ignore"
+                                                                   style="margin-bottom: -3px"/>
+                                            </td>
+                                        </tr>
+                                    </table>    
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td style="background-image: url('#{request.contextPath}/img/blue_box_04.png'); background-repeat: repeat"></td>
+                                            <td bgcolor="#54bbc8"><br/>
+                                                
+                                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap; width: 20px; color: #FFFFFF">to :</td>
+                                                        <td align="left" valign="top"><h:inputText id="pTo" value="#{sclAssignmentController.pTo}"
+                                                                                                   style="width: 400px; border: 0;"
+                                                                                                   required="true" requiredMessage="Required"/>
+                                                            <h:message for="pTo" style="color:red"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">cc :</td>
+                                                        <td align="left" valign="top"><h:inputText id="pCc" value="#{sclAssignmentController.pCc}"
+                                                                                                   style="width: 400px; border: 0;"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">bcc :</td>
+                                                        <td align="left" valign="top"><h:inputText id="pBcc" value="#{sclAssignmentController.pBcc}"
+                                                                                                   style="width: 400px; border: 0;"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">subject :</td>
+                                                        <td align="left" valign="top"><h:inputText id="pSubject" value="#{sclAssignmentController.pSubject}"
+                                                                                                   style="width: 400px; border: 0;"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <a4j:commandButton image="../img/social/btn_send.png" value="Send"
+                                                                               execute="@form"
+                                                                               limitRender="true"
+                                                                               action="#{sclAssignmentController.sendActionListener}"
+                                                                               style="margin-left: 10px; margin-right: 5px; margin-top: 3px"/>
+                                                            <ui:remove><a4j:commandButton image="../img/social/btn_attach.png" value="Attach"
+                                                                                          oncomplete="#{rich:component('popupFileUpload')}.show()"
+                                                                                          limitRender="true" execute="@this"
+                                                                                          render="fileUpload"
+                                                                                          style="margin-right: 5px; margin-top: 3px"/></ui:remove>
+                                                            <a4j:commandButton image="../img/social/btn_kb.png" value="Attach"
+                                                                               execute="@form"
+                                                                               limitRender="true"
+                                                                               style="margin-right: 5px; margin-top: 3px"/>
+                                                            <a4j:commandButton image="../img/social/btn_template.png" value="Template"
+                                                                               oncomplete="#{rich:component('selectMessageTemplate')}.show()"
+                                                                               execute="@form" limitRender="true"
+                                                                               render="popupSelectTemplate"
+                                                                               style="margin-right: 5px; margin-top: 3px"/>
+                                                            <a4j:commandButton image="../img/social/btn_savedraft.png" value="Save Draft"
+                                                                               execute="@form"
+                                                                               limitRender="true"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2" align="left">
+                                                            <h:inputTextarea id="pBody" value="#{sclAssignmentController.pBody}" rows="10" 
+                                                                             style="width: 440px; border: 0; margin-left: 10px"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2">
+                                                            <h:panelGroup id="filesUpload">
+                                                            <a4j:repeat value="#{sclAssignmentController.filesUpload}" var="list">
+                                                                <a href="#{request.contextPath}/emailfiles/temp/#{list[1]}" target="_blank">#{list[0]}</a><br/>
+                                                            </a4j:repeat>
+                                                            </h:panelGroup>
+                                                            <rich:fileUpload id="fileUpload" 
+                                                                             fileUploadListener="#{sclAssignmentController.uploadFileListener}"
+                                                                             addLabel="Attach" 
+                                                                             immediateUpload="true" 
+                                                                             listHeight="400" 
+                                                                             style="width: 440px; margin-left: 10px">
+                                                                <a4j:ajax event="uploadcomplete" render="filesUpload" execute="@none"/>
+                                                            </rich:fileUpload>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td style="background-image: url('#{request.contextPath}/img/blue_box_05.png'); background-repeat: repeat"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="background-image: url('#{request.contextPath}/img/blue_box_06.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                            <td style="background-image: url('#{request.contextPath}/img/blue_box_07.png'); background-repeat: repeat; height: 5px"></td>
+                                            <td style="background-image: url('#{request.contextPath}/img/blue_box_08.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                        </tr>
+                                    </table>
+                        
+                    </h:panelGroup>
+                </div>
+            </td>
+        </tr>
+    </table>
+</h:panelGroup>
+
+</td>
+<td width="20px" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+<!-- Column3  -->
+<td width="28%" valign="top">
+    <h:panelGroup rendered="#{sclAssignmentController.soMessage.source_type_enum_id ne 'EM'}">
+    <h:panelGroup id="panelUserMain">
+        <h:panelGroup id="panelListSelectsSaver2" rendered="#{sclAssignmentController.selectedMsgID eq ''}">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td align="center" valign="middle" style="height:480px">
+                        <h:graphicImage url="/img/social/img_noUser.png"/>
+                    </td>
+                </tr>
+            </table>
+        </h:panelGroup>
+
+        <h:panelGroup id="panelUser" rendered="#{sclAssignmentController.selectedMsgID ne ''}">
+
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree3">
+            <!-- product lists -->
+            <tr><td width="80" align="center" bgcolor="#99cc01"><div class="scroll" >
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td width="70">
+                            <h:graphicImage url="#{sclAssignmentController.userInfo.pic}" style="width:50px;height:50px;" rendered="#{sclAssignmentController.userInfo.pic ne null}"/>
+                            <h:graphicImage url="/img/social/white_man.jpg" style="width:50px;height:50px;" rendered="#{sclAssignmentController.userInfo.pic eq null}"/>
+                        </td>
+                        <td align="left">
+                            <b><font size="3" color="02a2b8">
+                                <h:outputText value="#{sclAssignmentController.userInfo.name}">
+                                </h:outputText></font></b>
+                            <b><font size="3" color="3fdade">
+                                (#{sclAssignmentController.getMessageCount(sclAssignmentController.soMessage.user_id, sclAssignmentController.soMessage.source_type_enum_id)} rec)
+                            </font></b>
+
+                        </td>
+                    </tr>
+                </table>
+                <h:graphicImage url="/img/clear.gif" height="20"/>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr><td>
+                        <rich:tabPanel switchType="ajax" id="tabs" activeItem="#{sclAssignmentController.selectedTab}">
+                            <rich:tab id="profile" header="Profile">
+                                <h:panelGroup>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                        <tr>
+                                            <td width="9%">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="5">
+                                                    <tr>
+                                                        <td align="right" width="25%">
+                                                            Sex :
+                                                        </td>
+                                                        <td align="left">
+                                                            <h:outputText value="#{sclAssignmentController.userInfo.sex}">
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right">
+                                                            Birth Date :
+                                                        </td>
+                                                        <td align="left">
+                                                            <h:outputText value="#{sclAssignmentController.userInfo.birthday_date_format}" rendered="#{sclAssignmentController.userInfo.birthday_date} ne null">
+                                                                <f:convertDateTime pattern="dd MMM yyyy" locale="Locale.US" timeZone="Asia/Bangkok"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right">
+                                                            Age :
+                                                        </td>
+                                                        <td align="left">
+                                                            <h:outputText value="">
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right">
+                                                            Email :
+                                                        </td>
+                                                        <td align="left">
+                                                            <h:outputText value="#{sclAssignmentController.userInfo.email}">
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                </table>                                                                            </td>
+                                        </tr>
+                                    </table>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td align="left">
+                                                <b><font size="2" color="02a2b8">
+                                                    Note
+                                                </font></b>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left">
+                                                <h:inputTextarea id="userNote" cols="30" rows="5"  value="#{sclAssignmentController.userNote}"></h:inputTextarea>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                </h:panelGroup>
+                                <f:param name="id" value="1"/>
+                                <f:param name="tab" value="assignment"/>
+                            </rich:tab>
+                            <rich:tab id="history" header="History">
+                                <h:panelGroup>
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool02">
+                                        <tr>
+                                            <td width="9%">
+                                                <a4j:repeat value="#{sclAssignmentController.soMessageUsers}" var="list">
+
+                                                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                        <tr align="left">
+
+                                                            <td width="10">
+                                                                <h:graphicImage url="/img/social/logo_#{list.source_type_enum_id}_small.png"/>
+                                                            </td>
+                                                            <td>
+                                                                <b><font size="2" color="#34c800"><h:outputText value="post : " rendered="#{list.source_subtype_enum_id eq 'FB_STM'}"/></font></b>
+                                                                <b><font size="2" color="#ff9601"><h:outputText value="comment : " rendered="#{list.source_subtype_enum_id ne 'FB_STM'}"/></font></b>
+                                                                <b><font size="2" color="#01a0c0"><h:outputText value="#{list.source_id}"/></font></b>
+                                                                <h:graphicImage url="/img/clear.gif" height="8"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr align="left">
+                                                            <td></td>
+                                                            <td>
+                                                                <h:outputText value="#{list.content}"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr align="left">
+                                                            <td></td>
+                                                            <td><font color="#c0c0c0">
+                                                                <h:outputText value="#{list.activity_time_format}">
+                                                                    <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                                </h:outputText></font>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="4" background="#{request.contextPath}/img/dot.gif" ></td>
+                                                        </tr>
+                                                    </table>
+                                                </a4j:repeat>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                                <f:param name="id" value="2"/>
+                                <f:param name="tab" value="unassignment"/>
+                            </rich:tab>
+                        </rich:tabPanel>
+
+                    </td></tr>
+                </table>
+
+            </div></td></tr>
+            <!-- product lists -->
+        </table>
+        <p></p>
+        <!--<button id="btnSend" type="button">Let's Go</button>-->
+    </h:panelGroup>
+    </h:panelGroup>
+    </h:panelGroup>
+</td>
+</tr>
+</table>
+<script type="text/javascript">
+    onLoad();
+
+</script>
+
+<script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+<script>
+    dojo.require("dojo.fx");
+    var btn = dojo.byId("btnSend");
+    var fn = function(){
+        dojo.fx.wipeOut({
+            duration: 1000,
+            node: dojo.byId("btnSend")
+        }).play();
+    }
+    dojo.connect(btn,"onclick",fn);
+</script>
+
+</h:body>
+</html>

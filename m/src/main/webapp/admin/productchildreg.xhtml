@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Product Child Registration</ui:define>
+            <ui:define name="search">
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{productChildRegController.editAction}" >
+                    <f:param name="productID" value="#{productChildRegController.productID}"/>
+                    <f:param name="mode" value="add"/>
+                </h:commandButton>
+                <h:commandButton image="../img/b_delete.png" action="#{productChildRegController.deleteAction}"  onclick="return checkDelete(this.form)">
+                    <f:param name="productID" value="#{productChildRegController.productID}"/>
+                </h:commandButton>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="table" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{productChildRegController.productChildRegTypes}" var="list" rows="#{global.maxrows}"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;">Child Registration Type</rich:column>
+                            <rich:column style="width: 77%;text-align: left;">Child Registration Form</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{productChildRegController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.childRegType.name}" action="#{productChildRegController.editAction}">
+                            <f:param name="productID" value="#{list.product.id}"/>
+                            <f:param name="mode" value="edit"/>
+                            <f:param name="childRegTypeID" value="#{list.childRegType.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{productChildRegController.showChildRegFormListName(list.childRegFormList)}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top">
+                            <h:commandButton image="../img/b_back.png" action="#{productChildRegController.backAction}" >
+                                <f:param name="productID" value="#{productChildRegController.productID}"/>
+                            </h:commandButton>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

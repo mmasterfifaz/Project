@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Sales Management</ui:define>
+            <ui:define name="title2">Export Payment</ui:define>
+            <ui:define name="button"> </ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr><td width="150" align="right">Purchase date:</td>
+                        <td align="left"><rich:calendar id="fromdate"
+                                                        value="#{exportPaymentController.fromDate}"
+                                                        inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                        datePattern="#{msg.datePattern}"
+                                                        locale="#{msg.locale}"/>
+                            to <span style="width: 5px"/> <rich:calendar id="todate"
+                                                                         value="#{exportPaymentController.toDate}"
+                                                                         inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                                         datePattern="#{msg.datePattern}"
+                                                                         locale="#{msg.locale}"/>
+                           
+                        </td>
+                    </tr>
+                    <tr><td></td>
+                        <td><a4j:commandButton actionListener="#{exportPaymentController.searchActionListener}" render="msgData, data" 
+                                               limitRender="true" image="/img/b_search.png"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{exportPaymentController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 10%;text-align: left;">Purchase Date</rich:column>
+                            <rich:column style="width: 20%;text-align: left;">Customer Name</rich:column>
+                            <rich:column style="width: 20%;text-align: left;">Ref No. 1</rich:column>
+                            <rich:column style="width: 35%;text-align: left;">Ref No. 2</rich:column>
+                            <rich:column style="width: 15%;text-align: left;">Amount</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value="#{list.purchaseDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        #{list.initialLabel} #{list.name} #{list.surname}
+                    </rich:column>
+                    <rich:column>
+                        #{list.poRefNo}
+                    </rich:column>
+                     <rich:column>
+                        #{list.idNo}
+                    </rich:column>
+                    <rich:column>
+                        #{list.installmentAmount}
+                    </rich:column>
+                  <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                </f:facet>
+                </rich:dataTable>
+                <table width="100%">
+                    <tr>
+                    <td align="center">
+                        <h:panelGroup id="msgData">
+                            <h:outputText id="txtNoData" rendered="#{exportPaymentController.list.size() eq 0}" style="color:red" value=" No Data"/>
+                            <h:commandLink actionListener="#{exportPaymentController.exportListener}" 
+                                           rendered="#{exportPaymentController.list.size() ne 0}" target="_blank">
+                                <img alt="Report" src="../img/bb_exportcus.png"/></h:commandLink>
+                        </h:panelGroup>
+                    </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

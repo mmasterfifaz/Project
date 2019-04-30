@@ -1,0 +1,379 @@
+<ui:composition template="../../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="11"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/search/searchCustomer.js" type="text/javascript"/>
+        <script type="text/javascript">
+            function searchByEnterAndReturn(e){ 
+                if(e.keyCode==13){
+                    document.getElementById("frm:searchButton").click(); 
+                }  
+             }
+        </script>
+    </ui:define>
+    <ui:define name="css">
+        
+    </ui:define>
+    <ui:define name="title1">#{msg.search}</ui:define>
+    <ui:define name="title2">#{msg.customerSearch}</ui:define>
+    <ui:define name="type">#{msg.customerSearch}</ui:define>
+
+    <ui:define name="detail">
+        
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.customerSearch}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                    <h:panelGroup rendered="#{searchTab.searchCustomerPermitted}"><td>
+                                            <a href="#{request.contextPath}/front/search/searchCustomer.jsf">
+                                             <img src="#{request.contextPath}/img/tb_customersearch02.png" id="sub01" name="sub01"  border="0"/></a>
+                                        </td></h:panelGroup>
+                                    <h:panelGroup rendered="#{searchTab.searchCasePermitted}"><td>
+                                        <a href="#{request.contextPath}/front/search/searchCase.jsf">
+                                            <img src="#{request.contextPath}/img/tb_casesearch01.png" id="sub02" name="sub02" border="0" 
+                                                 onmouseout="changeImage('sub02', '#{request.contextPath}/img/tb_casesearch01.png')" 
+                                                 onmouseover="changeImage('sub02', '#{request.contextPath}/img/tb_casesearch02.png')"/></a>
+                                        </td></h:panelGroup>
+                                    <h:panelGroup rendered="#{searchTab.searchAccountPermitted}"><td>
+                                        <a href="#{request.contextPath}/front/search/searchAccount.jsf">
+                                            <img src="#{request.contextPath}/img/tb_acc01.png" id="sub03" name="sub03" border="0" 
+                                                 onmouseout="changeImage('sub03', '#{request.contextPath}/img/tb_acc01.png')" 
+                                                 onmouseover="changeImage('sub03', '#{request.contextPath}/img/tb_acc02.png')"/></a>
+                                        </td></h:panelGroup>
+                                    <h:panelGroup rendered="#{searchTab.searchMessagePermitted}"><td>
+                                         <a href="#{request.contextPath}/front/search/searchMessage.jsf">
+                                            <img src="#{request.contextPath}/img/tb_msgsearch01.png" id="sub04" name="sub04" border="0" 
+                                                 onmouseout="changeImage('sub04', '#{request.contextPath}/img/tb_msgsearch01.png')" 
+                                                 onmouseover="changeImage('sub04', '#{request.contextPath}/img/tb_msgsearch02.png')"/></a>
+                                        </td></h:panelGroup>
+                                    </tr>
+                                </table></td>
+                        </tr>
+                    </table>
+                </td>
+            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#e4e4d6">
+                        <tr>
+                            <td width="50%" align="center" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px; background-color: #CACAAB">
+                                    <tr>
+                                        <td width="1"><img src="#{request.contextPath}/img/b101.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="#{request.contextPath}/img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td width="1"><img src="#{request.contextPath}/img/b102.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#CACAAB"></td>
+                                        <td bgcolor="#CACAAB">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td align="left"><h4>#{msg.customerInformation}</h4></td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="2" class="customer_search">
+                                                <tr>
+                                                    <td align="right">#{msg.customerNameSearch}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.customerName}" onkeypress="searchByEnterAndReturn(event);"/></td>
+                                                    <td align="right">#{msg.genderSearch}</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu value="#{searchCustomerController.gender}" styleClass="select01">
+                                                            <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                                                            <f:selectItem itemValue="#{msg.male}" itemLabel="#{msg.male}"/>
+                                                            <f:selectItem itemValue="#{msg.female}" itemLabel="#{msg.female}"/>
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">#{msg.identityNoSearch}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.identityNo}" onkeypress="searchByEnterAndReturn(event);"/></td>
+                                                    <td align="right">#{msg.customerTypeSearch}</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu value="#{searchCustomerController.customerTypeId}" styleClass="select01">
+                                                            <f:selectItem itemLabel="#{msg.all}"/>
+                                                            <f:selectItems value="#{searchCustomerController.customerTypeList}" />
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">#{msg.addressSearch}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.address}" onkeypress="searchByEnterAndReturn(event);"/></td>
+                                                    <td align="right">#{msg.accountSearch}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.account}" onkeypress="searchByEnterAndReturn(event);" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">#{msg.phoneSearch}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.phoneNo}" onkeypress="searchByEnterAndReturn(event);"/></td>
+                                                    <td align="right"></td>
+                                                    <td align="left"></td>
+                                                </tr>
+                                                <ui:remove>
+                                                <tr>
+                                                    <td align="right">Car Brand : </td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.carBrand}" onkeypress="searchByEnterAndReturn(event);"/></td>
+                                                    <td align="right">Car Model : </td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.carModel}" onkeypress="searchByEnterAndReturn(event);"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">Year of Car : </td>
+                                                    <td align="left">
+                                                        From
+                                                <h:selectOneMenu styleClass="select01" id="fromYear" value="#{searchCustomerController.carFromYear}" style="width: 70px">
+                                                    <f:selectItem itemLabel="Select" />
+                                                    <f:selectItem itemValue="2013" itemLabel="2013" />
+                                                    <f:selectItem itemValue="2012" itemLabel="2012" />
+                                                    <f:selectItem itemValue="2011" itemLabel="2011" />
+                                                    <f:selectItem itemValue="2010" itemLabel="2010" />
+                                                    <f:selectItem itemValue="2009" itemLabel="2009" />
+                                                    <f:selectItem itemValue="2008" itemLabel="2008" />
+                                                    <f:selectItem itemValue="2007" itemLabel="2007" />
+                                                    <f:selectItem itemValue="2006" itemLabel="2006" />
+                                                    <f:selectItem itemValue="2005" itemLabel="2005" />
+                                                    <f:selectItem itemValue="2004" itemLabel="2004" />
+                                                    <f:selectItem itemValue="2003" itemLabel="2003" />
+                                                    <f:selectItem itemValue="2002" itemLabel="2002" />
+                                                    <f:selectItem itemValue="2001" itemLabel="2001" />
+                                                    <f:selectItem itemValue="2000" itemLabel="2000" />
+                                                    <f:selectItem itemValue="1999" itemLabel="1999" />
+                                                    <f:selectItem itemValue="1998" itemLabel="1998" />
+                                                    <f:selectItem itemValue="1997" itemLabel="1997" />
+                                                    <f:selectItem itemValue="1996" itemLabel="1996" />
+                                                    <f:selectItem itemValue="1995" itemLabel="1995" />
+                                                    <f:selectItem itemValue="1994" itemLabel="1994" />
+                                                    <f:selectItem itemValue="1993" itemLabel="1993" />
+                                                    <f:selectItem itemValue="1992" itemLabel="1992" />
+                                                    <f:selectItem itemValue="1991" itemLabel="1991" />
+                                                    <f:selectItem itemValue="1990" itemLabel="1990" />
+                                                </h:selectOneMenu>
+                                                To
+                                                <h:selectOneMenu styleClass="select01" id="toYear" value="#{searchCustomerController.carToYear}" style="width: 70px">  
+                                                    <f:selectItem itemLabel="Select" />
+                                                    <f:selectItem itemValue="2013" itemLabel="2013" />
+                                                    <f:selectItem itemValue="2012" itemLabel="2012" />
+                                                    <f:selectItem itemValue="2011" itemLabel="2011" />
+                                                    <f:selectItem itemValue="2010" itemLabel="2010" />
+                                                    <f:selectItem itemValue="2009" itemLabel="2009" />
+                                                    <f:selectItem itemValue="2008" itemLabel="2008" />
+                                                    <f:selectItem itemValue="2007" itemLabel="2007" />
+                                                    <f:selectItem itemValue="2006" itemLabel="2006" />
+                                                    <f:selectItem itemValue="2005" itemLabel="2005" />
+                                                    <f:selectItem itemValue="2004" itemLabel="2004" />
+                                                    <f:selectItem itemValue="2003" itemLabel="2003" />
+                                                    <f:selectItem itemValue="2002" itemLabel="2002" />
+                                                    <f:selectItem itemValue="2001" itemLabel="2001" />
+                                                    <f:selectItem itemValue="2000" itemLabel="2000" />
+                                                    <f:selectItem itemValue="1999" itemLabel="1999" />
+                                                    <f:selectItem itemValue="1998" itemLabel="1998" />
+                                                    <f:selectItem itemValue="1997" itemLabel="1997" />
+                                                    <f:selectItem itemValue="1996" itemLabel="1996" />
+                                                    <f:selectItem itemValue="1995" itemLabel="1995" />
+                                                    <f:selectItem itemValue="1994" itemLabel="1994" />
+                                                    <f:selectItem itemValue="1993" itemLabel="1993" />
+                                                    <f:selectItem itemValue="1992" itemLabel="1992" />
+                                                    <f:selectItem itemValue="1991" itemLabel="1991" />
+                                                    <f:selectItem itemValue="1990" itemLabel="1990" />
+                                                </h:selectOneMenu>
+                                                    </td>
+                                                    <td align="right">Car Number : </td>
+                                                    <td align="left">
+                                                        <h:inputText styleClass="textfield" 
+                                                                     size="3"
+                                                                     value="#{searchCustomerController.carGroup}"
+                                                                     maxlength="3"/> - 
+                                                        <h:inputText styleClass="textfield" 
+                                                                     size="4"
+                                                                     value="#{searchCustomerController.carNo}"
+                                                                     maxlength="4"/>
+                                                    
+                                                    </td>
+                                                </tr>
+                                                </ui:remove>
+                                            </table>
+                                        </td>
+                                        <td bgcolor="#CACAAB"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="#{request.contextPath}/img/b103.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="#{request.contextPath}/img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td><img src="#{request.contextPath}/img/b104.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="10" valign="top" style="border-left: 1px dotted #cbcbc3;"></td>
+                            <td width="50%" align="center" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px">
+                                    <tr>
+                                        <td height="12"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="left"><h4>#{msg.relatedInfoAccountSearch}</h4></td>
+                                    </tr>
+                                </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td align="right">#{msg.caseIdSearch}</td>
+                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.caseId}" size="10" onkeypress="searchByEnterAndReturn(event);"/>
+        </td>
+        <td align="right">#{msg.descriptionSearch}</td>
+        <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.description}" onkeypress="searchByEnterAndReturn(event);"/>
+        </td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.contactDateSearch}</td>
+            <td align="left">
+                <rich:calendar value="#{searchCustomerController.contactDateFrom}"
+                                locale="#{msg.locale}"
+                                popup="true"
+                                inputClass="textfield"
+                                datePattern="#{msg.datePattern}" inputSize="10" buttonClass="rfcalbtn"/>
+                        #{msg.to} 
+                <rich:calendar  value="#{searchCustomerController.contactDateTo}"
+                                locale="#{msg.locale}"
+                                popup="true"
+                                inputClass="textfield"
+                                datePattern="#{msg.datePattern}" inputSize="10" buttonClass="rfcalbtn"/></td>
+            <td align="right">#{msg.createBySearch}</td>
+            <td align="left"><h:inputText styleClass="textfield" value="#{searchCustomerController.createdBy}" onkeypress="searchByEnterAndReturn(event);"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.serviceTypeSearch}</td>
+            <td align="left"><h:selectOneMenu value="#{searchCustomerController.channelId}" styleClass="select08">
+                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                <f:selectItem itemValue="1" itemLabel="#{msg.inbound}"/>
+                <f:selectItem itemValue="2" itemLabel="#{msg.outbound}"/>
+            </h:selectOneMenu></td>
+            <td align="right">#{msg.prioritySearch}</td>
+            <td align="left"><h:selectOneMenu value="#{searchCustomerController.priority}" styleClass="select01">
+                <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                <f:selectItem itemValue="#{msg.lowValue}" itemLabel="#{msg.low}"/>
+                <f:selectItem itemValue="#{msg.mediumValue}" itemLabel="#{msg.medium}"/>
+                <f:selectItem itemValue="#{msg.highValue}" itemLabel="#{msg.high}"/>
+                <f:selectItem itemValue="#{msg.immediateValue}" itemLabel="#{msg.immediate}"/>
+            </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.caseTypeSearch}</td>
+            <td align="left">
+                <h:selectOneMenu value="#{searchCustomerController.caseTypeId}" styleClass="select08">
+                    <f:selectItem itemLabel="#{msg.all}"/>
+                    <f:selectItems value="#{searchCustomerController.caseTypes}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                </h:selectOneMenu>
+            </td>
+            <td align="right">#{msg.statusSearch}</td>
+            <td align="left"><h:selectOneMenu value="#{searchCustomerController.status}" styleClass="select01">
+                <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                <f:selectItem itemValue="#{msg.pendingValue}" itemLabel="#{msg.pending}"/>
+                <f:selectItem itemValue="#{msg.closedValue}" itemLabel="#{msg.closed}"/>
+            </h:selectOneMenu></td>
+        </tr>
+        </table></td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center"><h:commandButton image="/resources/img/bb_search.png" id="searchButton" action="#{searchCustomerController.searchCustomer}" style="margin-top: 5px; margin-bottom: 5px"/></td>
+        </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="2" cellpadding="0">
+            <tr>
+                <td align="left"><h:outputLink value="#{request.contextPath}/front/customerHandling/customerAdd.jsf?phoneNo=#{searchCustomerController.phoneNo}"><h:graphicImage library="img" name="b_add.png" alt="Add" rendered="#{searchCustomerController.addPermitted}"/></h:outputLink>
+            </td>
+        </tr>
+        </table>       
+            <rich:dataTable style="width: 100%" id="customerList" styleClass="tableline01" value="#{searchCustomerController.searchCustomerList}" 
+                            rows="${global.maxrows}" var="list" 
+                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                            onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+            <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column styleClass="subh01" style="width: 3%"></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.nameDataSearch}" /></rich:column>
+                    <ui:remove>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.telephoneDataSearh}"/></rich:column>
+                    </ui:remove>
+                    
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.customerTypeDataSearch}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.pendingCaseDataSearch}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.closedCaseDataSearch}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="Car Brand"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="Car Model"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="Year of Car"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="Car Number"/></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+
+            <rich:column style="text-align: left;">
+                <h:selectBooleanCheckbox />
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:panelGroup rendered="#{frontMenuController.customerHandlingViewPermitted}">
+                    <h:commandLink title="#{list.customerName}" value="#{list.customerName}" action="#{customerHandlingDetailController.getCustomerInfo}">
+                        <f:param name="selectId" value="#{list.customerId}"/>
+                    </h:commandLink>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{not frontMenuController.customerHandlingViewPermitted}">
+                    <h:outputText value="#{list.customerName}"/>
+                </h:panelGroup>
+            </rich:column>
+                <ui:remove>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.telephone}"/>
+            </rich:column>
+                </ui:remove>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.customerType}"/>
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.pendingCase}"/>
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.closedCase}"/>
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.carBrand}"/>
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.carModel}"/>
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.carYear}"/>
+            </rich:column>
+            <rich:column style="text-align: left;">
+                <h:outputText value="#{list.carCharacterGroup}"/> - <h:outputText value="#{list.carNumber}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller id="sc2" fastControls="hide"
+                                   for="customerList"
+                                   maxPages="#{global.maxpages}"
+                                   renderIfSinglePage="false" />
+            </f:facet>
+        </rich:dataTable>
+                </td>
+            <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" style="background-image: url('#{request.contextPath}/img/box04.png'); background-repeat: repeat-x; background-position: left; width: 10px; height: 10px"></td>
+                <td style="background-image: url('#{request.contextPath}/img/box07.png'); background-repeat: repeat-x; background-position: bottom; height: 10px;"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td width="10" style="background-image: url('#{request.contextPath}/img/box03.png'); background-repeat: repeat-x; background-position: right; width: 10px; height: 10px"></td>
+            </tr>
+        </table>
+    </ui:define>
+</ui:composition>

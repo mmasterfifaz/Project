@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema version="1.0" targetNamespace="http://webservice.maxelyz.com/" xmlns:tns="http://webservice.maxelyz.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <xs:element name="countActiveUser" type="tns:countActiveUser"/>
+
+  <xs:element name="countActiveUserResponse" type="tns:countActiveUserResponse"/>
+
+  <xs:element name="getActiveUsers" type="tns:getActiveUsers"/>
+
+  <xs:element name="getActiveUsersResponse" type="tns:getActiveUsersResponse"/>
+
+  <xs:element name="sayHelloGalaxyFrom" type="tns:sayHelloGalaxyFrom"/>
+
+  <xs:element name="sayHelloGalaxyFromResponse" type="tns:sayHelloGalaxyFromResponse"/>
+
+  <xs:element name="sayHelloWorldFrom" type="tns:sayHelloWorldFrom"/>
+
+  <xs:element name="sayHelloWorldFromResponse" type="tns:sayHelloWorldFromResponse"/>
+
+  <xs:complexType name="getActiveUsers">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="getActiveUsersResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sayHelloWorldFrom">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sayHelloWorldFromResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sayHelloGalaxyFrom">
+    <xs:sequence>
+      <xs:element name="arg0" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="sayHelloGalaxyFromResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="countActiveUser">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="countActiveUserResponse">
+    <xs:sequence>
+      <xs:element name="return" type="xs:int" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+

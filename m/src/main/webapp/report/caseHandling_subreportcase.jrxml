@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="caseHandling_subreportcase" pageWidth="595" pageHeight="842" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="contact_case_id" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select cases.code, cases.contact_date, c.name as case_type, b.name as case_topic, a.name as case_detail, cases.contact_person, r.name as relationship, ch.type+':'+ch.name as channel, cases.schedule_date, cases.schedule_description, cases.description, cases.remark, related_case.code as related_case, cases.priority, cases.status, cust.initial+cust.name+' '+cust.surname as customer_name
+from contact_case cases
+inner join customer cust on cust.id = cases.customer_id
+left join case_detail a on a.id = cases.case_detail_id
+inner join case_topic b on b.id = a.case_topic_id
+inner join case_type c on c.id = b.case_type_id
+left join relationship r on r.id = cases.relationship_id
+left join channel ch on ch.id = cases.channel_id
+left join contact_case related_case on related_case.id = cases.ref_id
+where cases.id = $P{contact_case_id}]]>
+	</queryString>
+	<field name="code" class="java.lang.String"/>
+	<field name="contact_date" class="java.sql.Timestamp"/>
+	<field name="case_type" class="java.lang.String"/>
+	<field name="case_topic" class="java.lang.String"/>
+	<field name="case_detail" class="java.lang.String"/>
+	<field name="contact_person" class="java.lang.String"/>
+	<field name="relationship" class="java.lang.String"/>
+	<field name="channel" class="java.lang.String"/>
+	<field name="schedule_date" class="java.sql.Timestamp"/>
+	<field name="schedule_description" class="java.lang.String"/>
+	<field name="description" class="java.lang.String"/>
+	<field name="remark" class="java.lang.String"/>
+	<field name="related_case" class="java.lang.String"/>
+	<field name="priority" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="customer_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="227" splitType="Stretch">
+			<textField>
+				<reportElement x="117" y="24" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy HH:mm">
+				<reportElement x="117" y="144" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{contact_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="24" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Case ID: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="44" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Case Type: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="117" y="44" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{case_type}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="64" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Case Topic: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="117" y="64" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{case_topic}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="117" y="84" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{case_detail}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="84" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Case Detail: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="104" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Contact Person: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="117" y="104" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{contact_person}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="117" y="124" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{relationship}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="124" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Relationship: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="144" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Contact Date: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="117" y="164" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{channel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="17" y="164" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Channel: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="184" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Schedule: ]]></text>
+			</staticText>
+			<textField pattern="dd MM yyyy HH:mm" isBlankWhenNull="true">
+				<reportElement x="117" y="184" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{schedule_date}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="117" y="205" width="163" height="19"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[""+$F{schedule_description}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1" y="204" width="116" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Schedule Description: ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="384" y="24" width="214" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[""+$F{description}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="284" y="24" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[ Description: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="280" y="64" width="104" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Remark: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="384" y="45" width="214" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[""+$F{remark}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="280" y="45" width="104" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Related Case: ]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement positionType="Float" x="384" y="65" width="214" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{related_case}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="280" y="85" width="104" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Prioity: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="280" y="105" width="104" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Status: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement positionType="Float" x="384" y="85" width="100" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{priority}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement positionType="Float" x="384" y="105" width="100" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{status}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement positionType="Float" x="280" y="45" width="312" height="1" forecolor="#FFFFFF"/>
+			</line>
+			<staticText>
+				<reportElement x="17" y="4" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true" isStrikeThrough="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Customer Name: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="117" y="4" width="163" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isStrikeThrough="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

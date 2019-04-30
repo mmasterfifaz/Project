@@ -1,0 +1,156 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:ajax="https://ajax4jsf.dev.java.net/ajax">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="21"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+    </ui:define>
+    <ui:define name="title1">#{msg.saleManagement}</ui:define>
+    <ui:define name="title2">#{msg.shoppingCart}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+
+    <ui:define name="detail_1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td><h2 class="style1">#{msg.shoppingCart}</h2></td>
+                            <td align="right">
+                                
+                            </td>
+            </tr>
+        </table>
+        </td>
+        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+        </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top" height="100">
+            <h:panelGroup id="listCart">
+                    <rich:dataTable id="dtListCart" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{shoppingCartController.tempPurchaseOrderDetailList}"
+                                    var="list">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="text-align: left;"></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.productCode}" /></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.productName}" /></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.quantity}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.price}" /></rich:column>
+                                <rich:column style="text-align: left;""><h:outputText value="#{msg.total}" /></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="" /></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="" /></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column>
+                            <h:graphicImage id="picProduct"
+                                            url="../../upload/product/#{list.product.id}/#{list.product.productThumbnail}"
+                                            width="70" height="70"
+                                            rendered="#{list.product.productThumbnail ne null and list.product.productThumbnail ne ''}"/>
+                            <h:graphicImage id="picDefault"
+                                            url="../../img/picproduct02.png"
+                                            width="70" height="70"
+                                            rendered="#{list.product.productThumbnail eq null || list.product.productThumbnail eq ''}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.product.code}" />
+                        </rich:column>
+                        <rich:column>
+                            <h:commandLink title="#{list.product.name}"
+                                           value="#{list.product.name}"
+                                           action="#{shoppingCartController.toRegistrationForm}"
+                                           rendered="#{list.product.productCategory.categoryType eq 'insurance'}">
+                                <f:param name="tempPurchaseOrderId" value="#{list.tempPurchaseOrder.id}"/>
+                                <f:param name="productId" value="#{list.product.id}"/>
+                            </h:commandLink>
+                            <h:outputText title="#{list.product.name}"
+                                          value="#{list.product.name}"
+                                          rendered="#{list.product.productCategory.categoryType eq 'retail'}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.quantity}">
+                                <f:convertNumber pattern="#,##0"/>
+                            </h:outputText>&#160;&#160;&#160;
+                            <a4j:commandLink value="edit"
+                                             onclick="#{rich:component('modalPanel')}.show()"
+                                             render="edituserinfo"
+                                             rendered="#{list.product.productCategory.categoryType eq 'retail'}">
+                                <f:setPropertyActionListener value="#{list}"
+                                                             target="#{shoppingCartController.selectedValue}" />
+                            </a4j:commandLink>
+
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.unitPrice}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.amount}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <a4j:commandButton image="../../img/b_remove02.png"
+                                                   render="listCart,dtListCart,btnCheckout"
+                                                   actionListener="#{shoppingCartController.removeItem}"
+                                                   execute="@this" limitRender="true"
+                                                   onclick="if (!confirm('Do you want to delete this item?')) { return false; }">
+                                <f:param name="selectedId" value="#{list.id}"/>
+                            </a4j:commandButton>
+                        </rich:column>
+                    </rich:dataTable>
+                    </h:panelGroup>
+            <h:panelGroup id="btnCheckout">
+                <div align="center">
+                    <a4j:commandButton image="../../img/checkout.png"
+                                       action="#{shoppingCartController.checkOut}"
+                                       rendered="#{shoppingCartController.btnCheckOut}"
+                                       onclick="if (!confirm('Do you want to check out this items?')) { return false; }"/></div>
+            </h:panelGroup>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+    <ui:define name="popupModal">
+        <rich:popupPanel id="modalPanel" style="background-color: #FFFFFF">
+            <f:facet name="header">Edit</f:facet>            
+            <h:form>
+                <h:panelGrid id="edituserinfo" columns="2">
+                    <h:outputText value="#{msg.productName} :" />
+                    <h:outputText value="#{shoppingCartController.selectedValue.product.name}" />
+                    <h:outputText value="#{msg.quantity} :" />
+                    <h:inputText value="#{shoppingCartController.selectedValue.quantity}" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <a4j:commandLink value="Close"
+                                     onclick="#{rich:component('modalPanel')}.hide()" />
+                    <a4j:commandLink value="Save" actionListener="#{shoppingCartController.updateTpod}"
+                                     oncomplete="#{rich:component('modalPanel')}.hide()"
+                                     render="listCart" />
+                </h:panelGrid>
+            </h:form>
+        </rich:popupPanel>
+
+    </ui:define>
+</ui:composition>

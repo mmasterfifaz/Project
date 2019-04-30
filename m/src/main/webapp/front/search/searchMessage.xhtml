@@ -1,0 +1,324 @@
+<ui:composition template="../../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="11"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/search/searchCustomer.js" type="text/javascript"/>
+        <script type="text/javascript">
+            function searchByEnterAndReturn(e){ 
+                if(e.keyCode==13){
+                    document.getElementById("frm:searchButton").click(); 
+                }  
+             }
+        </script>
+    </ui:define>
+    <ui:define name="css">
+        
+    </ui:define>
+    <ui:define name="title1">#{msg.search}</ui:define>
+    <ui:define name="title2">#{msg.messageSearch}</ui:define>
+    <ui:define name="type">#{msg.messageSearch}</ui:define>
+
+    <ui:define name="detail">
+        
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.messageSearch}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                    <h:panelGroup rendered="#{searchTab.searchCustomerPermitted}"><td>
+                                      <a href="#{request.contextPath}/front/search/searchCustomer.jsf">
+                                        <img src="#{request.contextPath}/img/tb_customersearch01.png" id="sub01" name="sub01" border="0" 
+                                             onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_customersearch01.png')" 
+                                             onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_customersearch02.png')"/></a>
+                                        </td></h:panelGroup>
+                                    <h:panelGroup rendered="#{searchTab.searchCasePermitted}"><td>
+                                        <a href="#{request.contextPath}/front/search/searchCase.jsf">
+                                        <img src="#{request.contextPath}/img/tb_casesearch01.png" id="sub02" name="sub02" border="0" 
+                                             onmouseout="changeImage('sub02', '#{request.contextPath}/img/tb_casesearch01.png')" 
+                                             onmouseover="changeImage('sub02', '#{request.contextPath}/img/tb_casesearch02.png')"/></a>
+                                        </td></h:panelGroup>
+                                    <h:panelGroup rendered="#{searchTab.searchAccountPermitted}"><td>
+                                        <a href="#{request.contextPath}/front/search/searchAccount.jsf">
+                                        <img src="#{request.contextPath}/img/tb_acc01.png" id="sub03" name="sub03" border="0" 
+                                             onmouseout="changeImage('sub03', '#{request.contextPath}/img/tb_acc01.png')" 
+                                             onmouseover="changeImage('sub03', '#{request.contextPath}/img/tb_acc02.png')"/></a>
+                                        </td></h:panelGroup>
+                                    <h:panelGroup rendered="#{searchTab.searchMessagePermitted}"><td>
+                                        <a href="#{request.contextPath}/front/search/searchMessage.jsf">
+                                            <img src="#{request.contextPath}/img/tb_msgsearch02.png" id="sub04" name="sub04" border="0"/></a>
+                                        </td></h:panelGroup>
+                                    </tr>
+                                </table></td>
+                        </tr>
+                    </table>
+                </td>
+            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#e4e4d6">
+                        <tr>
+                            <td width="65%" align="center" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px; background-color: #CACAAB">
+                                    <tr>
+                                        <td width="1"><img src="#{request.contextPath}/img/b101.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="#{request.contextPath}/img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td width="1"><img src="#{request.contextPath}/img/b102.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#CACAAB"></td>
+                                        <td bgcolor="#CACAAB">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td align="left"><h4>Message / Post / Feed</h4></td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="2" class="customer_search">
+                                                <tr>
+                                                    <td align="right">Source Type:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu value="#{searchMessageController.sourceTypeID}" styleClass="select01" style="width: 250px">
+                                                            <f:selectItem itemLabel="#{msg.all}"/>
+                                                            <f:selectItems value="#{searchMessageController.channelList}" />
+                                                        </h:selectOneMenu>    
+                                                    </td>
+                                                    <td align="right">Contact Date:</td>
+                                                    <td align="left">
+                                                        <rich:calendar value="#{searchMessageController.contactDateFrom}"
+                                                                        locale="#{msg.locale}"
+                                                                        popup="true"
+                                                                        inputClass="textfield"
+                                                                        datePattern="#{msg.datePattern}" inputSize="10" buttonClass="rfcalbtn"/>
+                                                                #{msg.to} 
+                                                        <rich:calendar  value="#{searchMessageController.contactDateTo}"
+                                                                        locale="#{msg.locale}"
+                                                                        popup="true"
+                                                                        inputClass="textfield"
+                                                                        datePattern="#{msg.datePattern}" inputSize="10" buttonClass="rfcalbtn"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">Account ID:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu value="#{searchMessageController.accountID}" styleClass="select01" style="width: 250px">
+                                                            <f:selectItem itemLabel="#{msg.all}"/>
+                                                            <f:selectItems value="#{searchMessageController.accountList}" />
+                                                        </h:selectOneMenu>   
+                                                    </td>
+                                                    <td align="right">From:</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchMessageController.emailFrom}" onkeypress="searchByEnterAndReturn(event);" style="width: 250px"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">Status:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu styleClass="select01" id="status" value="#{searchMessageController.status}" style="width: 250px">
+                                                            <f:selectItem itemLabel="#{msg.all}"/>
+                                                            <f:selectItem itemValue="NW" itemLabel="Queued" />
+                                                            <f:selectItem itemValue="AS" itemLabel="Assigned" />
+                                                            <f:selectItem itemValue="PS" itemLabel="Opened" />
+                                                            <f:selectItem itemValue="WF" itemLabel="Request For Approval" />
+                                                            <f:selectItem itemValue="FL" itemLabel="Followed" />
+                                                            <f:selectItem itemValue="IG" itemLabel="Ignored" />
+                                                            <f:selectItem itemValue="CL" itemLabel="Closed" />
+                                                            <f:selectItem itemValue="ST" itemLabel="Sent" />
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                    <td align="right">To:</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchMessageController.emailTo}" onkeypress="searchByEnterAndReturn(event);" style="width: 250px"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">Priority:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu styleClass="select01" id="priority" value="#{searchMessageController.priority}" style="width: 250px">
+                                                            <f:selectItem itemLabel="#{msg.all}"/>
+                                                            <f:selectItem itemValue="PRIORITY_LOW" itemLabel="Low" />
+                                                            <f:selectItem itemValue="PRIORITY_MED" itemLabel="Medium" />
+                                                            <f:selectItem itemValue="PRIORITY_HI" itemLabel="High" />
+                                                            <f:selectItem itemValue="PRIORITY_IMM" itemLabel="Immediately" />
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                   <td align="right">Message ID:</td>
+                                                    <td align="left">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td><h:inputText styleClass="textfield" value="#{searchMessageController.messageID}" maxlength="10"
+                                                                                  onkeypress="return isNumberKey(event);searchByEnterAndReturn(event);" style="width: 80px"/></td>
+                                                                <td>Ticket ID:</td>
+                                                                <td><h:inputText styleClass="textfield" value="#{searchMessageController.ticketId}" maxlength="10"
+                                                                                  onkeypress="searchByEnterAndReturn(event);" style="width: 100px"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">User Group:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu id="userGroupId" style="width: 250px"
+                                                                         value="#{searchMessageController.userGroupId}"
+                                                                         valueChangeListener="#{searchMessageController.userGroupChangeListener}">
+                                                            <f:selectItem itemLabel="All" itemValue="0"/>
+                                                            <f:selectItems value="#{searchMessageController.userGroupList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                            <a4j:ajax event="change" render="userId" limitRender="true" execute="@this"/>
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                    <td align="right">Related Message ID:</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchMessageController.refMessageID}" onkeypress="searchByEnterAndReturn(event);" style="width: 250px"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">User Name:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu id="userId" style="width: 250px"
+                                                                         value="#{searchMessageController.userId}">
+                                                            <f:selectItem itemLabel="All" itemValue="0"/>
+                                                            <f:selectItems value="#{searchMessageController.userList}" var="list" 
+                                                                           itemLabel="#{list.name} #{list.surname}" itemValue="#{list.id}"/>
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                    <td align="right">Subject:</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchMessageController.subject}" onkeypress="searchByEnterAndReturn(event);" style="width: 250px"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right">Service:</td>
+                                                    <td align="left">
+                                                        <h:selectOneMenu value="#{searchMessageController.serviceID}" styleClass="select01" style="width: 250px">
+                                                            <f:selectItem itemLabel="#{msg.all}"/>
+                                                            <f:selectItems value="#{searchMessageController.serviceList}" />
+                                                        </h:selectOneMenu> 
+                                                    </td>
+                                                    <td align="right">Content:</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchMessageController.content}" onkeypress="searchByEnterAndReturn(event);" style="width: 250px"/></td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td bgcolor="#CACAAB"></td>
+                                    </tr>
+                                    <tr>
+                                        <td><img src="#{request.contextPath}/img/b103.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="#{request.contextPath}/img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td><img src="#{request.contextPath}/img/b104.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="10" valign="top" style="border-left: 1px dotted #cbcbc3;"></td>
+                            <td width="45%" align="center" valign="top">
+                                
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3" align="center">
+                                <h:commandButton image="/resources/img/bb_search.png" id="searchButton" 
+                                                 action="#{searchMessageController.searchMessageAction}" 
+                                                 style="margin-top: 5px; margin-bottom: 5px"/>
+                            </td>
+                        </tr>
+                </table>      
+                <rich:dataTable style="width: 100%" id="messageList" styleClass="tableline01" headerClass="subh01"
+                                value="#{searchMessageController.searchMessageList}" rows="#{global.maxrows}" var="list" 
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column style="text-align: left;width: 5%;"><h:outputText value="Source"/></rich:column>
+                        <rich:column style="text-align: left;width: 10%;"><h:outputText value="Account ID"/></rich:column>
+                        <rich:column style="text-align: left;width: 7%;"><h:outputText value="Message ID"/></rich:column>
+                        <rich:column style="text-align: left;width: 7%;"><h:outputText value="Ticket ID"/></rich:column>
+                        <rich:column style="text-align: left;width: 15%;"><h:outputText value="From"/></rich:column>
+                        <rich:column style="text-align: left;width: 15%;"><h:outputText value="To"/></rich:column>
+                        <rich:column style="text-align: left;width: 13%;"><h:outputText value="Contact Date"/></rich:column>
+                        <rich:column style="text-align: left;width: 10%;"><h:outputText value="Last Receive"/></rich:column>
+                        <rich:column style="text-align: left;width: 10%;"><h:outputText value="Status"/></rich:column>
+                        <rich:column style="text-align: left;width: 20%;"><h:outputText value="Subject"/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+                <rich:column style="text-align: left;">
+                    <table border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left">
+                    <h:graphicImage url="/img/social/em_in.png" rendered="#{list.sourceSub eq 'EM_IN'}" style="display: inline"/>
+                    <h:graphicImage url="/img/social/em_out.png" rendered="#{list.sourceSub eq 'EM_OUT'}" style="display: inline"/>
+                            </td>
+                            <td align="left">
+                    <h:graphicImage url="/img/icon_compose.png" alt="Compose" title="Compose" 
+                                    style="display: inline"
+                                    rendered="#{list.sourceSub eq 'EM_OUT' and list.parentId eq null and (list.status eq 'DF' or list.status eq 'WF')}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.accountID}"/>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:commandLink title="View Detail #{list.msgID}" value="#{list.msgID}" action="/social/scldetail.jsf"
+                                   rendered="#{not (list.sourceSub eq 'EM_OUT' and list.parentId eq null and (list.status eq 'DF' or list.status eq 'WF' or list.status eq 'IG'))}" >
+                        <f:param name="soMessageId" value="#{list.msgID}"/>
+                    </h:commandLink>
+                    <a4j:commandLink value="#{list.msgID}"
+                                   actionListener="#{searchMessageController.checkStatusComposeListener}"
+                                   rendered="#{list.sourceSub eq 'EM_OUT' and list.parentId eq null and (list.status eq 'DF' or list.status eq 'WF' or list.status eq 'IG')}" 
+                                   oncomplete="window.open('#{request.contextPath}/social/compose.jsf?soMessageId=#{list.msgID}','','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;">
+                        <f:param name="soMessageId" value="#{list.msgID}"/>
+                    </a4j:commandLink>
+                </rich:column>                   
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.ticketId}"/>
+                </rich:column>                  
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.emailFrom}"/>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.emailTo}"/>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.contactDate}" >
+                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.lastReceiveByName}"/>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:outputText value="Queued" rendered="#{list.status eq 'NW'}"/>
+                    <h:outputText value="Assigned" rendered="#{list.status eq 'AS'}"/>
+                    <h:outputText value="Opened" rendered="#{list.status eq 'PS' or list.status eq 'DF'}"/>
+                    <h:outputText value="Request For Approval" rendered="#{list.status eq 'WF'}"/>
+                    <h:outputText value="Followed" rendered="#{list.status eq 'FL'}"/>
+                    <h:outputText value="Ignored" rendered="#{list.status eq 'IG'}"/>
+                    <h:outputText value="Closed" rendered="#{list.status eq 'CL'}"/>
+                </rich:column>
+                <rich:column style="text-align: left;">
+                    <h:outputText value="#{list.subject}"/>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"  />
+                </f:facet>
+            </rich:dataTable>
+            </td>
+            <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" style="background-image: url('#{request.contextPath}/img/box04.png'); background-repeat: repeat-x; background-position: left; width: 10px; height: 10px"></td>
+                <td style="background-image: url('#{request.contextPath}/img/box07.png'); background-repeat: repeat-x; background-position: bottom; height: 10px;"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td width="10" style="background-image: url('#{request.contextPath}/img/box03.png'); background-repeat: repeat-x; background-position: right; width: 10px; height: 10px"></td>
+            </tr>
+        </table>
+    </ui:define>
+</ui:composition>

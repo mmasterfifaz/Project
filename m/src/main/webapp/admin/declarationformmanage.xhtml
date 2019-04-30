@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Declaration Form Manage</ui:define>
+            <ui:define name="button">
+            </ui:define>
+            <ui:define name="panel">
+                    <h:panelGroup>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td colspan="2" align="center">
+                                <table width="39%" align="center" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td width="200" class="blue04" align="left">Selected FlexField</td>
+                                        <td width="10">&nbsp;</td>
+                                        <td width="270" class="blue04" align="left"></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" align="left">
+                                            <rich:orderingList
+                                                id="selectedField" 
+                                                listWidth="250px" listHeight="400px" value="#{declarationFormManageController.fieldList}" itemValue="#{declarationFormManageController.selectedField}">
+                                                <f:selectItems value="#{declarationFormManageController.selectedField}"/>
+                                            </rich:orderingList>
+                                </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3" valign="top" align="center">
+                                            
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                    <td align="center" colspan="3">
+                                        <h:commandButton  image="../img/b_back.png" action="#{declarationFormManageController.backAction}"
+                                                          immediate="true">
+                                        </h:commandButton>
+                                        <h:commandButton  image="../img/b_proceed.png" action="#{declarationFormManageController.saveAction}">
+                                        </h:commandButton>
+                                    </td>
+                                </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <rich:popupPanel id='#{modalId}' width="1100" height="600" shadowOpacity="0" style="border-style: none" >
+        <h:form>
+            
+            <table width="880" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td><img src="#{request.contextPath}/img/box12.png" width="5" height="48"/></td>
+                    <td width="100%" background="#{request.contextPath}/img/box16.png" bgcolor="#FFFFFF">
+                <ui:insert name="searchcontent"/>
+                </td>
+                <td><img src="#{request.contextPath}/img/box13.png" width="5" height="48"/></td>
+                </tr>
+                <tr>
+                    <td bgcolor="#FFFFFF"></td>
+                    <td bgcolor="#FFFFFF" valign="top">
+                        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <tr>
+                                
+                                <td style="width: 100%;height: 480px;" valign="top"><div class="scroll"><ui:insert name='content'/></div></td></tr>
+                        </table>
+                    </td>
+                    <td bgcolor="#FFFFFF"></td>
+                </tr>
+                <tr>
+                    <td><img src="#{request.contextPath}/img/box15.png" width="5" height="5"/></td>
+                    <td bgcolor="#FFFFFF"><img src="#{request.contextPath}/img/sp.gif" width="5" height="5"/></td>
+                    <td><img src="#{request.contextPath}/img/box14.png" width="5" height="5"/></td>
+                </tr>
+            </table>
+        </h:form>
+    </rich:popupPanel>
+</ui:composition>

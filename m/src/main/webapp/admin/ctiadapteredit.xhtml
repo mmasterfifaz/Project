@@ -1,0 +1,288 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">CTI Adapter: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainData" >
+                <table width="80%" border="0" align="center" cellpadding="8" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{ctiAdapterEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Name:</td>
+                        <td><h:inputText id="name" value="#{ctiAdapterEditController.ctiAdapter.name}" styleClass="textfield" 
+                                         required="true" requiredMessage="#{msg.require}" size="30">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{ctiAdapterEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                   
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> CTI Server URL:</td>
+                        <td><h:inputText id="ctiUrl" value="#{ctiAdapterEditController.ctiAdapter.ctiServerUrl}" styleClass="textfield" 
+                                         required="true" requiredMessage="#{msg.require}" size="50">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="ctiUrl" style="color:red"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"> Web Toolbar URL:</td>
+                        <td><h:inputText id="toolbarUrl" value="#{ctiAdapterEditController.ctiAdapter.webToolbarUrl}" 
+                                         styleClass="textfield" size="50">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> CTI Vendor:</td>
+                        <td valign="top">
+                            <h:selectOneRadio id="ctiVendor" value="#{ctiAdapterEditController.ctiAdapter.ctiVendorCode}"
+                                              layout="pageDirection" required="true" requiredMessage="#{msg.require}" >
+                                <f:selectItem itemLabel="Aspect" itemValue="aspect"/>
+                                <f:selectItem itemLabel="CISCO" itemValue="cisco"/>
+                                <f:selectItem itemLabel="Avaya" itemValue="avaya"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneRadio>                            
+                            <rich:message for="ctiVendor" style="color:red"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="200" align="left" valign="top" class="blue04">Recorder Information</td>
+                        <td>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"> Recorder Vendor:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{ctiAdapterEditController.ctiAdapter.recorderVendorCode}"
+                                              layout="pageDirection" >
+                                <f:selectItem itemLabel="Aspect" itemValue="aspect"/>                                
+                                <f:selectItem itemLabel="NICE" itemValue="nice"/>
+                                <f:selectItem itemLabel="Redbox" itemValue="redbox"/>
+                                <f:selectItem itemLabel="Genesys" itemValue="genesys"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"> Thread Sleep (ms.):</td>
+                        <td>
+                            <h:inputText id="threadSleep" value="#{ctiAdapterEditController.ctiAdapter.recorderThreadSleep}" 
+                                         styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" 
+                                         validatorMessage="Please Enter Number Only!">
+                                 <rich:validator />
+                            </h:inputText>
+                            <rich:message for="threadSleep" style="color:red"/>
+                        </td>
+                    </tr>
+                    
+                    
+                </table>
+                </h:panelGroup>        
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr><td>
+                        <a4j:commandButton image="../img/b_add.png" execute="@this"
+                                           limitRender="true" render="data" 
+                                           actionListener="#{ctiAdapterEditController.addQuestionListener}"/>
+                        <h:outputText id="dupParam" value="#{ctiAdapterEditController.messageDupParam}" style="color:red"/>
+                    </td></tr>
+                    <tr><td>
+             
+                    <!-- BEGIN CONFIG 20 PARAMETER -->
+                    <rich:dataTable id="data" style="width: 80%" headerClass="subh01"
+                                    value="#{ctiAdapterEditController.parameterMapList}" var="list" >
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="text-align: left;;width: 30%" >Parameter</rich:column>
+                                <rich:column style="text-align: left;width: 20%" >Value</rich:column>
+                                <rich:column style="text-align: left;" ></rich:column>
+                                <rich:column style="text-align: left;width: 10%" ></rich:column>
+                                <rich:column style="text-align: left;width: 10%" ></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column style="text-align: left;;width: 30%" >
+                            <h:selectOneMenu id="paramName" value="#{list.name}" styleClass="select08" 
+                                             required="true" requiredMessage="#{msg.require}" >
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItem itemValue="param1" itemLabel="Param1"/>
+                                <f:selectItem itemValue="param2" itemLabel="Param2"/>
+                                <f:selectItem itemValue="param3" itemLabel="Param3"/>
+                                <f:selectItem itemValue="param4" itemLabel="Param4"/>
+                                <f:selectItem itemValue="param5" itemLabel="Param5"/>
+                                <f:selectItem itemValue="param6" itemLabel="Param6"/>
+                                <f:selectItem itemValue="param7" itemLabel="Param7"/>
+                                <f:selectItem itemValue="param8" itemLabel="Param8"/>
+                                <f:selectItem itemValue="param9" itemLabel="Param9"/>
+                                <f:selectItem itemValue="param10" itemLabel="Param10"/>
+                                <f:selectItem itemValue="param11" itemLabel="Param11"/>
+                                <f:selectItem itemValue="param12" itemLabel="Param12"/>
+                                <f:selectItem itemValue="param13" itemLabel="Param13"/>
+                                <f:selectItem itemValue="param14" itemLabel="Param14"/>
+                                <f:selectItem itemValue="param15" itemLabel="Param15"/>
+                                <f:selectItem itemValue="param16" itemLabel="Param16"/>
+                                <f:selectItem itemValue="param17" itemLabel="Param17"/>
+                                <f:selectItem itemValue="param18" itemLabel="Param18"/>
+                                <f:selectItem itemValue="param19" itemLabel="Param19"/>
+                                <f:selectItem itemValue="param20" itemLabel="Param20"/>                                
+                                <a4j:ajax event="change" execute="@this" render="dupParam"
+                                        listener="#{ctiAdapterEditController.checkDupParamListener}" />
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>                                                     
+                            <rich:message for="paramName" style="color:red"/>
+                        </rich:column>
+                        <rich:column style="text-align: left;width: 20%" >
+                            <h:inputText id="tagField" value="#{list.value}" size="30"
+                                         required="true" requiredMessage="#{msg.require}" >
+                                <f:ajax event="change" execute="@this" />
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>                                               
+                            <rich:message for="tagField" style="color:red"/>
+                        </rich:column>
+                        <rich:column style="text-align: left;" >
+                            <a4j:commandButton image="../img/b_addtag.png" title="View Tag Field" 
+                                               action="#{ctiAdapterEditController.addTagParamNo}"
+                                               render="tagFieldList" limitRender="true" execute="@this"
+                                               oncomplete="#{rich:component('tagDetail')}.show();" >                                
+                                <f:param name="paramId" value="#{list.id}"/>
+                            </a4j:commandButton>
+                        </rich:column>
+                        <rich:column style="text-align: right;width: 10%" >
+                            <a4j:commandButton image="../img/b_insert.png" execute="@this"
+                                            limitRender="true" render="data"
+                                            actionListener="#{ctiAdapterEditController.insertQuestionListener}"> 
+                                <f:param name="paramId" value="#{list.id}"/>
+                            </a4j:commandButton>
+                        </rich:column>
+                        <rich:column style="text-align: left;width: 10%" >
+                            <a4j:commandButton image="../img/b_delete.png" execute="@this"
+                                            limitRender="true" render="data" immediate="true"
+                                            actionListener="#{ctiAdapterEditController.deleteQuestionListener}">
+                                <f:param name="paramId" value="#{list.id}"/>
+                            </a4j:commandButton>
+                        </rich:column>
+                        
+                        
+                    </rich:dataTable>
+                    
+                    <!-- END CONFIG 20 PARAMETER -->
+                            
+                    </td></tr>
+                    
+                </table> 
+                            
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top" align="left">
+                            <h:selectBooleanCheckbox id="enable" value="#{ctiAdapterEditController.ctiAdapter.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr>
+                        <td align="left" valign="top" width="33%">
+                            <h:commandButton image="../img/b_back.png"
+                                             action="#{ctiAdapterEditController.backAction}" immediate="true"/></td>
+                        <td valign="top" align="center" width="34%">
+                             <h:commandButton image="../img/b_save.png" 
+                                             action="#{ctiAdapterEditController.saveAction}" />
+                        </td>
+                        <td align="right" valign="top" width="33%">&nbsp;</td>
+                    </tr>
+                </table>
+            </ui:define>
+            
+            <!-- BEGIN TAG FIELD POPUP -->            
+            <ui:define name="popupModal">
+                <rich:popupPanel id="tagDetail" width="500" autosized="true" style="padding: 0 0 0 0; border-style: none " >
+                    <h:form>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Tag Field</h2></td>
+                                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                    <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('tagDetail')}.hide(); return false;">#{msg.close}</a></td>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="5" background="#{request.contextPath}/img/box08.png">
+                                    <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                <td valign="top" bgcolor="#FFFFFF" >
+                                    <ui:insert name="popupDetail">
+                                    <h:panelGroup id="pgTagDetail">
+                                    <table border="0" cellpadding="3" cellspacing="1" width="100%">
+                                        <tr>
+                                            <td valign="top">
+                                                <rich:dataTable style="width: 100%" id="tagFieldList" styleClass="tableline01" 
+                                                                value="#{ctiAdapterEditController.tagFieldList}" rows="#{global.maxrows}" var="fieldList"
+                                                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                onrowmouseout="this.style.backgroundColor='#F8F8F8'" >
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column styleClass="subh01"><h:outputText value="Name"/></rich:column>
+                                                        <rich:column styleClass="subh01"><h:outputText value="Tag"/></rich:column>
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:column>
+                                                    <h:outputText value="#{fieldList.name}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <a4j:commandLink title="Add Tag Field" render="data" immediate="true" 
+                                                                     action="#{ctiAdapterEditController.selectTagFieldListener}"
+                                                                     value="#{fieldList.tagField}"
+                                                                     onclick="#{rich:component('tagDetail')}.hide();">
+                                                        <f:param name="tagField" value="#{fieldList.tagField}"/>
+                                                        <f:param name="paramId" value="#{ctiAdapterEditController.paramId}"/>
+                                                    </a4j:commandLink>
+                                                </rich:column>
+                                                <f:facet name="footer">
+                                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                                </f:facet>
+                                            </rich:dataTable>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="top" align="center"><a4j:commandButton image="../img/b_close.png" immediate="true" limitRender="true" execute="@this" onclick="#{rich:component('tagDetail')}.hide()"/></td>
+                                        </tr>
+                                    </table>
+                                    </h:panelGroup>
+                                </ui:insert>
+                                </td>
+                                <td width="4" class="bg_right"></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                            </tr>
+                        </table>
+                    </h:form>
+                </rich:popupPanel>
+             </ui:define>   
+            <!-- END TAG FIELD POPUP -->  
+
+        </ui:composition>
+    </h:body>
+</html>

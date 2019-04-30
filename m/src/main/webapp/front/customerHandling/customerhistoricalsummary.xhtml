@@ -1,0 +1,257 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:ajax="https://ajax4jsf.dev.java.net/ajax">
+     <ui:define name="head">
+            <style>
+                <!--
+                div.scroll {
+                    height: 300px;
+                    overflow: auto;
+                    border: 0px solid #666;
+                    background-color: #fff;
+                    padding: 8px;
+                } 
+                -->
+    </style>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/customerHandling/customerDetail.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="type">#{msg.customerhistorical}</ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.customerhistorical}</ui:define>
+    <ui:define name="detail_1"> 
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="300" valign="middle"><h2 class="style1">#{msg.customerhistorical}</h2></td>
+                            <td valign="bottom" height="48"></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td>
+                                <rich:tabPanel switchType="ajax" id="tabs" activeItem="#{customerHistoricalSummaryController.selectedTab}">
+                                    <rich:tab id="group1" name="#{customerHistoricalSummaryController.groupList1.name}" 
+                                              rendered="#{customerHistoricalSummaryController.groupList1.enable}" action="#{customerHistoricalSummaryController.disableDetail}" >  
+                                        <f:facet name="header"><div class="tab-content"><h:outputText value="#{customerHistoricalSummaryController.groupList1.name}"/></div></f:facet>
+                                        <h:panelGroup rendered="#{!customerHistoricalSummaryController.enableDetail}">
+                                            <div class="scroll">
+                                                <table  width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" styleClass="tableline01">
+                                                    <tr>
+                                                    <td bgcolor="#FFFFFF" width="100%" valign="top">
+                                                        <h:panelGrid cellpadding="0" cellspacing="0" width="100%" headerClass="subh01" styleClass="tableline01"
+                                                                     rendered="#{customerHistoricalSummaryController.data1.childCount ne 0}"
+                                                                     id="data1" binding="#{customerHistoricalSummaryController.data1}"/> 
+                                                        <h:outputText class="blue04" value="No data " rendered="#{customerHistoricalSummaryController.data1.childCount eq 0}"/>
+                                                    </td>
+                                                    </tr>
+                                                </table>
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup  rendered="#{customerHistoricalSummaryController.enableDetail}">
+                                            <rich:dataTable style="width: 100%" value="#{customerHistoricalSummaryController.customerHistoricalDetail}" var="historicalList">
+                                                <rich:column style="text-align: right;width: 50%;">
+                                                    <h:outputText class="blue04" value="#{historicalList.columnName}: "/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{historicalList.detail}"/>
+                                                </rich:column>
+                                            </rich:dataTable>
+                                            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                 <tr >
+                                                    <td  align="center" valign="bottom" ><h:outputText value=""/></td>
+                                                </tr>
+                                                <tr >
+                                                    <td  align="center" valign="bottom" >
+                                                        <h:commandButton action="#{customerHistoricalSummaryController.backAction}" image="../../img/b_back.png" immediate="true"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup>
+                                    </rich:tab>
+                                    <rich:tab id="group2" name="#{customerHistoricalSummaryController.groupList2.name}" 
+                                              rendered="#{customerHistoricalSummaryController.groupList2.enable}"  action="#{customerHistoricalSummaryController.disableDetail}">
+                                        <f:facet name="header"><div class="tab-content"><h:outputText value="#{customerHistoricalSummaryController.groupList2.name}"/></div></f:facet>
+                                        <h:panelGroup rendered="#{!customerHistoricalSummaryController.enableDetail}">
+                                        <div class="scroll">
+                                            <table  width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" styleClass="tableline01">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF" width="100%" valign="top">
+                                                        <h:panelGrid cellpadding="0" cellspacing="0" width="100%" headerClass="subh01"  styleClass="tableline01"
+                                                                 rendered="#{customerHistoricalSummaryController.data2.childCount ne 0}" 
+                                                                 id="data2" binding="#{customerHistoricalSummaryController.data2}"/> 
+                                                        <h:outputText class="blue04" value="No data " rendered="#{customerHistoricalSummaryController.data2.childCount eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </h:panelGroup>
+                                        <h:panelGroup  rendered="#{customerHistoricalSummaryController.enableDetail}">
+                                            <rich:dataTable style="width: 100%;" value="#{customerHistoricalSummaryController.customerHistoricalDetail}" var="historicalList">
+                                            <rich:column style="text-align: right;width: 50%">
+                                                <h:outputText class="blue04" value="#{historicalList.columnName}: "/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{historicalList.detail}"/>
+                                            </rich:column>
+                                            </rich:dataTable>
+                                            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                 <tr >
+                                                    <td  align="center" valign="bottom" ><h:outputText value=""/></td>
+                                                </tr>
+                                                <tr >
+                                                    <td  align="center" valign="bottom" >
+                                                        <h:commandButton action="#{customerHistoricalSummaryController.backAction}" image="../../img/b_back.png" immediate="true"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup> 
+                                    </rich:tab>
+                                    <rich:tab id="group3" name="#{customerHistoricalSummaryController.groupList3.name}" 
+                                              rendered="#{customerHistoricalSummaryController.groupList3.enable}"  action="#{customerHistoricalSummaryController.disableDetail}">  
+                                    <f:facet name="header"><div class="tab-content"><h:outputText value="#{customerHistoricalSummaryController.groupList3.name}"/></div></f:facet>
+                                        <h:panelGroup rendered="#{!customerHistoricalSummaryController.enableDetail}">
+                                        <div class="scroll">
+                                            <table  width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" styleClass="tableline01">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF" width="100%" valign="top">
+                                                         <h:panelGrid cellpadding="0" cellspacing="0" width="100%" headerClass="subh01"  styleClass="tableline01"
+                                                                 rendered="#{customerHistoricalSummaryController.data3.childCount ne 0}" 
+                                                                 id="data3" binding="#{customerHistoricalSummaryController.data3}"/> 
+                                                        <h:outputText class="blue04" value="No data " rendered="#{customerHistoricalSummaryController.data3.childCount eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </h:panelGroup>
+                                        <h:panelGroup  rendered="#{customerHistoricalSummaryController.enableDetail}">
+                                            <rich:dataTable style="width: 100%;" value="#{customerHistoricalSummaryController.customerHistoricalDetail}" var="historicalList">
+                                            <rich:column style="text-align: right;width: 50%;">
+                                                <h:outputText class="blue04" value="#{historicalList.columnName}: "/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{historicalList.detail}"/>
+                                            </rich:column>
+                                            </rich:dataTable>
+                                            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                 <tr >
+                                                    <td  align="center" valign="bottom" ><h:outputText value=""/></td>
+                                                </tr>
+                                                <tr >
+                                                    <td  align="center" valign="bottom" >
+                                                        <h:commandButton action="#{customerHistoricalSummaryController.backAction}" image="../../img/b_back.png" immediate="true"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup> 
+                                    </rich:tab>
+                                    <rich:tab id="group4" name="#{customerHistoricalSummaryController.groupList4.name}"
+                                              rendered="#{customerHistoricalSummaryController.groupList4.enable}"  action="#{customerHistoricalSummaryController.disableDetail}">  
+                                        <f:facet name="header"><div class="tab-content"><h:outputText value="#{customerHistoricalSummaryController.groupList4.name}"/></div></f:facet>
+                                        <h:panelGroup rendered="#{!customerHistoricalSummaryController.enableDetail}">
+                                        <div class="scroll">
+                                            <table  width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" styleClass="tableline01">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF" width="100%" valign="top">
+                                                         <h:panelGrid cellpadding="0" cellspacing="0" width="100%" headerClass="subh01"  styleClass="tableline01"
+                                                                 rendered="#{customerHistoricalSummaryController.data4.childCount ne 0}" 
+                                                                 id="data4" binding="#{customerHistoricalSummaryController.data4}"/> 
+                                                        <h:outputText class="blue04" value="No data " rendered="#{customerHistoricalSummaryController.data4.childCount eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </h:panelGroup>       
+                                        <h:panelGroup  rendered="#{customerHistoricalSummaryController.enableDetail}">
+                                            <rich:dataTable style="width: 100%;" value="#{customerHistoricalSummaryController.customerHistoricalDetail}" var="historicalList">
+                                            <rich:column style="text-align: right;width: 50%;">
+                                                <h:outputText class="blue04" value="#{historicalList.columnName}: "/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{historicalList.detail}"/>
+                                            </rich:column>
+                                            </rich:dataTable>
+                                            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                 <tr >
+                                                    <td  align="center" valign="bottom" ><h:outputText value=""/></td>
+                                                </tr>
+                                                <tr >
+                                                    <td  align="center" valign="bottom" >
+                                                        <h:commandButton action="#{customerHistoricalSummaryController.backAction}" image="../../img/b_back.png" immediate="true"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup>
+                                    </rich:tab>
+                                    <rich:tab id="group5" name="#{customerHistoricalSummaryController.groupList5.name}"
+                                              rendered="#{customerHistoricalSummaryController.groupList5.enable}"  action="#{customerHistoricalSummaryController.disableDetail}" >  
+                                        <f:facet name="header"><div class="tab-content"><h:outputText value="#{customerHistoricalSummaryController.groupList5.name}"/></div></f:facet>
+                                        <h:panelGroup rendered="#{!customerHistoricalSummaryController.enableDetail}">
+                                        <div class="scroll">
+                                            <table  width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" styleClass="tableline01">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF" width="100%" valign="top">
+                                                        <h:panelGrid cellpadding="0" cellspacing="0" width="100%" headerClass="subh01"  styleClass="tableline01"
+                                                                 rendered="#{customerHistoricalSummaryController.data5.childCount ne 0}" 
+                                                                 id="data5" binding="#{customerHistoricalSummaryController.data5}"/> 
+                                                        <h:outputText class="blue04" value="No data " rendered="#{customerHistoricalSummaryController.data5.childCount eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </h:panelGroup>
+                                        <h:panelGroup  rendered="#{customerHistoricalSummaryController.enableDetail}">
+                                            <rich:dataTable style="width: 100%;" value="#{customerHistoricalSummaryController.customerHistoricalDetail}" var="historicalList">
+                                            <rich:column style="text-align: right;width: 50%;">
+                                                <h:outputText class="blue04" value="#{historicalList.columnName}: "/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{historicalList.detail}"/>
+                                            </rich:column>
+                                            </rich:dataTable>
+                                            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                 <tr >
+                                                    <td  align="center" valign="bottom" ><h:outputText value=""/></td>
+                                                </tr>
+                                                <tr >
+                                                    <td  align="center" valign="bottom" >
+                                                        <h:commandButton action="#{customerHistoricalSummaryController.backAction}" image="../../img/b_back.png" immediate="true"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup> 
+                                    </rich:tab>
+                              </rich:tabPanel>
+                            </td>
+                        </tr>
+                    </table>      
+                </td>
+                <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+            </tr>
+        </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+            <td background="#{request.contextPath}/img/box07.png"></td>
+            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+        </tr>
+    </table>
+    </ui:define>
+</ui:composition>

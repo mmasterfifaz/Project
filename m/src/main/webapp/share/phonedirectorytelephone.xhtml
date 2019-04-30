@@ -1,0 +1,399 @@
+<ui:composition template="../templates/popupphonedirectory.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="title2">Address Directory</ui:define>
+    <ui:define name="search1">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td width="75%"><h2><img src="#{request.contextPath}/img/phone_directory.png" style="display: inline" width="30" height="37" hspace="5" align="absmiddle" />Phone Directory</h2></td>
+                <td width="25%" align="left">
+                    <h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                            <rich:togglePanel id="advanceSearch" activeItem="plus" switchType="client" cycledSwitching="plus, sub" style="width: 100%; border: 0; padding: 0; margin: 0">
+                                <rich:togglePanelItem name="plus">
+                                    <h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+                                        <h:panelGroup>
+                                            <h:commandLink> 
+                                                <rich:toggleControl targetPanel="advanceSearch" targetItem="sub"/> 
+                                                <img src="#{request.contextPath}/img/sad01.png" alt="" border="0"/>
+                                            </h:commandLink>
+                                        </h:panelGroup>
+                                    </h:panelGrid>
+                                </rich:togglePanelItem>
+                                <rich:togglePanelItem  name="sub">
+                                    <h:panelGroup>
+                                        <h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+                                            <h:panelGroup>
+                                                <h:commandLink> 
+                                                    <rich:toggleControl targetPanel="advanceSearch" targetItem="plus"/> 
+                                                    <img src="#{request.contextPath}/img/sad02.png" alt="" border="0"/>
+                                               </h:commandLink> 
+                                            </h:panelGroup>
+                                        </h:panelGrid>
+                                        <h:panelGroup layout="span" style="position: absolute; background-color: #FFFFFF; width: 300px">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.advanceSearch}</h2></td>
+                                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                                    <td valign="top">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                                                            <tr><td colspan="2"><br/></td></tr>
+                                                            <tr>
+                                                                <td align="right"><h:outputText class="gray03" value="Category:"/></td>
+                                                                <td>
+                                                                    <h:selectOneMenu value="#{phoneDirectoryTelephoneController.phoneDirectoryCategoryId}">
+                                                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                        <f:selectItems value="#{phoneDirectoryTelephoneController.phoneCategoryList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                                                                    </h:selectOneMenu>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right"> <h:outputText class="gray03" value="Name:"/></td>
+                                                                <td><h:inputText styleClass="textfield" value="#{phoneDirectoryTelephoneController.name}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right"><h:outputText class="gray03" value="Surname:"/></td>
+                                                                <td><h:inputText styleClass="textfield" value="#{phoneDirectoryTelephoneController.surname}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right"><h:outputText class="gray03" value="Telephone No:"/></td>
+                                                                <td><h:inputText styleClass="textfield" value="#{phoneDirectoryTelephoneController.phoneSearch}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right"><h:outputText class="gray03" value="Description:"/></td>
+                                                                <td><h:inputText styleClass="textfield" value="#{phoneDirectoryTelephoneController.description}"/></td>
+                                                            </tr>
+                                                            <tr><td colspan="2"><br/></td></tr>
+                                                        </table>
+                                                    </td>
+                                                    <td width="4" class="bg_right"></td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </rich:togglePanelItem>
+                            </rich:togglePanel>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <table border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td><h:inputText value="#{phoneDirectoryTelephoneController.keyword}" size="40" styleClass="textfield"
+                                                    style="width: 50; height: 18px">
+                                        <a4j:ajax event="keyup" render="titleLabel, data"
+                                                    limitRender="true" listener="#{phoneDirectoryTelephoneController.searchListener}"/>
+                                        </h:inputText>
+                                    </td>
+                                    <td>
+                                        <a4j:commandButton actionListener="#{phoneDirectoryTelephoneController.searchListener}"
+                                                            type="submit" image="/img/b_search01.png"
+                                                            render="titleLabel, data" limitRender="true"
+                                                            style="margin-left: 1px"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </h:panelGrid>  
+                </td>
+            </tr>
+        </table>
+    </ui:define>   
+    <ui:define name="leftcontent">     
+        <rich:dataTable id="datatree" style="width: 100%" value="#{phoneDirectoryTelephoneController.phoneCategoryList}" 
+                        var="categorylist">
+            <rich:column styleClass="treeline" style="width: 240px;">
+                <img src="#{request.contextPath}/img/bplus02.png" width="16" height="16" hspace="5" align="absmiddle" alt="" style="display: inline"/>
+                    <a4j:commandLink title="View Detail" value="#{categorylist.name}" 
+                                     action="#{phoneDirectoryTelephoneController.selectPhoneDirectory}"
+                                     render="titleLabel, data, dialText,userText" limitRender="true" styleClass="gray03">
+                        <f:param name="id" value="#{categorylist.id}"/>
+                    </a4j:commandLink>
+            </rich:column>
+        </rich:dataTable>
+    </ui:define>
+    <ui:define name="content">
+        <table id="contentTelephone" width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td valign="top" style="height:40px; width: 900px" class="line01">
+                <h2 class="style1">
+                    <h:panelGroup id="titleLabel">
+                        <h:outputText value="#{phoneDirectoryTelephoneController.phoneDirectoryCategory.name}" rendered="#{phoneDirectoryTelephoneController.phoneDirectoryCategory ne null}"/>
+                        <h:outputText value="Advance Search" rendered="#{phoneDirectoryTelephoneController.phoneDirectoryCategory eq null}"/>
+                        <br/><br/>
+                        <h:outputText class="gray03" value="#{phoneDirectoryTelephoneController.phoneDirectoryCategory.description}" rendered="#{phoneDirectoryTelephoneController.phoneDirectoryCategory ne null}"/>
+                    </h:panelGroup>
+                </h2>
+                </td>
+                <td valign="top" style="height:40px; width: 100px" class="line01">
+                </td>
+                <td valign="middle" class="line01">
+                    <!-- NOT INTEGRATE WITH TELEPHONE -->
+                    <ui:remove>
+                        <h:panelGroup id="telephonyEdit">
+                            <h:panelGroup>
+                                <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td colspan="3" align="left"><h:graphicImage url="/img/hd_transfer.png"/></td>  
+                                    </tr>
+                                </table>
+                                <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                    <tr >
+                                        <td width="5"><h:graphicImage url="/img/tl_f04.png"  width="5" height="5"/></td>
+                                        <td bgcolor="#54bbc8"  height="1"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                        <td valign="top" width="5" background="#{request.contextPath}/img/tl_f05.png"/>
+                                    </tr>
+                                    <tr>
+                                        <td background="#{request.contextPath}/img/tl_f04.png"></td>
+                                        <td bgcolor="#54bbc8" valign="top">
+                                            <table border="0" cellspacing="0" cellpadding="0" style="margin-left: 30px">
+                                                <tr>
+                                                    <td width="205" align="left" valign="middle" bgcolor="#54bbc8">
+                                                        <table border="0" cellspacing="0" cellpadding="0">
+                                                            <tr>
+                                                                <td height="5"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td height="41" align="left" valign="middle"  background="#{request.contextPath}/img/tl_number.png">
+                                                                    <h:panelGroup id="panelNumber">
+                                                                        <h:panelGroup id="transfer" rendered="#{phoneDirectoryTelephoneController.callCategory eq 'inbound'}">
+                                                                            <table border="0" cellpadding="0" cellspacing="0">
+                                                                                <tr><td colspan="3"></td></tr>
+                                                                                <tr>
+                                                                                    <td width="25"></td>
+                                                                                    <td width="140">
+                                                                                        <h:inputText styleClass="textfield" id="transferPhone" size="10" style="width: 140px" onkeypress="return isNumberKey(event)"
+                                                                                                    value="#{phoneDirectoryTelephoneController.phoneNo}" maxlength="12">
+                                                                                            <a4j:ajax event="blur" render="dialBtn" 
+                                                                                                      listener="#{phoneDirectoryTelephoneController.clearDirectoryId}" execute="@this"/>
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                    <td width="37"></td> 
+                                                                                </tr>
+                                                                            </table>
+                                                                        </h:panelGroup>
+                                                                        <h:panelGroup id="dial" rendered="#{phoneDirectoryTelephoneController.callCategory ne 'inbound'}">
+                                                                            <table border="0" cellpadding="0" cellspacing="0">
+                                                                                <tr><td colspan="3"></td></tr>
+                                                                                <tr>
+                                                                                    <td width="25"></td>
+                                                                                    <td width="100">
+                                                                                        <h:inputText styleClass="textfield" id="dialPhone" size="10" style="width: 100px" onkeypress="return isNumberKey(event)"
+                                                                                                    value="#{phoneDirectoryTelephoneController.phoneNo}" maxlength="12">
+                                                                                            <a4j:ajax event="blur" render="dialBtn" 
+                                                                                                      listener="#{phoneDirectoryTelephoneController.clearDirectoryId}" execute="@this"/>
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                    <td width="20">ext.</td>
+                                                                                    <td width="57" align="left">
+                                                                                        <h:inputText styleClass="textfield" id="extNo" value="#{phoneDirectoryTelephoneController.extNo}" 
+                                                                                                     onkeypress="return isNumberKey(event)" size="5" style="width: 30px">
+                                                                                            <a4j:ajax event="blur" render="extBtn"  execute="@this"/>
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </h:panelGroup>
+                                                                    </h:panelGroup>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                    <td valign="middle" align="left" width="5"></td>
+                                                    <h:panelGroup id="butDial">
+                                                    <td valign="middle">
+                                                        <h:panelGroup id="panelDial" >
+                                                            <h:panelGroup id="dialBtn" rendered="#{userSession.dialStatus eq 'idle' or 
+                                                                                                  (phoneDirectoryTelephoneController.callCategory eq 'inbound' and userSession.dialStatus eq 'active')
+                                                                                                  and phoneDirectoryTelephoneController.dialStatus ne 'dialing consult'
+                                                                                                  and newContactController.doNotCall}">
+                                                                <h:panelGroup>
+                                                                    <a4j:commandLink render="panelDial,panelResult,panelNumber"
+                                                                                    onmouseout="MM_swapImgRestore()"
+                                                                                    onmouseover="MM_swapImage('btnDial','','#{request.contextPath}/img/tl_icon01_2.png',1)"
+                                                                                    oncomplete="callTransfer('#{phoneDirectoryTelephoneController.transferType}','#{phoneDirectoryTelephoneController.phoneNo}','#{userSession.callCount}');"
+                                                                                    actionListener="#{phoneDirectoryTelephoneController.dial}"  
+                                                                                    immediate="true" limitRender="true" execute="@this">
+                                                                        <img src="#{request.contextPath}/img/tl_icon01.png" name="btnDial" border="0" alt="Dial" title="Dial"/>
+                                                                    </a4j:commandLink>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup id="extBtn">
+                                                                <h:panelGroup rendered="#{phoneDirectoryTelephoneController.transfer eq false and (userSession.dialStatus eq 'active' or userSession.dialStatus eq 'dialing')
+                                                                                          and userSession.dialStatus ne 'wrap' and phoneDirectoryTelephoneController.callCategory ne 'inbound'
+                                                                                          and phoneDirectoryTelephoneController.dialStatus eq 'dialing'}">
+                                                                    <a4j:commandLink render="panelDial,panelResult,panelNumber"
+                                                                                    onmouseout="MM_swapImgRestore()"
+                                                                                    onmouseover="MM_swapImage('btnExt','','#{request.contextPath}/img/tl_icon05_2.png',1)"
+                                                                                    oncomplete="callExt('#{phoneDirectoryTelephoneController.extNo}');"
+                                                                                    actionListener="#{phoneDirectoryTelephoneController.callExt}"  
+                                                                                    immediate="true" limitRender="true" execute="@this">
+                                                                        <img src="#{request.contextPath}/img/tl_icon05.png" name="btnExt" border="0" alt="Ext." title="Ext."/>
+                                                                    </a4j:commandLink>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{userSession.dialStatus eq 'wrap' and phoneDirectoryTelephoneController.transferType ne 'blind' and newContactController.doNotCall}">
+                                                                <h:panelGroup>
+                                                                    <img src="#{request.contextPath}/img/tl_icon01_dis.png" name="btnDial" border="0" alt="Dial" title="WRAP"/>
+                                                                </h:panelGroup>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{phoneDirectoryTelephoneController.transfer eq true and phoneDirectoryTelephoneController.dialStatus ne 'active' 
+                                                                                      and userSession.dialStatus ne 'idle'}">
+                                                                <table>
+                                                                    <tr><td><a4j:commandLink actionListener="#{phoneDirectoryTelephoneController.blindComplete}" 
+                                                                                            rendered="#{phoneDirectoryTelephoneController.transferType eq 'blind'}"
+                                                                                            render="panelDial,panelResult,panelNumber"
+                                                                                            execute="@this" limitRender="true"
+                                                                                            oncomplete="blindComplete();">
+                                                                                <img src="#{request.contextPath}/img/tran_complete.png"/>
+                                                                            </a4j:commandLink>
+                                                                            <h:panelGroup id="transButDis" rendered="#{phoneDirectoryTelephoneController.transferType eq '3way' and userSession.dialStatus ne 'consulting'}">
+                                                                                <img src="#{request.contextPath}/img/tran_complete_dis.png" />
+                                                                            </h:panelGroup>
+                                                                            <a4j:commandLink actionListener="#{phoneDirectoryTelephoneController.transferComplete}"  
+                                                                                            rendered="#{phoneDirectoryTelephoneController.transferType eq '3way' and userSession.dialStatus eq 'consulting'}"
+                                                                                            render="panelDial,panelResult,panelNumber"
+                                                                                            execute="@this" limitRender="true"
+                                                                                            oncomplete="transferComplete();">
+                                                                                <img src="#{request.contextPath}/img/tran_complete.png"/>
+                                                                            </a4j:commandLink>
+                                                                            </td></tr>
+                                                                    <tr><td><a4j:commandLink actionListener="#{phoneDirectoryTelephoneController.transferCancel}"
+                                                                                            rendered="#{phoneDirectoryTelephoneController.transferType eq '3way'}"
+                                                                                            render="panelDial,panelResult,panelNumber"
+                                                                                            execute="@this" limitRender="true" 
+                                                                                            oncomplete="transferCancel('#{phoneDirectoryTelephoneController.cancelReason}');">
+                                                                                <img src="#{request.contextPath}/img/tran_cancel.png"/>
+                                                                            </a4j:commandLink></td></tr>
+                                                                </table>
+                                                            </h:panelGroup>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                    </h:panelGroup>
+                                                </tr>
+                                            </table>
+                                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                <tr>
+                                                    <td width="20"></td>
+                                                    <td align="left">
+                                                        <h:panelGroup id="panelResult">
+                                                            <h:panelGroup id="panelTransferType" rendered="#{phoneDirectoryTelephoneController.callCategory eq 'inbound' and 
+                                                                                                             userSession.dialStatus eq 'active' and phoneDirectoryTelephoneController.dialStatus ne 'dialing consult'}">
+                                                                <h:selectOneRadio id="transferType" value="#{phoneDirectoryTelephoneController.transferType}">    
+                                                                <f:selectItem itemLabel="3 Way Transfer" itemValue="3way"/>
+                                                                    <f:selectItem itemLabel="Blind Transfer" itemValue="blind"/>
+                                                                    <a4j:ajax event="click" render="panelTransferType"/>
+                                                                </h:selectOneRadio>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup id="panelContactStatus" rendered="#{userSesstion ne 'idle' and phoneDirectoryTelephoneController.transfer eq true and 
+                                                                                                              phoneDirectoryTelephoneController.transferType eq '3way' and
+                                                                                                              phoneDirectoryTelephoneController.dialStatus ne 'active'}">
+                                                                <h:selectOneRadio value="#{phoneDirectoryTelephoneController.cancelReason}">
+                                                                    <f:selectItem itemLabel="Busy" itemValue="busy"/>
+                                                                    <f:selectItem itemLabel="No Answer" itemValue="noAnswer"/>
+                                                                    <f:selectItem itemLabel="Wrong Transfer" itemValue="wrongTransfer"/>
+                                                                    <a4j:ajax event="click" render="panelContactStatus"/>
+                                                                </h:selectOneRadio>
+                                                            </h:panelGroup>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                    <td align="right" width="15"><br/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td align="left" valign="top" width="5" background="#{request.contextPath}/img/tl_f05.png">
+                                            <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td widht="5"><h:graphicImage url="/img/tl_f06.png" width="5" height="5"/></td>
+                                        <td width="390" background="#{request.contextPath}/img/tl_f07.png"/>
+                                        <td width="5"><h:graphicImage url="/img/tl_f07_5.png" width="5" height="5"/></td>
+                                    </tr>
+                                </table>
+                            </h:panelGroup>                                                
+                        </h:panelGroup>
+                    </ui:remove>
+                    <!-- NOT INTEGRATE WITH TELEPHONE -->
+                </td>
+            </tr>
+            <tr><td valign="top" colspan="3">
+                <rich:dataTable id="data" style="width: 100%" rows="#{global.maxrows}" 
+                                value="#{phoneDirectoryTelephoneController.phoneDirectoryList}" var="directorylist"
+                                onrowmouseover="this.style.backgroundColor='#e9fcf8'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                <rich:columnGroup>
+                    <rich:column style="vertical-align: top;width: 60%;" styleClass="line01">
+                        <table width="100%">
+                            <tr>
+                                <td valign="top" style="width: 10%; text-align: right"><h:outputText class="gray03" value="Name: "/></td>
+                                <td valign="top" style="text-align: left"><h:outputText class="blue04" value="#{directorylist.name} #{directorylist.surname}"/></td>
+                            </tr>
+                            <tr>
+                                <td valign="top" style="width: 10%; text-align: right"><h:outputText class="gray03" value="Detail: "/></td>
+                                <td valign="top" style="text-align: left"><h:outputText class="blue04" value="#{directorylist.description}" rendered="#{directorylist.description ne ''}"/>
+                                <h:outputText class="blue04" value="-" rendered="#{directorylist.description eq ''}"/></td>
+                            </tr>
+                        </table>
+                    </rich:column>
+                    <rich:column style="vertical-align: top;width: 40%;" styleClass="line01">
+                        <rich:dataTable id="dataPhoneDirectory" style="width: 100%;background: none;" value="#{directorylist.phoneDirectoryTelephoneCollection}" var="telephonelist"
+                                        onrowmouseover="this.style.backgroundColor='#bceaf8'"
+                                        onrowmouseout="this.style.background='none'">
+                            <rich:column style="vertical-align: top">
+                                <table width="100%">
+                                    <tr>
+                                    <td style="width: 5%" align="right">
+                                        <h:graphicImage library="img" name="tl_is05.png" title="Extension" alt="extension" rendered="#{telephonelist.phoneType == 'extension'}" />
+                                        <h:graphicImage library="img" name="tl_is02.png" title="Home" alt="home" rendered="#{telephonelist.phoneType == 'home'}"/>
+                                        <h:graphicImage library="img" name="tl_is03.png" title="Office" alt="office" rendered="#{telephonelist.phoneType == 'office'}"/>
+                                        <h:graphicImage library="img" name="tl_is04.png" title="Mobile" alt="mobile" rendered="#{telephonelist.phoneType == 'mobile'}"/>
+                                        <h:graphicImage library="img" name="tl_is01.png" title="Main" alt="main" rendered="#{telephonelist.phoneType == 'main'}"/>
+                                    </td>
+                                    <td style="width: 80%" align="left">
+                                        <h:outputText value="#{telephonelist.phoneNo}" title="#{telephonelist.description}"/>
+                                        
+                                        <!-- NOT INTEGRATE WITH TELEPHONE -->
+                                        <ui:remove >
+                                            <a4j:commandLink action="#{phoneDirectoryTelephoneController.selectTelephoneAction}"
+                                                            render="panelNumber" execute="@this" limitRender="true">
+                                                <h:outputText value="#{telephonelist.phoneNo}" title="#{telephonelist.description}"/>
+                                                <f:param name="phoneNo" value="#{telephonelist.phoneNo}"/>
+                                                <f:param name="directoryId" value="#{directorylist.id}"/>
+                                            </a4j:commandLink>
+                                        </ui:remove>
+                                        <!-- NOT INTEGRATE WITH TELEPHONE -->
+                                        
+                                    </td>
+                                </tr></table>
+                            </rich:column>
+                        </rich:dataTable>
+                    </rich:column>
+                </rich:columnGroup>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                </f:facet>
+            </rich:dataTable>
+            </td></tr>
+        </table>
+    </ui:define>
+</ui:composition>
+

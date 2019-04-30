@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Holiday: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{holidayEditController.mode}"/>
+        <h:inputHidden value="#{holidayEditController.holiday.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">* Date:</td>
+                <td>
+                    <rich:calendar id="date" value="#{holidayEditController.holiday.holiday}"
+                                   inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}"
+                                   locale="#{msg.locale}"
+                                   required="true"
+                                   requiredMessage="Date is required">
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </rich:calendar>
+                    <rich:message  for="date" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">* Holiday Name:</td>
+                <td><h:inputText id="name" value="#{holidayEditController.holiday.name}" styleClass="textfield" size="30" required="true"
+                                 requiredMessage="Holiday Name is required">
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:inputText>
+                    <rich:message  for="name" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">Description:</td>
+                <td valign="top"><h:inputTextarea id="description" cols="40" rows="5"  value="#{holidayEditController.holiday.description}">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:commandButton image="../img/b_save.png" action="#{holidayEditController.saveAction}" rendered="#{holidayEditController.savePermitted}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{holidayEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

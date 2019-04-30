@@ -1,0 +1,988 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:outputStylesheet>
+        .even-row {
+        background-color: #F8F8F8;
+        }
+
+        .odd-row {
+        background-color: #FFFFFF;
+        }
+
+        .active-row {
+        background-color: #AFAF67 !important;
+        cursor: pointer;
+        }
+    </h:outputStylesheet>
+<h:head>
+    <style type="text/css">
+        <!--
+        .rich-tabhdr-side-cell {
+            border:none;
+        }
+        .rich-tab-inactive {
+            cursor: pointer;
+            background-image : url(../img/tb_01.png);
+            border:none;
+            height: 20px;
+            color: #000000;
+        }
+        .rich-tab-active {
+            background-image : url(../img/tb_02.png);
+            border:none;
+            height: 20px;
+            color: #FFFFFF;
+        }
+        .rich-tabpanel-content {
+            border-width: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+        .rich-tab-bottom-line {
+            border-color: #75b8d1;
+            border-width: 2px;
+        }
+        a.attach {
+            text-decoration: none;
+        }
+        a.attach:hover {
+            text-decoration: underline;
+        }
+        -->
+    </style>
+    <script type="text/javascript" >
+        function onLoad() {
+            //alert('onloaddd');
+        }
+        
+        function clickTab31() {
+            var tab11 = document.getElementById('frm:tab11');
+            var tab12 = document.getElementById('frm:tab12');
+            var tab21 = document.getElementById('frm:tab21');
+            var tab22 = document.getElementById('frm:tab22');
+        }
+        
+    </script>
+    <script type="text/javascript" src="#{request.contextPath}/includes/setcontrollerproperty.js"/>
+<script>
+window.onbeforeunload = function (evt) {
+
+    saveDraftBeforeUnload();
+    saveWorkingTime();
+}
+</script>
+         <script type="text/javascript">
+        function resizeIframe(obj)
+    {
+        {
+            obj.style.height = 0;
+        }
+        ;
+        {
+            obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+        }
+    }
+     </script>
+</h:head>
+<h:body>
+    <br/>
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td valign="top" style="min-width: 20px">
+        <rich:togglePanel id="toggle1" 
+                          activeItem="tab11" 
+                          switchType="client" 
+                          cycledSwitching="tab11,tab12" 
+                          style="border: 0; padding: 0; margin: 0; display: inline">
+            <rich:togglePanelItem id="tab11" name="tab11" style="float:left; width: 20px; position: relative">
+                <h:commandLink>
+                    <rich:toggleControl targetPanel="toggle1" targetItem="tab12"/>
+                    <img src="#{request.contextPath}/img/bplus.png" 
+                         name="CustomerMenuImage" alt="" border="0" 
+                         id="img11" />
+                </h:commandLink>
+            </rich:togglePanelItem>
+            <rich:togglePanelItem id="tab12" name="tab12" style="float:left; position: relative">
+                <h:commandLink style="float: right">
+                    <rich:toggleControl targetPanel="toggle1" targetItem="tab11"/> 
+                    <img src="#{request.contextPath}/img/b_subtract.png" alt=""/>
+                </h:commandLink><br/>
+                <table width="200" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td>test</td>
+                    </tr>
+                </table>
+                
+            </rich:togglePanelItem>
+        </rich:togglePanel>
+            </td>
+            <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="20" height="480"/></td>
+            <td valign="top" style="width: 100%">
+                
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <h:panelGroup id="panelListSelectsMain">
+                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                    <tr>
+                                        <td valign="top" style="width: 50%">
+                                            <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                <tr>
+                                                    <td nowrap="nowrap" style="width: 8%">
+                                                        <b><font size="2" color="#656565"><h:outputText value="Priority"/></font></b> 
+                                                        <h:graphicImage url="/img/social/#{sclDetailController.soMessage.priority_enum_id}_large.png"
+                                                                        style="display: inline; vertical-align: middle; padding-left: 3px"/>
+                                                    </td>
+                                                    <td valign="top" style="width: 92%">
+                                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td>
+                                                                    <ui:remove><h:graphicImage url="/img/social/logo_#{sclDetailController.soMessage.source_type_enum_id}_large.png"/></ui:remove>
+                                                                    <font size="4" color="#01a0c0">
+                                                                        <h:outputText value="#{sclDetailController.soMessage.source_id}" rendered="#{sclDetailController.soMessage.source_type_enum_id ne 'EM'}"/>
+                                                                        <h:outputText value="#{sclDetailController.emailFrom}" rendered="#{sclDetailController.soMessage.source_subtype_enum_id eq 'EM_IN'}"/>
+                                                                        <h:outputText value="#{sclDetailController.emailTo}" rendered="#{sclDetailController.soMessage.source_subtype_enum_id eq 'EM_OUT'}"/>
+                                                                    </font>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="left" valign="top">
+                                                        <ui:remove><h:outputText style="font-size:small;font-weight:bold;color:#01a0c0" value="#{sclDetailController.emailFrom}"/></ui:remove>
+                                                    </td>
+                                                    <td align="left" valign="top">
+                                                        <h:outputText value="#{sclDetailController.emailDate}" >
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">From : <h:outputText value="#{sclDetailController.emailFrom}"/></td>
+                                                </tr>
+                                                <tr>
+                                                    <td></td>
+                                                    <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">To : <h:outputText value="#{sclDetailController.emailTo}"/></td>
+                                                </tr>
+                                                <h:panelGroup rendered="#{not (sclDetailController.emailCc eq null)}">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Cc : <h:outputText value="#{sclDetailController.emailCc}"/></td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <tr>
+                                                    <td></td>
+                                                    <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Subject : <h:outputText value="#{sclDetailController.soMessage.soEmailMessage.subject}"/></td>
+
+                                                </tr>
+                                                <h:panelGroup rendered="#{not (sclDetailController.attachmentList eq null)}">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Attachments : 
+                                                            <a4j:repeat value="#{sclDetailController.attachmentList}" var="list">
+                                                                <a href="#{request.contextPath}/emailfiles/#{sclDetailController.soMessage.soAccount.id}/#{sclDetailController.soMessage.id}/#{list[1]}" target="_blank" styleClass="attach">
+                                                            #{list[0]}
+                                                                </a> &nbsp;
+                                                            </a4j:repeat>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                            </table>
+                                        </td>
+                                        <td valign="top" style="width: 45%">
+                                            <h:panelGrid columns="2" rendered="#{sclDetailController.bTransfer}">
+                                                <h:outputText value="Transfer From : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                <h:outputText value="#{sclDetailController.transferFrom}"/>
+                                                <h:outputText value="Transfer Date : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                <h:outputText value="#{sclDetailController.transferDate}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                                <h:outputText value="Transfer Reason : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                <h:outputText value="#{sclDetailController.transferFromReason}"/>
+                                                <h:outputText value="Transfer Remark : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                <h:outputText value="#{sclDetailController.transferFromRemark}"/>
+                                            </h:panelGrid>
+                                            <h:panelGrid columns="2" rendered="#{sclDetailController.soMessage.case_status eq 'WF'}">
+                                                <h:outputText value="Request From : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                <h:panelGroup>
+                                                <h:outputText value="#{sclDetailController.soMessage.soWorkflowInstance.createByUsers.name}"/><h:outputText value=" #{sclDetailController.soMessage.soWorkflowInstance.createByUsers.surname}"/>
+                                                </h:panelGroup>
+                                                <h:outputText value="Remark : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                <h:outputText value="#{sclDetailController.soMessage.soWorkflowInstance.note}"/>
+                                            </h:panelGrid>
+                                            <h:panelGrid columns="3" rendered="#{sclDetailController.soMessage.case_status eq 'IG'}">
+                                                <h:graphicImage url="/icon/reject.png" style="display: inline" alt="Ignored" title="Ignored"/>
+                                                <h:outputText value="Ignored" style="font-weight: bold; color: #0000FF"/>
+                                                <h:outputText value=""/>
+                                                
+                                                <h:outputText value=""/>
+                                                <h:outputText value="Reason : "/>
+                                                <h:outputText value="#{sclDetailController.ignoredReason}"/>
+                                                
+                                                <h:outputText value=""/>
+                                                <h:outputText value="Case Type : "/>
+                                                <h:outputText value="#{sclDetailController.ignoredCaseType}"/>
+                                                
+                                                <h:outputText value=""/>
+                                                <h:outputText value="Case Topic : "/>
+                                                <h:outputText value="#{sclDetailController.ignoredCaseTopic}"/>
+                                                
+                                                <h:outputText value=""/>
+                                                <h:outputText value="Remark : "/>
+                                                <h:outputText value="#{sclDetailController.ignoredRemark}"/>
+                                                
+                                                <h:outputText value=""/>
+                                                <h:outputText value="By : "/>
+                                                <h:outputText value="#{sclDetailController.ignoredBy}"/>
+                                                
+                                                <h:outputText value=""/>
+                                                <h:outputText value="Date : "/>
+                                                <h:outputText value="#{sclDetailController.ignoredDate}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </h:panelGrid>
+
+                                        </td>
+                                        <td valign="top" align="right" style="width: 5%">
+                                            <a4j:commandButton image="/img/btn_printer.png" 
+                                                               style="display: inline; text-align: right"
+                                                               onclick="window.open('#{request.contextPath}/social/scldetailview.jsf?soMessageId=#{sclDetailController.soMessage.id}','view','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                                
+                                
+                                
+                                
+                                    
+                                        <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                        <tr>
+                                            <td></td>
+                                            <td style="height: 20px; vertical-align: middle"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td align="left">
+                                                <h:panelGroup>
+                                                    <iframe id="msg" frameborder="0" style="border: 0; width: 100%" scrolling="no" onload="javascript:resizeIframe(this);" src="#{request.contextPath}/social/viewMailParent.jsf?soMessageId=#{sclDetailController.soMessage.id}"/>
+                                                </h:panelGroup> 
+                                            </td>
+                                        </tr>
+                                    </table>
+                                
+                                
+                                
+                                
+                                <h:panelGroup rendered="#{sclDetailController.soMessageParent ne null and sclDetailController.soMessage.soEmailMessage.direction ne 'OUT'}">
+                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                        <tr>
+                                            <td nowrap="nowrap" style="width: 1%">
+                                            </td>
+                                            <td valign="top" style="width: 99%">
+                                                <ui:remove><h:graphicImage url="/img/social/logo_#{sclDetailController.soMessageParent.source_type_enum_id}_large.png"/></ui:remove>
+                                                <font size="4" color="#01a0c0">
+                                                <h:outputText value="#{sclDetailController.soMessageParent.source_id}" rendered="#{sclDetailController.soMessageParent.source_type_enum_id ne 'EM'}"/>
+                                                <h:outputText value="#{sclDetailController.emailFromParent}" rendered="#{sclDetailController.soMessageParent.source_type_enum_id eq 'EM'}"/>
+                                                </font>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="left" valign="top">
+                                                <ui:remove><h:outputText style="font-size:small;font-weight:bold;color:#01a0c0" value="#{sclDetailController.emailFromParent}"/></ui:remove>
+                                            </td>
+                                            <td align="left" valign="top">
+                                                <h:outputText value="#{sclDetailController.emailDateParent}" >
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">From : <h:outputText value="#{sclDetailController.emailFromParent}"/></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">To : <h:outputText value="#{sclDetailController.emailToParent}"/></td>
+                                        </tr>
+                                        <h:panelGroup rendered="#{not (sclDetailController.emailCcParent eq null)}">
+                                            <tr>
+                                                <td></td>
+                                                <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Cc : <h:outputText value="#{sclDetailController.emailCcParent}"/></td>
+                                            </tr>
+                                        </h:panelGroup>
+                                        <tr>
+                                            <td></td>
+                                            <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Subject : <h:outputText value="#{sclDetailController.emailSubjectParent}"/></td>
+
+                                        </tr>
+                                        <h:panelGroup rendered="#{not (sclDetailController.attachmentListParent eq null)}">
+                                            <tr>
+                                                <td></td>
+                                                <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Attachments : 
+                                                    <a4j:repeat value="#{sclDetailController.attachmentListParent}" var="list">
+                                                        <a href="#{request.contextPath}/emailfiles/#{sclDetailController.soMessageParent.soAccount.id}/#{sclDetailController.soMessageParent.id}/#{list[1]}" target="_blank" styleClass="attach">
+                                                            #{list[0]}
+                                                        </a> &nbsp;
+                                                    </a4j:repeat>
+                                                </td>
+                                            </tr>
+                                        </h:panelGroup>
+                                        <tr>
+                                            <td></td>
+                                            <td style="height: 20px; vertical-align: middle"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td align="left">
+                                                <h:panelGroup>
+                                                    <iframe id="msgParent" frameborder="0" style="border: 0; width: 100%" scrolling="no" onload="javascript:resizeIframe(this);" src="#{request.contextPath}/social/viewMailParent.jsf?soMessageId=#{sclDetailController.soMessageParent.id}"/>
+                                                </h:panelGroup> 
+                                                
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </h:panelGroup>
+                                    
+                                        
+                                        
+                                <h:panelGroup rendered="#{sclDetailController.showPanelSendMail}">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td>
+                                                    <a4j:commandButton image="/img/social/btn_reply_over.png" 
+                                                                       value="Reply"
+                                                                       execute="@this"
+                                                                       limitRender="true"
+                                                                       render="pTo, pCc, pSubject"
+                                                                       actionListener="#{sclDetailController.replyActionListener}"
+                                                                       style="margin-bottom: -4px; margin-left: 1px"/>
+
+                                                    <a4j:commandButton image="/img/social/btn_replyall_over.png" 
+                                                                       value="Reply All"
+                                                                       execute="@this"
+                                                                       limitRender="true"
+                                                                       render="pTo, pCc, pSubject"
+                                                                       actionListener="#{sclDetailController.replyAllActionListener}"
+                                                                       style="margin-bottom: -4px"/>
+
+                                                    <a4j:commandButton image="/img/social/btn_forward_over.png"  
+                                                                       value="Forward"
+                                                                       execute="@this"
+                                                                       limitRender="true"
+                                                                       render="pTo, pCc, pSubject"
+                                                                       actionListener="#{sclDetailController.forwardActionListener}"
+                                                                       style="margin-bottom: -4px"/>
+
+                                                    <a4j:commandButton image="/img/social/btn_ignore.png"  
+                                                                       value="Ignore"
+                                                                       style="margin-bottom: -4px"
+                                                                       onclick="#{rich:component('ignoreConfirm')}.show()"
+                                                                       execute="@this"
+                                                                       limitRender="true"
+                                                                       render="popupIgnoreConfirm"/>
+
+                                                    <a4j:commandButton image="/img/social/btn_createCase.png"  
+                                                                       value="Ignore"
+                                                                       style="margin-bottom: -4px"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_04.png'); background-repeat: repeat"></td>
+                                                <td bgcolor="#54bbc8"><br/>
+                                                    
+                                                    <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                        <tr>
+                                                            <td style="width: 50%; vertical-align: top">
+                                                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; width: 10%; color: #FFFFFF">From :</td>
+                                                                        <td align="left" valign="top" style="">
+
+                                                                            <h:selectOneMenu value="#{sclDetailController.outName}" 
+                                                                                             style="width: 100%; border: 0; height: 22px; font-size: 14px">
+                                                                                <f:selectItems value="#{sclDetailController.outList}" var="list"
+                                                                                               itemLabel="#{list.outgoingAccountName}" itemValue="#{list.outgoingAccountName}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">To :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                                                                    <td>
+                                                                                        <h:inputText id="pTo" value="#{sclDetailController.pto}" required="true" requiredMessage="#{msg.require}"
+                                                                                                     style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                            <a4j:ajax event="change" execute="@this" limitRender="true" render="msgPTo"/>
+                                                                                        </h:inputText>
+                                                                                        <rich:message id="msgPTo" for="pTo" style="color:red; display: inline"/>
+                                                                                    </td>
+                                                                                    <td align="right" style="width: 26px">
+                                                                                        <a4j:commandButton image="/img/btn_addressbook.png" 
+                                                                                                           action="#{sclDetailController.checkTO}"
+                                                                                                           actionListener="#{popupSelectAddress.initialize}"
+                                                                                                           oncomplete="#{rich:component('selectAddress')}.show();"
+                                                                                                           render="popupSelectAddress,phoneCat,txtSearch,userList"
+                                                                                                           execute="@this" limitRender="true"
+                                                                                                           style="margin: 2px 0px 0px 5px; vertical-align: top"/> 
+                                                                                        
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Cc :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                                                                    <td>
+                                                                                        <h:inputText id="pCc" value="#{sclDetailController.pcc}"
+                                                                                                     style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                            <f:ajax event="blur" render="pCc" />
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                    <td align="right" style="width: 26px">
+                                                                                        <a4j:commandButton image="/img/btn_addressbook.png" 
+                                                                                                           action="#{sclDetailController.checkCC}"
+                                                                                                           actionListener="#{popupSelectAddress.initialize}"
+                                                                                                           oncomplete="#{rich:component('selectAddress')}.show();"
+                                                                                                           render="popupSelectAddress,phoneCat,txtSearch,userList"
+                                                                                                           execute="@this" limitRender="true"
+                                                                                                           style="margin: 0px 0px 0px 5px; vertical-align: top"/> 
+                                                                                        <h:message for="pCc" style="color:red"/>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Bcc :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                                                                    <td>
+                                                                                        <h:inputText id="pBcc" value="#{sclDetailController.pbcc}"
+                                                                                                     style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                            <f:ajax event="blur" render="pBcc" />
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                    <td align="right" style="width: 26px">
+                                                                                        <a4j:commandButton image="/img/btn_addressbook.png" 
+                                                                                                           action="#{sclDetailController.checkBCC}"
+                                                                                                           actionListener="#{popupSelectAddress.initialize}"
+                                                                                                           oncomplete="#{rich:component('selectAddress')}.show();"
+                                                                                                           render="popupSelectAddress,phoneCat,txtSearch,userList"
+                                                                                                           execute="@this" limitRender="true"
+                                                                                                           style="margin: 0px 0px 0px 5px; vertical-align: top"/> 
+                                                                                        <h:message for="pBcc" style="color:red"/>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Subject :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <h:inputText id="pSubject" value="#{sclDetailController.psubject}"
+                                                                                         style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                <f:ajax event="blur" render="pSubject"/>
+                                                                            </h:inputText></td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 50%; vertical-align: top">
+                                                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; width: 10%; color: #FFFFFF">Case Type :</td>
+                                                                        <td align="left" valign="top" style="">
+                                                                            <h:panelGroup id="caseTypeList">
+                                                                                <rich:dataTable id="dataCaseType" style="width: 100%;"
+                                                                                                value="#{sclDetailController.soMsgCasetypeMapList}" var="cList"
+                                                                                                rowKeyVar="idx" styleClass="tableline01">
+                                                                                    <rich:column style="vertical-align: top">
+                                                                                        <h:outputText value="#{idx+1}"/>
+                                                                                    </rich:column>
+                                                                                    <rich:column style="width: 50%; vertical-align: top">
+                                                                                        <h:outputText value="#{cList.soCaseType.name}"/>
+                                                                                    </rich:column>
+                                                                                    <rich:column style="width: 50%; vertical-align: top">
+                                                                                        <h:outputText value="#{cList.soCaseTypeSub.name}"/>
+                                                                                    </rich:column>
+                                                                                    <rich:column  style="text-align: right; vertical-align: top">
+                                                                                        <a4j:commandButton image="/img/social/btn_minus.png"
+                                                                                                           limitRender="true" execute="@this"
+                                                                                                           render="caseTypeList,pgCheck"
+                                                                                                           immediate="true"
+                                                                                                           actionListener="#{sclDetailController.deleteSoMsgCasetypeMapListener}">
+                                                                                            <f:param name="idx" value="#{idx}"/>
+                                                                                        </a4j:commandButton>
+                                                                                    </rich:column>
+                                                                                </rich:dataTable>
+                                                                                <h:panelGroup rendered="#{sclDetailController.soMsgCasetypeMapList ne null}">
+                                                                                    <h:inputHidden id="hCaseTypeNo" value="#{sclDetailController.caseTypeSize}"/>
+                                                                                </h:panelGroup>
+                                                                            </h:panelGroup>
+                                                                            <a4j:region>
+                                                                            <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                                                                                <tr>
+                                                                                    <td>
+                                                                                        <h:selectOneMenu id="soCaseTypeId" value="#{sclDetailController.soCaseTypeId}" 
+                                                                                                         style="width: 100%; border: 1px; height: 30px; font-size: 14px">
+                                                                                            <f:selectItem itemLabel="Please select"/>
+                                                                                            <f:selectItems value="#{sclDetailController.soCaseTypeList}" var="cList1"
+                                                                                                           itemLabel="#{cList1.name}" itemValue="#{cList1.id}"/>
+                                                                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="soCaseTypeSub"
+                                                                                                      listener="#{sclDetailController.soCaseTypeListener}"/>
+                                                                                        </h:selectOneMenu>
+                                                                                        <rich:message id="soCaseTypeIdMsg" for="soCaseTypeId" style="color:red"/>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <h:selectOneMenu id="soCaseTypeSub" value="#{sclDetailController.soCaseTypeSubId}" 
+                                                                                                         style="width: 100%; border: 1px; height: 30px; font-size: 14px"
+                                                                                                         required="#{sclDetailController.soCaseTypeId ne null}" requiredMessage="#{msg.require}"
+                                                                                                         valueChangeListener="#{sclDetailController.soCaseTypeSubListener}">
+                                                                                            <f:selectItem itemLabel="Please select"/>
+                                                                                            <f:selectItems value="#{sclDetailController.soCaseTypeSubList}" var="cList2"
+                                                                                                           itemLabel="#{cList2.name}" itemValue="#{cList2.id}"/>
+                                                                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="soCaseTypeSubMsg,pgCheck"/>
+                                                                                        </h:selectOneMenu>
+                                                                                        <rich:message id="soCaseTypeSubMsg" for="soCaseTypeSub" style="color:red"/>
+                                                                                    </td>
+                                                                                    <td style="text-align: right">
+                                                                                        <a4j:commandButton image="/img/social/btn_plus.png"
+                                                                                                           limitRender="true" execute="@region"
+                                                                                                           render="caseTypeList, soCaseTypeId, soCaseTypeSub, soCaseTypeSubMsg, soCaseTypeSubMsg,pgCheck"
+                                                                                                           actionListener="#{sclDetailController.insertSoMsgCasetypeMapListener}"
+                                                                                                           style="margin-top: 5px">
+                                                                                        </a4j:commandButton>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                            </a4j:region>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF"></td>
+                                                                        <td align="left" valign="top">
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Remark :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <h:inputText id="remark" value="#{sclDetailController.soMessage.remark}"
+                                                                                         style="width:100%; border: 0; height: 22px; font-size: 14px"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Priority :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <a4j:jsFunction name="changePriority"
+                                                                                            immediate="true">
+                                                                                <a4j:param name="param1" assignTo="#{sclDetailController.emailPriority}"/>
+                                                                            </a4j:jsFunction>
+                                                                            <h:panelGroup id="priorityGroup">
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_IMM" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_IMM')"
+                                                                                       checked="#{sclDetailController.emailPriority eq 'PRIORITY_IMM' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_IMM_small.png" style="display: inline; vertical-align: middle"/>
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_HI" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_HI')"
+                                                                                       checked="#{sclDetailController.emailPriority eq 'PRIORITY_HI' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_HI_small.png" style="display: inline; vertical-align: middle"/>
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_MED" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_MED')"
+                                                                                       checked="#{sclDetailController.emailPriority eq 'PRIORITY_MED' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_MED_small.png" style="display: inline; vertical-align: middle"/>
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_LOW" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_LOW')"
+                                                                                       checked="#{sclDetailController.emailPriority eq 'PRIORITY_LOW' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_LOW_small.png" style="display: inline; vertical-align: middle"/>
+                                                                            </h:panelGroup>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Signature :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <h:selectOneMenu id="signatureId" value="#{sclDetailController.signatureId}" 
+                                                                                             style="width: 100%; border: 0; height: 22px; font-size: 14px"
+                                                                                             valueChangeListener="#{sclDetailController.signatureValueChangeListener}">
+                                                                                <f:selectItem itemLabel="Please select"/>
+                                                                                <f:selectItems value="#{sclDetailController.signatureList}" var="list"
+                                                                                               itemLabel="#{list[1]}" itemValue="#{list[0]}"/>
+                                                                                <a4j:ajax event="change"
+                                                                                          oncomplete="clickInsertSignature()"
+                                                                                          limitRender="true"
+                                                                                          execute="@this" immediate="true"
+                                                                                          render="pgSignature"/>
+                                                                            </h:selectOneMenu>
+                                                                            <h:panelGroup id="pgSignature">
+                                                                                <h:inputHidden id="hSignature" value="#{sclDetailController.signatureString}"/>
+                                                                                <script type="text/javascript">
+                                                                                    function clickInsertSignature(){
+                                                                                        var oEditor = CKEDITOR.instances["frm:pBody:inp"];
+                                                                                        var html = document.getElementById('#{rich:clientId('hSignature')}').value;
+                                                                                        //alert(html);
+                                                                                        oEditor.insertHtml(html);
+                                                                                        document.getElementById('#{rich:clientId('signatureId')}').selectedIndex = 0;
+                                                                                    }
+                                                                                </script>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+
+                                                    <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                        <tr>
+                                                            <td>
+                                                                <h:panelGroup id="pgCheck">
+                                                                <script>
+                                                                    function checkSendValidate(){
+                                                                        var no = #{sclDetailController.caseTypeSize};
+                                                                        //alert(no.value);
+                                                                        if(document.getElementById('frm:pTo').value === ''){
+                                                                            return false;
+                                                                        }
+                                                                        if(no === 0){
+                                                                            #{rich:component('caseTypeValidate')}.show();
+                                                                        }else{
+                                                                            #{rich:component('sendConfirm')}.show();
+                                                                        }
+                                                                        return true;
+                                                                    }
+                                                                    
+                                                                </script>
+                                                                </h:panelGroup>
+                                                                <a4j:jsFunction name="saveDraftBeforeUnload" execute="@this" limitRender="true"
+                                                                                actionListener="#{sclDetailController.saveDraft}"></a4j:jsFunction>
+                                                                <a4j:jsFunction name="saveWorkingTime" execute="@this" limitRender="true"
+                                                                                actionListener="#{sclDetailController.saveWorkingTime}"></a4j:jsFunction>
+                                                                <a4j:commandButton image="/img/social/btn_send.png" value="Send"
+                                                                                   execute="@form"
+                                                                                   limitRender="true"
+                                                                                   render="popupSendConfirm,msgPTo"
+                                                                                   onclick="return checkSendValidate();"
+                                                                                   style="margin-left: 10px; margin-right: 5px; margin-top: 3px">
+                                                                    <f:param name="actionStatus" value="send"/>
+                                                                </a4j:commandButton>
+                                                                <a4j:commandButton id="btnSaveDraft" image="/img/social/btn_savedraft.png" value="Save Draft"
+                                                                                   execute="@form"
+                                                                                   limitRender="true"
+                                                                                   onclick="#{rich:component('draftConfirm')}.show()"
+                                                                                   style="margin-right: 5px; margin-top: 3px">
+                                                                    <f:param name="actionStatus" value="saveDraft"/>
+                                                                </a4j:commandButton>
+                                                                <ui:remove><a4j:commandButton image="/img/social/btn_attach.png" value="Attach"
+                                                                                              oncomplete="#{rich:component('popupFileUpload')}.show()"
+                                                                                              limitRender="true" execute="@this"
+                                                                                              render="fileUpload"
+                                                                                              style="margin-right: 5px; margin-top: 3px"/></ui:remove>
+                                                                <ui:remove><a4j:commandButton image="/img/social/btn_kb.png" value="Attach"
+                                                                                   execute="@form"
+                                                                                   limitRender="true"
+                                                                                   style="margin-right: 5px; margin-top: 3px"/></ui:remove>
+                                                                <a4j:commandButton image="/img/social/btn_template.png" value="Template"
+                                                                                   onclick="#{rich:component('selectMessageTemplate')}.show()"
+                                                                                   execute="@this" limitRender="true" immediate="true"
+                                                                                   render="popupSelectTemplate"
+                                                                                   style="margin-right: 5px; margin-top: 3px"/>
+                                                                <h:panelGroup rendered="#{sclDetailController.soMessage.case_status ne 'WF'}">
+                                                                <a4j:commandButton image="/img/social/b_email_transfer.png"
+                                                                                   onclick="#{rich:component('transfer')}.show()"
+                                                                                   execute="@this" limitRender="true" immediate="true"
+                                                                                   render="popupTransfer"
+                                                                                   style="margin-right: 5px; margin-top: 3px"/>
+                                                                </h:panelGroup>
+                                                                <h:panelGroup rendered="#{sclDetailController.soMessage.case_status ne 'WF'}">
+                                                                <a4j:commandButton image="/img/social/btn_request_approve.png" value="Request for Approval"
+                                                                                   execute="@form"
+                                                                                   limitRender="true"
+                                                                                   render="popupRequestApproval"
+                                                                                   onclick="#{rich:component('requestApproval')}.show()"
+                                                                                   style="margin-right: 5px; margin-top: 3px">
+                                                                </a4j:commandButton>
+                                                                </h:panelGroup>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left">
+                                                                <rich:editor id="pBody" toolbar="full" skin="kama"
+                                                                             value="#{sclDetailController.pbody}" 
+                                                                             style="margin-bottom: 1em; font-size: 14px"
+                                                                             height="600" width="99%">
+                                                                    <a4j:ajax event="change" immediate="true" limitRender="true"
+                                                                              execute="@this" render="popupSelectTemplate"/>
+                                                                </rich:editor>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <h:panelGroup id="attachPanel">
+                                                                    <h:panelGroup id="attachDraftPanel" rendered="#{sclDetailController.soMessageDraft ne null}">
+                                                                    <rich:dataTable value="#{sclDetailController.filesUploadDraft}" var="listDraftFile" style="border: 0">
+                                                                        <rich:column style="border: 0">
+                                                                            <a href="#{request.contextPath}/emailfiles/#{sclDetailController.soMessageDraft.soAccount.id}/#{sclDetailController.soMessageDraft.id}/temp/#{listDraftFile[1]}" target="_blank">#{listDraftFile[0]}</a>
+                                                                        </rich:column>
+                                                                        <rich:column style="border: 0">
+                                                                            <a4j:commandButton image="/img/b_subtract02.png"
+                                                                                               render="attachPanel"
+                                                                                               actionListener="#{sclDetailController.removeFileTempDraft}"
+                                                                                               execute="@this" limitRender="true">
+                                                                                <f:param name="rmFile" value="#{listDraftFile[1]}"/>
+                                                                            </a4j:commandButton>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                    </h:panelGroup>
+                                                                    
+                                                                    <rich:dataTable value="#{sclDetailController.filesUpload}" var="list" style="border: 0">
+                                                                        <rich:column style="border: 0">
+                                                                            <a href="#{request.contextPath}/emailfiles/temp/#{list[1]}" target="_blank">#{list[0]}</a>
+                                                                        </rich:column>
+                                                                        <rich:column style="border: 0">
+                                                                            <a4j:commandButton image="/img/b_subtract02.png"
+                                                                                               render="attachPanel"
+                                                                                               actionListener="#{sclDetailController.removeFileTemp}"
+                                                                                               execute="@this" limitRender="true">
+                                                                                <f:param name="rmFile" value="#{list[1]}"/>
+                                                                            </a4j:commandButton>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                </h:panelGroup>
+                                                                <ui:remove>
+                                                                <h:panelGroup id="filesUpload">
+                                                                    <a4j:repeat value="#{sclDetailController.filesUpload}" var="list">
+                                                                        <a href="#{request.contextPath}/emailfiles/temp/#{list[1]}" target="_blank">#{list[0]}</a><br/>
+                                                                    </a4j:repeat>
+                                                                </h:panelGroup>
+                                                                </ui:remove>
+                                                                <rich:fileUpload id="fileUpload" 
+                                                                                 fileUploadListener="#{sclDetailController.uploadFileListener}"
+                                                                                 addLabel="Attach" 
+                                                                                 immediateUpload="true" 
+                                                                                 listHeight="400" 
+                                                                                 style="width: 120px; height: 38px; border: 0">
+                                                                    <a4j:ajax event="uploadcomplete" render="attachPanel,fileUpload" execute="@none"/>
+                                                                </rich:fileUpload>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_05.png'); background-repeat: repeat"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_06.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_07.png'); background-repeat: repeat; height: 5px"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_08.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                            </tr>
+                                        </table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="20" height="480"/></td>
+            <td valign="top" align="right" style="min-width: 20px; max-width: 500px">
+        <rich:togglePanel id="toggle3" 
+                          activeItem="tab31" 
+                          switchType="client" 
+                          cycledSwitching="tab31,tab32" 
+                          style="border: 0; padding: 0; margin: 0; text-align: left">
+            <rich:togglePanelItem id="tab31" name="tab31" style="float:right; width: 20px; position: relative">
+                <h:commandLink>
+                    <rich:toggleControl targetPanel="toggle3" targetItem="tab32"/> 
+                    <img src="#{request.contextPath}/img/bplus.png" 
+                         name="CustomerMenuImage" alt="" border="0" 
+                         id="img31" />
+                </h:commandLink>
+            </rich:togglePanelItem>
+            <rich:togglePanelItem id="tab32" name="tab32" style="float:left; position: relative">
+                <h:commandLink>
+                    <rich:toggleControl targetPanel="toggle3" targetItem="tab31"/> 
+                    <img src="#{request.contextPath}/img/b_subtract.png" alt=""/>
+                </h:commandLink><br/>
+                <table width="350">
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Customer Profile</h2></td>
+                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                    <td valign="top" height="130">
+                                        <table width="100%" border="0" cellspacing="1" cellpadding="3">
+                                            <tr>
+                                                <td style="width: 50px"><h:graphicImage url="/img/guest.png"/>
+                                                    
+                                                </td>
+                                                <td><ui:remove>
+                                                    <a4j:commandButton image="/img/btn_plus.png"
+                                                                       execute="@this"
+                                                                       limitRender="true"
+                                                                       render="popupSelectCustomer"
+                                                                       immediate="true"
+                                                                       onclick="#{rich:component('selectCustomer')}.show()">
+                                                    </a4j:commandButton>
+                                                    </ui:remove>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table width="100%" border="0" cellspacing="1" cellpadding="3">
+                                            <tr>
+                                                <td><ui:remove>
+                                                    <rich:dataTable id="contactHistory" value="#{sclDetailController.contactHistoryList}" rows="10"
+                                                                    var="list" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                    rowClasses="odd-row, even-row">
+                                                        <f:facet name="header">
+                                                            <rich:columnGroup>
+                                                                <rich:column styleClass="subh01" style="text-align: left; width: 10px"></rich:column>
+                                                                <rich:column styleClass="subh01" style="text-align: left; width: 110px"><h:outputText value="Contact Date" /></rich:column>
+                                                                <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="Subject" /></rich:column>
+                                                            </rich:columnGroup>
+                                                        </f:facet>
+                                                        <rich:column style="vertical-align: top; font-size: 14px">
+                                                            <h:outputText value="I" rendered="#{list.soEmailMessage.direction eq 'INB'}"/>
+                                                            <h:outputText value="O" rendered="#{list.soEmailMessage.direction eq 'OUT'}"/>
+                                                        </rich:column>
+                                                        <rich:column style="vertical-align: top; font-size: 14px">
+                                                            <h:outputText value="#{list.soEmailMessage.receivedDate}" rendered="#{list.soEmailMessage.direction eq 'INB'}">
+                                                                <f:convertDateTime pattern="dd/MM/yy HH:mm" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                            </h:outputText>
+                                                            <h:outputText value="#{list.create_date}" rendered="#{list.soEmailMessage.direction eq 'OUT'}">
+                                                                <f:convertDateTime pattern="dd/MM/yy HH:mm" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                            </h:outputText>
+                                                        </rich:column>
+                                                        <rich:column style="vertical-align: top; font-size: 14px">
+                                                            <h:commandLink value="#{list.soEmailMessage.subject}" 
+                                                                           action="scldetail.jsf">
+                                                                <f:param name="soMessageId" value="#{list.id}"/>
+                                                            </h:commandLink>
+                                                        </rich:column>
+                                                        <f:facet name="footer">
+                                                            <rich:dataScroller id="contactHistoryDataScroller" fastControls="hide"
+                                                                               for="contactHistory"
+                                                                               maxPages="10"
+                                                                               renderIfSinglePage="false"/>
+                                                        </f:facet>
+                                                    </rich:dataTable>
+                                                    <rich:jQuery selector=".tableline01 tr:odd" query="addClass('odd-row')" />
+                                                    <rich:jQuery selector=".tableline01 tr:even" query="addClass('even-row')" />
+                                                    <rich:jQuery selector=".tableline01 tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
+                                                    <rich:jQuery selector=".tableline01 tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
+                                                    </ui:remove>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="4" class="bg_right"></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                </tr>
+                            </table>
+                            
+                            <br/>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Contact History</h2></td>
+                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                    <td valign="top" height="130">
+                                        <rich:dataTable id="contactHistory" value="#{sclDetailController.contactHistoryList}" rows="10"
+                                                        var="list" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                        rowClasses="odd-row, even-row">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column styleClass="subh01" style="text-align: left; width: 10px"></rich:column>
+                                                    <rich:column styleClass="subh01" style="text-align: left; width: 110px"><h:outputText value="Contact Date" /></rich:column>
+                                                    <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="Subject" /></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column style="vertical-align: top; font-size: 14px">
+                                                <h:graphicImage url="/img/social/em_in.png" rendered="#{list.soEmailMessage.direction eq 'INB'}" style="display: inline"/>
+                                                <h:graphicImage url="/img/social/em_out.png" rendered="#{list.soEmailMessage.direction eq 'OUT'}" style="display: inline"/>
+                                            </rich:column>
+                                            <rich:column style="vertical-align: top; font-size: 14px">
+                                                <h:outputText value="#{list.soEmailMessage.receivedDate}" rendered="#{list.soEmailMessage.direction eq 'INB'}">
+                                                    <f:convertDateTime pattern="dd/MM/yy HH:mm" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                                <h:outputText value="#{list.create_date}" rendered="#{list.soEmailMessage.direction eq 'OUT'}">
+                                                    <f:convertDateTime pattern="dd/MM/yy HH:mm" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </rich:column>
+                                            <rich:column style="vertical-align: top; font-size: 14px">
+                                                <h:commandLink value="#{list.soEmailMessage.subject}" 
+                                                               action="scldetail.jsf" immediate="true">
+                                                    <f:param name="soMessageId" value="#{list.id}"/>
+                                                </h:commandLink>
+                                            </rich:column>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller id="contactHistoryDataScroller" fastControls="hide"
+                                                                   for="contactHistory"
+                                                                   maxPages="10"
+                                                                   renderIfSinglePage="false"/>
+                                            </f:facet>
+                                        </rich:dataTable>
+                                        <rich:jQuery selector=".tableline01 tr:odd" query="addClass('odd-row')" />
+                                        <rich:jQuery selector=".tableline01 tr:even" query="addClass('even-row')" />
+                                        <rich:jQuery selector=".tableline01 tr" event="mouseover" query="jQuery(this).addClass('active-row')" />
+                                        <rich:jQuery selector=".tableline01 tr" event="mouseout" query="jQuery(this).removeClass('active-row')" />
+                                    </td>
+                                    <td width="4" class="bg_right"></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                
+            </rich:togglePanelItem>
+        </rich:togglePanel>
+   </td>
+            </tr>
+    </table>
+<script type="text/javascript">
+    onLoad();
+
+</script>
+
+<script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+
+</h:body>
+</html>

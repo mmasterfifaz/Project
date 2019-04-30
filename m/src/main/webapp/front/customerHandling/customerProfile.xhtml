@@ -1,0 +1,796 @@
+<ui:composition 
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{title}</h2></td>
+                            <td valign="bottom" height="48"></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <td class="line01"><h4>#{msg.customerInformation}</h4></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="50%" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="3">
+                                    <tr>
+                                        <td align="right" valign="top" width="30%">#{msg.picture}</td>
+                                        <td width="70%"><table border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td><table border="0" cellpadding="8" cellspacing="0" bgcolor="#F3F2E8">
+                                                            <tr>
+                                                                <td>
+                                                                    <h:graphicImage id="pictureUpload" url="../../upload/#{(customerEditController.fileNameFront == null || customerEditController.fileNameFront == '') ? 'customer/00_do_not_delete.png' : customerEditController.fileNameFront}" width="100" height="100"/>
+                                                                </td>
+                                                            </tr>
+                                                        </table></td>
+                                                    <td valign="bottom">
+                                                <a4j:commandButton image="../../img/b_add.png"
+                                                                   oncomplete="#{rich:component('fileUpload')}.show();"
+                                                                   limitRender="true" execute="@this"
+                                                                   render="fileUpload"/></td>
+                                                </tr>
+                                            </table>
+                                    <h:inputHidden id="mode" value="#{customerEditController.mode}" /></td>
+                        </tr>
+                        <tr>
+                            <td align="right">#{msg.initial}</td>
+                            <td><h:inputText id="initail" label="#{msg.clickEnterDetail}"
+                                         value="#{customerEditController.customer.initial}"
+                                         styleClass="textfield"/></td>
+            </tr>
+            <tr>
+                <td align="right"><h:outputText value="*" style="color:red"/> #{msg.name}</td>
+                <td><h:inputText id="name" value="#{customerEditController.customer.name}"
+                             styleClass="textfield" required="true" requiredMessage="Name is required">
+                                    
+                <rich:validator />
+            </h:inputText>
+            &#160;<rich:message for="name" style="color:red"/></td>
+            </tr>
+            <tr>
+                <td align="right"><h:outputText value="*" style="color:red"/> #{msg.surname}</td>
+                <td><h:inputText id="surname" value="#{customerEditController.customer.surname}"
+                             styleClass="textfield" required="true" requiredMessage="Surname is required">
+                                    
+                <rich:validator />
+            </h:inputText>
+            &#160;<rich:message for="surname" style="color:red"/></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.cardType}</td>
+                <td><h:selectOneMenu id="idCardTypeId" value="#{customerEditController.idCardTypeId}">
+                <f:selectItems value="#{customerEditController.creditTypes}"/>
+            </h:selectOneMenu></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.idCard}</td>
+                <td><h:inputText id="customerIdNo" value="#{customerEditController.customer.idno}"
+                             styleClass="textfield" validatorMessage="invalid" maxlength="13">
+                <f:validateLength minimum="13" maximum="13"/>
+                <f:validateLongRange minimum="0000000000001" maximum="9999999999999"/>                   
+                <rich:validator />
+            </h:inputText>
+            &#160;<rich:message for="customerIdNo" style="color:red"/></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.gender}</td>
+                <td><h:selectOneMenu id="gender" value="#{customerEditController.customer.gender}">
+                <f:selectItem itemValue="0" itemLabel="#{msg.pleaseSelect}"/>
+                <f:selectItem itemValue="#{msg.male}" itemLabel="#{msg.male}"/>
+                <f:selectItem itemValue="#{msg.female}" itemLabel="#{msg.female}"/>
+            </h:selectOneMenu></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.dateOfBirth}</td>
+                <td><rich:calendar id="birthday" value="#{customerEditController.customer.dob}"
+                               popup="true" buttonClass="rfcalbtn"
+                               locale="#{msg.locale}"
+                               datePattern="#{msg.datePattern}"
+                               inputClass="textfield"
+                               inputStyle="width: 80px"/></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.weigth}</td>
+                <td>
+            <h:inputText id="weight" styleClass="textfield"
+                         value="#{customerEditController.customer.weight}" maxlength="6"
+                         validatorMessage="Invalid number">
+                <f:validateLength minimum="1" maximum="6"/>
+                <f:validateDoubleRange minimum="0" maximum="999.99"/>
+                <f:convertNumber pattern="#,##0.00"/>                  
+                <rich:validator />
+            </h:inputText>
+            <rich:message for="weight" style="color:red"/>
+            </td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.height}</td>
+                <td>
+            <h:inputText id="height" styleClass="textfield"
+                         value="#{customerEditController.customer.height}" maxlength="6"
+                         validatorMessage="Invalid number">
+                <f:validateLength minimum="1" maximum="6"/>
+                <f:validateDoubleRange minimum="0" maximum="999.99"/>
+                <f:convertNumber pattern="#,##0.00"/>
+                <rich:validator />
+            </h:inputText>
+            <rich:message for="height" style="color:red"/></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.nationality}</td>
+                <td><h:inputText id="nationality" styleClass="textfield" value="#{customerEditController.customer.nationality}"/></td>
+            </tr>
+        </table></td>
+        <td width="50%" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td align="right" width="30%">#{msg.occupation}</td>
+                    <td width="70%"><h:inputText id="occupation" styleClass="textfield" value="#{customerEditController.customer.occupation}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.account}</td>
+            <td>
+        <h:panelGroup id="pAccount">
+            <h:inputText styleClass="textfield" readonly="true" value="#{customerEditController.accountName}"/>
+            <h:inputHidden value="#{customerEditController.accountId}"/>
+        </h:panelGroup>
+        <a4j:commandButton image="../../resources/img/b_search01.png"
+                           onclick="Richfaces.showModalPanel('mpAccount')"
+                           style="margin: 10px 0px 0px 10px; vertical-align: bottom"
+                           render="popupSelectAccount"
+                           execute="@this" limitRender="true"/>
+        <a4j:commandButton image="../../img/b_remove02.png"
+                           render="pAccount"
+                           actionListener="#{customerEditController.clearAccountListener}"
+                           execute="@this" limitRender="true">
+        </a4j:commandButton>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.homePhone}</td>
+            <td><h:inputText id="homePhone" styleClass="textfield" value="#{customerEditController.customer.homePhone}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.officePhone}</td>
+            <td><h:inputText id="officePhone" styleClass="textfield" value="#{customerEditController.customer.officePhone}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.mobilePhone}</td>
+            <td><h:inputText id="mobilePhone" styleClass="textfield" value="#{customerEditController.customer.mobilePhone}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.email}</td>
+            <td><h:inputText id="email" styleClass="textfield"
+                         value="#{customerEditController.customer.email}" validatorMessage="Email invalid">
+            <f:validator validatorId="EmailValidator" />
+            <rich:validator />
+        </h:inputText>
+        <h:message for="email" style="color:red"/></td>
+        </tr>
+        <tr>
+            <td align="right"><h:outputText value="*" style="color:red"/> #{msg.customerType}</td>
+            <td><h:selectOneMenu id="cutomerTypeId" value="#{customerEditController.customerTypeId}" required="true" requiredMessage="Customer Type is required">
+            <f:selectItems value="#{customerEditController.customerTypes}"/>
+        </h:selectOneMenu>
+        <h:message for="cutomerTypeId" style="color:red"/></td>
+        </tr>
+        <tr>
+            <td align="right" valign="top">#{msg.recommendedCustomer}</td>
+            <td>
+                <table border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td valign="top">
+                    <h:panelGroup id="recPanel">
+                        <rich:dataTable value="#{customerEditController.recCustomers}" var="list">
+                            <rich:column>
+                                <h:outputText value="#{list[1]}"/>
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../../img/b_subtract02.png"
+                                                   render="recPanel"
+                                                   actionListener="#{customerEditController.removeRecCustomers}"
+                                                   execute="@this" limitRender="true">
+                                    <f:param name="removeCustomerId" value="#{list[0]}"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                    </h:panelGroup>
+                        </td>
+                        <td valign="top">
+                        <a4j:commandButton image="../../img/b_add.png"
+                                           onclick="#{rich:component('selectCustomer')}.show();"
+                                           execute="@this" limitRender="true"></a4j:commandButton>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="top">#{msg.referee}</td>
+            <td>
+                <rich:dataTable value="#{customerEditController.referees}" var="list">
+                    <rich:column>
+                        <h:outputText value="#{list.name}  #{list.surname}"/>
+                    </rich:column>
+                </rich:dataTable>
+            </td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.privilege}</td>
+            <td><h:inputText id="privilege" styleClass="textfield" value="#{customerEditController.customer.privilege}"/></td>
+        </tr>        
+                    <tr>
+                        <td align="right" valign="top">#{msg.emoicon}</td>
+                        <td>
+                            <table width="" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="20" align="center"><img src="../../icon/1.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/2.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/3.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/4.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/5.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/6.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/7.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/8.png" alt="" width="16" height="16"/></td>
+                                    <td width="20" align="center"><img src="../../icon/9.png" alt="" width="16" height="16"/></td>
+                                </tr>
+                            </table>
+                            <h:selectOneRadio value="#{customerEditController.customer.emoicon}">
+                                <f:selectItem itemValue="1"/>
+                                <f:selectItem itemValue="2" />
+                                <f:selectItem itemValue="3" />
+                                <f:selectItem itemValue="4" />
+                                <f:selectItem itemValue="5" />
+                                <f:selectItem itemValue="6" />
+                                <f:selectItem itemValue="7" />
+                                <f:selectItem itemValue="8" />
+                                <f:selectItem itemValue="9" />
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">#{msg.remark}</td>
+                        <td><h:inputText id="remark" styleClass="textfield" value="#{customerEditController.customer.remark}"/></td>
+                </tr>
+               
+                
+        </table></td>
+        </tr>
+        <tr>
+            <td valign="top">&#160;</td>
+            <td valign="top">&#160;</td>
+        </tr>
+        <tr>
+            <td valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td class="line01"><h4>#{msg.currentAddress}</h4></td>
+                        <td class="line01">&#160;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" width="30%">#{msg.fullName}</td>
+                        <td width="70%"><h:inputText id="currentFullname" styleClass="textfield" value="#{customerEditController.customer.currentFullname}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine1}</td>
+            <td><h:inputText id="currentAddressLine1" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine1}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine2}</td>
+            <td><h:inputText id="currentAddressLine2" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine2}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine3}</td>
+            <td><h:inputText id="currentAddressLine3" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine3}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine4}</td>
+            <td><h:inputText id="currentAddressLine4" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine4}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine5}</td>
+            <td><h:inputText id="currentAddressLine5" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine5}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine6}</td>
+            <td><h:inputText id="currentAddressLine6" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine6}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine7}</td>
+            <td><h:inputText id="currentAddressLine7" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine7}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine8}</td>
+            <td><h:inputText id="currentAddressLine8" styleClass="textfield" value="#{customerEditController.customer.currentAddressLine8}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.province}</td>
+            <td><h:selectOneMenu id="currentProvince" value="#{customerEditController.currentProvinceId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.currentProvinceListener}">
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.provinces}"/>
+            <a4j:ajax event="change" render="currentDistrictId, currentSubDistrictId, currentPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.district}</td>
+            <td><h:selectOneMenu id="currentDistrictId" value="#{customerEditController.currentDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.currentDistrictListener}">
+                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                <f:selectItems value="#{customerEditController.currentDistricts}"/>
+            <a4j:ajax event="change" render="currentSubDistrictId, currentPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.subdistrict}</td>
+            <td><h:selectOneMenu id="currentSubDistrictId" value="#{customerEditController.currentSubDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.currentSubDistrictListener}">
+            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.currentSubDistrictList}"/>
+            <a4j:ajax event="change" render="currentPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>           
+        <tr>
+            <td align="right">#{msg.postalCode}</td>
+            <td><h:selectOneMenu id="currentPostalCode"
+                         value="#{customerEditController.customer.currentPostalCode}"
+                            requiredMessage="#{msg.require}"
+                            styleClass="select07">
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.currentPostalList}"/>
+                                        
+                    <rich:validator />
+                </h:selectOneMenu>
+                <rich:message for="currentPostalCode" style="color:red"/></td>
+        </tr>
+        </table></td>
+        <td valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td class="line01"><h4>#{msg.homeAddress}</h4></td>
+                    <td class="line01">&#160;</td>
+                </tr>
+                <tr>
+                    <td align="right" width="30%">#{msg.fullName}</td>
+                    <td width="70%"><h:inputText id="homeFullName" styleClass="textfield"
+                                             value="#{customerEditController.customer.homeFullname}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine1}</td>
+            <td><h:inputText id="homeAddressLine1" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine1}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine2}</td>
+            <td><h:inputText id="homeAddressLine2" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine2}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine3}</td>
+            <td><h:inputText id="homeAddressLine3" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine3}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine4}</td>
+            <td><h:inputText id="homeAddressLine4" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine4}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine5}</td>
+            <td><h:inputText id="homeAddressLine5" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine5}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine6}</td>
+            <td><h:inputText id="homeAddressLine6" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine6}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine7}</td>
+            <td><h:inputText id="homeAddressLine7" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine7}"/></td>
+        </tr> 
+        <tr>
+            <td align="right">#{msg.addressLine8}</td>
+            <td><h:inputText id="homeAddressLine8" styleClass="textfield"
+                         value="#{customerEditController.customer.homeAddressLine8}"/></td>
+        </tr>        
+        <tr>
+            <td align="right">#{msg.province}</td>
+            <td><h:selectOneMenu id="homeProvince" value="#{customerEditController.homeProvinceId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.homeProvinceListener}" >
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.provinces}"/>
+            <a4j:ajax event="change" render="homeDistrictId, homeSubDistrictId, homePostalCode" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.district}</td>
+            <td><h:selectOneMenu id="homeDistrictId" value="#{customerEditController.homeDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.homeDistrictListener}">
+                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.homeDistricts}"/>
+            <a4j:ajax event="change" render="homeSubDistrictId, homePostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.subdistrict}</td>
+            <td><h:selectOneMenu id="homeSubDistrictId" value="#{customerEditController.homeSubDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.homeSubDistrictListener}">
+            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.homeSubDistrictList}"/>
+            <a4j:ajax event="change" render="homePostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>           
+        <tr>
+            <td align="right">#{msg.postalCode}</td>
+            <td><h:selectOneMenu id="homePostalCode"
+                                 value="#{customerEditController.customer.homePostalCode}"
+                                 requiredMessage="#{msg.require}"
+                                 styleClass="select07">
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.homePostalList}"/>
+                                        
+                    <rich:validator />
+                </h:selectOneMenu>
+                <rich:message for="homePostalCode" style="color:red"/></td>
+        </tr>
+        <tr>
+            <td align="right">&#160;</td>
+            <td><h:selectBooleanCheckbox id="home_same"  value="#{customerEditController.homeSameCurrent}"/>  &#160;#{msg.sameAsCurrentAddress}</td>
+        </tr>
+        </table></td>
+        </tr>
+        <tr>
+            <td valign="top">&#160;</td>
+            <td valign="top">&#160;</td>
+        </tr>
+        <tr>
+            <td valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td class="line01"><h4>#{msg.billingAddress}</h4></td>
+                        <td class="line01">&#160;</td>
+                    </tr>
+                    <tr>
+                        <td width="30%" align="right">#{msg.fullName}</td>
+                        <td width="70%"><h:inputText id="billingFullName" styleClass="textfield"
+                                                 value="#{customerEditController.customer.billingFullname}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine1}</td>
+            <td><h:inputText id="billingAddressLine1" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine1}"/>
+        </td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine2}</td>
+            <td><h:inputText id="billingAddressLine2" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine2}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine3}</td>
+            <td><h:inputText id="billingAddressLine3" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine3}"/></td>
+        </tr>    
+        <tr>
+            <td align="right">#{msg.addressLine4}</td>
+            <td><h:inputText id="billingAddressLine4" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine4}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine5}</td>
+            <td><h:inputText id="billingAddressLine5" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine5}"/></td>
+        </tr>   
+        <tr>
+            <td align="right">#{msg.addressLine6}</td>
+            <td><h:inputText id="billingAddressLine6" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine6}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine7}</td>
+            <td><h:inputText id="billingAddressLine7" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine7}"/></td>
+        </tr> 
+        <tr>
+            <td align="right">#{msg.addressLine8}</td>
+            <td><h:inputText id="billingAddressLine8" styleClass="textfield"
+                         value="#{customerEditController.customer.billingAddressLine8}"/></td>
+        </tr>            
+        <tr>
+            <td align="right">#{msg.province}</td>
+            <td><h:selectOneMenu id="billingProvince" value="#{customerEditController.billingProvinceId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.billingProvinceListener}" >
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.provinces}"/>
+            <a4j:ajax event="change" render="billingDistrictId, billingSubDistrictId, billingPostalCode" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.district}</td>
+            <td><h:selectOneMenu id="billingDistrictId" value="#{customerEditController.billingDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.billingDistrictListener}">
+                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.billingDistricts}"/>
+            <a4j:ajax event="change" render="billingSubDistrictId, billingPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.subdistrict}</td>
+            <td><h:selectOneMenu id="billingSubDistrictId" value="#{customerEditController.billingSubDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.billingSubDistrictListener}">
+            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.billingSubDistrictList}"/>
+            <a4j:ajax event="change" render="billingPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>           
+        <tr>
+            <td align="right">#{msg.postalCode}</td>
+            <td><h:selectOneMenu id="billingPostalCode"
+                         value="#{customerEditController.customer.billingPostalCode}"
+                            requiredMessage="#{msg.require}"
+                            styleClass="select07">
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.billingPostalList}"/>
+                                        
+                    <rich:validator />
+                </h:selectOneMenu>
+                <rich:message for="billingPostalCode" style="color:red"/></td>
+        </tr>
+        <tr>
+            <td>&#160;</td>
+            <td><h:selectBooleanCheckbox id="billing_same"  value="#{customerEditController.billingSameCurrent}"/>  &#160;#{msg.sameAsCurrentAddress}</td>
+        </tr>
+        </table></td>
+        <td valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td class="line01"><h4>#{msg.shippingAddress}</h4></td>
+                    <td class="line01">&#160;</td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right">#{msg.fullName}</td>
+                    <td width="70%"><h:inputText id="shippingFullName" styleClass="textfield"
+                                             value="#{customerEditController.customer.shippingFullname}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine1}</td>
+            <td><h:inputText id="shippingAddressLine1" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine1}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine2}</td>
+            <td><h:inputText id="shippingAddressLine2" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine2}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine3}</td>
+            <td><h:inputText id="shippingAddressLine3" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine3}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine4}</td>
+            <td><h:inputText id="shippingAddressLine4" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine4}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine5}</td>
+            <td><h:inputText id="shippingAddressLine5" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine5}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine6}</td>
+            <td><h:inputText id="shippingAddressLine6" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine6}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine7}</td>
+            <td><h:inputText id="shippingAddressLine7" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine7}"/></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressLine8}</td>
+            <td><h:inputText id="shippingAddressLine8" styleClass="textfield"
+                         value="#{customerEditController.customer.shippingAddressLine8}"/></td>
+        </tr>        
+        <tr>
+            <td align="right">#{msg.province}</td>
+            <td><h:selectOneMenu id="shippingProvince" value="#{customerEditController.shippingProvinceId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.shippingProvinceListener}" >
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.provinces}"/>
+            <a4j:ajax event="change" render="shippingDistrictId, shippingSubDistrictId, shippingPostalCode" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.district}</td>
+            <td><h:selectOneMenu id="shippingDistrictId" value="#{customerEditController.shippingDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.shippingDistrictListener}">
+                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.shippingDistricts}"/>
+            <a4j:ajax event="change" render="shippingSubDistrictId, shippingPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.subdistrict}</td>
+            <td><h:selectOneMenu id="shippingSubDistrictId" value="#{customerEditController.shippingSubDistrictId}" 
+                                 immediate="true" valueChangeListener="#{customerEditController.shippingSubDistrictListener}">
+            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+            <f:selectItems value="#{customerEditController.shippingSubDistrictList}"/>
+            <a4j:ajax event="change" render="shippingPostalCode" limitRender="true" execute="@this"/>
+        </h:selectOneMenu></td>
+        </tr>           
+        <tr>
+            <td align="right">#{msg.postalCode}</td>
+            <td><h:selectOneMenu id="shippingPostalCode"
+                         value="#{customerEditController.customer.shippingPostalCode}"
+                            requiredMessage="#{msg.require}"
+                            styleClass="select07">
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItems value="#{customerEditController.shippingPostalList}"/>
+                                        
+                    <rich:validator />
+                </h:selectOneMenu>
+                <rich:message for="shippingPostalCode" style="color:red"/></td>
+        </tr>
+        <tr>
+            <td>&#160;</td>
+            <td><h:selectBooleanCheckbox id="shipping_same" value="#{customerEditController.shippingSameCurrent}"/> &#160;     #{msg.sameAsCurrentAddress}</td>
+        </tr>
+        </table></td>
+        </tr>
+        <tr>
+            <td valign="top">&#160;</td>
+            <td valign="top">&#160;</td>
+        </tr>
+        <tr>
+            <td valign="top"></td>
+        <td valign="top">       
+        </td>
+        </tr>
+        <tr>
+            <td>
+                <table width="98%" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td class="line01"><h4>Flex Field</h4></td>
+                    <td class="line01">&#160;</td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field1:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield1}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field2:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield2}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field3:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield3}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field4:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield4}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field5:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield5}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field6:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield6}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field7:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield7}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field8:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield8}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field9:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield9}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field10:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield10}"/></td>
+                </tr>
+               
+            </table>
+            </td>
+            <td>
+                <table width="98%" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td class="line01"><h4>&#160;</h4></td>
+                    <td class="line01">&#160;</td>
+                </tr>
+            
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field11:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield11}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field12:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield12}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field13:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield13}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field14:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield14}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field15:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield15}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field16:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield16}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field17:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield17}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field18:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield18}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field19:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield19}"/></td>
+                </tr>
+                <tr>
+                    <td width="30%" align="right" valign="top">Flex Field20:</td>
+                    <td width="70%"><h:inputText styleClass="textfield" value="#{customerEditController.customer.flexfield20}"/></td>
+                </tr>
+            </table>
+            </td>
+        </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td>&#160;</td>
+            </tr>
+            <tr>
+                <td align="center">&#160;</td>
+            </tr>
+            <tr>
+                <td align="center">&#160;</td>
+            </tr>
+            <tr>
+                <td align="center">
+            <h:inputHidden id="customerId" value="#{customerEditController.customerId}"/>
+            <h:commandButton image="/resources/img/b_save.png" action="#{customerEditController.saveAction}" rendered="#{customerEditController.customerId eq null ? frontMenuController.searchCustomerAddPermitted : frontMenuController.customerProfileEditPermitted}"/>
+            <h:commandButton image="/resources/img/b_back.png" action="#{customerEditController.back}" immediate="true"/>
+            </td>
+            </tr>
+        </table>
+        </td>
+        <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+        </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+</ui:composition>

@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Workflow Rule: Add/Edit</ui:define>
+            
+            <ui:define name="panel">
+                <h:panelGroup id="delegatePanel">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{workflowRuleEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">
+                            <h:outputText id="msgChkUser" value="*" style="color:red"/> Rule Name:</td>
+                        <td align="left" ><h:inputText id="name" value="#{workflowRuleEditController.workflowRule.name}" styleClass="textfield" 
+                                         required="true" size="30" requiredMessage="Rule name is required.">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{workflowRuleEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{workflowRuleEditController.workflowRule.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table width="850">
+                            <tr><td><a4j:commandButton image="../img/b_add_delegate.png"
+                                                        limitRender="true"
+                                                        render="delegatePanel,data"
+                                                        actionListener="#{workflowRuleEditController.addRuleListener}"/>
+                                </td></tr>
+                                <tr><td>
+                                    <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                    value="#{workflowRuleEditController.workflowRuleDetailList}" var="list" >
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column style="width: 14%;text-align: left;"></rich:column>
+                                                <rich:column style="width: 25%;text-align: left;">User</rich:column>
+                                                <rich:column style="width: 11%;text-align: left;">Close Case</rich:column>
+                                                <rich:column style="width: 10%;text-align: left;">Email Alert</rich:column>
+                                                <rich:column style="width: 25%;text-align: left;">Email</rich:column>
+                                                <rich:column style="width: 15%;text-align: left;"></rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+                                        <rich:column style="vertical-align: top" >
+                                            <h:outputText value="#{list.seqNo}. Delegate to"/>
+                                        </rich:column>
+                                        <rich:column style="vertical-align: top" >
+                                            <h:inputText id="userName" value="#{list.user eq null?'':list.user.name} #{list.user eq null?'':list.user.surname}"
+                                                         styleClass="textfield" size="15" readonly="true">
+                                                                    
+                                                <rich:validator />
+                                            </h:inputText>
+                                            <a4j:commandButton image="../img/b_search.png"
+                                                               action="#{workflowRuleEditController.selectUserNo}"
+                                                               oncomplete="#{rich:component('selectUser')}.show();"
+                                                               execute="@this" limitRender="true"
+                                                               render="userList"> 
+                                                <f:param name="seqNo" value="#{list.seqNo}"/>
+                                            </a4j:commandButton>
+                                            <h:outputText id="msg" value="#{list.message}" style="color:red"/>
+                                        </rich:column>
+                                        <rich:column style="vertical-align: top; text-align: center" >
+                                            <h:selectBooleanCheckbox id="closeCase" value="#{list.allowCloseCase}"/> 
+                                        </rich:column>
+                                        <rich:column style="vertical-align: top; text-align: center" >
+                                            <h:selectBooleanCheckbox id="sendMail" value="#{list.sentEmail}"/> 
+                                        </rich:column>
+                                        <rich:column style="vertical-align: top" >
+                                            <table cellpadding="0" cellspacing="0" border="0">
+                                                <tr><td align="right" class="gray03">To: </td>
+                                                    <td align="left"><h:inputText id="mailto" value="#{list.emailTo}" size="25" styleClass="textfield"/></td></tr>
+                                                <tr><td align="right" class="gray03">Cc: </td>
+                                                    <td align="left"><h:inputText id="mailcc" value="#{list.emailCc}" size="25" styleClass="textfield"/></td></tr>
+                                                <tr><td align="right" class="gray03">Bcc: </td>
+                                                    <td align="left"><h:inputText id="mailbcc" value="#{list.emailBcc}" size="25" styleClass="textfield"/></td></tr>
+                                            </table>
+                                        </rich:column>
+                                        <rich:column style="vertical-align: top" >
+                                           <a4j:commandButton image="../img/b_insert.png"
+                                                            limitRender="true"
+                                                            render="delegatePanel,data"
+                                                            actionListener="#{workflowRuleEditController.insertRuleListener}"> 
+                                                <f:param name="seqNo" value="#{list.seqNo}"/>
+                                            </a4j:commandButton>
+                                            <a4j:commandButton image="../img/b_delete.png"
+                                                            limitRender="true"
+                                                            render="data"
+                                                            immediate="true"
+                                                            actionListener="#{workflowRuleEditController.deleteRuleListener}">
+                                                <f:param name="seqNo" value="#{list.seqNo}"/>
+                                            </a4j:commandButton>
+                                        </rich:column>
+                                    </rich:dataTable>
+                                </td></tr>
+                        </table>
+                        </td>
+                    </tr>
+                </table>
+                </h:panelGroup>
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <td align="left" valign="top" width="33%">
+                            <h:commandButton image="../img/b_back.png"
+                                             action="#{workflowRuleEditController.backAction}" immediate="true"/></td>
+                        <td valign="top" align="center" width="34%">
+                             <h:commandButton image="../img/b_save.png" 
+                                             action="#{workflowRuleEditController.saveAction}" 
+                                             rendered="#{workflowRuleEditController.savePermitted}"/>
+                        </td>
+                        <td align="right" valign="top" width="33%">&nbsp;</td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="popupModal">
+                <rich:popupPanel id="selectUser" autosized="true" style="padding: 0 0 0 0; border-style: none" >
+                    <h:form id="wkfPanel">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Select User</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('selectUser')}.hide(); return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                                <ui:insert name="popupDetail">
+                                <h:panelGrid>
+                                    <h:column> User Name :<h:inputText styleClass="textfield" value="#{workflowRuleEditController.keyword}"/>
+                                    <a4j:commandButton image="../resources/img/bb_search.png" render="userList" 
+                                                       actionListener="#{workflowRuleEditController.popupSearchAction}" 
+                                                       style="vertical-align: baseline"/>
+                                    </h:column>
+                                </h:panelGrid>
+                                <rich:dataTable id="userList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                value="#{workflowRuleEditController.users}" rows="15" var="list">
+                                    <f:facet name="header">
+                                        <rich:columnGroup>
+                                            <rich:column style="text-align: left;"><h:outputText value="Name"/></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="Login Name"/></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="User Group"/></rich:column>
+                                        </rich:columnGroup>
+                                    </f:facet>
+                                    <rich:column>
+                                        <a4j:commandLink title="View Detail" render="data" immediate="true" 
+                                                         action="#{workflowRuleEditController.selectUserListener}"
+                                                        value="#{list.name} #{list.surname ne null?list.surname:''}"
+                                                        onclick="#{rich:component('selectUser')}.hide();">
+                                            <f:param name="userId" value="#{list.id}"/>
+                                            <f:param name="seqNo" value="#{workflowRuleEditController.no}"/>
+                                        </a4j:commandLink>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.loginName}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.userGroup.name}"/>
+                                    </rich:column>
+                                    <f:facet name="footer">
+                                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                                    </f:facet>
+                                </rich:dataTable>
+                                </ui:insert>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                    </h:form>
+                </rich:popupPanel>
+            </ui:define>
+            
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>        
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2"><h:outputText value="#{customerFlexFieldEditController.customerLayout.name}" />: Flexfield Mapping</ui:define>
+            <ui:define name="panel">                
+            <h:inputHidden value="#{customerFlexFieldEditController.customerLayout.id}"/>
+            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0" styleClass="tableline01">
+                <tr>
+                    <td valign="top">&nbsp;</td>
+                </tr>
+                <tr>
+                    <td valign="top" align="center">
+                        <h:outputText value="#{customerFlexFieldEditController.message}" style="color:red"/>&nbsp;
+                    </td>
+                </tr>
+                <!--Header-->
+                <tr>
+                    <td>  
+                        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <tr style="font-weight: bold;color: #F7A922;" align="left">
+                                <td style="width: 2%;"> </td>
+                                <td style="width: 6%;"><h:outputText value="Field Name" /></td>
+                                <td style="width: 30%;"><h:outputText value="Custom Name" /></td>
+                                <td style="width: 2%;"> </td>
+                                <td style="width: 7%;"><h:outputText value="Field Name" /></td>
+                                <td style="width: 30%;"><h:outputText value="Custom Name" /></td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <!--Header-->
+                <tr>
+                    <td>  
+                        <rich:dataGrid style="width: 100%" columns="2" id="fxTable" 
+                                       value="#{customerFlexFieldEditController.flexFieldValueList}" var="fxList">
+                            <rich:dataTable style="width: 100%" value="#{fxList}" var="fxField">    
+                                <rich:columnGroup>
+                                    <rich:column style="width: 5%;text-align: left;">
+                                        <h:selectBooleanCheckbox value="#{fxField.selected}"/>
+                                    </rich:column>
+                                    <rich:column style="width: 15%;text-align: left;">
+                                        <h:outputText value="#{fxField.customerLayoutFxMapping.fieldName}" />
+                                    </rich:column>
+                                    <rich:column style="text-align: left;">
+                                        <h:inputText size="50" value="#{fxField.customerLayoutFxMapping.customName}" /> 
+                                    </rich:column>
+                                </rich:columnGroup>
+                            </rich:dataTable>
+                        </rich:dataGrid>
+                    </td>
+                </tr>
+                <tr>
+                    <td valign="top" align="center">&nbsp;</td>
+                </tr>
+                <tr>
+                <td align="center">
+                    <h:commandButton image="../img/b_back.png" action="#{customerFlexFieldEditController.backAction}" immediate="true" />
+                    <h:commandButton image="../img/b_proceed.png" action="#{customerFlexFieldEditController.saveAction}" 
+                                     onclick="if(!confirm('Confirm to Proceed?\nCUSTOMER LAYOUT WILL BE DELETE!!!')) { return false; }" />
+                </td>
+                </tr>
+            </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

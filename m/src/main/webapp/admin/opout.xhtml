@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminmainsearch.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">List Exclusion</ui:define>
+    <ui:define name="search">
+        <style>
+            .colStyle1 { width: 15%; text-align: right; }
+            .colStyle2 { width: 85%;}
+        </style>
+        <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+            <h:outputText value="Name :"/>
+            <h:inputText styleClass="textfield" value="#{opOutController.name}"/>
+            <h:outputText value="Surname :"/>
+            <h:inputText styleClass="textfield" value="#{opOutController.surname}"/>
+            <h:outputText value="Telephone :"/>
+            <h:inputText styleClass="textfield" value="#{opOutController.telephone}"/>
+            <h:outputText value=""/>
+            <a4j:commandButton image="/img/b_search.png" 
+                    actionListener="#{opOutController.searchActionListener}" 
+                    render="dataList, totalRecord"
+                    limitRender="true"/>
+        </h:panelGrid>             
+    </ui:define>
+    <ui:define name="button">
+        <h:commandButton image="../img/b_add.png" action="#{opOutController.editAction}" actionListener="#{opOutController.initListener}" rendered="#{opOutController.addPermitted}"/>
+        <h:commandButton image="../img/b_delete.png" action="#{opOutController.deleteAction}" rendered="#{opOutController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+    </ui:define>
+        <ui:define name="panel">
+        <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                        value="#{opOutController.list}" rows="#{global.maxrows}" var="list">
+           <f:facet name="header">
+               <rich:columnGroup>
+                   <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                   <rich:column style="width: 3%;text-align: left;"><h:outputText value="ID" /></rich:column>
+                   <rich:column style="width: 10%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                   <rich:column style="width: 10%;text-align: left;"><h:outputText value="Surname"/></rich:column>                   
+                   <rich:column style="width: 10%;text-align: left;"><h:outputText value="Telephone"/></rich:column>                   
+                   <rich:column style="width: 20%;text-align: left;"><h:outputText value="Remark"/></rich:column>
+                   <rich:column style="width: 15%;text-align: left;"><h:outputText value="Last Update"/></rich:column>
+                   <rich:column style="width: 15%;text-align: left;"><h:outputText value="Update By"/></rich:column>
+               </rich:columnGroup>
+           </f:facet>
+
+            <rich:column >
+            <h:selectBooleanCheckbox value="#{opOutController.selectedIds[list.id]}"/>
+            </rich:column>
+            <rich:column>
+                <h:commandLink title="View Detail" value="#{list.id}" action="#{opOutController.editAction}">
+                    <f:param name="id" value="#{list.id}"/>
+                 </h:commandLink>
+             </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.name}"/>
+            </rich:column>
+             <rich:column>
+                 <h:outputText value="#{list.surname}"/>
+            </rich:column>
+            <ui:remove>
+            <rich:column>
+                 <h:outputText value="#{list.idcard}"/>
+            </rich:column>
+            </ui:remove>
+            <rich:column>
+                 <h:outputText value="#{list.telephone1}"/>
+            </rich:column>
+            <ui:remove>
+            <rich:column>
+                 <h:outputText value="#{list.telephone2}"/>
+            </rich:column>
+            <rich:column>
+                 <h:outputText value="#{list.telephone3}"/>
+            </rich:column>
+            </ui:remove>
+             <rich:column>
+                 <h:outputText value="#{list.email}"/>
+            </rich:column>
+            <rich:column>
+                 <h:outputText value="#{list.remark}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.updateDate}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.updateBy}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false" render="dataList"/>
+            </f:facet>
+        </rich:dataTable>
+        <table width="100%" border="0" cellspacing="0" cellpadding="5">
+            <tr>
+                <td class="gray03" width="100%" align="right">Total Records: <h:outputText id="totalRecord" styleClass="orange02" value="#{opOutController.list.size()}" /></td>
+            </tr>
+        </table>    
+            
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

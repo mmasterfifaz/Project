@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<subDataset name="GraphSubDS">
+		<queryString>
+			<![CDATA[SELECT c.name AS case_type_name,b.name as case_topic_name, cases.status, count(cases.status) as status_count
+FROM contact_case AS cases INNER JOIN
+ case_detail AS a ON a.id = cases.case_detail_id INNER JOIN
+ case_topic AS b ON b.id = a.case_topic_id INNER JOIN
+ case_type AS c ON c.id = b.case_type_id
+group by cases.status, c.name, b.name]]>
+		</queryString>
+		<field name="case_type_name" class="java.lang.String"/>
+		<field name="case_topic_name" class="java.lang.String"/>
+		<field name="status" class="java.lang.String"/>
+		<field name="status_count" class="java.lang.Integer"/>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT c.name AS case_type_name,b.name as case_topic_name, cases.status, count(cases.status) as status_count
+FROM contact_case AS cases INNER JOIN
+ case_detail AS a ON a.id = cases.case_detail_id INNER JOIN
+ case_topic AS b ON b.id = a.case_topic_id INNER JOIN
+ case_type AS c ON c.id = b.case_type_id
+group by cases.status, c.name, b.name]]>
+	</queryString>
+	<field name="case_type_name" class="java.lang.String"/>
+	<field name="case_topic_name" class="java.lang.String"/>
+	<field name="status" class="java.lang.String"/>
+	<field name="status_count" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="121" splitType="Stretch">
+			<image scaleImage="RealSize">
+				<reportElement x="710" y="0" width="92" height="31"/>
+				<imageExpression class="java.lang.String"><![CDATA["maxarlogo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="265" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Case Status by Case Type]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="37" width="802" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="0" y="41" width="802" height="72" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<line>
+				<reportElement x="0" y="116" width="802" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="15" y="51" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Contact Date From]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="82" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Contact Date To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="51" width="58" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Group]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="51" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1/1/2010]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="82" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1/1/2011]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="453" y="51" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[All]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="397" splitType="Stretch">
+			<crosstab>
+				<reportElement x="0" y="0" width="802" height="63"/>
+				<rowGroup name="case_type_name" width="212">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{case_type_name}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#FFFF99" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="212" height="25"/>
+								<box topPadding="3" leftPadding="3"/>
+								<textElement textAlignment="Left">
+									<font fontName="Browallia New" size="14"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{case_type_name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<rowGroup name="case_topic_name" width="346">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{case_topic_name}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#FFFF99" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="346" height="25"/>
+								<box topPadding="3" leftPadding="3"/>
+								<textElement textAlignment="Left">
+									<font fontName="Browallia New" size="14"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{case_topic_name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents/>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="status" height="30" totalPosition="End">
+					<bucket>
+						<bucketExpression class="java.lang.String"><![CDATA[$F{status}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#FFFF99" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<textField>
+								<reportElement style="Crosstab Data Text" x="0" y="0" width="74" height="30"/>
+								<textElement verticalAlignment="Middle">
+									<font fontName="Browallia New" size="14"/>
+								</textElement>
+								<textFieldExpression class="java.lang.String"><![CDATA[$V{status}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#FFE9BF" mode="Opaque">
+							<box>
+								<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+							</box>
+							<staticText>
+								<reportElement x="0" y="0" width="94" height="30"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Browallia New" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="status_countMeasure" class="java.lang.Integer">
+					<measureExpression><![CDATA[$F{status_count}]]></measureExpression>
+				</measure>
+				<crosstabCell width="74" height="25">
+					<cellContents backcolor="#FFFFCC" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="74" height="25"/>
+							<box topPadding="3" leftPadding="3"/>
+							<textElement>
+								<font fontName="Browallia New" size="14"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{status_countMeasure}==null?0:$V{status_countMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="case_type_name">
+					<cellContents backcolor="#B37400" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{status_countMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="94" height="25" columnTotalGroup="status">
+					<cellContents backcolor="#FFE9BF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="94" height="25"/>
+							<box topPadding="3" leftPadding="3"/>
+							<textElement>
+								<font fontName="Browallia New" size="14" isBold="true"/>
+							</textElement>
+							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{status_countMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="case_type_name" columnTotalGroup="status">
+					<cellContents backcolor="#B37400" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{status_countMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell height="25" rowTotalGroup="case_topic_name">
+					<cellContents backcolor="#FFE9BF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{status_countMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="case_topic_name" columnTotalGroup="status">
+					<cellContents backcolor="#FFE9BF" mode="Opaque">
+						<box>
+							<pen lineWidth="0.5" lineStyle="Solid" lineColor="#FFFFFF"/>
+						</box>
+						<textField>
+							<reportElement style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement/>
+							<textFieldExpression class="java.lang.Integer"><![CDATA[$V{status_countMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+			<stackedBarChart>
+				<chart>
+					<reportElement x="0" y="165" width="522" height="232"/>
+					<chartTitle position="Top"/>
+					<chartSubtitle/>
+					<chartLegend position="Right"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="GraphSubDS"/>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA[$F{status}]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{case_type_name}+"\n"+$F{case_topic_name}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{status_count}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot labelRotation="45.0"/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisFormat labelRotation="45.0">
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</stackedBarChart>
+		</band>
+	</summary>
+</jasperReport>

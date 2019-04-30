@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Contact Outcome By All Lists " pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="832" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="4a599f07-a784-4cb9-9f40-1c32c294d7c3">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="to" class="java.util.Date"/>
+	<parameter name="user_group_id" class="java.lang.Integer"/>
+	<parameter name="user_group_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_id" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Oat\\Documents\\NetBeansProjects\\MaxarCRM\\web\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="markeing_id" class="java.lang.Integer"/>
+	<parameter name="marketing_name" class="java.lang.String"/>
+	<parameter name="campaign_id" class="java.lang.Integer"/>
+	<parameter name="campaign_name" class="java.lang.String"/>
+	<parameter name="product_id" class="java.lang.Integer"/>
+	<parameter name="product_name" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select mk.name as marketing_name, cr.contact_status as contact_status, cr.name as name, count(ch.id) as total, 0.0 as ratio
+from assignment_detail ad
+inner join assignment a on a.id = ad.assignment_id
+inner join marketing mk on mk.id = a.marketing_id
+inner join contact_history_assignment cha on cha.assignment_detail_id = ad.id
+inner join contact_history ch on ch.id = cha.contact_history_id
+inner join contact_result cr on ch.contact_result_id = cr.id
+where ch.id in (
+	select max(ch.id) from contact_history ch
+	inner join contact_history_assignment cha on  cha.contact_history_id = ch.id
+	group by cha.assignment_detail_id)
+and ad.status = 'closed'
+group by mk.name, cr.contact_status, cr.name
+
+
+order by contact_status]]>
+	</queryString>
+	<field name="marketing_name" class="java.lang.String"/>
+	<field name="contact_status" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="total" class="java.lang.Integer"/>
+	<field name="ratio" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Right" isUsingCache="false">
+				<reportElement uuid="92fd13d9-5307-4f50-a0d9-4aa0df8ee7cb" x="715" y="0" width="117" height="37"/>
+				<imageExpression><![CDATA["maxarlogo.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement uuid="6d12436b-3b7e-4322-a97b-3dbf3187439f" x="0" y="0" width="265" height="37"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Browallia New" size="24" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Call Outcome By All List]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="dd2b952e-9734-4f0f-9e8c-08c73643a30b" x="0" y="36" width="832" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement uuid="2edf6afa-4626-4c84-9b14-e5c49406f670" x="0" y="41" width="832" height="32" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="aaa71ee4-b1a0-4289-a70a-1d27d8430d07" x="0" y="41" width="91" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Campaign: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7f091b31-9f90-4b24-9274-76903111475a" x="392" y="57" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="78d3d031-445b-4a30-ab0a-0406e81aa487" x="392" y="41" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Group: ]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="c4dcfb52-f44b-48da-ad74-c017349e2bdb" x="0" y="76" width="832" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="e6f61cc9-3fc8-4b26-8d81-9ed053d4ac69" x="210" y="41" width="98" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[From Contact Date: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8c5af8ff-fa5b-46c5-b060-b8bf7c2bc120" x="235" y="57" width="73" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[To Contact Date: ]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="0fcf3610-2117-4d8b-8563-9ac44cd9130b" x="311" y="41" width="61" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="9a1fb8d2-0f90-4c2f-a9b3-1ee503d9be38" x="311" y="57" width="61" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{to}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="66845e9d-c552-4ac1-b8f2-6d4ecc01edea" x="463" y="41" width="122" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_group_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ef10e70e-254c-4d23-b34b-a18915aa7cd2" x="463" y="57" width="122" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b3b5f7b2-8b5f-4e94-9b30-0a89496e0184" x="91" y="41" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{campaign_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="7e83e05b-066e-46c7-8f27-8b013b8bb73f" x="0" y="0" width="180" height="20" forecolor="#000000"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed Date "+ (new SimpleDateFormat("dd MMM yyyy HH:mm")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b8c828d2-eba3-4f33-8ff4-ec9524f2a71b" x="732" y="0" width="100" height="20" forecolor="#000000"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+ String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="129">
+			<crosstab>
+				<reportElement uuid="2120db3b-f2c9-4b72-8c9f-b554bcfcaf01" x="0" y="0" width="832" height="129"/>
+				<rowGroup name="marketing_name" width="163" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{marketing_name}]]></bucketExpression>
+					</bucket>
+					<crosstabRowHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<textField>
+								<reportElement uuid="c79aaeb2-7dc7-490e-9889-83ce248493e9" style="Crosstab Data Text" x="0" y="0" width="163" height="25"/>
+								<textElement textAlignment="Left">
+									<font fontName="Browallia New" size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{marketing_name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabRowHeader>
+					<crosstabTotalRowHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<staticText>
+								<reportElement uuid="84b82295-0601-4aab-be8f-41bae4f96b24" x="0" y="0" width="163" height="25"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle">
+									<font fontName="Browallia New" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total ]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalRowHeader>
+				</rowGroup>
+				<columnGroup name="contact_status" height="39" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{contact_status}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<textField>
+								<reportElement uuid="07c7c878-79f5-4f10-a4b1-01416865de61" style="Crosstab Data Text" positionType="Float" stretchType="RelativeToBandHeight" x="0" y="0" width="85" height="39"/>
+								<textElement>
+									<font fontName="Browallia New" size="14"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{contact_status}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#005FB3" mode="Opaque">
+							<staticText>
+								<reportElement uuid="383e9f1b-1b9a-414a-995f-f8aeea409d7e" x="0" y="0" width="50" height="182" forecolor="#FFFFFF"/>
+								<textElement verticalAlignment="Middle" rotation="Left">
+									<font fontName="Browallia New" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Grand Total ]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<columnGroup name="name" height="152" totalPosition="End">
+					<bucket class="java.lang.String">
+						<bucketExpression><![CDATA[$F{name}]]></bucketExpression>
+					</bucket>
+					<crosstabColumnHeader>
+						<cellContents backcolor="#F0F8FF" mode="Opaque">
+							<textField>
+								<reportElement uuid="722de004-e785-49b5-b455-3d3e322cb886" style="Crosstab Data Text" x="0" y="0" width="35" height="143"/>
+								<textElement textAlignment="Left" verticalAlignment="Middle" rotation="Left">
+									<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browa.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+								</textElement>
+								<textFieldExpression><![CDATA[$V{name}]]></textFieldExpression>
+							</textField>
+						</cellContents>
+					</crosstabColumnHeader>
+					<crosstabTotalColumnHeader>
+						<cellContents backcolor="#BFE1FF" mode="Opaque">
+							<staticText>
+								<reportElement uuid="a64f781f-2677-4ba0-a226-5443bad37190" x="0" y="0" width="50" height="143"/>
+								<textElement verticalAlignment="Middle" rotation="Left">
+									<font fontName="Browallia New" size="14" isBold="true"/>
+								</textElement>
+								<text><![CDATA[Total]]></text>
+							</staticText>
+						</cellContents>
+					</crosstabTotalColumnHeader>
+				</columnGroup>
+				<measure name="totalMeasure" class="java.lang.Integer" calculation="Sum">
+					<measureExpression><![CDATA[$F{total}]]></measureExpression>
+				</measure>
+				<crosstabCell width="35" height="25">
+					<cellContents>
+						<textField>
+							<reportElement uuid="720bba15-eeee-4e4c-a142-f0544049ed3d" style="Crosstab Data Text" x="0" y="0" width="35" height="25"/>
+							<textElement>
+								<font fontName="Browallia New" size="14"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{totalMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="35" height="25" rowTotalGroup="marketing_name">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<textField>
+							<reportElement uuid="a0e88a91-96ef-4de7-ac7b-66358d7b0a78" style="Crosstab Data Text" x="0" y="0" width="35" height="25"/>
+							<textElement>
+								<font fontName="Browallia New" size="14" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{totalMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="contact_status">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<textField>
+							<reportElement uuid="b59ca32c-f11e-4ceb-9ea4-bc73f3bba00a" style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement>
+								<font fontName="Browallia New" size="14" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{totalMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="marketing_name" columnTotalGroup="contact_status">
+					<cellContents backcolor="#005FB3" mode="Opaque">
+						<textField>
+							<reportElement uuid="1c630533-8398-4796-8e31-15c31babb444" style="Crosstab Data Text" x="0" y="0" width="50" height="25" forecolor="#FFFFFF"/>
+							<textElement>
+								<font fontName="Browallia New" size="14" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{totalMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell width="50" columnTotalGroup="name">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<textField>
+							<reportElement uuid="804164cb-97cb-4668-ab39-f3cbfa19e4dd" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement>
+								<font fontName="Browallia New" size="14" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{totalMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+				<crosstabCell rowTotalGroup="marketing_name" columnTotalGroup="name">
+					<cellContents backcolor="#BFE1FF" mode="Opaque">
+						<textField>
+							<reportElement uuid="45438cc6-f7fa-4bbc-9a42-914d0531e5d7" style="Crosstab Data Text" x="0" y="0" width="50" height="25"/>
+							<textElement>
+								<font fontName="Browallia New" size="14" isBold="true"/>
+							</textElement>
+							<textFieldExpression><![CDATA[$V{totalMeasure}]]></textFieldExpression>
+						</textField>
+					</cellContents>
+				</crosstabCell>
+			</crosstab>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="52fb9a32-bc9d-4f32-9c14-66c43af37de4" x="0" y="0" width="585" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="20" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

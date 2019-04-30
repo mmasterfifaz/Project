@@ -1,0 +1,78 @@
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">#{msg.customerInformation}</ui:define>
+    <ui:define name="popupDetail">
+        <div id="advanceCustomerSearch_wrapper">
+            <dl>
+                <dd class="gray03">
+                    #{msg.customerNameSearch}
+                </dd>
+                <dt>
+                <rich:inplaceInput defaultLabel="#{msg.clickEnterDetail}" />
+                </dt>
+            </dl>
+            <dl>
+                <dd class="gray03">
+                    #{msg.IdentityNoSearch}
+                </dd>
+                <dt>
+                    <rich:inplaceInput defaultLabel="#{msg.clickEnterDetail}" />
+                </dt>
+            </dl>
+            <dl>
+                <dd class="gray03">
+                    #{msg.addressSearch}
+                </dd>
+                <dt>
+                    <rich:inplaceInput defaultLabel="#{msg.clickEnterDetail}" />
+                </dt>
+            </dl>
+            <dl>
+                <dd class="gray03">
+                    #{msg.phoneSearch}
+                </dd>
+                <dt>
+                <rich:inplaceInput defaultLabel="#{msg.clickEnterDetail}" />
+                </dt>
+            </dl>
+            <dl>
+                <dd class="gray03">
+                    #{msg.genderSearch}
+                </dd>
+                <dt>
+                <h:selectOneMenu />
+                </dt>
+            </dl>
+            <dl>
+                <dd class="gray03">
+                    #{msg.customerTypeSearch}
+                </dd>
+                <dt>
+                <h:selectOneMenu />
+                </dt>
+            </dl>
+            <dl>
+                <dd class="gray03">
+                    #{msg.accountSearch}
+                </dd>
+                <dt>
+                <rich:inplaceInput defaultLabel="#{msg.clickEnterDetail}" />
+                </dt>
+            </dl>
+            <dl>
+                <dd>
+                    &nbsp;
+                </dd>
+                <dt>
+                <h:graphicImage library="img" name="bb_search.png" id="a" styleClass="pointer"/>
+                </dt>
+            </dl>
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Ignore Reason : Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{ignoreReasonEditController.mode}"/>
+                <h:inputHidden value="#{ignoreReasonEditController.soIgnoreReason.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{ignoreReasonEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                     <tr>
+                        <td align="right" valign="top">* Code:</td>
+                        <td valign="top"><h:inputText id="code" value="#{ignoreReasonEditController.soIgnoreReason.code}"
+                                                      styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Code is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{ignoreReasonEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Name:</td>
+                        <td valign="top"><h:inputText id="name" value="#{ignoreReasonEditController.soIgnoreReason.name}"
+                                                      styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{ignoreReasonEditController.soIgnoreReason.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{ignoreReasonEditController.saveAction}" rendered="#{ignoreReasonEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{ignoreReasonEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

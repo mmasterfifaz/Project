@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Confirm Script</ui:define>
+    <ui:param name="modalId" value="popupConfirm"/>
+    <ui:param name="width" value="900"/>
+    <ui:param name="height" value="400"/>
+    <ui:define name="popupDetail">
+       <h:panelGroup id="confirmScriptPanel">
+           <div class="scrollProduct">
+            <table width="100%" border="0" cellspacing="0" cellpadding="8">
+                <tr>
+                     <td class="line01"><h:outputText value="#{confirmationPoController.confirmationScript}" escape="false"/></td>
+                </tr>
+                <tr>
+                    <td align="center">
+                        <h:commandButton image="/resources/img/b_close.png" 
+                                        onclick="#{rich:component('popupConfirm')}.hide(); return false;"
+                                        immediate="true"
+                                        style="margin-top: 5px; margin-bottom: 5px"/>
+                    </td>
+                </tr>
+            </table>
+           </div>
+        </h:panelGroup>    
+    </ui:define>
+</ui:composition>

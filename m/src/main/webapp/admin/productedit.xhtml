@@ -1,0 +1,1023 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Product Information: Add/Edit</ui:define>
+            <ui:define name="javascript">
+            <style type="text/css">
+            <!--
+            div.scrollBank {
+                height: 100px;
+                width: 300px;
+                overflow: auto;
+                border: 0px solid #666;
+                background-color: #FFFFFF;
+                padding: 0px;
+            }
+            -->
+            </style>
+            </ui:define>
+            <ui:define name="panel">
+                <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+                <script type="text/javascript">                    
+                    function InsertDescription(sample) {                        
+                        CKEDITOR.instances['frm:description'].insertText(" "+sample+" ");
+                    }
+                    
+                    function InsertConfirmScript(sample) {
+                        CKEDITOR.instances['frm:confirmationscript'].insertText(" "+sample+" ");
+                    }
+                </script>
+                <h:inputHidden value="#{productEditController.mode}"/>
+                <h:inputHidden value="#{productEditController.product.id}"/>
+                <table width="85%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="250" align="right" valign="top">* Product Code:</td>
+                        <td><h:inputText id="code" value="#{productEditController.product.code}" styleClass="textfield" size="30" required="true"
+                                         requiredMessage="Product code is required"/>
+                            <h:message for="code" style="color:red"/>
+                            <h:outputText value="#{productEditController.message}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Product Name:</td>
+                        <td><h:inputText id="name" value="#{productEditController.product.name}" styleClass="textfield" size="30" required="true"
+                                         requiredMessage="Product name is required"/>
+                            <h:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Product Category:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="productCategoryId" value="#{productEditController.product.productCategory.id}" required="true"
+                                             requiredMessage="Product Category is required" 
+                                             valueChangeListener="#{productEditController.productCategoryChangeListener}"
+                                             styleClass="select08">
+                                <f:selectItems value="#{productEditController.productCategoryList}"/>
+                                <a4j:ajax event="change" 
+                                             render="productCategoryId,productsponsorLabel, productsponsor, registrationformLabel, registrationform, panelMotor, pricelabel, price" 
+                                             limitRender="true" 
+                                             execute="@this"/>
+                            </h:selectOneMenu>
+                            <h:message for="productCategoryId" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Contact Result Plan:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="contactResultPlanId" value="#{productEditController.contactResultPlanId}" required="true"
+                                             requiredMessage="Contact Result Plan is required" 
+                                             valueChangeListener="#{productEditController.contactResultPlanChangeListener}"
+                                             styleClass="select08">
+                                <f:selectItems value="#{productEditController.contactResultPlanList}"/>
+                                <a4j:ajax event="change" limitRender="true" execute="@this"/>
+                            </h:selectOneMenu>
+                            <h:message for="contactResultPlanId" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Family Product:</td>
+                        <td valign="top">   
+                            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0"> 
+                                <tr valign="top">
+                                    <td width="10px">
+                                        <h:selectBooleanCheckbox id="familyProduct" value="#{productEditController.product.familyProduct}">
+                                            <a4j:ajax event="click" execute="@this" render="familyPackage" limitRender="true" />
+                                        </h:selectBooleanCheckbox>
+                                    </td>
+                                    <td align="left">
+                                        <h:panelGroup id="familyPackage">
+                                        <h:panelGroup rendered="#{productEditController.product.familyProduct}">                                        
+                                            <table >   
+                                                <tr>
+                                                    <td align="left" width="100px">
+                                                        <h:selectOneMenu value="#{productEditController.familyType}"
+                                                                         styleClass="select08">
+                                                            <f:selectItem itemLabel="Spouse Package" itemValue="1" />
+                                                            <f:selectItem itemLabel="Family Pack Discount" itemValue="2" />
+                                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="logicList" />
+                                                        </h:selectOneMenu>
+                                                    </td>
+                                                    <td align="left">
+                                                        <h:panelGroup id="logicList" >
+                                                        <h:selectOneMenu value="#{productEditController.familyLogic}" rendered="#{productEditController.familyType eq 2}">
+                                                            <f:selectItem itemLabel="2" itemValue="2" />
+                                                            <f:selectItem itemLabel="3" itemValue="3" />
+                                                            <f:selectItem itemLabel="4" itemValue="4" />
+                                                            <f:selectItem itemLabel="5" itemValue="5" />
+                                                            <f:selectItem itemLabel="6" itemValue="6" />
+                                                            <a4j:ajax event="change" limitRender="true" execute="@this"/>
+                                                        </h:selectOneMenu>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </table>                                        
+                                        </h:panelGroup>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Show Coverage:</td>
+                        <td valign="top"><h:selectOneMenu value="#{productEditController.showCoverage}">
+                            <f:selectItem itemLabel="Not show coverage" itemValue="0" />
+                            <f:selectItem itemLabel="Show coverage" itemValue="1" />
+                        </h:selectOneMenu></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top">
+                            <h:panelGroup id="panelMotor">
+                                <h:panelGroup rendered="#{productEditController.product.productCategory.categoryType eq 'motor'}">
+                                    <table border="0" align="left" cellpadding="3" cellspacing="0">
+                                        <tr>
+                                            <td align="right" valign="top">* Brand :</td>
+                                            <td valign="top">
+                                                <h:selectOneMenu id="brandId" 
+                                                                 value="#{productEditController.product.model.brand.id}"
+                                                                 required="true"
+                                                                 requiredMessage="Brand is required"
+                                                                 styleClass="select08"
+                                                                 valueChangeListener="#{productEditController.brandChangeListener}">
+                                                    <f:selectItem itemLabel="Select"/>
+                                                    <f:selectItems value="#{productEditController.brandList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                    <a4j:ajax event="change" 
+                                                                 render="modelId" 
+                                                                 limitRender="true" 
+                                                                 execute="@this"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="brandId" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">* Model :</td>
+                                            <td valign="top">
+                                                <h:selectOneMenu id="modelId" 
+                                                                 value="#{productEditController.product.model.id}"
+                                                                 required="true"
+                                                                 requiredMessage="Model is required"
+                                                                 styleClass="select08">
+                                                    <f:selectItem itemLabel="Select"/>
+                                                    <f:selectItems value="#{productEditController.modelList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="modelId" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">* Model Type :</td>
+                                            <td valign="top">
+                                                <h:selectOneMenu id="modelTypeId" 
+                                                                 value="#{productEditController.product.modelType.id}"
+                                                                 required="true"
+                                                                 requiredMessage="Model Type is required"
+                                                                 styleClass="select08">
+                                                    <f:selectItem itemLabel="Select"/>
+                                                    <f:selectItems value="#{productEditController.modelTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="modelTypeId" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <ui:remove>
+                                        <tr>
+                                            <td align="right" valign="top">* Year :</td>
+                                            <td valign="top">
+                                                <h:selectOneMenu id="modelYear" 
+                                                                 value="#{productEditController.product.modelYear}"
+                                                                 required="true"
+                                                                 requiredMessage="Year is required"
+                                                                 styleClass="select08">
+                                                    <f:selectItem itemLabel="Select"/>
+                                                    <f:selectItems value="#{productEditController.modelYearList}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="modelYear" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        </ui:remove>
+                                        <tr>
+                                            <td align="right" valign="top">* Model From Year :</td>
+                                            <td valign="top">
+                                                <h:selectOneMenu id="modelFromYear" 
+                                                                 value="#{productEditController.product.modelFromYear}"
+                                                                 required="true"
+                                                                 requiredMessage="#{msg.require}"
+                                                                 styleClass="select08">
+                                                    <f:selectItem itemLabel="Select"/>
+                                                    <f:selectItems value="#{productEditController.modelFromYearList}"/>
+                                                    <a4j:ajax event="change" 
+                                                                 render="modelToYear" 
+                                                                 execute="@this"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="modelFromYear" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">* To Year :</td>
+                                            <td valign="top">
+                                                <h:selectOneMenu id="modelToYear" 
+                                                                 value="#{productEditController.product.modelToYear}"
+                                                                 required="true"
+                                                                 requiredMessage="#{msg.require}"
+                                                                 styleClass="select08">
+                                                    <f:selectItem itemLabel="Select"/>
+                                                    <f:selectItems value="#{productEditController.modelToYearList}"/>
+                                                </h:selectOneMenu>
+                                                <h:message for="modelToYear" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">Number of seats :</td>
+                                            <td valign="top">
+                                                <h:inputText value="#{productEditController.product.modelSeat}" styleClass="textfield" size="30"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">Displacement (CC) :</td>
+                                            <td valign="top">
+                                                <h:inputText value="#{productEditController.product.modelCc}" styleClass="textfield" size="30"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">Weight (KG) :</td>
+                                            <td valign="top">
+                                                <h:inputText value="#{productEditController.product.modelWeight}" styleClass="textfield" size="30"/>
+                                            </td>
+                                        </tr>
+                                       
+                                    </table>
+                            </h:panelGroup>
+                            </h:panelGroup>
+
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Product Highlight:</td>
+                        <td valign="top"><h:inputTextarea value="#{productEditController.product.highlight}" rows="5" cols="80" style="width: 100%"/>
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Description:
+                            <br><a4j:commandButton image="../img/b_addtag.png" title="View Tag Field" 
+                                                   render="tagFieldList" limitRender="true" execute="@this"
+                                                   actionListener="#{productEditController.addTag}" 
+                                                   oncomplete="#{rich:component('tagDetail')}.show();" >
+                                    <f:param name="type" value="description"/>
+                                </a4j:commandButton></br></td>
+                        <td valign="top">
+                            <h:inputTextarea id="description" value="#{productEditController.product.description}"/>
+                            <script type="text/javascript">
+                                CKEDITOR.replace('frm:description'  ,{
+                                                filebrowserBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserImageBrowseUrl : '#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Image&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserFlashBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Flash&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/'}
+                                            );
+                            </script>
+
+                        </td>
+                    </tr>
+                    <h:panelGroup id="confirm">
+                    <tr>
+                        <td align="right" valign="top">Confirmation Script:
+                            <br><a4j:commandButton image="../img/b_addtag.png" title="View Tag Field" 
+                                                   render="tagFieldList" limitRender="true" execute="@this"
+                                                   actionListener="#{productEditController.addTag}"
+                                                   oncomplete="#{rich:component('tagDetail')}.show();" >
+                                    <f:param name="type" value="confirmation"/>
+                                </a4j:commandButton></br></td>
+                        <td valign="top">
+                            <h:inputTextarea id="confirmationscript" value="#{productEditController.product.confirmationScript}"/>
+                            <script type="text/javascript">
+                                CKEDITOR.replace('frm:confirmationscript'  ,{
+                                                filebrowserBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserImageBrowseUrl : '#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Image&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserFlashBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Flash&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/'}
+                                            );
+                            </script>
+                        </td>
+                    </tr>
+                    </h:panelGroup>
+                    <tr>
+                        <td align="right" valign="top">Remark:</td>
+                        <td valign="top"><h:inputText styleClass="textfield" value="#{productEditController.product.remark}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Thumbnail:</td>
+                        <td valign="top">
+                            <a4j:region>
+                                <h:panelGroup id="picThumbnail">
+                                <h:panelGroup rendered="#{productEditController.product.productThumbnail eq null}">
+                                    <rich:fileUpload id="fileUploadBean"
+                                                     fileUploadListener="#{productEditController.fileUploadBean.listener}"
+                                                     maxFilesQuantity="1"
+                                                     immediateUpload="true"
+                                                     acceptedTypes="jpg, gif, png, bmp, pdf" 
+                                                     listHeight="70px">
+                                        <a4j:ajax event="clear" render="fileUploadBean"/>
+                                    </rich:fileUpload>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!(productEditController.product.productThumbnail eq null)}">
+                                    <a href="../upload/product/#{productEditController.product.id}/#{productEditController.product.productThumbnail}" target="_blank">#{productEditController.product.productThumbnail}</a>
+                                    &nbsp;&nbsp;&nbsp;<a4j:commandButton image="../img/b_delete.png" 
+                                                                         render="picThumbnail"
+                                                                         limitRender="true" execute="@region"
+                                                                         actionListener="#{productEditController.deletePicThumbnailListener}"/>
+                                </h:panelGroup>
+                                </h:panelGroup>    
+                            </a4j:region>
+                        </td>
+                    </tr>                  
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{productEditController.product.allowCopy}"/> Allow Copy Lead from Sale History
+                        </td>
+                    </tr>                 
+                    <tr>
+                        <td align="right" valign="top"><h:panelGroup id="productsponsorLabel">* Product Sponsor:</h:panelGroup></td>
+                        <td valign="top"><h:panelGroup id="productsponsor">
+                                    <h:selectOneMenu id="productSponsorId" 
+                                                     value="#{productEditController.product.productSponsor.id}"
+                                                     required="true"
+                                                     requiredMessage="Product Sponsor is required"
+                                                     styleClass="select08">
+                                        <f:selectItems value="#{productEditController.productSponsorList}"/>
+                                    </h:selectOneMenu>
+                                    <h:message for="productSponsorId" style="color:red"/>
+                                </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"><h:panelGroup id="registrationformLabel">* Registration Form Template:</h:panelGroup></td>
+                        <td valign="top"><h:panelGroup id="registrationform">
+                                    <h:selectOneMenu id="registrationFormid" 
+                                                     value="#{productEditController.product.registrationForm.id}"
+                                                     required="true"
+                                                     requiredMessage="Registration Form is required"
+                                                     styleClass="select08">
+                                        <f:selectItems value="#{productEditController.registrationFormList}"/>
+                                    </h:selectOneMenu>
+                                    <h:message for="registrationFormid" style="color:red"/>
+                                </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"><h:panelGroup id="approvalRuleLabel">Approval Rule:</h:panelGroup></td>
+                        <td valign="top"><h:panelGroup id="approvalRule">
+                                    <h:selectOneMenu id="approvalRuleId" 
+                                                     value="#{productEditController.approvalRuleId}"
+                                                     required="false"
+                                                     requiredMessage="Approval Rule is required"
+                                                     styleClass="select08">
+                                        <f:selectItem itemLabel="Select Approval Rule"/>
+                                        <f:selectItems value="#{productEditController.approvalRuleList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                    </h:selectOneMenu>
+                                    <h:message for="approvalRuleId" style="color:red"/>
+                                </h:panelGroup>
+                        </td>
+                    </tr>
+                   
+                    
+                    <tr>
+                        <td valign="top" align="center" colspan="2">
+                                        <table border="0" cellspacing="0" cellpadding="4">
+                                            <tr>
+                                                <td width="380" class="blue04" style="padding-left: 10px">Available Declaration Form</td>
+                                                <td width="380" class="blue04" style="padding-left: 10px">Selected Declaration Form</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <rich:pickList id="fieldList" switchByDblClick="true"
+                                                        listWidth="350px" listHeight="150px"
+                                                        addText="" addAllText="" removeText="" removeAllText=""
+                                                        value="#{productEditController.selectedField}">
+                                                        <f:selectItems value="#{productEditController.fieldList}"/>
+                                                    </rich:pickList>
+                                                    <span style="padding-left:10px"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"><h:panelGroup id="pricelabel"><h:panelGroup rendered="#{productEditController.product.productCategory.categoryType eq 'retail'}">Price:</h:panelGroup></h:panelGroup></td>
+                        <td valign="top">
+                            <h:panelGroup id="price">
+                                <h:inputText id="pricevalue" 
+                                                      value="#{productEditController.product.price}" 
+                                                      styleClass="textfield" 
+                                                      rendered="#{productEditController.product.productCategory.categoryType eq 'retail'}"
+                                                      size="10" >
+                                    <f:convertNumber/>
+                                </h:inputText>
+                                <h:message for="pricevalue"/>
+                            </h:panelGroup>
+
+                        </td>
+                    </tr>
+                    
+                <!-- BEGIN PAYMENT METHOD FIELD -->
+                  <tr>
+                        <td align="right" valign="top">Payment Method:</td>
+                        <td valign="top" style="padding-bottom:20px;">
+                            <rich:dataTable id="paymentMethodFrm" value="#{productEditController.paymentMethodOptions}" var="pmOption"  >
+                                <rich:column>
+                                    <h:selectBooleanCheckbox value="#{pmOption.selected}"  >
+                                        <a4j:ajax execute="@this" listener="#{productEditController.doPaymentMethodSelected}"  render="paymentMethodFrm, paymentModeFrm" />
+                                        <a4j:param name="PAYMENTMETHOD_ID_CHECKED" value="#{pmOption.ikey}" />
+                                    </h:selectBooleanCheckbox>    
+                                    #{pmOption.svalue}                                    
+                                </rich:column>
+                            </rich:dataTable>
+                       </td>                            
+                    </tr>  
+                    <!-- END PAYMENT METHOD FIELD -->
+
+                    <!-- BEGIN CREDIT/DEBIT CARD ISSUER -->
+                    <tr>
+                        <td align="right" valign="top">Credit Card Issuer:</td>
+                        <td valign="top" style="padding-bottom:20px;">
+                            <table border="0" cellpadding="2" cellspacing="0">
+                                <tr>
+                                    <td bgcolor="#d1ebf1"><h:outputText value="Card Type"/></td>
+                                    <td bgcolor="#eef2f7">
+                                        <h:selectManyCheckbox value="#{productEditController.cardTypeString}" layout="lineDirection" >
+                                            <a4j:ajax execute="@this" />
+                                            <f:selectItems value="#{productEditController.cardTypeList}"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#d1ebf1" valign="top"><h:outputText value="Card Issuer"/></td>
+                                    <td bgcolor="#eef2f7">
+                                        <div class="scrollBank">
+                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td><h:selectBooleanCheckbox id="selectBankAll" value="#{productEditController.checkBankAll}" valueChangeListener="#{productEditController.checkBankAllListener}">
+                                                                <f:param name="checkBankAll" value="#{productEditController.checkBankAll}"/>
+                                                                <a4j:ajax event="click" render="selectBankAll,selectBank" limitRender="true" execute="@this"/>
+                                                        </h:selectBooleanCheckbox>
+                                                        <h:outputText value="All"/>
+                                                        <h:selectManyCheckbox id="selectBank" 
+                                                                              value="#{productEditController.bankString}" 
+                                                                              layout="pageDirection">
+                                                            <f:selectItems value="#{productEditController.bankList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                            <a4j:ajax event="click" 
+                                                                      render="selectBankAll,selectBank" 
+                                                                      limitRender="true" execute="@this"
+                                                                      listener="#{productEditController.checkBankListener}">
+                                                            </a4j:ajax>
+                                                        </h:selectManyCheckbox>
+                                                    </td>
+                                                </tr>                       
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>                            
+                    </tr>  
+                    <tr>
+                        <td align="right" valign="top">Debit Card Issuer:</td>
+                        <td valign="top" style="padding-bottom:20px;">
+                            <table border="0" cellpadding="2" cellspacing="0">
+                                <tr>
+                                    <td bgcolor="#d1ebf1"><h:outputText value="Card Type"/></td>
+                                    <td bgcolor="#eef2f7">
+                                        <h:selectManyCheckbox value="#{productEditController.cardTypeDebitString}" layout="lineDirection" >
+                                            <a4j:ajax execute="@this" />
+                                            <f:selectItems value="#{productEditController.cardTypeList}"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td bgcolor="#d1ebf1" valign="top"><h:outputText value="Card Issuer"/></td>
+                                    <td bgcolor="#eef2f7">
+                                        <div class="scrollBank">
+                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td><h:selectBooleanCheckbox id="selectBankAllDebit" 
+                                                                                 value="#{productEditController.checkBankAllDebit}" 
+                                                                                 valueChangeListener="#{productEditController.checkBankAllDebitListener}">
+                                                                <f:param name="checkBankAllDebit" value="#{productEditController.checkBankAllDebit}"/>
+                                                                <a4j:ajax event="click" render="selectBankAllDebit,selectBankDebit" limitRender="true" execute="@this"/>
+                                                        </h:selectBooleanCheckbox>
+                                                        <h:outputText value="All"/>
+                                                        <h:selectManyCheckbox id="selectBankDebit" 
+                                                                              value="#{productEditController.bankDebitString}" 
+                                                                              layout="pageDirection">
+                                                            <f:selectItems value="#{productEditController.bankList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                            <a4j:ajax event="click" 
+                                                                      render="selectBankAllDebit,selectBankDebit" 
+                                                                      limitRender="true" execute="@this"
+                                                                      listener="#{productEditController.checkBankDebitListener}">
+                                                            </a4j:ajax>
+                                                        </h:selectManyCheckbox>
+                                                    </td>
+                                                </tr>                       
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>                            
+                    </tr>  
+                    <!-- END CREDIT/DEBIT CARD ISSUER -->
+
+
+<!-- BEGIN PAYMENT MODE FIELD -->
+                    <tr>
+                        <td align="right" valign="top">Payment Mode:</td>
+                        <td valign="top" style="padding-bottom:20px;">
+                            <rich:dataTable id="paymentModeFrm" value="#{productEditController.activePaymentModeOptions}" var="pModeOption" >
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                    <rich:column style="background-color:#d1ebf1;width:200px;" rowspan="2"> Pay By </rich:column>
+                                    <rich:column style="background-color:#d1ebf1;" colspan="4"> First Installment </rich:column>
+                                    <rich:column style="background-color:#eef2f7;width:110px;" breakRowBefore="true"> Monthly </rich:column>
+                                    <rich:column style="background-color:#eef2f7;width:110px;"> Quarterly </rich:column>
+                                    <rich:column style="background-color:#eef2f7;width:110px;"> Half Year </rich:column>
+                                    <rich:column style="background-color:#eef2f7;width:110px;"> Yearly </rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column style="font-weight: bold;background-color:#eef2f7;" ><h:outputText  value="#{pModeOption.paymentMethodName}" /></rich:column>
+                                <rich:column>
+                                    <h:selectOneMenu value="#{pModeOption.noPayPeriodOfMonthlyMode}" >
+                                        <a4j:ajax execute="@this" />
+                                        <f:selectItems value="#{productEditController.monthlyInstallmentOptions}" var="obj" itemLabel="#{obj.label}" itemValue="#{obj.value}" />
+                                    </h:selectOneMenu>
+                                </rich:column>
+                                <rich:column>
+                                    <h:selectOneMenu value="#{pModeOption.noPayPeriodOfQuarterlyMode}" >
+                                        <a4j:ajax execute="@this" />
+                                        <f:selectItems value="#{productEditController.quarterlyInstallmentOptions}" var="obj" itemLabel="#{obj.label}" itemValue="#{obj.value}" />
+                                    </h:selectOneMenu>
+                                </rich:column>
+                                <rich:column>
+                                    <h:selectOneMenu value="#{pModeOption.noPayPeriodOfHalfYearMode}" >
+                                        <a4j:ajax execute="@this" />
+                                        <f:selectItems value="#{productEditController.halfYearInstallmentOptions}" var="obj" itemLabel="#{obj.label}" itemValue="#{obj.value}" />
+                                    </h:selectOneMenu>
+                                </rich:column>
+                                <rich:column>
+                                    <h:selectOneMenu value="#{pModeOption.noPayPeriodOfYearlyMode}" >
+                                        <a4j:ajax execute="@this" />
+                                        <f:selectItems value="#{productEditController.yearlyInstallmentOptions}" var="obj" itemLabel="#{obj.label}" itemValue="#{obj.value}" />
+                                    </h:selectOneMenu>
+                                </rich:column>
+                            </rich:dataTable> 
+                        </td>
+                    </tr>
+<!-- END PAYMENT MODE FIELD-->
+                    <tr>
+                        <td align="right" valign="top">Delivery Method:</td>
+                        <td valign="top">
+                            <h:selectManyCheckbox value="#{productEditController.deliveryMethodString}">
+                                <f:selectItems value="#{productEditController.deliveryMethodList}"/>
+                            </h:selectManyCheckbox>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Number of Beneficiaries:</td>
+                        <td valign="top">
+                            <h:selectOneMenu value="#{productEditController.product.beneficiaryNo}">
+                                <f:selectItem itemValue="0" itemLabel="Select"/>
+                                <f:selectItem itemValue="1" itemLabel="1"/> 
+                                <f:selectItem itemValue="2" itemLabel="2"/>
+                                <f:selectItem itemValue="3" itemLabel="3"/>
+                                <f:selectItem itemValue="4" itemLabel="4"/>
+                                <f:selectItem itemValue="5" itemLabel="5"/>
+                                <f:selectItem itemValue="6" itemLabel="6"/>          
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Percentage of Beneficiary Field Name:</td>
+                        <td valign="top">
+                            <h:selectOneMenu value="#{productEditController.product.percentBeneficiaryFxFieldNo}">
+                                <f:selectItem itemValue="" itemLabel="Select"/>
+                                <f:selectItem itemValue="1" itemLabel="Flex Field 1"/>
+                                <f:selectItem itemValue="2" itemLabel="Flex Field 2"/>
+                                <f:selectItem itemValue="3" itemLabel="Flex Field 3"/>
+                                <f:selectItem itemValue="4" itemLabel="Flex Field 4"/>
+                                <f:selectItem itemValue="5" itemLabel="Flex Field 5"/>
+                                <f:selectItem itemValue="6" itemLabel="Flex Field 6"/>
+                                <f:selectItem itemValue="7" itemLabel="Flex Field 7"/>
+                                <f:selectItem itemValue="8" itemLabel="Flex Field 8"/>
+                                <f:selectItem itemValue="9" itemLabel="Flex Field 9"/>
+                                <f:selectItem itemValue="10" itemLabel="Flex Field 10"/> 
+                                <f:selectItem itemValue="11" itemLabel="Flex Field 11"/>
+                                <f:selectItem itemValue="12" itemLabel="Flex Field 12"/>
+                                <f:selectItem itemValue="13" itemLabel="Flex Field 13"/>
+                                <f:selectItem itemValue="14" itemLabel="Flex Field 14"/>
+                                <f:selectItem itemValue="15" itemLabel="Flex Field 15"/>
+                                <f:selectItem itemValue="16" itemLabel="Flex Field 16"/>
+                                <f:selectItem itemValue="17" itemLabel="Flex Field 17"/>
+                                <f:selectItem itemValue="18" itemLabel="Flex Field 18"/>
+                                <f:selectItem itemValue="19" itemLabel="Flex Field 19"/>
+                                <f:selectItem itemValue="20" itemLabel="Flex Field 20"/> 
+                                <f:selectItem itemValue="21" itemLabel="Flex Field 21"/>
+                                <f:selectItem itemValue="22" itemLabel="Flex Field 22"/>
+                                <f:selectItem itemValue="23" itemLabel="Flex Field 23"/>
+                                <f:selectItem itemValue="24" itemLabel="Flex Field 24"/>
+                                <f:selectItem itemValue="25" itemLabel="Flex Field 25"/>
+                                <f:selectItem itemValue="26" itemLabel="Flex Field 26"/>
+                                <f:selectItem itemValue="27" itemLabel="Flex Field 27"/>
+                                <f:selectItem itemValue="28" itemLabel="Flex Field 28"/>
+                                <f:selectItem itemValue="29" itemLabel="Flex Field 29"/>
+                                <f:selectItem itemValue="30" itemLabel="Flex Field 30"/> 
+                                <f:selectItem itemValue="31" itemLabel="Flex Field 31"/>
+                                <f:selectItem itemValue="32" itemLabel="Flex Field 32"/>
+                                <f:selectItem itemValue="33" itemLabel="Flex Field 33"/>
+                                <f:selectItem itemValue="34" itemLabel="Flex Field 34"/>
+                                <f:selectItem itemValue="35" itemLabel="Flex Field 35"/>
+                                <f:selectItem itemValue="36" itemLabel="Flex Field 36"/>
+                                <f:selectItem itemValue="37" itemLabel="Flex Field 37"/>
+                                <f:selectItem itemValue="38" itemLabel="Flex Field 38"/>
+                                <f:selectItem itemValue="39" itemLabel="Flex Field 39"/>
+                                <f:selectItem itemValue="40" itemLabel="Flex Field 40"/> 
+                                <f:selectItem itemValue="41" itemLabel="Flex Field 41"/>
+                                <f:selectItem itemValue="42" itemLabel="Flex Field 42"/>
+                                <f:selectItem itemValue="43" itemLabel="Flex Field 43"/>
+                                <f:selectItem itemValue="44" itemLabel="Flex Field 44"/>
+                                <f:selectItem itemValue="45" itemLabel="Flex Field 45"/>
+                                <f:selectItem itemValue="46" itemLabel="Flex Field 46"/>
+                                <f:selectItem itemValue="47" itemLabel="Flex Field 47"/>
+                                <f:selectItem itemValue="48" itemLabel="Flex Field 48"/>
+                                <f:selectItem itemValue="49" itemLabel="Flex Field 49"/>
+                                <f:selectItem itemValue="50" itemLabel="Flex Field 50"/> 
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Age Calculation Method:</td>
+                        <td valign="top">
+                            <h:selectOneMenu value="#{productEditController.product.ageCalMethod}">
+                                <a4j:ajax event="change" 
+                                          render="pgAgeCal" 
+                                          limitRender="true" 
+                                          execute="@this" 
+                                          immediate="true"/>
+                                <f:selectItem itemValue="day" itemLabel="วันชนวัน"/>
+                                <f:selectItem itemValue="year" itemLabel="ปีชนปี"/>
+                                <f:selectItem itemValue="month" itemLabel="เดือน"/>
+                                <f:selectItem itemValue="dayrange" itemLabel="ช่วงวัน"/>              
+                            </h:selectOneMenu>
+                            
+                            <h:panelGroup id="pgAgeCal">
+                                <h:panelGroup rendered="#{productEditController.product.ageCalMethod eq 'dayrange'}">
+                                    <h:inputText id="ageCalDay" 
+                                                 value="#{productEditController.product.ageCalDay}" 
+                                                 required="#{productEditController.product.ageCalMethod eq 'dayrange'}"
+                                                 style="margin-left: 5px;width: 50px;text-align: right">
+                                        <f:validateLongRange minimum="1" maximum="365" />
+                                        <rich:validator/>
+                                    </h:inputText>
+                                    <rich:message for="ageCalDay" style="color:red"/>
+                                </h:panelGroup>
+
+                                <h:panelGroup rendered="#{productEditController.product.ageCalMethod eq 'month'}">
+                                    <h:selectOneMenu value="#{productEditController.product.ageCalMonth}" 
+                                                     style="margin-left: 10px">
+                                        <f:selectItem itemValue="1" itemLabel="1"/> 
+                                        <f:selectItem itemValue="2" itemLabel="2"/>
+                                        <f:selectItem itemValue="3" itemLabel="3"/>
+                                        <f:selectItem itemValue="4" itemLabel="4"/>
+                                        <f:selectItem itemValue="5" itemLabel="5"/>
+                                        <f:selectItem itemValue="6" itemLabel="6"/>
+                                        <f:selectItem itemValue="7" itemLabel="7"/> 
+                                        <f:selectItem itemValue="8" itemLabel="8"/>
+                                        <f:selectItem itemValue="9" itemLabel="9"/>
+                                        <f:selectItem itemValue="10" itemLabel="10"/>
+                                        <f:selectItem itemValue="11" itemLabel="11"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Sequence Number for Reference No.:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="sequenceNo"
+                                             value="#{productEditController.product.sequenceNo.id}"
+                                             required="true"
+                                             requiredMessage="Sequence number is required">
+                                <f:selectItem itemLabel="Select"/>
+                                <f:selectItems value="#{productEditController.sequenceNoList}" 
+                                               var="list" 
+                                               itemValue="#{list.id}" 
+                                               itemLabel="#{list.name}"/>     
+                            </h:selectOneMenu>
+                            <h:message for="sequenceNo" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Generate Reference No.:</td>
+                        <td valign="top">
+                            <h:selectOneMenu value="#{productEditController.product.refNoGenerateEvent}">
+                                <f:selectItem itemValue="reg" itemLabel="When Saved Registration Form"/>
+                                <f:selectItem itemValue="qc" itemLabel="When QC Approved"/>           
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Gender:</td>
+                        <td valign="top">
+                            <h:selectOneMenu value="#{productEditController.product.gender}">
+                                <f:selectItem itemValue="false" itemLabel="Not Specific"/>
+                                <f:selectItem itemValue="true" itemLabel="Male/Female"/>           
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Approval Workflow:<br/>(When Success Yes)</td>
+                        <td valign="top">
+                            <rich:dataTable id="workflowList"  
+                                            value="#{productEditController.productWorkflowList}" var="list" >
+                                <rich:column style="vertical-align: top">
+                                    <h:panelGrid columns="1">
+                                        <h:panelGroup>
+                                            
+                                                <table cellpadding="2" cellspacing="0" border="0" width="100%">
+                                                <tr>
+                                                    <td>
+                                                        <a4j:commandButton image="/img/b_delete.png"
+                                                                           limitRender="true" immediate="true"
+                                                                           render="workflowList,cbAddWorkflow"
+                                                                           actionListener="#{productEditController.removeProductWorkflowListener}"
+                                                                           rendered="#{productEditController.productWorkflowList.size() != 1}">
+                                                            <f:param name="stepNo" value="#{list.stepNo}"/>
+                                                        </a4j:commandButton>
+                                                    </td>
+                                                    <td nowrap="nowrap">Step<h:outputText value="#{list.stepNo}"/></td>
+                                                    <td nowrap="nowrap">
+                                                        <h:selectOneMenu id="roleName" value="#{list.approvalRoleName}"
+                                                                         required="true"
+                                                                         requiredMessage="#{msg.require}">
+                                                            <f:selectItem itemLabel="Select"/>
+                                                            <f:selectItems value="#{productEditController.stepList}"/> 
+                                                            <a4j:ajax event="change" render="auto,msgRoleName" limitRender="true" execute="@this"/>
+                                                        </h:selectOneMenu>
+                                                        <rich:message id="msgRoleName" for="roleName" style="color:red"/>
+                                                    </td>
+                                                    <ui:remove>
+                                                    <td nowrap="nowrap">
+                                                        <h:selectBooleanCheckbox value="#{list.require}"/> Required to approve
+                                                    </td>
+                                                    </ui:remove>
+                                                    <td nowrap="nowrap">
+                                                        <h:selectBooleanCheckbox value="#{list.notify}"/> Notify when approved
+                                                    </td>
+                                                    <td nowrap="nowrap">
+                                                        <h:selectBooleanCheckbox id="chkEmail" value="#{list.sentEmail}" label="E-Mail">
+                                                            <a4j:ajax event="change" render="panelEmail" limitRender="true" execute="@this"/>
+                                                        </h:selectBooleanCheckbox> E-Mail
+                                                        
+                                                        <h:panelGroup id="panelEmail">
+                                                            <h:panelGroup rendered="#{list.sentEmail}">
+                                                                <h:inputText id="email" value="#{list.email}" 
+                                                                             styleClass="textfield"
+                                                                             required="#{list.sentEmail}"
+                                                                             requiredMessage="#{msg.require}">
+                                                                </h:inputText>
+                                                                <rich:message for="email" style="color:red"/>
+                                                            </h:panelGroup>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                    <td nowrap="nowrap">
+                                                        <h:panelGroup id="auto">
+                                                            <h:panelGroup rendered="#{list.approvalRoleName eq 'Uw'}">
+                                                                <h:selectBooleanCheckbox value="#{list.autoApprove}" label="Auto approved"/> <h:outputText value="Auto approved"/>
+                                                            </h:panelGroup>
+                                                            <h:panelGroup rendered="#{list.approvalRoleName eq 'Payment'}">
+                                                                <h:selectBooleanCheckbox value="#{list.autoApprove}" label="Auto approved when paid"/> <h:outputText value="Auto approved when paid"/>
+                                                            </h:panelGroup>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            
+                                        </h:panelGroup>
+                                    </h:panelGrid>
+                                </rich:column>
+                            </rich:dataTable>
+                            <a4j:commandButton id="cbAddWorkflow" image="/img/b_add.png"
+                                               actionListener="#{productEditController.addProductWorkflowListener}"
+                                               render="workflowList"
+                                               limitRender="true"
+                                               disabled="#{productEditController.productWorkflowList.size() eq 4}"/>
+                        </td>
+                    </tr>
+
+                     <!-- BEGIN FLEX FIELD -->
+                     <tr>
+                         <td colspan="2" style="padding-top:15px;">
+                            <table width="98%" border="0" cellspacing="0" cellpadding="3">
+                                <tr>
+                                    <td class="line01" style="border: 1px dotted #CCCCCC;" colspan="2" ><h4>Flex Field</h4></td>
+                                </tr>
+                                <tr>
+                                    <td width="50%" style="padding-top:15px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field1:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx1}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field2:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx2}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field3:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx3}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field4:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx4}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field5:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx5}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field6:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx6}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field7:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx7}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field8:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx8}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field9:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx9}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr><tr>
+                                                <td align="right" valign="top">Flex Field10:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx10}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+         
+                                        </table>
+                                    </td>
+                                    <td width="50%" style="padding-top:15px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field11:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx11}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field12:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx12}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field13:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx13}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field14:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx14}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field15:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx15}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field16:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx16}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field17:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx17}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field18:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx18}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field19:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx19}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field20:</td>
+                                                <td valign="top"><h:inputText value="#{productEditController.product.fx20}" styleClass="textfield" maxlength="100"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                     <!-- END FLEX FIELD -->
+                </table>                            
+
+                
+                <!-- BEGIN CONTROL BUTTON -->                        
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="left" valign="top" width="33%">
+                            <h:commandButton image="../img/b_back.png" action="#{productEditController.backAction}" immediate="true"/></td>
+                        <td align="center" valign="top">
+                            <h:commandButton image="../img/b_save.png" action="#{productEditController.saveAction}" rendered="#{productEditController.savePermitted}"/></td>
+                        <td align="right" valign="top" width="33%"></td>
+                    </tr>
+                </table>
+                <!-- END CONTROL BUTTON -->                        
+
+            </ui:define>
+
+        <!-- BEGIN POPUP -->            
+        <ui:define name="popupModal">
+             <rich:popupPanel id="tagDetail" autosized="true" style="padding: 0 0 0 0; border-style: none " >
+                <h:form>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Tag Field</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('tagDetail')}.hide(); return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                               <ui:insert name="popupDetail">
+                                <h:panelGroup id="pgTagDetail">
+                                <table border="0" cellpadding="3" cellspacing="1" width="100%">
+                                    <tr>
+                                        <td valign="top">
+                                            <rich:dataTable id="tagFieldList" styleClass="tableline01" 
+                                                            value="#{productEditController.tagFieldList}" rows="#{global.maxrows}" var="fieldList">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column styleClass="subh01"><h:outputText value="Name"/></rich:column>
+                                                    <rich:column styleClass="subh01"><h:outputText value="Tag"/></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column>
+                                                <h:outputText value="#{fieldList.name}"/>
+                                            </rich:column>
+                                            <rich:column rendered="#{productEditController.tag eq 'description'}">
+                                                <a4j:commandLink onclick="InsertDescription('#{fieldList.tagField}');">
+                                                    <h:outputText value="#{fieldList.tagField}"/>
+                                                </a4j:commandLink>
+                                            </rich:column>
+                                            <rich:column rendered="#{productEditController.tag eq 'confirmation'}">
+                                                <a4j:commandLink onclick="InsertConfirmScript('#{fieldList.tagField}');">
+                                                    <h:outputText value="#{fieldList.tagField}"/>
+                                                </a4j:commandLink>
+                                            </rich:column>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                            </f:facet>
+                                        </rich:dataTable>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" align="center"><a4j:commandButton image="../img/b_close.png" immediate="true" limitRender="true" execute="@this" onclick="#{rich:component('tagDetail')}.hide()"/></td>
+                                    </tr>
+                                </table>
+                                </h:panelGroup>
+                            </ui:insert>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </h:form>
+            </rich:popupPanel>
+
+            <ui:include src="/share/waitpopup.xhtml"/>           
+            <a4j:status id="actionStatus" 
+                    onstart="#{rich:component('waitPopup')}.show()"
+                    onstop="#{rich:component('waitPopup')}.hide()" />
+         </ui:define>   
+        <!-- END POPUP -->                        
+        
+        </ui:composition>
+    </h:body>
+</html>

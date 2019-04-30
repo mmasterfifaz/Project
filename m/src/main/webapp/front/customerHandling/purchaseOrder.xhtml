@@ -1,0 +1,107 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/customerHandling/customerDetail.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.customerHandling}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+    <ui:define name="detail_1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.activityInformation}</h2></td>
+                <td valign="bottom" align="right" background="#{request.contextPath}/img/box11.png">
+                    <h:outputLink value="#{request.contextPath}/front/customerHandling/activityEdit.jsf">
+                        <f:param name="caseId" value="#{caseHandlingController.contactCase.id}"/>
+                        <h:graphicImage library="img" name="b_createactivity.png" alt="Add" />
+                    </h:outputLink></td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top">
+                    <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{purchaseHistoryController.purchaseOrderList}" rows="5" var="list">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="text-align: left;">&#160;</rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryContactDate}" /></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryReferenceNo}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryProductNo}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryProductName}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryQuantity}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryAmount}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryLastUpdate}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.purchaseHistoryUpdateBy}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:graphicImage library="icon" name="ApprovalStatus.png"/></rich:column>
+                                <rich:column style="text-align: left;"><h:graphicImage library="icon" name="QCStatus.png"/></rich:column>
+                                <rich:column style="text-align: left;"><h:graphicImage library="icon" name="SettlementStatus.png"/></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        <rich:column>
+                            <h:graphicImage library="icon" name="inbound.png" rendered="#{list.channelType == 'inbound'}" />
+                            <h:graphicImage library="icon" name="outbound.png" rendered="#{list.channelType == 'outbound'}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.contactDate}">
+                                <f:convertDateTime pattern="#{vars.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.referenceNo}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.productNo}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.productName}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.quantity}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.amount}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.updatedDate}">
+                                <f:convertDateTime pattern="#{vars.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.updatedBy}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:graphicImage library="icon" name="tic.png" rendered="#{list.approve}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:graphicImage library="icon" name="tic.png" rendered="#{list.qc}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:graphicImage library="icon" name="tic.png" rendered="#{list.settlement}"/>
+                        </rich:column>
+                        <f:facet name="footer">
+
+                        </f:facet>
+                    </rich:dataTable>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,507 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/mainmenu01-3.png"  width="100%"></td>
+                    <td><img src="#{request.contextPath}/img/mainmenu01-4.png" alt="" width="40"/></td>
+                </tr>
+                <tr>
+                    <td width ="100%" style="background-color: white">                  
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+                            <tr>
+                                <td height="40" colspan="2" style="color:green; padding-left: 1em" class="ping01" >Report Menu</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:panelGrid columns="2" border="0">
+                                        <h:panelGroup rendered="#{reportSidemenuController.showMenuLeft}">   
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree2" class="tableMenuReport">
+                                                    <ui:remove>
+                                                        ---Social----
+                                                    </ui:remove>
+                                                    <h:panelGroup rendered="#{reportSidemenuController.socialPermitted}">   
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Social and Email</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/agentByCaseType.xhtml?faces-redirect=true"  value="Agent by Case Type" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.agentByCaseTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/agentPerformanceByPeriod.xhtml?faces-redirect=true"  value="Agent Performance by Period" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.performanceByPeriodPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/customerDetailByDate.xhtml?faces-redirect=true"  value="Detail Report of Customer by Date" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.customerDetailByDatePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/forwardMsgByDate.xhtml?faces-redirect=true"  value="Forward Report of Message by Date" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.forwardMsgByDatePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/performanceByBraketime.xhtml?faces-redirect=true"  value="Report of agent performance by Brake Time" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.performanceByBreaktimePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/performanceByOperation.xhtml?faces-redirect=true"  value="Report of agent performance by Operation Time" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.performanceByOperationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/approvalReasonByUser.xhtml?faces-redirect=true"  value="Report of Approval Reason by User" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.approvalReasonByUserPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/ignoreReasonByUser.xhtml?faces-redirect=true"  value="Report of Ignore Reason by User" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.ignoreReasonByUserPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/slaPerformanceByCustomerType.xhtml?faces-redirect=true"  value="SLA Report of Agent Performance by Customer Type" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.SLAPerformanceByCustomerPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/slaPerformanceBySource.xhtml?faces-redirect=true"  value="SLA Report of Agent Performance by Source" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.SLAPerformanceBySourcePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/slaPerformanceByUser.xhtml?faces-redirect=true"  value="SLA Report of Agent Performance by User" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.SLAPerformanceByUserPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/slaApprovalByCaseType.xhtml?faces-redirect=true"  value="SLA Report of Approval by Case Type" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.SLAApprovalByCasePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/slaApprovalBySupervisor.xhtml?faces-redirect=true"  value="SLA Report of Approval by Supervisor" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.SLAApprovalBySupPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/slaMsgPerformanceByCaseType.xhtml?faces-redirect=true"  value="SLA Report of Message Performance by Case Type" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.msgPerformanceByCasePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/StatisticDailyByCase.xhtml?faces-redirect=true"  value="Statistic Daily Message By Case" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.dailyMsgByCasePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticMonthlyByCase.xhtml?faces-redirect=true"  value="Statistic Monthly Message by Case" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.monthlyMsgByCasePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/PerformanceByUser.xhtml?faces-redirect=true"  value="Statistic Report of Agent Performance By User" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.performanceByUserPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticApprovalByCase.xhtml?faces-redirect=true"  value="Statistic Report of Approval by Case" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.approvalByCasePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticMsgByCustomer.xhtml?faces-redirect=true"  value="Statistic Report of Message by Customer" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.msgByCustomerPermitted}"/></td>
+                                                        </tr>   
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticMsgByService.xhtml?faces-redirect=true"  value="Statistic Report of Message by Service" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.msgByServicePermitted}"/></td>
+                                                        </tr>   
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticApprovalEmailByDay.xhtml?faces-redirect=true"  value="Statistic of Approval Email by Day" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.approvalEmailByDayPermitted}"/></td>
+                                                        </tr>   
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticAgentPerformanceByDate.xhtml?faces-redirect=true"  value="Statistic Report of Agent Performance by Date" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.performanceByDatePermitted}"/></td>
+                                                        </tr>   
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticCustomerByContact.xhtml?faces-redirect=true"  value="Statistic Report of Customer by Contact" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.customerByContactPermitted}"/></td>
+                                                        </tr>  
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticMsgPerformanceByPriorityTime.xhtml?faces-redirect=true"  value="Statistic Report of Message Performance by Priority with Time" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.msgPerformanceByPriorityTimePermitted}"/></td>
+                                                        </tr>    
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="400"><h:commandLink action="/socialreport/statisticMsgPerformanceByPriority.xhtml?faces-redirect=true"  value="Statistic Report of Message Performance by Priority" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.msgPerformanceByPriorityPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{reportSidemenuController.customerServicesPermitted}">                                        
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Customer Services</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/casetypeByInboundChannel.xhtml?faces-redirect=true"  value="Contact Summary By Inbound Channel" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.contactSumByInboundPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/casetypeByOutboundChannel.xhtml?faces-redirect=true"  value="Contact Summary By Outbound Channel" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.contactSumByOutboundPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/casetypeByContactDate.xhtml?faces-redirect=true"  value="Contact Summary By Contact Date" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.contactSumByContactDatePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/casetypeByStatus.xhtml?faces-redirect=true"  value="Contact Summary By Status" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.contactSumByStatusPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/casetypeByUser.xhtml?faces-redirect=true"  value="Case Handling By User Group" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.caseHandlingByUserGroupPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/casedetail.xhtml?faces-redirect=true"  value="Case Detail" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.caseDetailPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/caselist.xhtml?faces-redirect=true"  value="Case List" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.caseListPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/firstcall.xhtml?faces-redirect=true"  value="First Call Resolution" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.firstCallPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/top10case.xhtml?faces-redirect=true"  value="Top 10 Case" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.top10casePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/multicase.xhtml?faces-redirect=true"  value="Multi Case in a contact" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.multicasePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/customerstatbychannel.xhtml?faces-redirect=true"  value="*** Customer Statistic by Channel" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.customerStatByChannelPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{reportSidemenuController.campaignSalesPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><a href="#" class="black01"><strong><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Campaign &amp; Sales</strong></a></td>
+                                                        </tr>
+                                                        <ui:remove>
+                                                            <tr>
+                                                                <td width="31"></td>
+                                                                <td width="225"><h:commandLink action="/report/saleperformancebyuserold.xhtml?faces-redirect=true"  value="Sale Performance By User (Old)" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.salePerfByUserPermitted}"/></td>
+                                                            </tr>
+                                                        </ui:remove>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/saleperformancebyuser.xhtml?faces-redirect=true"  value="Sale Performance By User" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.salePerfByUserPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/saleperformancebygroup.xhtml?faces-redirect=true"  value="Sale Performance By User Group" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.salePerfByUserGroupPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/saleperformancebydate.xhtml?faces-redirect=true"  value="Sale Performance By Date" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.salePerfByDatePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/saleperformancebyproduct.xhtml?faces-redirect=true"  value="*** Sale Performance by Product" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.salePerformanceByProductPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/salesrecordbystatus.xhtml?faces-redirect=true"  value="*** Sale Record by Status" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.saleRecordByStatusPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/salesrecordbypaymenttransaction.xhtml?faces-redirect=true"  value="*** Sale Record by Payment Transaction" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.saleRecordByPaymentTransactionPermitted}"/></td>
+                                                        </tr>    
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/listperformance.xhtml?faces-redirect=true"  value="Marketing List Performance" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketListPerfPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/yessaleanalysisinsurance.xhtml?faces-redirect=true"  value="Yes Sale Analysis (Insurance)" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.yesSaleAnalysisPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/salebyrecords.xhtml?faces-redirect=true"  value="Sale By Records" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.saleByRecordsPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/contactoutcome.xhtml?faces-redirect=true"  value="Call Outcome" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.callOutcomePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/contactoutcomebylist.xhtml?faces-redirect=true"  value="Call Outcome by List" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.callOutcomeByListPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/contactoutcomebylistall.xhtml?faces-redirect=true"  value="Call Outcome by All Lists" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.callOutcomeByListAllPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/nosalereason.xhtml?faces-redirect=true"  value="No Sale Reason" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.noSaleReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/custom/aiaregistrationformreport.xhtml?faces-redirect=true"  value="Export Application (AIA)" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.AIAExportApplicationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/custom/aia/aiaTravelProtectionForm.xhtml?faces-redirect=true"  value="Export Application (AIA Travel Protection)" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.AIAExportApplicationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/custom/motorregistrationformreport.xhtml?faces-redirect=true"  value="Registration Form (Motor)" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.motorRegistrationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/custom/motorpayinslipformreport.xhtml?faces-redirect=true"  value="Pay In Slip (Motor)" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.motorPayInSlipUsePermitted}"/></td>
+                                                        </tr>
+
+                                                    </h:panelGroup>
+                                                </table>
+                                            </td>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{reportSidemenuController.showMenuRight}">                                            
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree3" class="tableMenuReport">
+                                                    <h:panelGroup rendered="#{reportSidemenuController.marketingPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Marketing</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/marketingrecordbyassignment.xhtml?faces-redirect=true"  value="*** Marketing List Record by Assignment" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketingRecordByAssignmentPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/marketingrecordbyuser.xhtml?faces-redirect=true"  value="*** Marketing List Record by User" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketingRecordByUserPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/marketinglistbyproducttype.xhtml?faces-redirect=true"  value="*** MKT List Performance by Product Type" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketingListByProductTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/marketinglistbychannel.xhtml?faces-redirect=true"  value="*** MKT List Performance by Channel" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketingListByChannelPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/marketinglistbysalestatus.xhtml?faces-redirect=true"  value="*** MKT List Performance by Status" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketingListBySaleStatusPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/marketinglistcontactresult.xhtml?faces-redirect=true"  value="Marketing List Export" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.marketingListExportPermitted}"/></td>
+                                                        </tr>                                                       
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/summaryreportchecklead.xhtml?faces-redirect=true"  value="Summary Report Check Lead" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.summaryReportCheckLeadPermitted}"/></td>
+                                                        </tr>
+
+
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{reportSidemenuController.SLAPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>SLA</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/slaCaseClosed.xhtml?faces-redirect=true"  value="SLA Case Closed By Case Type" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.slaCaseCloseByCaseTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/slaCaseClosedByContactDate.xhtml?faces-redirect=true"  value="SLA Case Closed By Contact Date" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.slaCaseCloseByDatePermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{reportSidemenuController.informationProvidingPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Information Providing</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/knowledgebasetop20.xhtml?faces-redirect=true"  value="Top Knowledge Base " immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.top20KbPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/productinformationtop20.xhtml?faces-redirect=true"  value="Top 20 Product Information" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.top20ProductInfoPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/knowledgebaseStructure.xhtml?faces-redirect=true"  value="Knowledge Base Structure" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.kbStructurePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/knowledgebasedailyuse.xhtml?faces-redirect=true"  value="Knowledge Base Daily Use" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.kbDailyUsePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/productinformationdailyuse.xhtml?faces-redirect=true"  value="Product Information Daily Use" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.productInfoDailyUsePermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup rendered="#{reportSidemenuController.transferDetailPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Phone Directory</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/transferdetail.xhtml?faces-redirect=true"  value="Transfer Detail" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.transferDetailPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup rendered="#{reportSidemenuController.agentPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Agents</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/agentperformance.xhtml?faces-redirect=true"  value="Agent Performance" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.agentPerformancePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/agentperformancebysalestatus.xhtml?faces-redirect=true"  value="Agent Performance by Sale Status" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.agentPerformanceBySaleStatusPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup rendered="#{reportSidemenuController.adminPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Administrator</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/attendanceReport.xhtml?faces-redirect=true"  value="Attendance Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.attendanceReportPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup rendered="#{reportSidemenuController.telesalesReportPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline;"/>Telesales Report</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/salesreport.xhtml?faces-redirect=true"  value="Sales Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.mtlSalesReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/outcomebreakdownreport.xhtml?faces-redirect=true"  value="Outcome Breakdown Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.mtlOutcomeBreakdownReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/mediaplanreport.xhtml?faces-redirect=true"  value="DRTV Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.mediaPlanPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/collectionreport.xhtml?faces-redirect=true"  value="Sales and Collected Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.collectionPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/totalsalesreport.xhtml?faces-redirect=true"  value="Total Sales Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.totalSalesPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/fwd_salesreport.xhtml?faces-redirect=true"  value="Daily Sales Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.fwdSalesReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/fwd_performancereport.xhtml?faces-redirect=true"  value="TSR Performance Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.fwdPerformanceReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/fwd_tsrperformancedailyreport.xhtml?faces-redirect=true"  value="Daily Performance Report by TSR" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.dailyPerformanceReportbyTSRPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/fwd_agentperformancedailyreport.xhtml?faces-redirect=true"  value="Daily Sales by Agent" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.dailySaleByAgentPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/fwd_dateperformancedailyreport.xhtml?faces-redirect=true"  value="New Daily Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.newDailyReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/dailycallstatusreport.xhtml?faces-redirect=true"  value="Daily Call Status" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.dailyCallStatusPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/rejectcollectionreport.xhtml?faces-redirect=true"  value="Reject Collection Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.rejectCollectionReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/callcodeleadssegmentanalysis.xhtml?faces-redirect=true"  value="Call Code Leads Segment Analysis" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.callCodeLeadsSegmentAnalysisPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/callcodebycampaign.xhtml?faces-redirect=true"  value="Call Code By Campaign " immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.callCodeByCampaignPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/leadsegmentationperformancebymarketing.xhtml?faces-redirect=true"  value="Leads Segmentation Performance By Marketing" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.leadSegmentationPerformanceByMarketingPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/leadsegmentationperformancebycustomer.xhtml?faces-redirect=true"  value="Leads Segmentation Performance By Customer" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.leadSegmentationPerformanceByCustomerPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/leadsegmentationperformancebyfamilyproduct.xhtml?faces-redirect=true"  value="Leads Segmentation Performance By Family Product" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.leadSegmentationPerformanceByFamilyPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/summarybillingtransaction.xhtml?faces-redirect=true"  value="Summary Billing Transaction" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.summaryBillingTransactionPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/agentperformancesummaryreport.xhtml?faces-redirect=true"  value="Agent Performance Summary Report by Question" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.agentPerformanceSummaryReportPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/telesalesdailyreportbyinsurer.xhtml?faces-redirect=true"  value="Telesales Daily Report By Insurer" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.telesalesDailyReportByInsurerPermitted}"/></td>                                       
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/telesalesdailyreportbyproduct.xhtml?faces-redirect=true"  value="Telesales Daily Report By Product" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.telesalesDailyReportByProductPermitted}"/></td>                                       
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/productivitybytelesale.xhtml?faces-redirect=true"  value="Productivity By Telesale Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.productivityByTelesaleReportPermitted}"/></td>                                       
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/leadperformancereport.xhtml?faces-redirect=true"  value="Lead Performance Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.leadPerformanceReportPermitted}"/></td>                                       
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31"></td>
+                                                            <td width="225"><h:commandLink action="/report/dailysaleperfomancereport.xhtml?faces-redirect=true"  value="Daily Sale Perfomance Report" immediate="true"  styleClass="black01" rendered="#{reportSidemenuController.dailySalePerfomanceReportPermitted}"/></td>                                       
+                                                        </tr>
+                                                    </h:panelGroup>
+
+
+                                                </table></td>
+                                        </h:panelGroup>                                             
+                                    </h:panelGrid>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td background="#{request.contextPath}/img/mainmenu_bg-3.png" width="40" valign="top" align="left">
+                        <table cellpadding="3"><tr><td>
+                                    <a href="#">
+                                        <img src="#{request.contextPath}/img/reportmenu01.png" 
+                                             name="ReportMenuImage1" width="22" height="153" border="0" 
+                                             id="ReportMenuImage1"
+                                             onmouseout="changeImage('ReportMenuImage1', '#{request.contextPath}/img/reportmenu01.png')"
+                                             onmouseover="changeImage('ReportMenuImage1', '#{request.contextPath}/img/reportmenu02.png')"/>
+                                    </a>
+                                </td></tr></table>
+                    </td>
+                </tr>
+                <tr>
+                    <td background="#{request.contextPath}/img/mainmenu02-3.png"  width="100%" height="20"></td>
+                    <td><img src="#{request.contextPath}/img/mainmenu02-4.png" alt="" width="40" height="20" /></td>
+                </tr>
+            </table>
+        </ui:composition>
+    </h:body>
+</html>

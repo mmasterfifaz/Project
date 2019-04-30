@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Contact History</ui:define>
+    <ui:param name="modalId" value="contactHistory"/>
+    <ui:param name="width" value="800"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <rich:dataTable id="contactHistoryList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                        value="#{campaignFrontController.contactHistoryList}" rows="10" var="list">
+            <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column><h:outputText value="Contact Date"/></rich:column>
+                    <rich:column><h:outputText value="Contact By"/></rich:column>
+                    <rich:column><h:outputText value="Contact To"/></rich:column>
+                    <rich:column><h:outputText value="Contact Result"/></rich:column>
+                    <rich:column><h:outputText value="Remark"/></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+            <rich:column>
+                <h:outputText value="#{list.contactDate}">
+                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                </h:outputText>                
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.createBy}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactTo}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactResult}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.remark}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="5"/>
+            </f:facet>
+        </rich:dataTable>
+    </ui:define>
+</ui:composition>

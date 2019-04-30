@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Model Type</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{modelTypeController.editAction}" rendered="#{modelTypeController.addPermitted}"/>
+                <a4j:commandButton image="../img/b_delete.png" action="#{modelTypeController.deleteAction}"  rendered="#{modelTypeController.deletePermitted}"  
+                                   onclick="return checkDelete(this.form)" 
+                                   render="modelTypeTablePanel" />
+            </ui:define>
+            <ui:define name="panel">
+                <rich:messages globalOnly="true"/>
+                <h:panelGroup id="modelTypeTablePanel" >
+                    <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{modelTypeController.modelTypeList}" rows="#{global.maxrows}" var="list">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                                <rich:column style="width: 20%;text-align: left;"><h:outputText value="Code" /></rich:column>
+                                <rich:column style="width: 57%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                                <rich:column style="width: 20%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column >
+                            <h:selectBooleanCheckbox value="#{modelTypeController.selectedIds[list.id]}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:commandLink title="View Detail" value="#{list.code}" action="#{modelTypeController.editAction}">
+                                <f:param name="id" value="#{list.id}"/>
+                            </h:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.name}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

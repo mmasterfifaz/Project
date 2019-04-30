@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Child Registration Type</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{childRegTypeController.editAction}" rendered="#{childRegTypeController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{childRegTypeController.deleteAction}" rendered="#{childRegTypeController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{childRegTypeController.list}" rows="#{global.maxrows}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;"></rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="Type Name" /></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column>
+                        <h:selectBooleanCheckbox value="#{childRegTypeController.selectedIds[list.id]}" disabled="#{childRegTypeController.isDelete(list.id)}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{childRegTypeController.editAction}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                   
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+    <ui:composition template="../templates/adminmain.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2">Customer Layout</ui:define>
+        <ui:define name="button">
+            <h:commandButton image="../img/b_add.png" action="#{customerLayoutController.editAction}" rendered="#{customerLayoutController.addPermitted}"/>
+            <h:commandButton image="../img/b_delete.png" action="#{customerLayoutController.deleteAction}" rendered="#{customerLayoutController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+        </ui:define>
+        <ui:define name="panel">
+            <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                            value="#{customerLayoutController.customerLayoutList}" rows="#{global.maxrows}" var="list"
+                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                            onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+               <f:facet name="header">
+                   <rich:columnGroup>
+                       <rich:column style="text-align: left;width: 3%;">&nbsp;</rich:column>
+                       <rich:column style="text-align: left;width: 20%;"><h:outputText value="Name"/></rich:column>                       
+                       <rich:column style="text-align: left;"><h:outputText value="Description" /></rich:column>
+                       <rich:column style="text-align: left;width: 15%;"><h:outputText value="Update Date"/></rich:column>
+                       <rich:column style="text-align: left;width: 10%;">&nbsp;</rich:column>
+                       <rich:column style="text-align: left;width: 10%;">&nbsp;</rich:column>
+                       <rich:column style="text-align: left;width: 10%;">&nbsp;</rich:column>
+                   </rich:columnGroup>
+               </f:facet>
+
+                <rich:column>
+                    <h:selectBooleanCheckbox value="#{customerLayoutController.selectedIds[list.id]}" rendered="#{not list.isDefault}"/>
+                </rich:column>
+                <rich:column>
+                    <h:commandLink title="View Detail" value="#{list.name}" action="#{customerLayoutController.editAction}">
+                        <f:param name="id" value="#{list.id}"/>
+                     </h:commandLink>
+                 </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.descripion}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.updateDate}">
+                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column>
+                    <h:commandButton image="../img/b_fx_label.png" action="#{customerLayoutController.setFlexFieldLabel}" >
+                        <f:param name="id" value="#{list.id}"/>
+                    </h:commandButton>
+                </rich:column>
+                <rich:column>
+                    <h:commandButton image="../img/b_cust_display.png" action="#{customerLayoutController.setCustomerDisplay}" >
+                        <f:param name="id" value="#{list.id}"/>
+                    </h:commandButton>
+                </rich:column>
+                <rich:column>                    
+                    <a4j:commandButton image="../img/b_copy.png" action="#{customerLayoutController.copyAction}" rendered="#{customerLayoutController.addPermitted}"
+                                       onclick="if (!confirm('Do you want to copy this Customer Layout?')) { return false; }">
+                        <f:param name="id" value="#{list.id}"/>
+                    </a4j:commandButton>                    
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                </f:facet>
+            </rich:dataTable>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

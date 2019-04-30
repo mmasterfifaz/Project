@@ -1,0 +1,332 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <style>
+        .colStyle1 { width: 30%;
+                     text-align: right; }
+        .colStyle2 { width: 70%;}
+        .colStyle3 { width: 50%;}
+        .colPrice1 { text-align: right;
+                     font-weight: bold}
+        .colPrice2 { text-align: right; }
+    </style>
+    <h:panelGroup id="productInfo">
+    <h:panelGroup rendered="#{paymentController.categoryType eq 'motor'}">
+            <h2>#{paymentController.product.name}</h2>
+            <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                <tr>
+                    <td valign="top" width="50%">
+                        <table border="0" cellpadding="3" cellspacing="0">
+                            <tr>
+                                <td align="right" valign="top" width="200">บริษัทประกัน :</td>
+                                <td valign="top" width="200">
+                                    <h:outputText value="#{paymentController.product.productCategory.name}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">ประเภทประกัน :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.productPlanCategory.name}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top"> ชนิด :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.product.modelType.name}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">ยี่ห้อ :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.product.model.brand.name}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">รุ่น :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.product.model.name}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">ปี :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.product.modelYear}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">ชื่อ :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.product.name}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">หมายเลขตัวถัง :</td>
+                                <td valign="top"><h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.product.fx4}"/></td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td valign="top" width="50%">
+                        <table border="0" cellpadding="3" cellspacing="0">
+                            <tr>
+                                <td valign="top" align="right">ทุนประกัน :</td>
+                                <td valign="top" align="right">
+                                    <h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.motorLoss}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" align="right" width="200">เบี้ย :</td>
+                                <td valign="top" align="right">
+                                    <h:outputText value="#{paymentController.purchaseOrder.amount1}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">พรบ. :</td>
+                                <td valign="top" align="right">
+                                    <h:outputText value="#{paymentController.purchaseOrder.amount2}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">รวม :</td>
+                                <td valign="top" align="right">
+                                    <h:outputText value="#{paymentController.purchaseOrder.amount1 + paymentController.purchaseOrder.amount2}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">ส่วนลด :</td>
+                                <td valign="top" align="right">
+                                    <h:outputText value="#{paymentController.purchaseOrder.discount}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top">เบี้ยหลังหักส่วนลด (เบี้ยรวมภาษี) :</td>
+                                <td valign="top" align="right">
+                                    <h:outputText value="#{paymentController.purchaseOrder.totalAmount}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                        </table>                        
+                    </td>
+                </tr>
+            </table>
+            
+        </h:panelGroup>
+        <h:panelGroup rendered="#{paymentController.categoryType eq 'life' or paymentController.categoryType eq 'nonlife' or paymentController.categoryType eq 'motoradvance'}">
+            <table border="0" cellpadding="3" cellspacing="0">
+                <tr>
+                    <td class="line01"><h2>#{paymentController.product.name}</h2></td>
+                    <td class="line01" colspan="3"></td>
+                </tr>
+                <tr>
+                    <td align="right">Product Plan :</td>
+                    <td>
+                        <h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.name}"/>
+                    </td>
+                    <td align="right"></td>
+                    <td></td>
+                </tr>
+            </table>
+            <h:panelGrid id="panelPrice" columns="4" cellpadding="3" columnClasses="colPrice1, colPrice2, colPrice1, colPrice2">
+                <h:outputText value="#{msg.totalPrice} :"/>
+                <h:outputText id="totalPrice" value="#{paymentController.purchaseOrder.totalAmount}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+                    
+                <h:outputText value="Sum Insured :"/>
+                <h:outputText value="#{paymentController.purchaseOrderDetail.productPlan.sumInsured}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+            </h:panelGrid>
+        </h:panelGroup>
+    </h:panelGroup>
+
+    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+        <tr>
+            <td valign="top">
+
+                <table width="800" border="0" cellpadding="4" cellspacing="0" id="product3">
+                    <tr>
+                        <td bgcolor="#F4CDCD" class="line01"><div id="hproduct3">
+                                <h4><span class="style4">Payment Information</span><a name="a3" id="a"></a></h4>
+                            </div></td>
+                    </tr>
+                    <tr>
+                        <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="1566" rowspan="2" valign="top">
+
+
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                            <tr>
+                                                <td width="30%" align="right">Reference No. :</td>
+                                                <td width="70%">#{paymentController.purchaseOrder.refNo}</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="30%" align="right">Installment :</td>
+                                                <td width="70%">
+                                                    <h:panelGroup id="noInstallment">
+                                                        <h:selectOneMenu value="#{paymentController.purchaseOrder.noInstallment}" 
+                                                                         >
+                                                            <a4j:ajax event="change" render="panelInstallment,paymentList" limitRender="true"
+                                                                      listener="#{paymentController.noInstallmentValueChangeListener}"/>
+                                                            <f:selectItem itemLabel="1" itemValue="1" itemDisabled="#{paymentController.noPaid ge 1 or (paymentController.purchaseOrder.totalAmount eq paymentController.paidTotal)}"/>
+                                                            <f:selectItem itemLabel="2" itemValue="2" itemDisabled="#{paymentController.noPaid ge 2 or (paymentController.purchaseOrder.totalAmount eq paymentController.paidTotal) or paymentController.categoryType ne 'motor'}"/>
+                                                            <f:selectItem itemLabel="3" itemValue="3" itemDisabled="#{paymentController.noPaid ge 3 or (paymentController.purchaseOrder.totalAmount eq paymentController.paidTotal) or paymentController.categoryType ne 'motor'}"/>
+                                                        </h:selectOneMenu>
+                                                    </h:panelGroup>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <h:panelGroup rendered="#{paymentController.categoryType eq 'motor' or paymentController.categoryType eq 'motoradvance'}">
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="3">  
+                                                <tr>
+                                                    <td width="30%" align="right">วันที่หมดประกัน :</td>
+                                                    <td width="70%">
+                                                        <rich:calendar id="dueDate" 
+                                                                       value="#{paymentController.purchaseOrder.dueDate}"
+                                                                       inputClass="textfield" buttonClass="rfcalbtn"
+                                                                       inputSize="14"
+                                                                       requiredMessage="#{msg.require}"
+                                                                       locale="#{msg.locale}"
+                                                                       datePattern="#{msg.datePattern}"
+                                                                       valueChangeListener="#{paymentController.dueDateListener}">
+                                                            <a4j:ajax event="changed" render="paymentList" limitRender="true" execute="@this"/>
+                                                                                
+                                                            <rich:validator />
+                                                            <f:validator validatorId="DateBeforeValidator"/>
+                                                        </rich:calendar>
+                                                        &#160;<rich:message for="dueDate" style="color:red" />
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </h:panelGroup>
+                                        <h:panelGroup id="panelInstallment">
+                                            <h:panelGroup rendered="#{paymentController.purchaseOrder.noInstallment ne 0 and paymentController.purchaseOrder.noInstallment ne null}">
+
+                                                <rich:dataTable id="paymentList" 
+                                                                value="#{paymentController.poInstallmentList}"
+                                                                styleClass="tableline01 tb_contact_case_detail" 
+                                                                var="list"
+                                                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                onrowmouseout="this.style.backgroundColor='#F8F8F8'"
+                                                                style="width: 100%" headerClass="subh01">
+                                                    <f:facet name="header">
+                                                        <rich:columnGroup>
+                                                            <rich:column style="text-align: left;">No.</rich:column>
+                                                            <rich:column style="text-align: left;">Due Date</rich:column>
+                                                            <rich:column style="text-align: left;">Amount</rich:column>
+                                                            <rich:column style="text-align: left;">Payment Method</rich:column>
+                                                            <rich:column style="text-align: left;">Status</rich:column>
+                                                            <rich:column style="text-align: left;">Update By</rich:column>
+                                                            <rich:column style="text-align: left;">Update Date</rich:column>
+                                                            <rich:column style="text-align: left;">Remark</rich:column>
+                                                            <rich:column style="text-align: left;"></rich:column>
+                                                        </rich:columnGroup>
+                                                    </f:facet>
+                                                    <rich:column style="vertical-align: top; text-align: left">
+                                                          <h:outputText value="#{list.installmentNo}"/>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top">
+                                                        <h:outputText value="#{list.dueDate}" >
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top; text-align: right">
+                                                        <h:outputText value="#{list.installmentAmount}" >
+                                                            <f:convertNumber pattern="#,##0.00"/>
+                                                        </h:outputText>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top">
+                                                        <h:outputText value="#{list.paymentMethod.name}"/>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top">
+                                                        <h:outputText value="#{list.paymentStatus}"/>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top">
+                                                        <h:outputText value="#{list.updateBy}"/>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top">
+                                                        <h:outputText value="#{list.updateDate}" >
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </rich:column>
+                                                    <rich:column style="vertical-align: top">
+                                                        <h:outputText value="#{list.remark}"/>
+                                                    </rich:column>
+                                                     <rich:column style="vertical-align: top; text-align: center">
+                                                        <h:panelGroup>
+                                                            <a4j:commandButton  image="/img/b_manage_payment.png"
+                                                                             oncomplete="Richfaces.showModalPanel('popupPayment')"
+                                                                             value="#{list.installmentNo}"
+                                                                             execute="@this"
+                                                                             limitRender="true"
+                                                                             render="paymentPanel"
+                                                                             actionListener="#{paymentController.installmentNoListener}">
+                                                                <f:param name="installmentNo" value="#{list.installmentNo}"/>
+                                                            </a4j:commandButton>
+                                                        </h:panelGroup>
+                                                    </rich:column>
+                                                    <f:facet name="footer">
+                                                        <rich:columnGroup>
+                                                            <rich:column colspan="2" style="vertical-align: top; text-align: right; font-weight: bold">Payment Collection</rich:column>
+                                                            <rich:column style="vertical-align: top; text-align: right; font-weight: bold">
+                                                                <h:outputText value="#{paymentController.purchaseOrder.totalAmount}">
+                                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                                </h:outputText>
+                                                            </rich:column>
+                                                            <rich:column colspan="5"></rich:column>
+                                                        </rich:columnGroup>
+                                                    </f:facet>
+                                                </rich:dataTable>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+
+                                    </td>
+                                    <td width="66" height="100" align="center" valign="top"></td>
+                                </tr>
+                                <tr>
+                                    <td align="center" valign="bottom"></td>
+                                </tr>
+                            </table></td>
+                    </tr>
+                    <tr>
+                        <td align="center">
+                            <h:panelGroup id="savePaymentPanel">
+                                <h:commandButton image="/img/b_save.png"
+                                                 rendered="#{(paymentController.purchaseOrder.totalAmount ne paymentController.paidTotal) and (paymentController.disableSaveButton or paymentController.editPermitted) and paymentController.purchaseOrder.paymentStatus ne 'approved'}"
+                                                 action="#{paymentController.saveAction}"
+                                                 onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})">
+                                </h:commandButton>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="50%" align="left">
+                                        <h:commandButton image="/img/b_back.png" immediate="true" action="#{paymentController.backAction}"
+                                                         rendered="#{paymentController.showPrevious}">
+                                        </h:commandButton>
+                                    </td>
+                                    <td width="50%" align="right">
+                                        <h:commandButton image="/img/b_next.png" 
+                                                         immediate="true" 
+                                                         action="#{paymentController.nextAction}"
+                                                         rendered="#{paymentController.purchaseOrder.id ne null and paymentController.showNext}">
+                                        </h:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>     
+
+
+
+            </td>
+        </tr>
+    </table>
+</ui:composition>

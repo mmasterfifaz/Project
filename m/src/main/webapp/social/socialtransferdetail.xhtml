@@ -1,0 +1,342 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Social Configurations</ui:define>
+    <ui:define name="title2">Transfer Message</ui:define>
+    <ui:define name="head">
+
+    </ui:define>
+    <ui:define name="panel"><br/>
+        <h:panelGroup id="mainPanel">
+            <h:panelGroup id="step1" rendered="#{socialTransferDetailController.step eq 1}">
+                <a4j:region id="rg1">
+                    <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                        <tr>
+                            <td style="width:25%;vertical-align:top">
+                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                    <tr>
+                                        <td colspan="2" style="text-align:left;">
+                                            <b><font size="3" color="55bbc9">Select Source</font></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" style="width:150px;">Source Type :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="selectedChannelId" value="#{socialTransferDetailController.selectedChannelId}">
+                                                <f:selectItem itemLabel="#{msg.all}" itemValue="0"/>
+                                                <f:selectItems value="#{socialTransferDetailController.soChannelList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Account ID :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="selectedAccountId" value="#{socialTransferDetailController.selectedAccountId}">
+                                                <f:selectItem itemLabel="#{msg.all}" itemValue="0"/>
+                                                <f:selectItems value="#{socialTransferDetailController.soEmailAccountList}" var="list" itemLabel="#{list.emailAddress}" itemValue="#{list.soAccount.id}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Contact Date :</td>
+                                        <td>
+                                            <rich:calendar id="fromdate"
+                                                           value="#{socialTransferDetailController.fromDate}"
+                                                           inputClass="textfield" inputSize="10"
+                                                           datePattern="#{msg.datePattern}"
+                                                           locale="#{msg.locale}"
+                                                           style="display: inline" buttonClass="rfcalbtn"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">To :</td>
+                                        <td>
+                                          <span style="width: 5px"/> <rich:calendar id="todate"
+                                                                                         value="#{socialTransferDetailController.toDate}"
+                                                                                         inputClass="textfield" inputSize="10"
+                                                                                         datePattern="#{msg.datePattern}"
+                                                                                         locale="#{msg.locale}" buttonClass="rfcalbtn"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Status :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="selectedCaseStatus" value="#{socialTransferDetailController.selectedCaseStatus}">
+                                                <f:selectItem itemLabel="#{msg.all}" itemValue="0"/>
+                                                <f:selectItems value="#{socialTransferDetailController.caseStatusList}" />
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Priority :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="selectedMessagePriority" value="#{socialTransferDetailController.selectedMessagePriority}">
+                                                <f:selectItem itemLabel="#{msg.all}" itemValue="0"/>
+                                                <f:selectItems value="#{socialTransferDetailController.messagePriorityList}" />
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">From :</td>
+                                        <td>
+                                            <h:inputText id="selectedFromEmail" styleClass="textfield"
+                                                         value="#{socialTransferDetailController.selectedFromEmail}">
+                                            </h:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Message ID :</td>
+                                        <td>
+                                            <h:inputText id="selectedMsgId" styleClass="textfield"
+                                                         value="#{socialTransferDetailController.selectedMsgId}">
+                                            </h:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Related Msg ID :</td>
+                                        <td>
+                                            <h:inputText id="selectedRelatedMsgId" styleClass="textfield"
+                                                         value="#{socialTransferDetailController.selectedRelatedMsgId}">
+                                            </h:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">User Group ID :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="selectedUserGroupId" value="#{socialTransferDetailController.selectedUserGroupId}"
+                                                             valueChangeListener="#{socialTransferDetailController.selectedUserGroupListener}">
+                                                <f:selectItem itemLabel="#{msg.all}" />
+                                                <f:selectItems value="#{socialTransferDetailController.userGroupList}" />
+                                                <a4j:ajax event="change" render="selectedUsersId"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">User Name :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="selectedUsersId" value="#{socialTransferDetailController.selectedUsersId}">
+                                                <f:selectItem itemLabel="#{msg.all}" />
+                                                <f:selectItems value="#{socialTransferDetailController.userList}" var="list" itemLabel="#{list.name} #{list.surname}" itemValue="#{list.id}" />
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"></td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"></td>
+                                        <td>
+                                            <a4j:commandButton actionListener="#{socialTransferDetailController.searchActionListener}" render="panelResultHeader,panelResult" image="/img/b_search.png">
+                                            </a4j:commandButton>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="20px" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+                            <td style="width:40%;vertical-align:top">
+                                <h:panelGroup id="panelResultHeader">
+                                    <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <b><font size="3" color="55bbc9">Email List </font></b>
+                                                <b><font size="3" color="bbbbbb">  <h:outputText value="#{socialTransferDetailController.cnt}" ></h:outputText> record(s)</font></b>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                                <h:panelGroup id="panelResult">
+                                    <h:panelGroup id="panelListSelectsSaver1" rendered="#{socialTransferDetailController.cnt eq 0}">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td align="center" valign="middle" style="height:300px">
+                                                    <h:graphicImage url="/img/social/img_noItem.png"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </h:panelGroup>
+
+                                    <h:panelGroup id="emaillist" rendered="#{socialTransferDetailController.cnt ne 0}">
+                                        <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                            <tr>
+                                                <td>
+                                                    <a4j:repeat value="#{socialTransferDetailController.soEmailMessageList}" var="list">
+
+                                                        <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                                            <tr>
+                                                                <td style="width:10px;align:left;vertical-align:top">
+                                                                    <h:selectBooleanCheckbox value="#{socialTransferDetailController.selectedIds[list.soMessage.id]}"/>
+                                                                </td>
+                                                                <td style="width:10px;align:left;vertical-align:top">
+                                                                    <h:graphicImage url="/img/social/#{list.soMessage.priority_enum_id}_small.png" />
+                                                                </td>
+                                                                <td style="width:10px;align:right;vertical-align:top">
+                                                                    <h:graphicImage url="/img/social/logo_#{list.soMessage.source_type_enum_id}_small.png"/>
+                                                                </td>
+                                                                <td style="width:100%;align:left;vertical-align:top">
+                                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                                        <tr>
+                                                                            <td align="left">
+                                                                                <b><font size="2" color="#01a0c0"><h:outputText value="#{list.emailReplyTo} : "/></font></b>
+                                                                                <b><font size="2" color="#676767"><h:outputText value="#{list.subject}" /></font></b>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td align="left">
+                                                                                <b><font size="2" color="#bbbbbb"><h:outputText value="#{list.sentDate}" /></font></b>
+                                                                                <b><font size="2" color="#ff9601"><h:outputText value=": #{list.soMessage.lastReceiveByName}"/></font></b>
+                                                                                <b><font size="2" color="#bbbbbb">
+                                                                                        <a4j:commandLink value=": Message-id #{list.soMessage.id}" 
+                                                               style="display: inline; text-align: right"
+                                                               onclick="window.open('#{request.contextPath}/social/scldetailview.jsf?soMessageId=#{list.soMessage.id}','view','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;"/>
+                                        
+                                                                                        </font></b>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4" background="#{request.contextPath}/img/dot.gif" ></td>
+                                                            </tr>
+                                                        </table>
+                                                    </a4j:repeat>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </td>
+                            <td width="20px" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+                            <td style="text-align:left;vertical-align:top">
+                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                    <tr>
+                                        <td colspan="2" style="text-align:left;">
+                                            <b><font size="3" color="55bbc9">Target User</font></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" >User Group ID :</td>
+                                        <td >
+                                            <h:selectOneMenu style="width:150px" id="targetUserGroupId" value="#{socialTransferDetailController.targetUserGroupId}"
+                                                             valueChangeListener="#{socialTransferDetailController.targetUserGroupListener}">
+                                                <f:selectItem itemLabel="#{msg.all}"/>
+                                                <f:selectItems value="#{socialTransferDetailController.targetUserGroupList}" />
+                                                <a4j:ajax event="change" render="targetUsersId"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">User Name :</td>
+                                        <td>
+                                            <h:selectOneMenu style="width:150px" id="targetUsersId" value="#{socialTransferDetailController.targetUsersId}">
+                                                <f:selectItem itemLabel="----- Select User ----------"/>
+                                                <f:selectItems value="#{socialTransferDetailController.targetUserList}" var="list" itemLabel="#{list.name} #{list.surname}" itemValue="#{list.id}" />
+                                            </h:selectOneMenu>
+                                            <b><font size="3" color="red">*</font></b>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Transfer Reason :</td>
+                                        <td>
+                                            <h:inputText id="targetReason" styleClass="textfield"
+                                                         value="#{socialTransferDetailController.targetReason}">
+                                            </h:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">Remark :</td>
+                                        <td>
+                                            <h:inputText id="targetRemark" styleClass="textfield"
+                                                         value="#{socialTransferDetailController.targetRemark}">
+                                            </h:inputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"></td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td align="left" valign="top">
+                                            <a4j:commandButton image="../img/b_transfer.png" value="Previous"
+                                                               actionListener="#{socialTransferDetailController.transferActionListener}"
+                                                               execute="@region" render="mainPanel" onclick="return confirm('Confirm Transfer?')"/>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                    <ui:remove>
+                    <a4j:commandButton image="../img/b_next.png" value="Next"
+                                       actionListener="#{socialTransferDetailController.step1to2}"
+                                       execute="@form" limitRender="true" render="mainPanel"
+                                       style="float: right; margin-right: 10px"/>
+                    </ui:remove>
+                </a4j:region>
+            </h:panelGroup>
+            <h:panelGroup id="step2" rendered="#{socialTransferDetailController.step eq 2}">
+                <a4j:region id="rg2">
+                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                        <tr>
+                            <td align="right" valign="top">key</td>
+                            <td>
+                                value
+                            </td>
+                        </tr>
+                    </table>
+                    <a4j:commandButton image="../img/b_back.png" value="Previous"
+                                       actionListener="#{socialTransferDetailController.step2to1}"
+                                       execute="@form" limitRender="true" render="mainPanel"
+                                       style="margin-left: 10px"/>
+                    <a4j:commandButton image="../img/b_next.png" value="Next"
+                                       actionListener="#{socialTransferDetailController.step2to3}"
+                                       execute="@form" limitRender="true" render="mainPanel"
+                                       style="float: right; margin-right: 10px"/>
+                </a4j:region>
+            </h:panelGroup>
+            <h:panelGroup id="step3" rendered="#{socialTransferDetailController.step eq 3}">
+                <a4j:region id="rg3">
+                    <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                        <tr>
+                            <td align="right" valign="top">key</td>
+                            <td>
+                                value
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top"></td>
+                            <td>
+                                <a4j:commandButton image="../img/b_save.png" value="Save"
+                                                   action="#{socialServiceDetailController.save}"
+                                                   execute="@form" limitRender="true"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <a4j:commandButton image="../img/b_back.png" value="Previous"
+                                       actionListener="#{socialTransferDetailController.step3to2}"
+                                       execute="@region" limitRender="true" render="mainPanel"
+                                       style="margin-left: 10px"/>
+                </a4j:region>
+            </h:panelGroup>
+        </h:panelGroup>
+    </ui:define>
+    <ui:define name="popupModal">
+        <ui:include id="popupSelectUser"
+                    src="/social/popupSelectUser.xhtml">
+            <ui:param name="m" value="#{socialTransferDetailController}"/>
+        </ui:include>
+    </ui:define>
+</ui:composition>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <script type="text/javascript">
+    </script>
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Campaign Management: Add new prospect</ui:define>
+            <ui:define name="head">
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{campaignNewProspectController.campaign.id}"/>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td bgcolor="#E8E7D5"><table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td width="100" class="gray03">Campaign Name:</td>
+                                    <td class="blue04" align="left"><h:outputText value="#{campaignSummaryController.campaign.name}"/></td>
+                                    <td width="60" class="gray03">Start Date:</td>
+                                    <td class="blue04">
+                                        <h:outputText value="#{campaignSummaryController.campaign.startDate}">
+                                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                        </h:outputText></td>
+                                    <td width="60" class="gray03">End Date:</td>
+                                    <td class="blue04">
+                                        <h:outputText value="#{campaignSummaryController.campaign.endDate}">
+                                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td width="60" class="gray03">Description:</td>
+                                    <td class="blue04"><h:outputText value="#{campaignSummaryController.campaign.description}"/></td>
+                                    <td width="50" align="center">
+                                    </td>
+                                </tr>
+                            </table></td>
+                    </tr>
+                </table>
+                <a4j:region id="addNewPanel">
+                    <table width="95%" align="center" border="0" cellpadding="4" cellspacing="1">
+                        <tr>
+                            <td><table width="100%" border="0" cellpadding="8" cellspacing="0">
+                                    <tr>
+                                        <td><h4>Customer Information</h4></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" valign="top" >
+                                            <table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF">
+                                                        <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                                            <tr>
+                                                                <td class="gray03" width="20%">&nbsp;</td>
+                                                                <td>&nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03"><h:outputText value="* " style="color:red"/>Customer Name :</td>
+                                                                <td align="left" >
+                                                                    <h:inputText id="name" value="#{campaignNewProspectController.customer.name}"
+                                                                                 styleClass="textfield" required="true" requiredMessage="Name is required">
+                                                                        <f:validateRequired/>                  
+                                                                        <rich:validator />
+                                                                    </h:inputText>&#160;<rich:message for="name" style="color:red"/>
+                                                                    <h:outputText style="color:red" value="#{campaignNewProspectController.messageDup}"/></td>
+                                                                <td align="right" class="gray03" > Refer To Customer : &nbsp;</td>
+                                                                <td align="left" class="gray03" >
+                                                                    <h:inputText id="referCust" value="#{campaignNewProspectController.referCustName}" styleClass="textfield" />
+                                                                    <a4j:commandButton  image="../img/b_search01.png" actionListener="#{campaignNewProspectController.initialReferCustomer}"
+                                                                                        oncomplete="#{rich:component('referCustomer')}.show()"
+                                                                                        render="dataList,referCustomerPanel"
+                                                                                        immediate="true" execute="@this" >
+                                                                    </a4j:commandButton> &nbsp;
+                                                                    <a4j:commandButton  image="../img/b_close_icon.png"
+                                                                                        actionListener="#{campaignNewProspectController.clearReferCustomer}"
+                                                                                        immediate="true" execute="@this"
+                                                                                        render="spotRefId,copyRefer,referCust" >
+                                                                    </a4j:commandButton>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">Customer Surname :</td>
+                                                                <td align="left" >
+                                                                    <h:inputText id="surname" value="#{campaignNewProspectController.customer.surname}" styleClass="textfield" />
+                                                                </td>
+                                                                <td>&nbsp;&nbsp;</td>
+                                                                <td align="left" class="gray03" > 
+                                                                    <h:panelGroup id="copyRefer">
+                                                                        <h:selectBooleanCheckbox value="#{campaignNewProspectController.isCopy}" disabled="#{campaignNewProspectController.canCopy}"/> 
+                                                                        <h:outputText value="Copy Refer Profile to Prospect"/>   
+                                                                    </h:panelGroup>
+                                                                </td>
+                                                            </tr>
+                                                            <ui:remove>
+                                                                <tr>
+                                                                    <td align="right" class="gray03">#{msg.gender}</td>
+                                                                    <td align="left" >
+                                                                        <h:selectOneRadio value="#{campaignNewProspectController.customer.gender}">
+                                                                            <f:selectItem itemLabel="Male" itemValue="Male"/>
+                                                                            <f:selectItem itemLabel="Female" itemValue="Female"/>
+                                                                        </h:selectOneRadio>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="right" class="gray03">#{msg.dateOfBirth}</td>
+                                                                    <td align="left" ><rich:calendar id="birthday"  value="#{campaignNewProspectController.customer.dob}"
+                                                                                                     popup="true"
+                                                                                                     locale="#{msg.locale}"
+                                                                                                     datePattern="#{msg.datePattern}"
+                                                                                                     inputClass="textfield" buttonClass="rfcalbtn"
+                                                                                                     inputStyle="width: 80px"/></td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td align="right" class="gray03">Card Type :</td>
+                                                                    <td align="left" ><h:inputText id="cardType" styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield2}"/></td>
+                                                                </tr>
+                                                            </ui:remove>
+                                                            <tr>
+                                                                <td align="right" class="gray03"><h:outputText value="* " style="color:red"/>#{msg.mobilePhone}</td>
+                                                                <td align="left" >
+                                                                    <h:inputText id="mobilePhone" styleClass="textfield" onkeypress="return isNumberKey(event)" 
+                                                                                 value="#{campaignNewProspectController.customer.mobilePhone}"
+                                                                                 required="true" requiredMessage="Mobile Phone is required">
+                                                                        <f:validateRequired/>                  
+                                                                        <rich:validator />
+                                                                    </h:inputText>&#160;<rich:message for="mobilePhone" style="color:red"/></td>
+                                                                <td align="right" class="gray03" > Spot Ref ID : &nbsp; </td>
+                                                                <td align="left" class="gray03" >
+                                                                    <h:inputText id="spotRefId" value="#{campaignNewProspectController.spotRefId}" styleClass="textfield" />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">#{msg.homePhone}</td>
+                                                                <td align="left" ><h:inputText id="homePhone" styleClass="textfield" onkeypress="return isNumberKey(event)" 
+                                                                                               value="#{campaignNewProspectController.customer.homePhone}"/> 
+                                                                    <h:outputText value="Ext. "  class="gray03"/>
+                                                                    <h:inputText id="extHomePhone" styleClass="textfield" maxlength="10" size="5" onkeypress="return isNumberKey(event)" 
+                                                                                 value="#{campaignNewProspectController.customer.homeExt}" /></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">#{msg.officePhone}</td>
+                                                                <td align="left" ><h:inputText id="officePhone" styleClass="textfield" onkeypress="return isNumberKey(event)" 
+                                                                                               value="#{campaignNewProspectController.customer.officePhone}"/>
+                                                                    <h:outputText value="Ext. " class="gray03"/>
+                                                                    <h:inputText id="extOfficePhone" styleClass="textfield" maxlength="10" size="5" onkeypress="return isNumberKey(event)" 
+                                                                                 value="#{campaignNewProspectController.customer.officeExt}"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField1</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield1}"/>
+                                                                    <h:outputText value="(Customer ID)"/>
+                                                                    <h:outputText value="#{campaignNewProspectController.meassgeFlexField1Dup}" style="color: red"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField2</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield2}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField3</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield3}"/>
+                                                                    <h:outputText value="(Customer ID)"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField4</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield4}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField5</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield5}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField6</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield6}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField7</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield7}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField8</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield8}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField9</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield9}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" class="gray03">FlexField10</td>
+                                                                <td align="left" >
+                                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.customer.flexfield10}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <ui:remove>
+                                                                <tr>
+                                                                    <td align="right" class="gray03">Area :</td>
+                                                                    <td align="left" >
+                                                                        <h:selectOneRadio value="#{campaignNewProspectController.customer.flexfield3}">
+                                                                            <f:selectItem itemLabel="BKK" itemValue="BKK"/>
+                                                                            <f:selectItem itemLabel="UPC" itemValue="UPC"/>
+                                                                        </h:selectOneRadio>
+                                                                    </td>
+                                                                </tr>
+                                                            </ui:remove>
+                                                            <tr>
+                                                                <td class="gray03">&nbsp;</td>
+                                                                <td>&nbsp;</td>
+                                                            </tr>
+                                                        </table></td>
+                                                </tr>
+                                            </table>
+                                        </td>    
+                                    </tr>
+                                    <tr>
+                                        <td><h4>Assign to TMR</h4></td>
+                                    </tr> 
+                                    <tr>
+                                        <td align="center" valign="top" >
+                                            <table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF">
+                                                        <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                                            <tr>
+                                                                <td class="gray03" width="20%">&nbsp;</td>
+                                                                <td>&nbsp;</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top" class="gray03"><h:outputText value="* " style="color:red"/>Marketing List :</td>
+                                                                <td valign="top" align="left" >
+                                                                    <h:selectOneMenu id="marketingList" value="#{campaignNewProspectController.marketingId}" 
+                                                                                     required="true" requiredMessage="#{msg.require}">
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItems value="#{campaignNewProspectController.marketingList}"/>
+                                                                        <f:validateRequired/>                  
+                                                                        <rich:validator />
+                                                                        <a4j:ajax event="change" render="productList" execute="@this"
+                                                                            listener="#{campaignNewProspectController.marketingListener}"/>
+                                                                    </h:selectOneMenu>
+                                                                    &#160;<rich:message for="marketingList" style="color:red"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top" class="gray03"></td>
+                                                                <td valign="top" align="left"> 
+                                                                    <table>
+                                                                        <tr>
+                                                                            <td width="45%" class="blue04" align="left">Available Product</td>
+                                                                            <td>&nbsp;</td>
+                                                                            <td class="blue04" align="left">Selected Product</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td colspan="3" >
+                                                                                <rich:pickList id="productList" switchByDblClick="true" 
+                                                                                               listWidth="250px" listHeight="150px"
+                                                                                               addText="" addAllText="" removeText="" removeAllText=""
+                                                                                               value="#{campaignNewProspectController.selectedProduct}" 
+                                                                                               required="true" requiredMessage="Selected Product is required">
+                                                                                    <f:selectItems value="#{campaignNewProspectController.productList}"/>
+                                                                                    <f:validateRequired/>                  
+                                                                                    <rich:validator />
+                                                                                </rich:pickList>
+                                                                                <span style="padding-left:10px"/><rich:message for="productList" style="color:red"/>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </table>
+                                                                </td>
+                                                            </tr>
+
+                                                            <tr>
+                                                                <td align="right" valign="top" class="gray03">User Group :</td>
+                                                                <td valign="top" align="left" >
+                                                                    <h:selectOneMenu id="userGroupList" value="#{campaignNewProspectController.userGroupId}">
+                                                                        <f:selectItem itemValue="0" itemLabel="All"/>
+                                                                        <f:selectItems value="#{campaignNewProspectController.userGroupList}"/>
+
+                                                                        <rich:validator />
+                                                                        <a4j:ajax event="change" render="userList" execute="@this"/>
+                                                                    </h:selectOneMenu>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top" class="gray03"><h:outputText value="* " style="color:red"/>User :</td>
+                                                                <td valign="top" align="left" >
+                                                                    <h:selectOneMenu id="userList" value="#{campaignNewProspectController.userId}" 
+                                                                                     required="true" requiredMessage="#{msg.require}">
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItems value="#{campaignNewProspectController.userList}"/>
+                                                                        <f:validateRequired/>                  
+                                                                        <rich:validator />
+                                                                    </h:selectOneMenu>
+                                                                    &#160;<rich:message for="userList" style="color:red"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="gray03">&nbsp;</td>
+                                                                <td>&nbsp;</td>
+                                                            </tr>
+                                                        </table></td>
+                                                </tr>
+                                            </table>
+                                        </td>    
+                                    </tr>
+
+                                    <tr>
+                                        <td align="center" colspan="2">
+                                            <h:commandButton  image="../img/b_back.png"
+                                                              actionListener="#{campaignSummaryController.initialize()}"
+                                                              action="#{campaignNewProspectController.backAction}"
+                                                              immediate="true">
+                                                <f:param name="tab" value="assignment"/> 
+                                                <f:param name="id" value="#{campaignNewProspectController.campaign.id}"/>
+                                            </h:commandButton>
+                                            <h:commandButton  image="../img/b_proceed.png"
+                                                              onclick="#{rich:component('waitPopup')}.show('', {height: '80px', width: '150px'})"
+                                                              actionListener="#{campaignNewProspectController.saveAction}">
+                                                <f:param name="tab" value="assignment"/> 
+                                                <f:param name="id" value="#{campaignNewProspectController.campaign.id}"/>
+                                            </h:commandButton>
+                                        </td>
+                                    </tr>
+                                </table></td>
+                        </tr>
+                    </table>
+                </a4j:region>
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>            
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+
+
+                <rich:popupPanel id="referCustomer" autosized="true" shadowOpacity="0" width="1200" height="600" style="padding: 0 0 0 0; border-style: none " >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Contact History</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('referCustomer')}.hide(); return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <h:form>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                                <h:panelGroup id="referCustomerPanel">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#eeeee5" id="bartool01">
+                                        <tr bgcolor="#ffffff">
+                                            <td valign="top" class="line01">
+                                                <table width="100%">
+                                                    <tr>
+                                                        <td width="150" align="right">Customer Name :</td>
+                                                        <td align="left">
+                                                            <h:inputText styleClass="textfield" value="#{campaignNewProspectController.custName}" >
+                                                                <a4j:ajax event="blur" execute="@this" />
+                                                            </h:inputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="150" align="right">Customer Surname :</td>
+                                                        <td align="left">
+                                                            <h:inputText styleClass="textfield" value="#{campaignNewProspectController.custSurname}">
+                                                                <a4j:ajax event="blur" execute="@this" />
+                                                            </h:inputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td width="150" align="right">Mobile Phone :</td>
+                                                        <td align="left">
+                                                            <h:inputText styleClass="textfield" value="#{campaignNewProspectController.mobilePhone}">
+                                                                <a4j:ajax event="blur" execute="@this" />
+                                                            </h:inputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td align="right">Marketing List :</td>
+                                                        <td align="left">
+                                                            <h:selectOneMenu id="marketingListSearch" value="#{campaignNewProspectController.marketingSearchId}" >
+                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                <f:selectItems value="#{campaignNewProspectController.marketingList}"/>
+                                                                <a4j:ajax event="blur" execute="@this" />
+                                                            </h:selectOneMenu>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td><a4j:commandButton image="/img/b_search.png" execute="@this" limitRender="true" actionListener="#{campaignNewProspectController.searchActionListener}" render="dataList" >
+
+                                                            </a4j:commandButton>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                value="#{campaignNewProspectController.customerList}" rows="10" var="clist">
+                                                    <f:facet name="header">
+                                                        <rich:columnGroup>
+                                                            <rich:column><h:outputText value="Marketing"/></rich:column>
+                                                            <rich:column><h:outputText value="Customer Name"/></rich:column>
+                                                            <rich:column><h:outputText value="Spot Ref ID"/></rich:column>
+                                                            <rich:column><h:outputText value="Case No"/></rich:column>
+                                                            <rich:column><h:outputText value="Age"/></rich:column>
+                                                            <rich:column><h:outputText value="Disposition"/></rich:column>
+                                                            <rich:column><h:outputText value="Date of Birth"/></rich:column>
+                                                            <rich:column><h:outputText value="Description 1"/></rich:column>
+                                                            <rich:column><h:outputText value="Description 2"/></rich:column>
+                                                            <rich:column><h:outputText value="Description 3"/></rich:column>
+                                                            <rich:column><h:outputText value="Description 4"/></rich:column>
+                                                            <rich:column><h:outputText value="Description 5"/></rich:column>
+                                                        </rich:columnGroup>
+                                                    </f:facet>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.marketing.name}"/> 
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <a4j:commandLink value="#{clist.customer.name} #{clist.customer.surname}" actionListener="#{campaignNewProspectController.referCustomerAction}" execute="@this" 
+                                                                         oncomplete="#{rich:component('referCustomer')}.hide()" render="spotRefId,copyRefer,referCust" >
+                                                            <f:param name="marketingId" value="#{clist.marketing.id}" />
+                                                            <f:param name="customerId" value="#{clist.customer.id}" />
+                                                        </a4j:commandLink>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield15 eq null or clist.customer.flexfield15 eq '' ? '-' : clist.customer.flexfield15}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield2 eq null or clist.customer.flexfield2 eq '' ? '-' : clist.customer.flexfield2}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield3 eq null or clist.customer.flexfield3 eq '' ? '-' : clist.customer.flexfield3}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield4 eq null or clist.customer.flexfield4 eq '' ? '-' : clist.customer.flexfield4}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield5 eq null or clist.customer.flexfield5 eq '' ? '-' : clist.customer.flexfield5}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield6 eq null or clist.customer.flexfield6 eq '' ? '-' : clist.customer.flexfield6}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield7 eq null or clist.customer.flexfield7 eq '' ? '-' : clist.customer.flexfield7}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield8 eq null or clist.customer.flexfield8 eq '' ? '-' : clist.customer.flexfield8}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield9 eq null or clist.customer.flexfield9 eq '' ? '-' : clist.customer.flexfield9}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{clist.customer.flexfield10 eq null or clist.customer.flexfield10 eq '' ? '-' : clist.customer.flexfield10}"/>
+                                                    </rich:column>
+                                                    <f:facet name="footer">
+                                                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                                                    </f:facet>
+                                                </rich:dataTable>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                        </h:form>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </rich:popupPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

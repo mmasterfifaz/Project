@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Assignment List Monitoring</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="Campaign:"/> 
+                    <h:selectOneMenu id="campaignList"
+                                     value="#{assignmentListMonitorController.campaignId}">
+                        <f:selectItem itemLabel="All" itemValue="0"/>
+                        <f:selectItems value="#{assignmentListMonitorController.campaignList}"/>
+                        <a4j:ajax event="change" render="data" execute="@this"/>
+                    </h:selectOneMenu>
+                    <h:outputText value="User Group:"/> 
+                    <h:selectOneMenu id="userGroupList"
+                                            value="#{assignmentListMonitorController.userGroupId}">
+                        <f:selectItems value="#{assignmentListMonitorController.userGroupList}"/>
+                        <a4j:ajax event="change" render="data" execute="@this"/>
+                    </h:selectOneMenu>  
+                    <h:outputText value="View Mode:"/>
+                    <h:selectOneRadio value="#{assignmentListMonitorController.viewMode}">
+                        <f:selectItem itemLabel="List Used Today" itemValue="today"/>
+                        <f:selectItem itemLabel="Total Used" itemValue="total"/>
+                        <f:selectItem itemLabel="Real Time (might effect server performance)" itemValue="realtime"/>
+                    </h:selectOneRadio>
+                    <h:outputText value=""/>
+                    <a4j:commandButton actionListener="#{assignmentListMonitorController.searchListener}" 
+                                       render="data" limitRender="true" image="/img/b_search.png"/>
+                </h:panelGrid>
+               
+            </ui:define>
+            <ui:define name="button"></ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{assignmentListMonitorController.list}" rows="#{global.maxrows}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;">
+                                <h:outputText rendered="#{assignmentListMonitorController.campaignId ne 0}" value="Campaign" />
+                            </rich:column>
+                            <rich:column style="text-align: left;">Name</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right">Assigned</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right">Viewed</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right">Opened</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right">Followup</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right">Closed</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right">Total</rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right"><font style="color: #00A200">Gross Sale</font></rich:column>
+                            <rich:column style="text-align: left;width: 7%;text-align: right"><font style="color: #00A200">Net Sale</font></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText rendered="#{assignmentListMonitorController.campaignId ne 0}" value="#{list.campaign}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name} #{list.surname}" action="#{assignmentListMonitorController.viewAction}"
+                                       onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})"
+                                       actionListener="#{assignmentListMonitorDetailController.tabListener}">
+                            <f:param name="campaignId" value="#{list.campaignId}"/>
+                            <f:param name="agentId" value="#{list.createBy}"/>
+                            <f:param name="mode" value="#{assignmentListMonitorController.viewMode}"/>
+                       </h:commandLink>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.assigned}">
+                             <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.viewed}">
+                             <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.opened}">
+                             <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.followup}">
+                             <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.closed}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.assigned + list.viewed + list.opened + list.followup + list.closed}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.grossSale}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.netSale}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show();"
+                            onstop="#{rich:component('waitPopup')}.hide();" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

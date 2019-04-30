@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+    <h:head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <script type="text/javascript" src="telephony.js"></script>
+        <script type="text/javascript">
+            function loadTelephony() {
+                document.frm.telephonyOCX.ButtonHangupVisible = true;
+                document.frm.telephonyOCX.ButtonDialVisible = false;
+                document.frm.telephonyOCX.ButtonNextCallVisible = false;
+                document.frm.telephonyOCX.ButtonLoginVisible = false;
+                document.frm.telephonyOCX.EnableAutoManualRecording = false;
+                document.frm.telephonyOCX.ButtonJunkCallVisible = true;
+                document.frm.telephonyOCX.ButtonTransferVisible = false;
+                document.frm.telephonyOCX.EnableWriteLogFile = true;
+                document.frm.telephonyOCX.EnableDelayIdle_AfterAODCall = false;
+
+                document.frm.telephonyOCX.ButtonScoreVisible = true; //call survey button
+                //document.frm.telephonyOCX.setServiceID_Transfer2Score = 16; //call survey service id
+
+                document.frm.telephonyOCX.setServiceID_ForOutbound = #{userSession.userGroup.telephonyServiceId};
+                if ("true" === "#{userSession.users.telephonySso}") {
+		    document.frm.telephonyOCX.AgentLogIn2("#{userSession.users.loginName}", "#{userSession.ldapPassword}");
+                } else {
+                    document.frm.telephonyOCX.AgentLogIn2("#{userSession.users.telephonyLoginName}", "#{userSession.users.telephonyPassword}");
+                }
+            }
+        </script>
+        <script type="text/javascript" for="telephonyOCX" event="OnRinging(ServiceName, ANI, DNIS, callCategory, CallType)">
+            <!--
+            //WriteToFile(callCategory + ' : ' +CallType);
+            onRingingAction(ANI, ServiceName, DNIS, callCategory, CallType);
+            //-->
+        </script>
+	<script type="text/javascript" for="telephonyOCX" event="OnJunkCall(PhoneNo, CallCategory, TrackID)">
+        </script>
+        <script language="JavaScript">
+            window.onbeforeunload = UnLoadPage;
+            function UnLoadPage(){
+                if (document.frm.telephonyOCX.getPhoneStatus() != "LOGGED OUT") {
+                    document.frm.telephonyOCX.AgentLogOutPanic();
+                }
+            }
+        </script>
+
+        <script type="text/javascript" for="telephonyOCX" event="OnStateChange(LineStatus)">
+            
+            var state = LineStatus.toUpperCase();
+            if(state !== 'INACTIVE'){
+                //WriteToFile(state);
+                if(state === 'WRAP') {
+                    setTalkTime();
+                }
+                setLineStatus(state);
+                buttonChange(state);
+            }
+            
+//            switch (state){
+//                case "IDLE": 
+//                    buttonChange(state);
+//                    break;
+//                case "ACTIVE": 
+//                    buttonChange(state);
+//                    //toggleHide();
+//                    break;
+//                case "DIALING": 
+//                    showContactSummary();
+//                    break;
+//                case "WRAP":
+//                    buttonChange(state);
+//                    break;
+//                default : state = LineStatus.toUpperCase();
+//            }            
+            
+//            if(state == 'ACTIVE'){
+//                buttonChange();
+//            }else if(state == 'DIALING'){
+//                showContactSummary();
+//            }
+            
+        </script>
+        <script language="javascript" for="telephonyOCX" event="OnStartAutoRecording(RecordingType, PhoneNo, CallCategory, TrackID)">
+
+        if(RecordingType === 'A') {    // RecordingType = {'A','M'}
+            var telephonyTrackId = TrackID;
+            if(telephonyTrackId == 0 || telephonyTrackId == "") {
+                telephonyTrackId = document.frm.telephonyOCX.getTrackID_AutoRecording();
+            }
+            create(PhoneNo, CallCategory, TrackID);
+            
+            //if (typeof parent.frames['actionframe'].createContactHistory == 'function') {
+                //alert(TrackID);
+                //parent.frames['actionframe'].createContactHistory(PhoneNo, CallType, TrackID);
+            //}
+        }
+
+        </script>
+    </h:head>
+    <h:body onload="loadTelephony()">
+        <form name="frm">
+            <!--input type="text" name="tel" value="081"/>
+            <input type="button" value="Call Alert" onclick="parent.frames['mainframe'].callAlert(frm.tel.value);"/>
+            <input type="button" value="dial" onclick="parent.frames['mainframe'].buttonDialChange(status);"/>
+            -->
+            <OBJECT id="telephonyOCX" 
+                    classid="Telephony_AspectWebService.dll#Telephony_AspectWebService.PhoneControl" 
+                    codebase="Telephony_AspectWebService.dll"
+                    style="Z-INDEX: 102; LEFT: 0px; WIDTH: 1000px; POSITION: absolute; TOP: 0px; HEIGHT: 23px">
+            </OBJECT>
+        </form>
+    </h:body>
+</html>

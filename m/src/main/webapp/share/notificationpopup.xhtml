@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+   
+<script type="text/javascript">
+    function popupNotification(jsonMessage) {
+        updateNotificationMessage(jsonMessage.uuid, parseInt(jsonMessage.refid), jsonMessage.phonenumber);
+
+        document.getElementById("display").innerHTML = "";
+        //alert(jsonMessage.displayvalue.length);
+        if (Array.isArray(jsonMessage.displayvalue)) {
+            jsonMessage.displayvalue.forEach(showDisplay);
+        }else{
+            JSON.parse(jsonMessage.displayvalue).forEach(showDisplay);
+        }
+        
+        #{rich:element('uuid')}.value = jsonMessage.uuid;
+        #{rich:element('refId')}.value = jsonMessage.refid;
+        #{rich:element('phoneNumber')}.value = jsonMessage.phonenumber;
+            
+        //updateNotificationMessage(jsonMessage.uuid, parseInt(jsonMessage.refid), jsonMessage.phonenumber);
+        //updateNotificationMessage([{name:'uuid', value:jsonMessage.uuid}, {name:'refId', value:jsonMessage.refid}, {name:'phoneNumber', value:jsonMessage.phonenumber}]);
+        //updateNotificationMessage();
+        
+        showNotificationPopup();
+    }
+    
+    function showDisplay(item, index){
+        var displayElement = document.getElementById("display");
+        var label = '<div style="width:120px; color: white; text-align: right; display: block; float: left">' + item.label + ' : </div>';
+        var value = '<span style="padding-left:10px">' + item.value + '</span>';
+        displayElement.innerHTML = displayElement.innerHTML + label + value + "<br/><br/>";
+    }
+</script>
+
+<rich:popupPanel id='notificationPopup' width="620" height="500" style="border-style: none">
+    <h:form id="notificationPopupForm">
+        <table width="605" border="0" align="center" cellpadding="0" cellspacing="0">
+            <tr>
+                <td width="605" height="397" align="center" valign="top" 
+                    background="#{request.contextPath}/img/notification_bg.png">
+                    <br/>
+                    <table width="98%" border="0" cellpadding="3" cellspacing="0" id="hbox01">
+                        <tr>
+                            <td align="left" valign="middle" ></td>
+                            <td width="60" valign="middle" align="right"></td>
+                        </tr>
+                    </table>
+                    <h:panelGroup>
+                        <table width="98%" border="0" cellspacing="0" cellpadding="0">
+                            <tr height="100" ><td colspan="3"></td></tr>
+                            <tr>
+                                <td width="10" ></td>
+                                <td align="center" valign="top">
+                                    <table width="80%" border="0" cellspacing="1" cellpadding="3">
+                                        <tr>
+                                            <td align="left" valign="top" colspan="2" >
+                                                <h:inputHidden id="uuid" value="#{notificationPopupController.uuid}" />
+                                                <h:inputHidden id="refId" value="#{notificationPopupController.refId}" />
+                                                <h:inputHidden id="phoneNumber" value="#{notificationPopupController.phoneNumber}" />
+                                                <p id="display"></p>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="center" valign="top" colspan="2">
+                                                <h:panelGroup>
+                                                    <h:commandButton id="notificationButton" image="/img/ok_button.png"
+                                                                    actionListener="#{userSession.notificationMessageListener}"
+                                                                    action="#{saleApproachingController.toSaleApproaching}"
+                                                                    rendered="#{true}" style="margin-left:-80px">
+                                                        <f:param name="selectedId" value="-1"/>
+                                                    </h:commandButton>
+                                                    <h:outputText value="&#160;&#160;&#160;" rendered="false" />
+                                                    <h:button id="notificationClose" image="/img/close_button.png" onclick="#{rich:component('notificationPopup')}.hide(); return false" rendered="false" />
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                </table>
+                                </td>
+                                <td width="150"></td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                </td>
+            </tr>
+        </table>
+    </h:form>
+</rich:popupPanel>
+</ui:composition>

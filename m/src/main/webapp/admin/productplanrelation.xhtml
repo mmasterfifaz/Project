@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+
+<h:body>
+    <ui:composition template="../templates/adminmain.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2">Product Plan: Relation</ui:define>
+        <ui:define name="javascript">
+            <style type="text/css">
+                <!--
+                div.scrollSpouseRelation {
+                    height: 140px;
+                    width: auto;
+                    min-width: 150px;
+                    overflow: auto;
+                    border: 0px solid #EEEEEE;
+                    background-color: #FFFFFF;
+                    padding: 0px;
+                }
+                #divRelation:hover { 
+                    background-color: #fffacd;
+                }
+                -->
+            </style>
+        </ui:define>
+        <ui:define name="button">
+        </ui:define>
+        <ui:define name="panel">
+            <br></br>
+            <table border="0" cellpadding="0" style="text-align: center; margin: auto;">
+                <tr>
+                    <td>
+                        <h:outputText value="* Product Plan Relation: "/> 
+                    </td>
+                    <td>
+                        <h:panelGroup id="productPlanRelation" >
+                            <h:selectOneMenu value="#{productPlanRelationController.selectPlanId}" 
+                                             valueChangeListener="#{productPlanRelationController.changeProductPlanListener}" >
+                                <f:selectItem  itemValue="0"  itemLabel="Please Select Product Plan"/>
+                                <f:selectItems value="#{productPlanRelationController.productPlans}"  
+                                               var="list"
+                                               rendered="relation,message"
+                                               itemLabel="#{list.name} #{list.paymentMode eq 1?'(Monthly)':list.paymentMode eq 2?'(Quarterly)':list.paymentMode eq 3?'(Hlf Year)':'(Yearly)'}"
+                                               itemValue="#{list.id}"/>
+                                <a4j:ajax event="change" render="relation, meassage" />
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup id="meassage" >
+                            &nbsp;&nbsp;<h:outputText value="#{productPlanRelationController.messageDup}" style="color:red"/>
+                        </h:panelGroup>
+                    </td>
+                </tr>
+            </table>
+            <br></br>
+            <h:panelGroup id="relation" >
+                <h:panelGroup  rendered="#{productPlanRelationController.showTableRelation}">
+                    <table border="0" style="text-align: center; margin: auto; border-color: #EEEEEE; border-collapse: collapse;">
+                        <tr>
+                            <th style="width: 200px;height: 60px; background: #abd5fd;">Main Insure</th>
+                            <th style="width: 400px;background: #abd5fd;">Family</th>
+                        </tr>
+                        <tr>
+                            <td style="background: #e7f4ff;">
+                                <ui:repeat value="#{productPlanRelationController.productPlans}" var="list">
+                                    <h1><h:outputText rendered="#{list.id == productPlanRelationController.selectPlanId}" value="#{list.name}"/></h1>
+                                </ui:repeat>
+                            </td>
+                            <td align="left" style="min-width: 100px;">
+                                <div class="scrollSpouseRelation" id="divRelation">
+                                    <h:panelGroup rendered="#{productPlanRelationController.familyType eq 1}">
+                                        <h:selectBooleanCheckbox id="selectSpouseAll" value="#{productPlanRelationController.checkSpouseAll}" valueChangeListener="#{productPlanRelationController.checkSpouseAllListener}"
+                                                                 rendered="#{productPlanRelationController.spouseList.size() !=0}">
+                                            <f:param name="checkSpouseAll" value="#{productPlanRelationController.checkSpouseAll}"/>
+                                            <a4j:ajax event="click" render="selectSpouseAll,selectSpouse" limitRender="true" execute="@this"/>
+                                        </h:selectBooleanCheckbox>
+                                        <h:outputText value="#{productPlanRelationController.spouseList.size()==0? 'No spouse plan. Please create spouse plan first':'All'}"/>
+                                        <h:selectManyCheckbox id="selectSpouse"
+                                                              value="#{productPlanRelationController.selectSpouseId}"
+                                                              layout="pageDirection">
+                                            <f:selectItems value="#{productPlanRelationController.spouseList}" var="list" itemLabel="#{list.name} #{list.paymentMode eq 1?'(Monthly)':list.paymentMode eq 2?'(Quarterly)':list.paymentMode eq 3?'(Half Year)':'(Yearly)'}" itemValue="#{list.id}"/>
+                                            <a4j:ajax event="click" 
+                                                      render="selectSpouseAll, selectSpouse" 
+                                                      limitRender="true" execute="@this"
+                                                      listener="#{productPlanRelationController.checkSpouseListener}">
+                                            </a4j:ajax>
+                                        </h:selectManyCheckbox>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{productPlanRelationController.familyType eq 2}">
+                                        <h:outputText value="#{productPlanRelationController.spouseList.size()==0? 'No family plan. Please create family plan first':''}"/>
+                                        <h:selectOneRadio id="selectOneSpouse" value="#{productPlanRelationController.selectOneSpouseId}"
+                                                          layout="pageDirection" >
+                                            <f:selectItems value="#{productPlanRelationController.spouseList}" var="list" 
+                                                           itemLabel="#{list.name} #{list.paymentMode eq 1?'(Monthly)':list.paymentMode eq 2?'(Quarterly)':list.paymentMode eq 3?'(Half Year)':'(Yearly)'}" 
+                                                           itemValue="#{list.id}" />
+                                             <a4j:ajax event="click" render="selectOneSpouse" limitRender="true" execute="@this" />
+                                        </h:selectOneRadio>
+
+                                    </h:panelGroup>                                    
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </h:panelGroup>
+            </h:panelGroup>
+
+            <br></br> <br></br>
+            <div style="text-align: center">
+                <h:commandButton image="../img/b_back.png" action="#{productPlanRelationController.backAction}" immediate="true"/>
+                <a4j:commandButton image="../img/b_save.png" action="#{productPlanRelationController.saveAction}" 
+                                   rendered="#{productPlanRelationController.savePermitted}" render="productPlanRelation,meassage,relation" /></div>
+        </ui:define>
+        <ui:define name="popupModal">
+            <ui:include src="/share/waitpopup.xhtml"/>           
+            <a4j:status id="actionStatus" 
+                        onstart="#{rich:component('waitPopup')}.show()"
+                        onstop="#{rich:component('waitPopup')}.hide()" />
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

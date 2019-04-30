@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Product Child Registration: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{productChildRegEditController.mode}"/>
+
+                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>   
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:outputText value="#{productChildRegEditController.message}" style="color:red"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Product Code :</td>
+                        <td>
+                                <h:outputText id="Productcode" value="#{productChildRegEditController.product.code}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Product Name:</td>
+                        <td>
+                            <h:outputText id="Productname" value="#{productChildRegEditController.product.name}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Child Registration Type:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="mergeDataView"  style="width: 180px;"
+                                             value="#{productChildRegEditController.childRegTypeIdSelected}"
+                                             required="true" requiredMessage="Child Registration Type is required">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{productChildRegEditController.childRegTypeList}"/>
+                                <a4j:ajax event="change" 
+                                          render="childRegForm" 
+                                          execute="@this"
+                                          listener="#{productChildRegEditController.changeChildRegType()}"/>
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="mergeDataView" style="color: red"/>
+                            <h:outputText value="#{productChildRegEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Child Registration Form:</td>
+                        <td >
+                            <h:panelGroup id="childRegForm">
+                                <h:outputText value="#{productChildRegEditController.messageForm}" style="color: red" />
+                                
+                                <rich:dataGrid style="width: 100%" columns="1" 
+                                               value="#{productChildRegEditController.childRegFormAllList}" var="listInfo">
+                                    <rich:dataTable style="width: 100%" value="#{listInfo}" var="list" headerClass="subh01">
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column style="text-align: left;width: 5%"></rich:column>
+                                                <rich:column style="text-align: left;width: 95%"></rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+
+                                        <rich:column style="height: 15px">
+                                            <h:selectBooleanCheckbox value="#{productChildRegEditController.selectedIds[list.id]}">
+                                            </h:selectBooleanCheckbox>
+                                        </rich:column>  
+                                        <rich:column style="height: 15px">
+                                            <h:outputText value="#{list.name}"/>
+                                        </rich:column>
+                                    </rich:dataTable>
+                                </rich:dataGrid>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    
+                    
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{productChildRegEditController.saveAction}">
+                                <f:param name="productID" value="#{productChildRegEditController.productID}"/>
+                            </h:commandButton>
+                            <h:commandButton image="../img/b_back.png" action="#{productChildRegEditController.backAction}" 
+                                             immediate="true">
+                                <f:param name="productID" value="#{productChildRegEditController.productID}"/>
+                            </h:commandButton>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

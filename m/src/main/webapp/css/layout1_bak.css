@@ -1,0 +1,122 @@
+/**
+ * 100% height layout with header and footer
+ * ----------------------------------------------
+ * Feel free to copy/use/change/improve
+ */
+
+html,body {
+	margin:0;
+	padding:0;
+	height:100%;
+	color:#000000;
+	font: 13px Arial, Helvetica, sans-serif, Tahoma;
+	text-decoration: none;
+	min-width:980px;
+}
+div#container01 {
+	background: url(../img/bgleft.png) repeat-y left;
+}
+div#container02 {
+	position:relative; /* needed for footer positioning*/
+	margin:0 auto; /* center, not in IE5 */
+	width:100%;
+	height:auto !important; /* real browsers */
+	height:100%; /* IE6: treaded as min-height*/
+	min-height:100%; /* real browsers */
+	min-width:980px;
+	background: url(../img/bgright.png) repeat-y right;
+}
+
+
+
+div#header {
+	padding-top: 4px;
+	width: 100%;
+	padding-bottom: 4px;
+}
+#bartop  {
+	margin-top: 0px;
+}
+#bartopc {
+	margin-top: 5px;
+}
+
+
+
+
+
+
+#bartop #agent {
+	color: #FFFFFF;
+	text-decoration: none;
+}
+
+#bartop #navigeate {
+	color: #0198ab;
+	text-decoration: none;
+}
+#bartop  #navigeate  a  {
+	color: #0198ab;
+	text-decoration: none;
+	margin-right: 4px;
+}
+#bartop  #navigeate  a:hover  {
+	text-decoration: underline;
+}
+.m01 img {
+	margin-left: 10px;
+	margin-right: 3px;
+}
+
+
+div#content {
+	background-image: url(../img/bgall.jpg);
+	background-repeat: repeat-x;
+	text-align: left;
+	padding: 0px 0px 50px;
+	margin-right: 20px;
+	margin-left: 15px;
+}
+div#content#mid    {
+}
+
+
+div#footer {
+	position:absolute;
+	width:100%;
+	bottom:0px;
+	text-align: center;
+	padding-top: 8px;
+	font-size: 10px;
+	margin-bottom: 0px;
+	height:45px;
+}
+#footer #footerc {
+	margin-top: 10px;
+}
+.lastcase a {
+	margin-left: 5px;
+}
+
+div#bgtheme {
+	background: url(../img/bg.gif);
+}
+
+a:link {
+}
+a:hover {
+	text-decoration: underline;
+}
+a:active {
+	color: #ec5a13;
+}
+
+a:visited {
+}
+#tabmain {
+	height: 38px;
+}
+
+a  img {
+	border-style: none;
+}

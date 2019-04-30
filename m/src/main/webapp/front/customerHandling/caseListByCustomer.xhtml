@@ -1,0 +1,68 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="24"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/customerHandling/customerDetail.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.customerHandling} / Report</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+    <ui:define name="detail_1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Case List by Customer Report</h2></td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top"><br/><br/>
+                    <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td width="200" align="right" valign="top">Contact Date From:</td>
+                            <td><rich:calendar value="#{caseListByCustomerReport.fromDate}" inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                                <rich:calendar value="#{caseListByCustomerReport.toDate}" inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">Output Type:</td>
+                            <td valign="top"><h:selectOneRadio value="#{caseListByCustomerReport.outputFormat}">
+                                    <f:selectItems value="#{caseListByCustomerReport.outputFormatList}"/>
+                                </h:selectOneRadio>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top"></td>
+                            <td valign="top"><h:commandLink  action="blank.xhtml" actionListener="#{caseListByCustomerReport.reportListener}" target="_blank">
+                                    <img alt="Report" src="../../img/b_report.png"/>
+                                    
+                                </h:commandLink></td>
+                        </tr>
+                    </table>
+                    <br/><br/>
+                </td>
+            <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+</ui:composition>

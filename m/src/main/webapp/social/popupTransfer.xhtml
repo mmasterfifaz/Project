@@ -1,0 +1,142 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        <ui:insert name="popupHead"/>
+    </h:head>
+    <h:body>
+            <rich:popupPanel id="transfer" shadowOpacity="0" autosized="true" width="450" height="300" style="border: 0">
+        <h:form id="fTransfer">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Transfer</h2></td>
+                        <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"><a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('transfer')}.hide();
+                                return false;">#{msg.close}</a></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" bgcolor="#FFFFFF">
+                            
+                            <a4j:jsFunction name="setTransferTo" limitRender="true" execute="@this"
+                                            immediate="true" oncomplete="setUserList()" render="pngUserList,pngSupList">
+                                <a4j:param name="param1" assignTo="#{o.transferTo}"/>
+                            </a4j:jsFunction>
+                            <a4j:jsFunction name="setUserList" limitRender="true" execute="@this"
+                                            immediate="true" render="pngUserList,pngSupList"
+                                            actionListener="#{o.transferUserListListener}">
+                            </a4j:jsFunction>
+                            <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">To :</td>
+                                    <td style=""><input type="radio" name="radioTransfer" value="supervisor" onclick="setTransferTo(this.value)"/> Supervisor
+                                    <h:panelGroup id="pngSupList">
+                                        <h:selectOneMenu id="supList" value="#{o.transferToSupervisorId}" 
+                                                         style="height: 22px; font-size: 14px"
+                                                         required="#{o.transferTo eq 'supervisor'}"
+                                                         requiredMessage="#{msg.require}"
+                                                         disabled="#{o.transferTo ne 'supervisor'}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{o.transferSupervisorList}" var="list"
+                                                           itemLabel="#{list.name} #{list.surname}" itemValue="#{list.id}"/>
+                                            <a4j:ajax event="blur" limitRender="true" execute="@this" render="msgSupList"/>
+                                        </h:selectOneMenu>
+                                        <rich:message id="msgSupList" for="supList" style="color:red"/>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <ui:remove>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top"></td>
+                                    <td style="">
+                                        <input type="radio" name="radioTransfer" value="service" onclick="setTransferTo(this.value)"/> Service 
+                                        <ui:remove>
+                                        <h:selectOneMenu id="service" value="#{o.transferToServiceId}" 
+                                                         style="height: 22px; font-size: 14px"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{o.transferServiceList}" var="list"
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                        </h:selectOneMenu>
+                                        </ui:remove>
+                                    </td>
+                                </tr>
+                                </ui:remove>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top"></td>
+                                    <td style="">
+                                        <input type="radio" name="radioTransfer" value="agent" onclick="setTransferTo(this.value)"/> Agent
+                                        <h:panelGroup id="pngUserList">
+                                        <h:selectOneMenu id="userList" value="#{o.transferToUserId}" 
+                                                         style="height: 22px; font-size: 14px"
+                                                         required="#{o.transferTo eq 'agent'}"
+                                                         requiredMessage="#{msg.require}"
+                                                         disabled="#{o.transferTo ne 'agent'}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{o.transferUserList}" var="list"
+                                                           itemLabel="#{list.name} #{list.surname}" itemValue="#{list.id}"/>
+                                            <a4j:ajax event="blur" limitRender="true" execute="@this" render="msgUserList"/>
+                                        </h:selectOneMenu>
+                                        <rich:message id="msgUserList" for="userList" style="color:red"/>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">Transfer Reason :</td>
+                                    <td style="">
+                                        <h:selectOneMenu id="reason" value="#{o.transferReasonId}" 
+                                                         style="height: 22px; font-size: 14px"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{o.transferReasonList}" var="list"
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <a4j:ajax event="blur" limitRender="true" execute="@this" render="msgReason"/>
+                                        </h:selectOneMenu>
+                                        <rich:message id="msgReason" for="reason" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">Remark :</td>
+                                    <td style="">
+                                        <h:inputTextarea id="remark" value="#{o.transferRemark}"
+                                                     style="width:200px; font-size: 14px" 
+                                                     rows="5">
+                                        </h:inputTextarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style=""></td>
+                                    <td style="">
+                                        <a4j:commandButton value="Yes" image="/img/btn_yes.png"
+                                                           limitRender="true" execute="@form" render="supList,msgSupList,userList,msgUserList,reason,msgReason"
+                                                           actionListener="#{o.transferAction}">
+                                        </a4j:commandButton>
+                                        <span style="width: 10px"></span>
+                                        <a4j:commandButton value="No" image="/img/btn_staypage.png"
+                                                           onclick="#{rich:component('transfer')}.hide(); return false;">
+                                        </a4j:commandButton>
+                                    </td>
+                                </tr>
+                            </table></td>
+                        <td width="4" class="bg_right"></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+       </h:form>
+            </rich:popupPanel>
+    </h:body>
+</ui:composition>

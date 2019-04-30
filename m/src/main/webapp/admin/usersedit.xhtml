@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">User Management</ui:define>
+            <ui:define name="title2">Users: Add/Edit</ui:define>
+            <ui:define name="title3">
+                <b>
+                    <a4j:commandLink value="Show Audit Log"
+                                     title="Show Audit Log" rendered="#{usersEditController.users.id ne null}"
+                                     oncomplete="#{rich:component('auditLog')}.show()"
+                                     actionListener="#{usersEditController.auditLogListener}"
+                                     render="auditLogList" >
+                        <f:param value="#{usersEditController.users.id}" name="userId" />
+                    </a4j:commandLink>
+                </b>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{usersEditController.mode}"/>
+                <h:inputHidden value="#{usersEditController.users.id}"/>
+                <style>
+                    .colStyle1 { width: 30%; text-align: right; vertical-align: top; }
+                    .colStyle2 { width: 70%;}
+                </style>
+
+                <h:panelGrid id="table" columns="2" width="80%" cellpadding="4" columnClasses="colStyle1, colStyle2">
+
+                    <h:outputText value="* Name:"/>
+                    <h:panelGroup>
+                        <h:inputText id="name" value="#{usersEditController.users.name}" styleClass="textfield" size="30"  required="true"
+                                     requiredMessage="Name is required">
+                            <f:validateRequired/>                  
+                            <rich:validator />
+                        </h:inputText>
+                        <rich:message for="name" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Surname:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.surname}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="Nickname:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.nickname}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="* Citizen ID:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:panelGroup rendered="#{usersEditController.users.userType eq 'user'}">
+                        <h:inputText id="id1" value="#{usersEditController.id1}" maxlength="1" style="width: 20px"
+                                     onkeypress="return isNumberKey(event)"  
+                                     onkeyup="if (this.value.length >= this.getAttribute('maxlength')) {#{rich:element('id2')}.focus()
+                                             }"
+                                     required="true"
+                                     requiredMessage="#{msg.require}">
+                            <a4j:ajax event="blur" queueId="regQueue" listener="#{usersEditController.checkIdNo(usersEditController.users)}" 
+                                      render="id1,msgId1,msgIdno" limitRender="true" execute="@this" />
+                        </h:inputText><rich:message id="msgId1" for="id1" style="color:red; display: inline-table"/>
+                        <h:inputText id="id2" value="#{usersEditController.id2}" maxlength="4" style="width: 40px"
+                                     onkeypress="return isNumberKey(event)"
+                                     onkeyup="if (this.value.length >= this.getAttribute('maxlength')) {#{rich:element('id3')}.focus()
+                                             }"
+                                     required="true"
+                                     requiredMessage="#{msg.require}">
+                            <a4j:ajax event="blur" queueId="regQueue" listener="#{usersEditController.checkIdNo(usersEditController.users)}"
+                                      render="id2,msgId2,msgIdno" limitRender="true" execute="@this" />
+                        </h:inputText><rich:message id="msgId2" for="id2" style="color:red; display: inline-table"/>
+                        <h:inputText id="id3" value="#{usersEditController.id3}" maxlength="5" style="width: 45px"
+                                     onkeypress="return isNumberKey(event)"
+                                     onkeyup="if (this.value.length >= this.getAttribute('maxlength')) {#{rich:element('id4')}.focus()
+                                             }"
+                                     required="true"
+                                     requiredMessage="#{msg.require}">
+                            <a4j:ajax event="blur" queueId="regQueue" listener="#{usersEditController.checkIdNo(usersEditController.users)}" 
+                                      render="id3,msgId3,msgIdno" limitRender="true" execute="@this" />
+                        </h:inputText><rich:message id="msgId3" for="id3" style="color:red; display: inline-table"/>
+                        <h:inputText id="id4" value="#{usersEditController.id4}" maxlength="2" style="width: 25px"
+                                     onkeypress="return isNumberKey(event)"
+                                     onkeyup="if (this.value.length >= this.getAttribute('maxlength')) {#{rich:element('id5')}.focus()
+                                             }"
+                                     required="true"
+                                     requiredMessage="#{msg.require}">
+                            <a4j:ajax event="blur" queueId="regQueue" listener="#{usersEditController.checkIdNo(usersEditController.users)}" 
+                                      render="id4,msgId4,msgIdno" limitRender="true" execute="@this" />
+                        </h:inputText><rich:message id="msgId4" for="id4" style="color:red; display: inline-table"/>
+                        <h:inputText id="id5" value="#{usersEditController.id5}" maxlength="1" style="width: 20px"
+                                     onkeypress="return isNumberKey(event)"
+                                     required="true"
+                                     requiredMessage="#{msg.require}">
+                            <a4j:ajax event="blur" queueId="regQueue" listener="#{usersEditController.checkIdNo(usersEditController.users)}" 
+                                      render="id5,msgId5,msgIdno" limitRender="true" execute="@this" />
+                        </h:inputText><rich:message id="msgId5" for="id5" style="color:red; display: inline-table"/>
+                        <span style="width:30px"></span>
+                        <h:outputText id="msgIdno" style="color:red; display: inline-table" value="#{usersEditController.msgIdno}"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Date of Birth:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <rich:calendar value="#{usersEditController.users.dateOfBirth}"
+                                   inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                   rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="Mobile Phone:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.mobile}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="Email:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.email}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="License No:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.licenseNo}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="Agent Code:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.agentCode}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="TMR Code:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:inputText value="#{usersEditController.users.code}" styleClass="textfield" size="30" 
+                                 rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="External User Id:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <h:panelGroup rendered="#{usersEditController.users.userType eq 'user'}">
+                        <h:inputText id="externalUserId" value="#{usersEditController.users.externalUserId}" styleClass="textfield" size="30" />
+                        <h:outputText value="#{usersEditController.message2}" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Hired Date:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <rich:calendar value="#{usersEditController.users.hiredDate}" 
+                                   inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                   rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="Resigned Date:" rendered="#{usersEditController.users.userType eq 'user'}"/>
+                    <rich:calendar value="#{usersEditController.users.resignedDate}" 
+                                   inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                   rendered="#{usersEditController.users.userType eq 'user'}"/>
+
+                    <h:outputText value="* Login Name:" />
+                    <h:panelGroup>
+                        <h:inputText id="loginName" value="#{usersEditController.users.loginName}" styleClass="textfield" size="30"  required="true"
+                                     requiredMessage="Login name is required">
+                            <f:validateRequired/>                  
+                            <rich:validator />
+                        </h:inputText>
+                        <rich:message for="loginName" style="color:red"/>
+                        <h:outputText value="#{usersEditController.message}" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="* Password:" />
+                    <h:panelGroup>
+                        <h:inputSecret id="userPassword" value="#{usersEditController.users.userPassword}" styleClass="textfield" size="30"  required="true"
+                                       requiredMessage="Password is required" redisplay="true" >
+                            <f:validateRequired/>                  
+                            <rich:validator />
+                        </h:inputSecret>
+                        <rich:message for="userPassword" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Station ID:" />
+                    <h:inputText id="stationId" value="#{usersEditController.users.stationId}" styleClass="textfield" size="30"/>
+
+                    <h:outputText value="* User Group:" />
+                    <h:panelGroup>
+                        <h:selectOneMenu id="userGroupId" value="#{usersEditController.users.userGroup.id}" required="true"
+                                         requiredMessage="User group is required" valueChangeListener="#{usersEditController.usersGroupListener}">
+                            <f:selectItem itemLabel="Please Select"/>
+                            <f:selectItems value="#{usersEditController.userGroupList}"/>
+                            <a4j:ajax event="change" render="telephonyloginnamepanel,ldapUserPanel"/>
+                            <f:validateRequired/>
+                            <rich:validator />
+                        </h:selectOneMenu>
+                        <rich:message for="userGroupId" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputText value="* " rendered="#{usersEditController.configuration.value eq 'ldap' and usersEditController.userGroupRequired}"/>
+                        <h:outputText value="LDAP User:" />
+                    </h:panelGroup>
+                    <h:panelGroup id="ldapUserPanel">
+                        <h:inputText id="ldapUser" value="#{usersEditController.users.ldapLogin}" styleClass="textfield" size="30" required="#{usersEditController.configuration.value eq 'ldap' and usersEditController.userGroupRequired}" requiredMessage="LDAP user is required">
+                            <f:validateRequired/>
+                            <rich:validator />
+                        </h:inputText>
+                        <rich:message for="ldapUser" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Base DN:" />
+                    <h:inputText id="basedn" value="#{usersEditController.users.baseDn}" styleClass="textfield" size="30"/>
+
+                    <h:outputText value="" />
+                    <h:panelGroup>
+                        <h:selectBooleanCheckbox value="#{usersEditController.users.telephonySso}">
+                            <a4j:ajax event="click" render="telephonyloginnameTxt,telephonyloginnamepanel,telephonypasswordTxt,telephonypasswordpanel"
+                                      execute="@this" limitRender="true" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputText value="Use LDAP SSO for Telephony" /> 
+                    </h:panelGroup>
+
+                    <h:panelGroup id="telephonyloginnameTxt">
+                        <h:outputText value="* " rendered="#{usersEditController.userGroupRequired and not usersEditController.users.telephonySso}"/>
+                        <h:outputText value="Telephony Login Name:" rendered="#{not usersEditController.users.telephonySso}"/>
+                    </h:panelGroup>
+                    <h:panelGroup id="telephonyloginnamepanel">
+                        <h:inputText id="telephonyloginname" value="#{usersEditController.users.telephonyLoginName}" styleClass="textfield" size="30"
+                                     rendered="#{not usersEditController.users.telephonySso}"
+                                     required="#{usersEditController.userGroupRequired}"
+                                     requiredMessage="Telephony login name is required">
+                            <f:validateRequired/>
+                            <rich:validator />
+                        </h:inputText>
+                        <rich:message for="telephonyloginname" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:panelGroup id="telephonypasswordTxt" >
+                        <h:outputText value="* " rendered="#{usersEditController.userGroupRequired and not usersEditController.users.telephonySso}"/>
+                        <h:outputText value="Telephony Password:" rendered="#{not usersEditController.users.telephonySso}"/>
+                    </h:panelGroup>
+                    <h:panelGroup id="telephonypasswordpanel" >
+                        <h:inputSecret id="telephonypassword" value="#{usersEditController.users.telephonyPassword}" styleClass="textfield" size="30" redisplay="true"
+                                       rendered="#{not usersEditController.users.telephonySso}"
+                                       required="#{usersEditController.userGroupRequired}"
+                                       requiredMessage="Telephony password is required">
+                            <f:validateRequired/>
+                            <rich:validator />
+                        </h:inputSecret>
+                        <rich:message for="telephonypassword" style="color:red"/>
+                    </h:panelGroup>
+
+                    <h:outputText value="Description:" />
+                    <h:inputTextarea cols="40" rows="5"  value="#{usersEditController.users.description}"/>
+
+                    <h:outputText value="* Group Member:" rendered="#{usersEditController.users.userType eq 'team'}"/>     
+                    <h:panelGroup rendered="#{usersEditController.users.userType eq 'team'}">
+                        <rich:pickList id="groupMember"
+                                       listHeight="250px" listWidth="250px"
+                                       addText="" addAllText="" removeText="" removeAllText=""
+                                       switchByDblClick="true"
+                                       value="#{usersEditController.selectedGroupMember}"
+                                       required="true" requiredMessage="#{msg.require}">
+                            <f:selectItems value="#{usersEditController.groupMemberList}"/>
+                            <f:validateRequired/>                  
+                            <rich:validator />
+                        </rich:pickList>
+                        <rich:message for="groupMember" style="color:red"/> 
+                    </h:panelGroup>
+
+                    <h:outputText value="* Default Page:"/>
+                    <h:panelGroup>
+                        <h:selectOneMenu id="defaultpage" value="#{usersEditController.users.defaultPage}" required="true"
+                                         requiredMessage="Default Page is required">
+                            <f:selectItem itemLabel="Todo List" itemValue="todolist"/>
+                            <f:selectItem itemLabel="Social" itemValue="social"/>
+                            <f:selectItem itemLabel="Campaign" itemValue="campaign"/>  
+                            <f:selectItem itemLabel="Search" itemValue="search"/>
+                            <f:selectItem itemLabel="Report" itemValue="report"/>
+                            <f:selectItem itemLabel="Admin" itemValue="admin"/>
+                            <f:validateRequired/>                  
+                            <rich:validator />
+                        </h:selectOneMenu>
+                        <rich:message for="defaultpage" style="color:red"/>
+                    </h:panelGroup>  
+
+                    <h:outputText value="Image:"/>
+                    <h:panelGroup>
+                        <a4j:region>
+                            <h:panelGroup id="picThumbnail">
+                                <h:panelGroup rendered="#{usersEditController.users.image eq null}">
+                                    <rich:fileUpload id="fileUploadBean"
+                                                     fileUploadListener="#{usersEditController.fileUploadBean.listener}"
+                                                     maxFilesQuantity="1"
+                                                     immediateUpload="true"
+                                                     acceptedTypes="jpg, gif, png, bmp, pdf" 
+                                                     listHeight="70px">
+                                        <a4j:ajax event="clear" render="fileUploadBean"/>
+                                    </rich:fileUpload>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{!(usersEditController.users.image eq null)}">
+                                    <a href="../upload/users/#{usersEditController.users.id}/#{usersEditController.users.image}" target="_blank">#{usersEditController.users.image}</a>
+                                    &nbsp;&nbsp;&nbsp;<a4j:commandButton image="../img/b_delete.png" 
+                                                                         render="picThumbnail"
+                                                                         limitRender="true" execute="@region"
+                                                                         actionListener="#{usersEditController.deletePicThumbnailListener}"/>
+                                </h:panelGroup>
+                            </h:panelGroup>    
+                        </a4j:region>
+                    </h:panelGroup>
+
+                    <h:outputText value=""/>
+                    <h:panelGroup>
+                        <h:selectBooleanCheckbox id="isAdmin" value="#{usersEditController.users.isAdministrator}"
+                                                 disabled="#{not usersEditController.isAdmin}" /> 
+                        <h:outputText value="Is Administrator"/>   
+                    </h:panelGroup>
+                    
+                    <h:outputText value=""/>
+                    <h:panelGroup>
+                        <h:selectBooleanCheckbox id="isSystem" value="#{usersEditController.users.isSystem}" /> 
+                        <h:outputText value="Is System"/>   
+                    </h:panelGroup>
+
+                    <h:outputText value="User Status:" />
+                    <h:panelGroup>
+                        <h:selectOneMenu id="userStatusId" value="#{usersEditController.users.usersStatusId}" 
+                                         valueChangeListener="#{usersEditController.userStatusChangeListener}">
+                            <f:selectItems value="#{usersEditController.usersStatusList}"/>
+                            <a4j:ajax event="change" limitRender="true" execute="@this" render="userStatusDate"/>
+                        </h:selectOneMenu>
+                        <h:panelGroup id="userStatusDate" >
+                            <h:panelGroup rendered="#{usersEditController.users.usersStatusId ne null and usersEditController.users.usersStatusId != 0 and usersEditController.users.userType eq 'user'}" >
+                                From 
+                                <rich:calendar value="#{usersEditController.effectiveFrom}" 
+                                               inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                               rendered="#{usersEditController.users.userType eq 'user'}">
+                                    <a4j:ajax event="change" execute="@this" limitRender="true" listener="#{usersEditController.userStatusDateChangeListener}" />
+                                </rich:calendar>
+                                To
+                                <rich:calendar value="#{usersEditController.effectiveTo}" 
+                                               inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                               rendered="#{usersEditController.users.userType eq 'user'}">
+                                    <a4j:ajax event="change" execute="@this" limitRender="true" listener="#{usersEditController.userStatusDateChangeListener}" />
+                                </rich:calendar>
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </h:panelGroup>
+
+                    <h:outputText value=""/>
+                    <h:panelGroup>
+                        <h:selectBooleanCheckbox id="enable" value="#{usersEditController.users.status}" /> 
+                        <h:outputText value="Enable"/>   
+                    </h:panelGroup>
+
+                    <h:outputText value="" />
+                    <h:panelGroup>
+                        <h:selectBooleanCheckbox value="#{usersEditController.users.userExpire}">
+                            <a4j:ajax event="click" render="userexpirenameTxt,userexpiredate"
+                                      execute="@this" limitRender="true" />
+                        </h:selectBooleanCheckbox>
+                        <h:outputText value="User Expire Date" />
+                    </h:panelGroup>
+
+                    <h:panelGroup id="userexpirenameTxt">
+                        <h:outputText value="* " rendered="#{usersEditController.users.userExpire eq true}"/>
+                        <h:outputText value="User Expire Date" rendered="#{usersEditController.users.userExpire eq true}"/>
+                    </h:panelGroup>
+                    <h:panelGroup id="userexpiredate">
+                        <rich:calendar id="expiredDate" value="#{usersEditController.users.userExpireDate}"
+                                       inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                       required="#{usersEditController.users.userExpire eq true}"
+                                       requiredMessage="Required"
+                                       datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                       rendered="#{usersEditController.users.userExpire eq true}"/>
+                        <rich:message for="expiredDate" style="display: inline-block;color: red"/>
+                    </h:panelGroup>
+
+
+                </h:panelGrid>
+                <table width="98%" border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td class="line01" style="border: 1px dotted #CCCCCC;" colspan="2" ><h4>Flex Field</h4></td>
+                    </tr>
+                    <tr>
+                        <td width="50%" style="padding-top:15px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                <tr>
+                                    <td align="right" valign="top">Flex Field1:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx1}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field2:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx2}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field3:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx3}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field4:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx4}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field5:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx5}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field6:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx6}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field7:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx7}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field8:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx8}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field9:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx9}" styleClass="textfield" maxlength="100"/></td>
+                                </tr><tr>
+                                    <td align="right" valign="top">Flex Field10:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx10}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+
+                            </table>
+                        </td>
+                        <td width="50%" style="padding-top:15px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                <tr>
+                                    <td align="right" valign="top">Flex Field11:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx11}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field12:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx12}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field13:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx13}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field14:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx14}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field15:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx15}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field16:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx16}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field17:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx17}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field18:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx18}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field19:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx19}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Flex Field20:</td>
+                                    <td valign="top"><h:inputText value="#{usersEditController.users.fx20}" styleClass="textfield" maxlength="100"/></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <td align="left" valign="top" width="33%"><h:commandButton image="../img/b_back.png" action="#{usersEditController.backAction}" immediate="true"/></td>
+                        <td valign="top" align="center" width="34%">
+                            <h:commandButton image="../img/b_save.png" action="#{usersEditController.saveAction}" rendered="#{usersEditController.savePermitted}" />      
+                        </td>
+                        <td align="right" valign="top" width="33%">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" width="33%">&nbsp;</td>
+                        <td class="line01" ><h4>User Status History</h4></td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" width="33%">&nbsp;</td>
+                        <td style="padding-top:15px;" >
+                            <rich:dataTable id="userStatusHistoryList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{usersEditController.userStausHistoryList}" rows="#{global.maxrows}" var="list">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Status" /></rich:column>
+                                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="From Date"/></rich:column>
+                                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="To Date"/></rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column >
+                                    <h:outputText value="#{list.usersStatusName}" />
+                                </rich:column>
+                                <rich:column>
+                                    <h:outputText value="#{list.effectiveFrom}">
+                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </rich:column>
+                                <rich:column>
+                                    <h:outputText value="#{list.effectiveTo}">
+                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </rich:column>
+                                <f:facet name="footer">
+                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                </f:facet>
+                            </rich:dataTable>
+                        </td>
+                    </tr>
+                </table>
+
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <rich:popupPanel id="auditLog" autosized="true" shadowOpacity="0" width="800" height="600" style="padding: 0 0 0 0; border-style: none " >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Audit Log</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('auditLog')}.hide();
+                                        return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                                <rich:dataTable id="auditLogList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                value="#{usersEditController.auditLogs}" rows="10" var="list">
+                                    <f:facet name="header">
+                                        <rich:columnGroup>
+                                            <rich:column><h:outputText value="Activity Type"/></rich:column>
+                                            <rich:column><h:outputText value="Activity Date"/></rich:column>
+                                            <rich:column><h:outputText value="by User"/></rich:column>
+                                            <rich:column><h:outputText value="Audit Values"/></rich:column>
+                                        </rich:columnGroup>
+                                    </f:facet>
+                                    <rich:column>
+                                        <h:outputText value="#{list.actionType}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.actionDate}">
+                                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" />
+                                        </h:outputText>                
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.actionBy}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:inputTextarea value="#{list.actionDetail}" cols="60" rows="5" />
+                                    </rich:column>
+                                    <f:facet name="footer">
+                                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                                    </f:facet>
+                                </rich:dataTable>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </rich:popupPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+    <ui:composition template="../templates/adminedit.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2">Sequence No Upload: Add/Edit</ui:define>
+        <ui:define name="panel">
+            <h:inputHidden value="#{sequenceNoFileEditController.mode}"/>
+            <br />
+            <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                <tr>
+                    <td width="200" align="right" valign="top"><h:outputText value="Code :" rendered="#{sequenceNoFileEditController.mode eq 'edit'}"/>
+                    </td>
+                    <td>
+                        <h:inputText value="#{sequenceNoFileEditController.sequenceNoFile.code}" rendered="#{sequenceNoFileEditController.mode eq 'edit'}" disabled="true"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="200" align="right" valign="top"><font color="red">*</font> Sequence Number Name:</td>
+                    <td>
+                        <h:panelGroup id="dropDown">
+                            <h:selectOneMenu id="listSource" value="#{sequenceNoFileEditController.selectSequenceId}"
+                                             required="true" requiredMessage="Sequence No.file is required"
+                                             valueChangeListener="#{sequenceNoFileEditController.dropdownChangListener}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{sequenceNoFileEditController.sequenceNoList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                <rich:validator/>
+                                <a4j:ajax event="change"
+                                          render="fileUpload"
+                                        />
+                            </h:selectOneMenu>
+                            &#160;<rich:message id="msgListSource" for="listSource" styleClass="required"/>
+                        </h:panelGroup>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top" class="gray03">
+                        <h:outputText value="*" rendered="#{sequenceNoFileEditController.mode eq 'add'}" style="color: red"/><h:outputText value=" Filename:" rendered="#{sequenceNoFileEditController.mode eq 'add'}"/>
+                    </td>
+                    <td align="left">
+                        <h:panelGroup id ="uploadPanel">
+                            <rich:fileUpload id="fileUpload" fileUploadListener="#{sequenceNoFileEditController.uploadCompleteListener}"
+                                             ontyperejected="alert('Only csv files are accepted');"
+                                             acceptedTypes="csv"
+                                             maxFilesQuantity="1"
+                                             immediateUpload="true"
+                                             listHeight="63px"
+                                             disabled="#{sequenceNoFileEditController.selectSequenceId eq null}"
+                                             rendered="#{sequenceNoFileEditController.mode eq 'add'}" oncomplete="#{rich:component('waitPopup')}.hide()">
+                                <a4j:ajax event="clear" render="fileUpload" limitRender="true" execute="@this" listener="#{sequenceNoFileEditController.clearFileUpload}" oncomplete="#{rich:component('waitPopup')}.hide()"/>
+                            </rich:fileUpload>
+                        </h:panelGroup>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top" class="gray03">
+                        <h:outputText value=""/>
+                    </td>
+                    <td align="left">
+                        <h:selectBooleanCheckbox id="enable" value="#{sequenceNoFileEditController.sequenceNoFile.status}"/> Enable
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top">&nbsp;</td>
+                    <td valign="top"><a4j:commandButton image="../img/b_save.png" action="#{sequenceNoFileEditController.saveAction}" rendered="#{sequenceNoFileEditController.savePermitted}" onclick="#{rich:component('waitPopup')}.show()"/>
+                        <h:commandButton image="../img/b_back.png" action="#{sequenceNoFileEditController.backAction}" immediate="true"/>
+                    </td>
+                </tr>
+            </table>
+            <ui:include src="/share/waitpopup.xhtml" />
+            <a4j:status id="actionStatus"
+                        onstart="#{rich:component('waitPopup')}.show()"
+                        onstop="#{rich:component('waitPopup')}.hide()" />
+        </ui:define>
+
+
+    </ui:composition>
+</h:body>
+</html>

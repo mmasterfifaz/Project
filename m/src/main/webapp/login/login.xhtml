@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <h:head>
+        <title>Maxar Login</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="shortcut icon" href="favicon.ico"/>
+        <link href="#{request.contextPath}/resources/css/maxelyz.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/css/scroll01.css" rel="stylesheet" type="text/css" />
+        <style>
+            .uinp {
+                    font-family: Tahoma, Geneva, sans-serif;
+                    background-color:transparent;
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: normal;
+                    border-bottom-width: 1px;
+                    border-bottom-style: dashed;
+                    border-bottom-color: #F90;
+                    margin: 0px;
+                    padding: 0px;
+                    border-top-style: none;
+                    border-right-style: none;
+                    border-left-style: none;
+                    color: #F90;
+                }
+              
+                .textred {
+                    font-family: Tahoma, Geneva, sans-serif;
+                    font-size: 10px;
+                    color: #F00;
+                }    
+        </style>
+        <script type="text/javascript">  
+            function clearValue(obj,text)  { 
+                if ( obj.value === text ) 
+                    obj.value = '';  
+            }  
+
+            function checkValue(obj,text)  {  
+                if ( obj.value === '' ) 
+                    obj.value = text;  
+            }
+            function loaddata() {
+                obj = document.getElementById('frm:username');
+                if (obj.value === '')
+                    obj.value=obj.title;
+                obj = document.getElementById('frm:password');
+                if (obj.value === '')
+                    obj.value=obj.title;
+                obj = document.getElementById('frm:stationNo');
+                if (obj.value === '')
+                    obj.value=obj.title;
+                localStorage.setItem('pasw', '');
+                localStorage.setItem('station', '');
+                localStorage.setItem('signalrId', '');
+                localStorage.setItem('serviceId', '');
+                localStorage.setItem('userId', '');
+            }
+        </script>
+    </h:head>
+    <h:body onload="loaddata();">
+       <h:form id="frm">           
+           <table id="Table_01" width="1250" border="0" cellpadding="0" cellspacing="0">
+               <tr>
+                    <td height="120" colspan="2"></td>
+                    <td height="120" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td width="655" height="94" colspan="2" align="right" valign="bottom"><span class="textred">
+                            <h:outputText id="message" style="font-size: 16px;" value="#{loginController.message}"/></span>
+                    </td>
+                    <td colspan="2" height="141" width="599" background="#{request.contextPath}/img/login02_04.gif" 
+                        style="background-position: bottom;"></td>
+                </tr>
+               <tr>
+                   <td width="655" colspan="2" align="right" valign="middle">
+                      <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr >
+                                <td background="#{request.contextPath}/img/login02_02-05.gif" align="right" height="35" width="621">
+                                    <h:inputText id="username" styleClass="uinp" 
+                                                 value="#{loginController.userName}" 
+                                                 onfocus="clearValue(this,this.title)" 
+                                                 onblur="checkValue(this,this.title)" title="User Name"/></td>
+                                <td background="#{request.contextPath}/img/login02_06.gif"  align="left" height="35" width="21" 
+                                    style="background-repeat: no-repeat"></td>
+                            </tr>
+                            <tr >
+                                <td background="#{request.contextPath}/img/login02_05.gif" align="right" height="35" width="621">
+                                    <h:inputSecret redisplay="true" id="password" 
+                                                   styleClass="uinp" value="#{loginController.password}" 
+                                                   onfocus="clearValue(this,this.title)" onblur="checkValue(this,this.title)" 
+                                                   title="Password"/></td>
+                                <td background="#{request.contextPath}/img/login02_12.gif"  align="left" height="35" width="21" 
+                                    style="background-repeat: no-repeat"></td>
+                            </tr>
+                            <tr >
+                                <td background="#{request.contextPath}/img/login02_st_bg.gif" align="right" height="35" width="621">
+                                    <h:inputText id="stationNo" 
+                                                   styleClass="uinp" 
+                                                   value="#{loginController.stationNo}" 
+                                                   onfocus="clearValue(this,this.title)" 
+                                                   onblur="checkValue(this,this.title)" 
+                                                   title="Station No."/></td>
+                                <td background="#{request.contextPath}/img/login02_st.gif"  align="left" height="35" width="21" 
+                                    style="background-repeat: no-repeat"></td>
+                            </tr>
+                        </table>
+                    </td>
+                   <td width="84" valign="top">
+                        <h:commandButton id="loginButton" image="/img/login02_07.gif" value="Submit" 
+                                         action="#{loginController.loginAction()}">
+
+                        </h:commandButton></td>
+                   <td valign="top"><img src="#{request.contextPath}/img/login02_08.gif" width="515" height="77" style="display: inline-block"/></td>
+                </tr>
+                <tr>
+                    <td height="106" colspan="4"></td>
+                </tr>
+               <tr>
+                    <td colspan="4">
+                        <table width="100%" border="0">
+                        <tr>
+                            <td width="188"><img src="#{request.contextPath}/img/login02_14.gif" height="25" alt=""/></td>
+                            <td>v. 2.5</td>
+                        </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4"><img src="#{request.contextPath}/img/login02_15.gif" width="1000" height="70" alt=""/></td>
+                </tr>
+            </table>       
+            <script type="text/javascript">  
+            document.getElementById('frm:stationNo').value=sessionStorage.getItem('extension');
+            </script>
+        </h:form> 
+    </h:body>
+</html>

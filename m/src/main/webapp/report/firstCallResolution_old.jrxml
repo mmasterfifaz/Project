@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="54"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<queryString>
+		<![CDATA[SELECT c.name AS case_type_name,
+ SUM(CASE cases.status WHEN 'closed' THEN 1 ELSE 0 END) firstcall,
+ count(cases.status) case_total,
+ cast(SUM(CASE cases.status WHEN 'closed' THEN 1 ELSE 0 END) as float)/cast(count(cases.status) as float)*100.0 as perc
+FROM contact_case AS cases INNER JOIN
+ case_detail AS a ON a.id = cases.case_detail_id INNER JOIN
+ case_topic AS b ON b.id = a.case_topic_id INNER JOIN
+ case_type AS c ON c.id = b.case_type_id
+group by c.name]]>
+	</queryString>
+	<field name="case_type_name" class="java.lang.String"/>
+	<field name="firstcall" class="java.lang.Integer"/>
+	<field name="case_total" class="java.lang.Integer"/>
+	<field name="perc" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="123" splitType="Stretch">
+			<image scaleImage="RealSize">
+				<reportElement x="710" y="0" width="92" height="31"/>
+				<imageExpression class="java.lang.String"><![CDATA["maxarlogo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="265" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[First Call Resolution]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="37" width="802" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="0" y="41" width="802" height="72" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<line>
+				<reportElement x="0" y="116" width="802" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="15" y="51" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Contact Date From]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="82" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Contact Date To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="51" width="58" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Group]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="51" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1/1/2010]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="142" y="82" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[1/1/2011]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="453" y="51" width="127" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[All]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="24" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="220" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Case Type]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="220" y="0" width="117" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[First Call Resolution]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="338" y="0" width="67" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="405" y="0" width="54" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="19" width="802" height="1" forecolor="#000000"/>
+				<graphicElement>
+					<pen lineWidth="1.0"/>
+				</graphicElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="22" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="220" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{case_type_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="0" width="67" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{case_total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="405" y="0" width="54" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{perc}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="220" y="0" width="117" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{firstcall}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="194" splitType="Stretch">
+			<barChart>
+				<chart>
+					<reportElement x="0" y="25" width="395" height="169"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["First Call Resolution (%)"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{case_type_name}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{perc}]]></valueExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot>
+					<plot/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF"/>
+					<categoryAxisFormat>
+						<axisFormat verticalTickLabels="true">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisFormat>
+						<axisFormat>
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</summary>
+</jasperReport>

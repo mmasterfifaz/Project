@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Auto Assignment Configuration: Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{autoAssignmentConfigEditController.mode}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+          <tr>
+            <td align="right" valign="top" width="200">&nbsp;</td>
+            <td valign="top"><h:outputText value="#{autoAssignmentConfigEditController.message}" style="color:red"/>&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="200" align="right" valign="top" class="gray03">* User Quota:</td>
+            <td><h:inputText id="quota" value="#{autoAssignmentConfigEditController.autoAssignmentConfig.userQuota}" styleClass="textfield"
+                             size="10" maxlength="10" onkeypress="return isNumberKey(event);" validatorMessage="Quota Range is 1 to 10"
+                             required="true" requiredMessage="Quota is required" >
+                    <f:validateDoubleRange minimum="1" maximum="10"/>
+                    <f:validateRequired/>                  
+                    <rich:validator />
+                </h:inputText>
+                <rich:message for="quota" style="color:red"/>
+            </td>
+          </tr>
+          <tr>
+            <td width="200" align="right" valign="top" class="gray03"></td>
+            <td>
+                <h:selectBooleanCheckbox id="chkDup" value="#{autoAssignmentConfigEditController.autoAssignmentConfig.checkDuplicate}">
+                    <a4j:ajax event="click" render="period" execute="@this" />
+                </h:selectBooleanCheckbox> Check Duplicate</td>
+          </tr>
+          <tr>
+            <td width="200" align="right" valign="top" class="gray03">Duplicate Period:</td>
+            <td>
+                <h:selectOneMenu id="period" value="#{autoAssignmentConfigEditController.autoAssignmentConfig.duplicatePeriod}" 
+                                 disabled="#{!autoAssignmentConfigEditController.autoAssignmentConfig.checkDuplicate}"
+                                 required="#{autoAssignmentConfigEditController.autoAssignmentConfig.checkDuplicate}" 
+                                 requiredMessage="Duplicate Period is required" >
+                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                    <f:selectItem itemValue="30" itemLabel="30 Min" />
+                    <f:selectItem itemValue="60" itemLabel="60 Min" />
+                    <f:selectItem itemValue="1440" itemLabel="1 Day" />
+                    <f:validateRequired/>                  
+                    <rich:validator />
+                </h:selectOneMenu>
+                <rich:message for="period" style="color:red"/>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" valign="top" colspan="2"></td>
+          </tr>
+          <tr>
+            <td align="center" valign="top" colspan="2"><h:commandButton image="../img/b_save.png" action="#{autoAssignmentConfigEditController.saveAction}" rendered="#{autoAssignmentConfigEditController.savePermitted}"/>
+                <h:commandButton image="../img/b_back.png" action="#{autoAssignmentConfigEditController.backAction}" immediate="true"/>
+            </td>
+          </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

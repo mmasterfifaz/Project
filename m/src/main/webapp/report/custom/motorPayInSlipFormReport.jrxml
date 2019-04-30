@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" pageWidth="595" pageHeight="842" orientation="Landscape" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="2.196150000000017"/>
+	<property name="ireport.x" value="616"/>
+	<property name="ireport.y" value="359"/>
+	<parameter name="from" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="to" class="java.util.Date">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="refNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT  initial+name+'  '+surname AS full_name, *
+FROM motor_payin
+where inst_due_date between CONVERT(NVARCHAR(20),$P{from},102)+' 00:00:00'  and CONVERT(NVARCHAR(20),$P{to},102)+' 23:59:59'
+order by inst_due_date]]>
+	</queryString>
+	<field name="full_name" class="java.lang.String"/>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="ref_no" class="java.lang.String"/>
+	<field name="sale_date" class="java.sql.Timestamp"/>
+	<field name="product_category_name" class="java.lang.String"/>
+	<field name="initial" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="current_address_line1" class="java.lang.String"/>
+	<field name="current_address_line2" class="java.lang.String"/>
+	<field name="current_address_line3" class="java.lang.String"/>
+	<field name="current_address_line4" class="java.lang.String"/>
+	<field name="current_address_line5" class="java.lang.String"/>
+	<field name="current_address_line6" class="java.lang.String"/>
+	<field name="current_district_name" class="java.lang.String"/>
+	<field name="current_province_name" class="java.lang.String"/>
+	<field name="current_postal_code" class="java.lang.String"/>
+	<field name="insure_valid_from" class="java.lang.String"/>
+	<field name="insure_valid_to" class="java.lang.String"/>
+	<field name="insure_valid_time" class="java.lang.String"/>
+	<field name="act_valid_from" class="java.lang.String"/>
+	<field name="act_valid_to" class="java.lang.String"/>
+	<field name="register_date" class="java.lang.String"/>
+	<field name="license_prefix" class="java.lang.String"/>
+	<field name="license_infix" class="java.lang.String"/>
+	<field name="lisence_postfix" class="java.lang.String"/>
+	<field name="product_plan_name" class="java.lang.String"/>
+	<field name="purchase_date" class="java.sql.Timestamp"/>
+	<field name="no_installment" class="java.lang.Integer"/>
+	<field name="inst_no" class="java.lang.Integer"/>
+	<field name="inst_due_date" class="java.sql.Timestamp"/>
+	<field name="inst_installment_amount" class="java.math.BigDecimal"/>
+	<field name="inst_payment_method" class="java.lang.String"/>
+	<field name="product_code" class="java.lang.String"/>
+	<field name="model_name" class="java.lang.String"/>
+	<field name="model_year" class="java.lang.String"/>
+	<field name="model_type_name" class="java.lang.String"/>
+	<field name="act" class="java.math.BigDecimal"/>
+	<field name="net_premium" class="java.math.BigDecimal"/>
+	<field name="amount1" class="java.math.BigDecimal"/>
+	<field name="amount2" class="java.math.BigDecimal"/>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="payment_status" class="java.lang.String"/>
+	<field name="approval_status" class="java.lang.String"/>
+	<field name="settlement" class="java.lang.Boolean"/>
+	<field name="user_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="842" splitType="Stretch">
+			<image>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="595" height="842"/>
+				<imageExpression><![CDATA["motor_bg_payInSlip.png"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="37" y="129" width="218" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="37" y="146" width="218" height="99"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{current_address_line1}==null || $F{current_address_line1}.isEmpty())?"":"หมู่บ้าน " + $F{current_address_line1}) + " " + (($F{current_address_line2}==null || $F{current_address_line2}.isEmpty())?"":"เลขที่ " + $F{current_address_line2}) + " " + (($F{current_address_line3}==null || $F{current_address_line3}.isEmpty())?"":"หมู่ " + $F{current_address_line3}) + " " + (($F{current_address_line4}==null || $F{current_address_line4}.isEmpty())?"":"ซอย " + $F{current_address_line4}) + " " + (($F{current_address_line5}==null || $F{current_address_line5}.isEmpty())?"":"ถนน " + $F{current_address_line5}) + " " + ($F{current_address_line6}==null?"":$F{current_address_line6}) + " " + ($F{current_district_name}==null?"":$F{current_district_name}) + " " + ($F{current_province_name}==null?"":$F{current_province_name}) + " " + ($F{current_postal_code}==null?"":$F{current_postal_code})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="372" y="427" width="183" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="372" y="708" width="183" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="37" y="103" width="100" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="372" y="443" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="372" y="726" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="406" y="139" width="174" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_category_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="406" y="153" width="173" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{model_name}==null?"":$F{model_name}) + " " + ($F{license_prefix}==null?"":$F{license_prefix}) + " " + ($F{license_infix}==null?"":$F{license_infix}) + " " + ($F{lisence_postfix}==null?"":$F{lisence_postfix})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="406" y="170" width="174" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{insure_valid_from}==null?"":$F{insure_valid_from}) + " - " + ($F{insure_valid_to}==null?"":$F{insure_valid_to})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="406" y="186" width="174" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{act_valid_from}==null?"":$F{act_valid_from}) + " - " + ($F{act_valid_to}==null?"":$F{act_valid_to})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="406" y="203" width="174" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="406" y="220" width="100" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount1}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="472" y="220" width="74" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{amount2}.intValue()==0 || $F{amount2}==null?"":"พรบ. " + $F{amount2})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="406" y="235" width="100" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount1}.add($F{amount2})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="395" y="411" width="41" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[PMTHAI]]></text>
+			</staticText>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="374" y="475" width="79" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst_installment_amount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="374" y="756" width="79" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst_installment_amount}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="490" y="411" width="71" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{inst_due_date}==null)?"-":(new SimpleDateFormat("d MMM yyyy", new Locale ( "th", "TH" )).format($F{inst_due_date}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="561" y="277" width="18" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="550" y="566" width="18" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="491" y="692" width="77" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{inst_due_date}==null)?"-":(new SimpleDateFormat("d MMM yyyy", new Locale ( "th", "TH" )).format($F{inst_due_date}))]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="395" y="689" width="41" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[PMTHAI]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="191" y="493" width="262" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[com.maxelyz.utils.ThaiUtil.bahtText($F{inst_installment_amount})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="191" y="774" width="262" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[com.maxelyz.utils.ThaiUtil.bahtText($F{inst_installment_amount})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="406" y="251" width="163" height="16"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_amount}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

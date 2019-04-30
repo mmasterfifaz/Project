@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:define name="javascript">
+    </ui:define>
+    <ui:define name="title1">#{msg.campaign}</ui:define>
+    <ui:define name="title2">#{msg.closed}</ui:define>
+    <ui:define name="type">#{msg.closed}</ui:define>
+
+    <ui:define name="detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.closed}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                        <td><a href="#{request.contextPath}/campaign/assignmentList.jsf"><img src="#{request.contextPath}/img/tb_assign01.png" id="sub01" name="sub01" border="0" onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_assign01.png')" onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_assign02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/openedList.jsf"><img src="#{request.contextPath}/img/tb_open01.png" id="sub02" name="sub02" border="0" onmouseout="changeImage('sub02', '#{request.contextPath}/img/tb_open01.png')" onmouseover="changeImage('sub02', '#{request.contextPath}/img/tb_open02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/followupList.jsf"><img src="#{request.contextPath}/img/tb_tofollow01.png" id="sub03" name="sub03" border="0" onmouseout="changeImage('sub03', '#{request.contextPath}/img/tb_tofollow01.png')" onmouseover="changeImage('sub03', '#{request.contextPath}/img/tb_tofollow02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/pendingList.jsf"><img src="#{request.contextPath}/img/tb_pending01.png" id="sub04" name="sub05" border="0" onmouseout="changeImage('sub04', '#{request.contextPath}/img/tb_pending01.png')" onmouseover="changeImage('sub04', '#{request.contextPath}/img/tb_pending02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/campaign/closedList.jsf"><img src="#{request.contextPath}/img/tb_upclosed02.png" id="sub05" name="sub04" border="0" onmouseout="changeImage('sub05', '#{request.contextPath}/img/tb_upclosed02.png')" onmouseover="changeImage('sub05', '#{request.contextPath}/img/tb_upclosed02.png')"/></a></td>
+                                    </tr>
+                                </table></td>
+                            <td width="330" align="left">
+                                <!-- Contact Record, News&Update, Make Note-->
+                                <ui:include id="search"
+                                            src="includeSearch.xhtml">
+                                </ui:include>
+                                <!-- Contact Record, News&Update, Make Note-->
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="160" valign="top">
+                    <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" value="#{campaignFrontController.dataList}" 
+                                    rows="#{global.maxrows}" var="list"
+                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                    onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.campaign}" /></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.marketingCode}"/></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.customer}"/></rich:column>
+                                <ui:remove>
+                                <rich:column styleClass="subh01"><h:outputText value="Province"/></rich:column>
+                                </ui:remove>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.assignDate}"/></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="Update Date"/></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.saleResult}"/></rich:column>
+                                <rich:column styleClass="subh01"><h:outputText value="#{msg.contactHistory}"/></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        <rich:column>
+                            <h:outputText value="#{list.campaign}"/>
+                        </rich:column>
+
+                        <rich:column>
+                            <h:outputText value="#{list.marketingCode}"/>
+                        </rich:column>
+
+                        <rich:column>
+                            <h:outputText value="#{list.customerName}"/>
+                        </rich:column>
+                        <ui:remove>
+                        <rich:column>
+                            <h:outputText value="#{list.customerCurrentAdd2}"/>
+                        </rich:column>
+                        </ui:remove>
+                        <rich:column>
+                            <h:outputText value="#{list.assignDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.updateDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="Yes" rendered="#{fn:contains(list.saleResult, 'Y') ? true : false}" />
+                            <h:outputText value="No" rendered="#{fn:contains(list.saleResult, 'N') ? true : false}" />
+                        </rich:column>
+                        <rich:column>
+                            <a4j:commandButton  image="/img/btn_contact_history.png"  value="Contact History"
+                                                 title="Contact History"
+                                             oncomplete="#{rich:component('contactHistory')}.show()"
+                                             render="popupContactHistory, contactHistoryList"
+                                             actionListener="#{campaignFrontController.contactHistoryListener}">
+                                <f:param value="#{list.customerId}" name="customerId" />
+                                <f:param value="#{list.assignmentDetailId}" name="adId" />
+                            </a4j:commandButton>
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                    <table border="0" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <td></td>
+                            <td width="100%" align="right">
+                                <h:outputText class="gray03" value="Total Records: "/>
+                                <h:outputText id="totalRec" style="color: orange;font-weight: bold" value="#{campaignFrontController.dataList.size()}"/>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        <!-- Contact Record, News&Update, Make Note-->
+        <ui:include id="campaign"
+                    src="includeCampaign.xhtml">
+        </ui:include>
+        <!-- Contact Record, News&Update, Make Note-->
+    </ui:define>
+
+    <ui:define name="popupModal">
+        <ui:include id="popupContactHistory"
+                    src="/campaign/popupContactHistory.xhtml">
+        </ui:include>
+        <ui:include id="popupNews"
+                    src="/campaign/popupNews.xhtml">
+        </ui:include>
+    </ui:define>
+</ui:composition>

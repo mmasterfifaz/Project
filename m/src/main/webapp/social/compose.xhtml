@@ -1,0 +1,535 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        
+    </h:head>
+    <h:body>
+        
+        <h:outputStylesheet library="css" name="maxelyz.css"/>
+        <h:outputStylesheet library="css" name="scroll01.css"/>
+        <h:outputStylesheet library="css" name="popbox.css"/>
+        <h:form id="frm">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Compose</h2></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" align="center" bgcolor="#FFFFFF"><br/>
+                            
+                            
+                            
+                            <h:panelGroup>
+                                        <table width="98%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_04.png'); background-repeat: repeat"></td>
+                                                <td bgcolor="#54bbc8" align="left"><br/>
+                                                    
+                                                    <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                        <tr>
+                                                            <td style="width: 50%; vertical-align: top">
+                                                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; width: 10%; color: #FFFFFF">From :</td>
+                                                                        <td align="left" valign="top">
+
+                                                                            <h:selectOneMenu value="#{composeController.from}" 
+                                                                                             style="width: 100%; border: 0; height: 22px; font-size: 14px">
+                                                                                <f:selectItems value="#{composeController.outList}" var="list"
+                                                                                               itemLabel="#{list.outgoingAccountName}" itemValue="#{list.outgoingAccountName}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; width: 20px; color: #FFFFFF">To :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                                                                    <td>
+                                                                                        <h:inputText id="pTo" value="#{composeController.to}" required="true" requiredMessage="#{msg.require}"
+                                                                                                     style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                            <a4j:ajax event="change" execute="@this" limitRender="true" render="msgPTo"/>
+                                                                                        </h:inputText>
+                                                                                        <h:message id="msgPTo" for="pTo" style="color:red; display: inline"/>
+                                                                                    </td>
+                                                                                    <td align="right" style="width: 26px; vertical-align: top">
+                                                                                        <a4j:commandButton image="/img/btn_addressbook.png" 
+                                                                                                           action="#{composeController.checkTO}"
+                                                                                                           actionListener="#{popupSelectAddress.initialize}"
+                                                                                                           oncomplete="#{rich:component('selectAddress')}.show();"
+                                                                                                           render="popupSelectAddress,phoneCat,txtSearch,userList"
+                                                                                                           execute="@this" limitRender="true"
+                                                                                                           style="margin: 2px 0px 0px 5px; vertical-align: top"/> 
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Cc :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                                                                    <td>
+                                                                                        <h:inputText id="pCc" value="#{composeController.cc}"
+                                                                                                     style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                            <f:ajax event="blur" render="pCc" />
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                    <td align="right" style="width: 26px">
+                                                                                        <a4j:commandButton image="/img/btn_addressbook.png" 
+                                                                                                           action="#{composeController.checkCC}"
+                                                                                                           actionListener="#{popupSelectAddress.initialize}"
+                                                                                                           oncomplete="#{rich:component('selectAddress')}.show();"
+                                                                                                           render="popupSelectAddress,phoneCat,txtSearch,userList"
+                                                                                                           execute="@this" limitRender="true"
+                                                                                                           style="margin: 0px 0px 0px 5px; vertical-align: top"/> 
+                                                                                        <h:message for="pCc" style="color:red"/>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Bcc :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0"><tr>
+                                                                                    <td>
+                                                                                        <h:inputText id="pBcc" value="#{composeController.bcc}"
+                                                                                                     style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                            <f:ajax event="blur" render="pBcc" />
+                                                                                        </h:inputText>
+                                                                                    </td>
+                                                                                    <td align="right" style="width: 26px">
+                                                                                        <a4j:commandButton image="/img/btn_addressbook.png" 
+                                                                                                           action="#{composeController.checkBCC}"
+                                                                                                           actionListener="#{popupSelectAddress.initialize}"
+                                                                                                           oncomplete="#{rich:component('selectAddress')}.show();"
+                                                                                                           render="popupSelectAddress,phoneCat,txtSearch,userList"
+                                                                                                           execute="@this" limitRender="true"
+                                                                                                           style="margin: 0px 0px 0px 5px; vertical-align: top"/> 
+                                                                                        <h:message for="pBcc" style="color:red"/>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Subject :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <h:inputText id="pSubject" value="#{composeController.subject}"
+                                                                                         style="width:100%; border: 0; height: 22px; font-size: 14px">
+                                                                                <f:ajax event="blur" render="pSubject"/>
+                                                                            </h:inputText></td>
+                                                                    </tr>
+                                                                    
+                                                                </table>
+                                                            </td>
+                                                            <td style="width: 50%; vertical-align: top">
+                                                                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; width: 10%; color: #FFFFFF">Case Type :</td>
+                                                                        <td align="left" valign="top">
+                                                                            
+                                                                            <a4j:jsFunction name="refreshCaseTypeNo" execute="@this" immediate="true" limitRender="true"
+                                                                                            render="hCaseTypeNo"></a4j:jsFunction>
+                                                                            <h:panelGroup id="caseTypeList">
+                                                                                <rich:dataTable id="dataCaseType" style="width: 100%;"
+                                                                                                value="#{composeController.soMsgCasetypeMapList}" var="cList"
+                                                                                                rowKeyVar="idx" styleClass="tableline01">
+                                                                                    <rich:column style="vertical-align: top">
+                                                                                        <h:outputText value="#{idx+1}"/>
+                                                                                    </rich:column>
+                                                                                    <rich:column style="width: 50%; vertical-align: top">
+                                                                                        <h:outputText value="#{cList.soCaseType.name}"/>
+                                                                                    </rich:column>
+                                                                                    <rich:column style="width: 50%; vertical-align: top">
+                                                                                        <h:outputText value="#{cList.soCaseTypeSub.name}"/>
+                                                                                    </rich:column>
+                                                                                    <rich:column  style="text-align: right; vertical-align: top">
+                                                                                        <a4j:commandButton image="/img/social/btn_minus.png"
+                                                                                                           limitRender="true" execute="@this"
+                                                                                                           render="caseTypeList,pgCheck"
+                                                                                                           actionListener="#{composeController.deleteSoMsgCasetypeMapListener}">
+                                                                                            <f:param name="idx" value="#{idx}"/>
+                                                                                        </a4j:commandButton>
+                                                                                    </rich:column>
+                                                                                </rich:dataTable>
+                                                                            </h:panelGroup>
+                                                                            <a4j:region>
+                                                                                
+                                                                            <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                                                                                <tr>
+                                                                                    <td style="vertical-align: top">
+                                                                                        <h:selectOneMenu id="soCaseTypeId" value="#{composeController.soCaseTypeId}" 
+                                                                                                         style="width: 100%; border: 1px; height: 30px; font-size: 14px">
+                                                                                            <f:selectItem itemLabel="Please select"/>
+                                                                                            <f:selectItems value="#{composeController.soCaseTypeList}" var="cList1"
+                                                                                                           itemLabel="#{cList1.name}" itemValue="#{cList1.id}"/>
+                                                                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="soCaseTypeSub"
+                                                                                                      listener="#{composeController.soCaseTypeListener}"/>
+                                                                                        </h:selectOneMenu>
+                                                                                        <rich:message id="soCaseTypeIdMsg" for="soCaseTypeId" style="color:red"/>
+                                                                                    </td>
+                                                                                    <td style="vertical-align: top">
+                                                                                        <h:selectOneMenu id="soCaseTypeSub" value="#{composeController.soCaseTypeSubId}" 
+                                                                                                         style="width: 100%; border: 1px; height: 30px; font-size: 14px"
+                                                                                                         required="#{composeController.soCaseTypeId ne null}" requiredMessage="#{msg.require}"
+                                                                                                         valueChangeListener="#{composeController.soCaseTypeSubListener}">
+                                                                                            <f:selectItem itemLabel="Please select"/>
+                                                                                            <f:selectItems value="#{composeController.soCaseTypeSubList}" var="cList2"
+                                                                                                           itemLabel="#{cList2.name}" itemValue="#{cList2.id}"/>
+                                                                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="soCaseTypeSubMsg"/>
+                                                                                        </h:selectOneMenu>
+                                                                                        <rich:message id="soCaseTypeSubMsg" for="soCaseTypeSub" style="color:red"/>
+                                                                                    </td>
+                                                                                    <td style="text-align: right; vertical-align: top">
+                                                                                        <a4j:commandButton image="/img/social/btn_plus.png"
+                                                                                                           limitRender="true" execute="@region"
+                                                                                                           render="caseTypeList, soCaseTypeId, soCaseTypeSub, soCaseTypeSubMsg, soCaseTypeSubMsg,pgCheck"
+                                                                                                           actionListener="#{composeController.insertSoMsgCasetypeMapListener}"
+                                                                                                           style="margin-top: 5px">
+                                                                                        </a4j:commandButton>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                                </a4j:region>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Remark :</td>
+                                                                        <td align="left" valign="top"><h:inputText id="remark" value="#{composeController.remark}"
+                                                                                                                   style="width:100%; border: 0; height: 22px; font-size: 14px"/></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; width: 20px; color: #FFFFFF">Priority :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <a4j:jsFunction name="changePriority"
+                                                                                            immediate="true">
+                                                                                <a4j:param name="param1" assignTo="#{composeController.emailPriority}"/>
+                                                                            </a4j:jsFunction>
+                                                                            <h:panelGroup id="priorityGroup">
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_IMM" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_IMM')"
+                                                                                       checked="#{composeController.emailPriority eq 'PRIORITY_IMM' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_IMM_small.png" style="display: inline; vertical-align: middle"/>
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_HI" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_HI')"
+                                                                                       checked="#{composeController.emailPriority eq 'PRIORITY_HI' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_HI_small.png" style="display: inline; vertical-align: middle"/>
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_MED" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_MED')"
+                                                                                       checked="#{composeController.emailPriority eq 'PRIORITY_MED' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_MED_small.png" style="display: inline; vertical-align: middle"/>
+                                                                                <input type="radio" name="priority" id="priority" value="PRIORITY_LOW" 
+                                                                                       style="display: inline" 
+                                                                                       onclick="changePriority('PRIORITY_LOW')"
+                                                                                       checked="#{composeController.emailPriority eq 'PRIORITY_LOW' ? 'checked' : ''}"/>
+                                                                                <h:graphicImage url="/img/social/PRIORITY_LOW_small.png" style="display: inline; vertical-align: middle"/>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF">Signature :</td>
+                                                                        <td align="left" valign="top">
+                                                                            <h:selectOneMenu id="signatureId" value="#{composeController.signatureId}" 
+                                                                                             style="width: 100%; border: 0; height: 22px; font-size: 14px"
+                                                                                             valueChangeListener="#{composeController.signatureValueChangeListener}">
+                                                                                <f:selectItem itemLabel="Please select"/>
+                                                                                <f:selectItems value="#{composeController.signatureList}" var="list"
+                                                                                               itemLabel="#{list[1]}" itemValue="#{list[0]}"/>
+                                                                                <a4j:ajax event="change"
+                                                                                          oncomplete="clickInsertSignature()"
+                                                                                          limitRender="true"
+                                                                                          execute="@this" immediate="true"
+                                                                                          render="pgSignature"/>
+                                                                            </h:selectOneMenu>
+                                                                            <h:panelGroup id="pgSignature">
+                                                                                <h:inputHidden id="hSignature" value="#{composeController.signatureString}"/>
+                                                                                <script type="text/javascript">
+                                                                                    function clickInsertSignature(){
+                                                                                        var oEditor = CKEDITOR.instances["frm:pBody:inp"];
+                                                                                        var html = document.getElementById('#{rich:clientId('hSignature')}').value;
+                                                                                        //alert(html);
+                                                                                        oEditor.insertHtml(html);
+                                                                                        document.getElementById('#{rich:clientId('signatureId')}').selectedIndex = 0;
+                                                                                    }
+                                                                                </script>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="right" valign="top" style="white-space: nowrap; color: #FFFFFF"></td>
+                                                                        <td align="left" valign="top">
+                                                                            
+                                                                            <h:panelGrid columns="2" rendered="#{composeController.soMessage.case_status eq 'WF'}">
+                                                                                <h:outputText value="Request From : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                                                <h:panelGroup>
+                                                                                <h:outputText value="#{composeController.soMessage.soWorkflowInstance.createByUsers.name}"/><h:outputText value=" #{composeController.soMessage.soWorkflowInstance.createByUsers.surname}"/>
+                                                                                </h:panelGroup>
+                                                                                <h:outputText value="Remark : " style="font-weight: bold; color: #0000FF; text-align: right"/>
+                                                                                <h:outputText value="#{composeController.soMessage.soWorkflowInstance.note}"/>
+                                                                            </h:panelGrid>
+                                                                            <h:panelGrid columns="3" rendered="#{composeController.soMessage.id ne null and composeController.soMessage.case_status eq 'IG'}">
+                                                                                <h:graphicImage url="/icon/reject.png" style="display: inline" alt="Ignored" title="Ignored"/>
+                                                                                <h:outputText value="Ignored" style="font-weight: bold; color: #0000FF"/>
+                                                                                <h:outputText value=""/>
+
+                                                                                <h:outputText value=""/>
+                                                                                <h:outputText value="Reason : "/>
+                                                                                <h:outputText value="#{composeController.ignoredReason}"/>
+
+                                                                                <h:outputText value=""/>
+                                                                                <h:outputText value="Case Type : "/>
+                                                                                <h:outputText value="#{composeController.ignoredCaseType}"/>
+
+                                                                                <h:outputText value=""/>
+                                                                                <h:outputText value="Case Topic : "/>
+                                                                                <h:outputText value="#{composeController.ignoredCaseTopic}"/>
+
+                                                                                <h:outputText value=""/>
+                                                                                <h:outputText value="Remark : "/>
+                                                                                <h:outputText value="#{composeController.ignoredRemark}"/>
+
+                                                                                <h:outputText value=""/>
+                                                                                <h:outputText value="By : "/>
+                                                                                <h:outputText value="#{composeController.ignoredBy}"/>
+
+                                                                                <h:outputText value=""/>
+                                                                                <h:outputText value="Date : "/>
+                                                                                <h:outputText value="#{composeController.ignoredDate}">
+                                                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                                                </h:outputText>
+                                                                            </h:panelGrid>
+
+                                                                        </td>
+                                                                    </tr>
+                                                                    
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+                                                    
+
+                                                    <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                                        
+                                                        <tr>
+                                                            <td><h:panelGroup id="pgCheck">
+                                                                <script>
+                                                                    function checkSendValidate(){
+                                                                        var no = #{composeController.caseTypeSize};
+                                                                        //alert(document.getElementById('frm:pTo').value);
+                                                                        if(document.getElementById('frm:pTo').value === ''){
+                                                                            renderPTo();
+                                                                            return false;
+                                                                        }
+                                                                        if(no === 0){
+                                                                            #{rich:component('caseTypeValidate')}.show();
+                                                                            return false;
+                                                                        }
+                                                                        
+                                                                        if(document.getElementById('frm:pSubject').value === ''){
+                                                                            if(!confirm('Do you want to send this email without subject?')){
+                                                                                return false;
+                                                                            }
+                                                                        }
+                                                                        return true;
+                                                                    }
+                                                                    
+                                                                    function checkSentApproval(){
+                                                                        
+                                                                        if(document.getElementById('frm:pTo').value === ''){
+                                                                            return false;
+                                                                        }
+                                                                        return true;
+                                                                    }
+                                                                    
+                                                                </script>
+                                                                </h:panelGroup>
+                                                                <h:panelGroup id="igCheck" rendered="#{composeController.soMessage != null and composeController.soMessage.case_status ne 'IG'}">
+                                                                <ui:remove>
+                                                                <a4j:repeat id="facemsg" value="#{facesContext.messageList}" var="list">
+                                                                #{list.detail}, #{list.summary}<br/>
+                                                                </a4j:repeat>
+                                                                </ui:remove>
+                                                                <a4j:jsFunction name="renderPTo" execute="@form" limitRender="true" render="msgPTo"></a4j:jsFunction>
+                                                                <a4j:commandButton id="btnSend" image="/img/social/btn_send.png" value="Send"
+                                                                                   execute="@form"
+                                                                                   limitRender="true"
+                                                                                   render="msgPTo"
+                                                                                   action="#{composeController.sendAction}"
+                                                                                   style="margin-left: 10px; margin-right: 5px; margin-top: 3px"
+                                                                                   onclick="return checkSendValidate();"
+                                                                                   rendered="#{composeController.showPanelSendMail}">
+                                                                    <f:param name="actionStatus" value="send"/>
+                                                                </a4j:commandButton>
+                                                                
+                                                                <a4j:commandButton image="../img/social/btn_savedraft.png" value="Save Draft"
+                                                                                   action="#{composeController.saveDraftAction}"
+                                                                                   style="margin-right: 5px; margin-top: 3px"
+                                                                                   onclick="if(checkSentApproval()) return true;" render="msgPTo"
+                                                                                   rendered="#{composeController.showPanelSendMail}">
+                                                                    <f:param name="actionStatus" value="saveDraft"/>
+                                                                </a4j:commandButton>
+                                                                
+                                                                <a4j:commandButton image="../img/social/btn_template.png" value="Template"
+                                                                                   onclick="#{rich:component('selectMessageTemplate')}.show()"
+                                                                                   execute="@this" limitRender="true" immediate="true"
+                                                                                   render="popupSelectTemplate"
+                                                                                   style="margin-right: 5px; margin-top: 3px"
+                                                                                   rendered="#{composeController.showPanelSendMail}"/>
+                                                                <h:panelGroup rendered="#{composeController.soMessage.id eq null ? true : ((composeController.soMessage.case_status eq 'WF' and composeController.soMessage.lastReceiveByUsers.id eq userSession.users.id) ? false : (composeController.soMessage.lastReceiveByUsers.id eq userSession.users.id ? true : false))}">
+                                                                <a4j:commandButton image="/img/social/btn_request_approve.png" value="Request for Approval"
+                                                                                   execute="@form"
+                                                                                   limitRender="true"
+                                                                                   render="popupRequestApproval, msgPTo"
+                                                                                   onclick="if(checkSentApproval()) {#{rich:component('requestApproval')}.show();}"
+                                                                                   style="margin-right: 5px; margin-top: 3px">
+                                                                </a4j:commandButton>
+                                                                </h:panelGroup>
+                                                                
+                                                                <a4j:commandButton image="/img/btn_ignore.png"  
+                                                                                   value="Ignore"
+                                                                                   onclick="#{rich:component('ignoreConfirm')}.show()"
+                                                                                   execute="@this"
+                                                                                   limitRender="true"
+                                                                                   render="popupIgnoreConfirm"
+                                                                                   rendered="#{composeController.btnIgnoreStatus}"/>
+                                                                
+                                                                </h:panelGroup>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="left">
+                                                                <rich:editor id="pBody" toolbar="full" skin="kama"
+                                                                             value="#{composeController.pBody}" 
+                                                                             style="margin-bottom: 1em" 
+                                                                             height="500" width="99%">
+                                                                    <a4j:ajax event="change" immediate="true" limitRender="true"
+                                                                              execute="@this" render="popupSelectTemplate"/>
+                                                                </rich:editor>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <h:panelGroup id="attachPanel">
+                                                                    <rich:dataTable value="#{composeController.filesUploadDraft}" var="listDraftFile" style="border: 0">
+                                                                        <rich:column style="border: 0">
+                                                                            <a href="#{request.contextPath}/emailfiles/#{composeController.soMessage.soAccount.id}/#{composeController.soMessage.id}/temp/#{listDraftFile[1]}" target="_blank">#{listDraftFile[0]}</a>
+                                                                        </rich:column>
+                                                                        <rich:column style="border: 0">
+                                                                            <a4j:commandButton image="/img/b_subtract02.png"
+                                                                                               render="attachPanel"
+                                                                                               actionListener="#{composeController.removeFileTempDraft}"
+                                                                                               execute="@this" limitRender="true">
+                                                                                <f:param name="rmFile" value="#{listDraftFile[1]}"/>
+                                                                            </a4j:commandButton>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                    
+                                                                    <rich:dataTable value="#{composeController.filesUpload}" var="list" style="border: 0">
+                                                                        <rich:column style="border: 0">
+                                                                            <a href="#{request.contextPath}/emailfiles/temp/#{list[1]}" target="_blank">#{list[0]}</a>
+                                                                        </rich:column>
+                                                                        <rich:column style="border: 0">
+                                                                            <a4j:commandButton image="/img/b_subtract02.png"
+                                                                                               render="attachPanel"
+                                                                                               actionListener="#{composeController.removeFileTemp}"
+                                                                                               execute="@this" limitRender="true">
+                                                                                <f:param name="rmFile" value="#{list[1]}"/>
+                                                                            </a4j:commandButton>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                </h:panelGroup>
+                                                                <ui:remove>
+                                                                <h:panelGroup id="filesUpload">
+                                                                    <a4j:repeat value="#{composeController.filesUpload}" var="list">
+                                                                        <a href="#{request.contextPath}/emailfiles/temp/#{list[1]}" target="_blank">#{list[0]}</a><br/>
+                                                                    </a4j:repeat>
+                                                                </h:panelGroup>
+                                                                </ui:remove>
+                                                                <rich:fileUpload id="fileUpload" 
+                                                                                 fileUploadListener="#{composeController.uploadFileListener}"
+                                                                                 addLabel="Attach" 
+                                                                                 immediateUpload="true" 
+                                                                                 listHeight="400" 
+                                                                                 style="width: 120px; height: 38px; border: 0">
+                                                                    <a4j:ajax event="uploadcomplete" render="attachPanel,fileUpload" execute="@none"/>
+                                                                </rich:fileUpload>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_05.png'); background-repeat: repeat"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_06.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_07.png'); background-repeat: repeat; height: 5px"></td>
+                                                <td style="background-image: url('#{request.contextPath}/img/blue_box_08.png'); background-repeat: no-repeat; width: 5px; height: 5px"></td>
+                                            </tr>
+                                        </table>
+                                </h:panelGroup>
+                            
+                            
+                            
+                        </td>
+                        <td width="4" style="background-image: url('#{request.contextPath}/img/box06.png')"></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+       </h:form>
+        
+        <ui:include id="popupSelectTemplate"
+                    src="/social/popupSelectTemplate.xhtml">
+            <ui:param name="m" value="#{composeController}"/>
+        </ui:include>
+        <ui:include id="popupSelectAddress"
+                    src="/social/popupSelectAddress.xhtml">
+            <ui:param name="m" value="#{composeController}"/>
+        </ui:include>
+        <ui:include id="popupSendConfirm"
+                    src="/social/popupSendConfirm.xhtml">
+            <ui:param name="m" value="#{composeController}"/>
+        </ui:include>
+        <ui:include id="popupDraftConfirm"
+                    src="/social/popupDraftConfirm.xhtml">
+            <ui:param name="m" value="#{composeController}"/>
+        </ui:include>
+        <ui:include id="popupComposeConfirm"
+                    src="/social/popupComposeConfirm.xhtml">
+            <ui:param name="m" value="#{composeController}"/>
+        </ui:include>
+        <ui:include id="popupCaseTypeValidate"
+                    src="/social/popupCaseTypeValidate.xhtml">
+        </ui:include>
+        <ui:include id="popupRequestApproval"
+                    src="/social/popupRequestApproval.xhtml">
+            <ui:param name="m" value="#{composeController}"/>
+        </ui:include>
+        <ui:include id="popupIgnoreConfirm"
+                    src="/social/popupIgnoreConfirm.xhtml">
+            <ui:param name="soMessageId" value="#{composeController.soMessage.id}"/>
+        </ui:include>
+    </h:body>
+</ui:composition>

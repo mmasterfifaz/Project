@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">News</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 15%; text-align: right; }
+                    .colStyle2 { width: 85%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="News Title :"/>
+                    <h:inputText styleClass="textfield" value="#{newsController.title}"/>
+                    
+                    <h:outputText value="Display Date From :"/>
+                    <h:panelGroup><rich:calendar id="dateFrom"
+                                           value="#{newsController.dateFrom}"
+                                           inputClass="textfield" inputSize="12" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="00:00"/>
+                            To <span style="width: 5px"/> 
+                            <rich:calendar id="dateTo"
+                                           value="#{newsController.dateTo}"
+                                           inputClass="textfield" inputSize="12" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="23:59"/>
+                    </h:panelGroup>
+                    <h:outputText value="Status :"/>
+                    <h:selectOneMenu value="#{newsController.status}">
+                            <f:selectItem itemLabel="All" itemValue="all"/>
+                            <f:selectItem itemLabel="Enable" itemValue="enable"/>
+                            <f:selectItem itemLabel="Disable" itemValue="disable"/>
+                    </h:selectOneMenu>
+                    
+                    <h:outputText value=""/>
+                    <a4j:commandButton image="/img/b_search.png" 
+                                               actionListener="#{newsController.searchActionListener}" 
+                                               render="dataList"
+                                               limitRender="true"/>
+                </h:panelGrid>
+                </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{newsController.editAction}" rendered="#{newsController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{newsController.deleteAction}" rendered="#{newsController.deletePermitted}"  onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{newsController.newsList}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Title" /></rich:column>
+                            <rich:column style="width: 37%;text-align: left;"><h:outputText value="Short Description"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Start Date"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="End Date"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value=""/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{newsController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="Title" value="#{list.title}" action="#{newsController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.shortDesc}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.startDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.endDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/>
+                        <h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandButton image="../img/b_view.png" action="#{newsController.viewAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

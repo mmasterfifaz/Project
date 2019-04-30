@@ -1,0 +1,21 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="/templates/blank.xhtml">
+    <ui:define name="title2">OOPS! 404:Page Not Found</ui:define>
+    <ui:define name="panel">          
+        <p><h1>OOPS! <span style="color:red">Page Not Found</span></h1></p>
+        <div style="color: orangered">We could not locate the page you requested.</div>
+        <div>The page you are looking for has been moved or does not exist on our server. <br/>
+            
+        <p><a href="#{request.contextPath}">Try our main page.</a> </p>
+        </div>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

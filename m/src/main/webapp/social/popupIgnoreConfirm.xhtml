@@ -1,0 +1,112 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        <ui:insert name="popupHead"/>
+    </h:head>
+    <h:body>
+        <rich:popupPanel id="ignoreConfirm" autosized="true"  width="500" style="border: 0" shadowOpacity="0">
+        <h:form id="fIgnoreConfirm">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Ignore Reason</h2></td>
+                        <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"><a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('ignoreConfirm')}.hide();
+                                return false;">#{msg.close}</a></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" bgcolor="#FFFFFF">
+                            
+                            <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">Ignore Reason :</td>
+                                    <td style="">
+                                        <h:selectOneMenu id="ignoreReason" value="#{popupIgnoreConfirmController.ignoreId}" 
+                                                         style="height: 22px; font-size: 14px"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{popupIgnoreConfirmController.ignoreList}" var="list"
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <a4j:ajax event="blur" limitRender="true" execute="@this" render="ignoreReason, msgReason"/>
+                                        </h:selectOneMenu>
+                                        <rich:message id="msgReason" for="ignoreReason" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">Case Type :</td>
+                                    <td style="">
+                                        <h:selectOneMenu id="soCaseTypeId" value="#{popupIgnoreConfirmController.soCaseTypeId}" 
+                                                         style="width: 100%; border: 1; height: 30px; font-size: 14px"
+                                                         valueChangeListener="#{popupIgnoreConfirmController.soCaseTypeListener}"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{popupIgnoreConfirmController.soCaseTypeList}" var="cList1"
+                                                           itemLabel="#{cList1.name}" itemValue="#{cList1.id}"/>
+                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="soCaseTypeSub,soCaseTypeId,soCaseTypeIdMsg"/>
+                                        </h:selectOneMenu>
+                                        <rich:message id="soCaseTypeIdMsg" for="soCaseTypeId" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">Case Topic :</td>
+                                    <td style="">
+                                        <h:selectOneMenu id="soCaseTypeSub" value="#{popupIgnoreConfirmController.soCaseTypeSubId}" 
+                                                         style="width: 100%; border: 1; height: 30px; font-size: 14px"
+                                                         valueChangeListener="#{popupIgnoreConfirmController.soCaseTypeSubListener}"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="Please select"/>
+                                            <f:selectItems value="#{popupIgnoreConfirmController.soCaseTypeSubList}" var="cList2"
+                                                           itemLabel="#{cList2.name}" itemValue="#{cList2.id}"/>
+                                            <a4j:ajax event="change" limitRender="true" execute="@this" render="soCaseTypeSub, soCaseTypeSubMsg"/>
+                                        </h:selectOneMenu>
+                                        <rich:message id="soCaseTypeSubMsg" for="soCaseTypeSub" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align: right; vertical-align: top">Remark :</td>
+                                    <td style="">
+                                        <h:inputTextarea id="ignoreRemark" value="#{popupIgnoreConfirmController.ignoreRemark}"
+                                                     style="width:95%; font-size: 14px" 
+                                                     rows="5">
+                                        </h:inputTextarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style=""></td>
+                                    <td style="">
+                                        <a4j:commandButton value="Yes" image="/img/btn_yes.png"
+                                                           limitRender="true" execute="@form" render="ignoreReason, caseTypeIgnore, msgReason, soCaseTypeIdMsg, soCaseTypeSubMsg"
+                                                           actionListener="#{popupIgnoreConfirmController.ignoreAction}">
+                                            <f:param name="statusEmail" value="CL"/>
+                                        </a4j:commandButton>
+                                        <span style="width: 10px"></span>
+                                        <a4j:commandButton value="No" image="/img/btn_staypage.png"
+                                                           onclick="#{rich:component('ignoreConfirm')}.hide(); return false;">
+                                        </a4j:commandButton>
+                                    </td>
+                                </tr>
+                            </table></td>
+                        <td width="4" class="bg_right"></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+       </h:form>
+            </rich:popupPanel>
+    </h:body>
+</ui:composition>

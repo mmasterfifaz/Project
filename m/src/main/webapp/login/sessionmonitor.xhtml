@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/blankborder.xhtml">
+    <ui:define name="title2">Session Monitoring</ui:define>
+    <ui:define name="panel">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr><td>
+            <p><h2>Total Session:<h:outputText id="total" value="#{sessionMonitorController.totalSession}" /></h2></p>
+            </td></tr>
+            <tr><td>
+            <h:panelGroup id="data1">
+            <h:panelGroup rendered="#{sessionMonitorController.concurrentUser1.size() > 0}">                         
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr><td style="height: 30px;" valign="bottom"><h2 class="style1">Concurrent License Group 1</h2></td></tr>
+                    <tr><td valign="top">
+                            <rich:dataTable  style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                        var="list1" value="#{sessionMonitorController.concurrentUser1}"
+                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                           <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Online User" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Group" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Login Time"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Agent Status"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="IP Address"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Session ID"/></rich:column>
+                                    <rich:column style="text-align: left;"><h:outputText value=""/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <h:outputText value="#{list1.user.name} #{list1.user.surname}"/>
+                            </rich:column>
+                            <rich:column sortBy="#{list1.user.userGroup.name}, #{list1.user.name}, #{list1.user.surname}" sortOrder="ascending">
+                                <h:outputText value="#{list1.user.userGroup.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list1.loginTime}"> 
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list1.agentStatus}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list1.remoteAddr}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list1.sessionId}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton  image="../img/b_remove02.png" actionListener="#{sessionMonitorController.removeSessionGroup1}"
+                                                   rendered="#{sessionMonitorController.chkShow eq 'true'}" render="total,data1" limitRender="true">
+                                    <f:param name="sessionValue" value="#{list1.sessionKey}"/>
+                                    <f:param name="admin" value="true"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                        </td></tr>
+                </table>
+            </h:panelGroup>
+            </h:panelGroup>
+            </td></tr>
+
+            <tr><td> 
+            <h:panelGroup id="data2">
+            <h:panelGroup rendered="#{sessionMonitorController.concurrentUser2.size() > 0}">                         
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr><td style="height: 30px;" valign="bottom"><h2 class="style1">Concurrent License Group 2</h2></td></tr>
+                    <tr><td valign="top">
+                           <rich:dataTable value="#{sessionMonitorController.concurrentUser2}" var="list2"
+                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'"
+                                        style="width: 100%" styleClass="tableline01" headerClass="subh01">
+                           <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Online User" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Group" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Login Time"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Agent Status"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="IP Address"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Session ID"/></rich:column>
+                                    <rich:column style="text-align: left;"><h:outputText value=""/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <h:outputText value="#{list2.user.name} #{list2.user.surname}"/>
+                            </rich:column>
+                            <rich:column sortBy="#{list2.user.userGroup.name}, #{list2.user.name}, #{list2.user.surname}" sortOrder="ascending">
+                                <h:outputText value="#{list2.user.userGroup.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list2.loginTime}"> 
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list2.agentStatus}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list2.remoteAddr}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list2.sessionId}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../img/b_remove02.png" action="#{sessionMonitorController.removeSessionGroup2}"
+                                                   rendered="#{sessionMonitorController.chkShow eq 'true'}" render="total,data2" limitRender="true">
+                                    <f:param name="sessionValue" value="#{list2.sessionKey}"/>
+                                    <f:param name="admin" value="true"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                       </td></tr>
+                </table>
+            </h:panelGroup>
+            </h:panelGroup>
+            </td></tr>
+
+            <tr><td> 
+            <h:panelGroup id="data3">  
+            <h:panelGroup rendered="#{sessionMonitorController.concurrentUser3.size() > 0}">                         
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr><td style="height: 30px;" valign="bottom"><h2 class="style1">Concurrent License Group 3</h2></td></tr>
+                    <tr><td valign="top">
+                           <rich:dataTable value="#{sessionMonitorController.concurrentUser3}" var="list3"
+                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'"
+                                        style="width: 100%" styleClass="tableline01" headerClass="subh01">
+                           <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Online User" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Group" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Login Time"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Agent Status"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="IP Address"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Session ID"/></rich:column>
+                                    <rich:column style="text-align: left;"><h:outputText value=""/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <h:outputText value="#{list3.user.name} #{list3.user.surname}"/>
+                            </rich:column>
+                            <rich:column sortBy="#{list3.user.userGroup.name}, #{list3.user.name}, #{list3.user.surname}" sortOrder="ascending">
+                                <h:outputText value="#{list3.user.userGroup.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list3.loginTime}"> 
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list3.agentStatus}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list3.remoteAddr}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list3.sessionId}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../img/b_remove02.png" action="#{sessionMonitorController.removeSessionGroup3}"
+                                                   rendered="#{sessionMonitorController.chkShow eq 'true'}" render="total,data3" limitRender="true">
+                                    <f:param name="sessionValue" value="#{list3.sessionKey}"/>
+                                    <f:param name="admin" value="true"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                     </td></tr>
+                </table>
+            </h:panelGroup>
+            </h:panelGroup>
+            </td></tr>
+
+            <tr><td> 
+            <h:panelGroup id="data4">  
+            <h:panelGroup rendered="#{sessionMonitorController.concurrentUser4.size() > 0}">                         
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr><td style="height: 30px;" valign="bottom"><h2 class="style1">Concurrent License Group 4</h2></td></tr>
+                    <tr><td valign="top">
+                           <rich:dataTable value="#{sessionMonitorController.concurrentUser4}" var="list4" 
+                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'"
+                                        style="width: 100%" styleClass="tableline01" headerClass="subh01">
+                           <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Online User" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Group" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Login Time"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Agent Status"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="IP Address"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Session ID"/></rich:column>
+                                    <rich:column style="text-align: left;"><h:outputText value=""/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <h:outputText value="#{list4.user.name} #{list4.user.surname}"/>
+                            </rich:column>
+                            <rich:column sortBy="#{list4.user.userGroup.name}, #{list4.user.name}, #{list4.user.surname}" sortOrder="ascending">
+                                <h:outputText value="#{list4.user.userGroup.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list4.loginTime}"> 
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list4.agentStatus}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list4.remoteAddr}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list4.sessionId}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../img/b_remove02.png" action="#{sessionMonitorController.removeSessionGroup4}"
+                                                   rendered="#{sessionMonitorController.chkShow eq 'true'}" render="total,data4" limitRender="true">
+                                    <f:param name="sessionValue" value="#{list4.sessionKey}"/>
+                                    <f:param name="admin" value="true"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                     </td></tr>
+                </table>
+            </h:panelGroup>
+            </h:panelGroup>
+            </td></tr>
+
+            <tr><td> 
+            <h:panelGroup id="data5">  
+            <h:panelGroup rendered="#{sessionMonitorController.concurrentUser5.size() > 0}">                         
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr><td style="height: 30px;" valign="bottom"><h2 class="style1">Concurrent License Group 5</h2></td></tr>
+                    <tr><td valign="top">
+                           <rich:dataTable value="#{sessionMonitorController.concurrentUser5}" var="list5"
+                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'"
+                                        style="width: 100%" styleClass="tableline01" headerClass="subh01">
+                           <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Online User" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Group" /></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Login Time"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Agent Status"/></rich:column>
+                                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="IP Address"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Session ID"/></rich:column>
+                                    <rich:column style="text-align: left;"><h:outputText value=""/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <h:outputText value="#{list5.user.name} #{list5.user.surname}"/>
+                            </rich:column>
+                            <rich:column sortBy="#{list5.user.userGroup.name}, #{list5.user.name}, #{list5.user.surname}" sortOrder="ascending">
+                                <h:outputText value="#{list5.user.userGroup.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list5.loginTime}"> 
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list5.agentStatus}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list5.remoteAddr}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list5.sessionId}"/> 
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../img/b_remove02.png" action="#{sessionMonitorController.removeSessionGroup5}"
+                                                   rendered="#{sessionMonitorController.chkShow eq 'true'}" render="total,data5" limitRender="true">
+                                    <f:param name="sessionValue" value="#{list5.sessionKey}"/>
+                                    <f:param name="admin" value="true"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                     </td></tr>
+                </table>
+            </h:panelGroup>
+            </h:panelGroup>
+            </td></tr>
+        </table>
+        </ui:define>
+</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,1078 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+<h:head>
+    <title></title>
+    <link href="#{request.contextPath}/resources/css/maxelyz.css" rel="stylesheet" type="text/css" />
+    <script src="#{userSession.ctiToolbar}/Content/js/jquery.min.js"></script>
+    <script src="#{userSession.ctiToolbar}/Content/js/jquery.signalR-2.1.2.min.js"></script>
+    <script src="#{userSession.ctiToolbar}/socket/signalr/hubs"></script>
+    <script src="#{userSession.ctiToolbar}/Content/js/telephony-std.js?v2"></script>
+
+    <script type="text/javascript">
+        // For SSO
+        var loginName = '#{userSession.users.ldapLogin}';      
+        var ldapPassword = '#{userSession.ldapPassword}';
+     
+        // For not SSO
+        var telephonyLoginName = '#{userSession.users.telephonyLoginName}';  
+        var telephonyPassword = '#{userSession.users.telephonyPassword}';
+        
+        var stationNo = '#{userSession.stationNo}';
+        
+        var af = parent.document.getElementById('actionframe');
+        var mf = parent.document.getElementById('mainframe');
+        var objAf = getIframeWindow(af);
+        var objMf = getIframeWindow(mf);
+
+        function getIframeWindow(iframe_object) {
+            var doc;
+
+            if (iframe_object.contentWindow) {
+                return iframe_object.contentWindow;
+            }
+
+            if (iframe_object.window) {
+                return iframe_object.window;
+            }
+
+            if (!doc) {
+                if (iframe_object.contentDocument) {
+                    doc = iframe_object.contentDocument;
+                }
+            }
+
+            if (!doc) {
+                if (iframe_object.document) {
+                    doc = iframe_object.document;
+                }
+            }
+
+            if (doc) {
+                if (doc.defaultView) {
+                    return doc.defaultView;
+                }
+            }
+
+            if (doc) {
+                if (doc.parentWindow) {
+                    return doc.parentWindow;
+                }
+            }
+
+            return undefined;
+        }
+
+        function loginPhone() {
+            if ("true" === "#{userSession.users.telephonySso}") {                
+                localStorage.setItem("userId", loginName);
+                localStorage.setItem("password", ldapPassword);
+            } else {
+                localStorage.setItem("userId", telephonyLoginName);            
+                localStorage.setItem("password", telephonyPassword);
+            }
+            localStorage.setItem("extension", stationNo);
+            var uri = "#{request.getScheme()}" + "://" + "#{request.getServerName()}" + ":" + "#{request.getServerPort()}" + "#{request.contextPath}";  
+            localStorage.setItem("callbackScreenPopUrl",uri+"/api/v1/notifications/notify/");
+        }
+
+        function logoutPhone() {
+            localStorage.removeItem("userId");
+            localStorage.removeItem("extension");
+        }
+
+        function onStateChange(lineStatus) {
+            var state = lineStatus.toUpperCase();
+            if(state === 'PARKED') {
+                console.log('Maxar Get Status PARKED');
+                if (typeof window.parent.document.getElementById('mainframe').contentWindow.upDateStateParked === 'function') {
+                    window.parent.document.getElementById('mainframe').contentWindow.upDateStateParked();
+                }
+            } else if(state === 'NOT READY' || state === 'IDLE') {
+                closeCallAlert();
+            } else if (state === 'WRAP') {
+                console.log('Maxar Get Status WRAP');
+                if (typeof window.parent.document.getElementById('mainframe').contentWindow.upDateStateWrap === 'function') {
+                    window.parent.document.getElementById('mainframe').contentWindow.upDateStateWrap();
+                }
+            } else if (state === 'ACTIVE') {
+                console.log('Maxar Get Status ACTIVE');
+                if (typeof window.parent.document.getElementById('mainframe').contentWindow.upDateStateActive === 'function') {
+                    window.parent.document.getElementById('mainframe').contentWindow.upDateStateActive();
+                }
+            }
+        }
+
+        function closeCallAlert() {
+            var elementExists = window.parent.document.getElementById('mainframe').contentWindow.document.getElementById('callAlertPopupForm');
+            if(elementExists !== null) {
+                if (typeof window.parent.document.getElementById('mainframe').contentWindow.closeCallAlertPopup === 'function') {
+                    window.parent.document.getElementById('mainframe').contentWindow.closeCallAlertPopup();
+                }
+            }
+        }            
+
+        function callAlert(data) {
+            //{"ani":"0899831679","dnis":"21066490","callCategory":"Inbound","callType":"acACD","dialMode":"","callDatetime":null,"userId":"Raveewan.Kas",
+            //"param1":"","param2":"","param3":"","param4":"","param5":"","param6":"","param7":"","param8":"","param9":null,"param10":null,"param11":null,"param12":null,"param13":null,"param14":null,"param15":null,"param16":null,"param17":null,"param18":null,"param19":null,"param20":null}
+            var telephone = data.ani;
+            var manualCall = data.isManualAcceptCall;
+            var serviceName = data.serviceName;
+            window.parent.document.getElementById('mainframe').contentWindow.onAlertCallRinging(telephone, manualCall, serviceName);
+            //onAlertCallRinging(telephone, manualCall);
+        }
+        
+        function callNotificationAlert(data) {
+            //{"ani":"0899831679","dnis":"21066490","callCategory":"Inbound","callType":"acACD","dialMode":"","callDatetime":null,"userId":"Raveewan.Kas",
+            //"param1":"","param2":"","param3":"","param4":"","param5":"","param6":"","param7":"","param8":"","param9":null,"param10":null,"param11":null,"param12":null,"param13":null,"param14":null,"param15":null,"param16":null,"param17":null,"param18":null,"param19":null,"param20":null}
+            /*
+            var telephone = data.ani;
+            var manualCall = data.isManualAcceptCall;
+            var serviceName = data.serviceName;
+            window.parent.document.getElementById('mainframe').contentWindow.onAlertCallRinging(telephone, manualCall, serviceName);
+            */
+            //localStorage.setItem("pdsData", JSON.stringify(data.pds));
+            
+            console.log('Client start handle Notification, ' + JSON.stringify(data.pds));
+            var count = 0;
+            var handlePopup = setInterval(function() {
+                if (typeof window.parent.document.getElementById('mainframe').contentWindow.popupNotification === 'function') {
+                    console.log(new Date().toString() + ', Call function popupNotification of mainframe');
+                    window.parent.document.getElementById('mainframe').contentWindow.popupNotification(data.pds);
+                    clearInterval(handlePopup);
+                }else if (count > 10){
+                    console.log(new Date().toString() + ', Maximum wait function popupNotification of mainframe');
+                    clearInterval(handlePopup);
+                }else{
+                    console.log(new Date().toString() + ', Wait for function popupNotification of mainframe, ' + count);
+                    count++;
+                }
+            }, 500);
+            //console.log(JSON.stringify(data.pds));
+            //alert(JSON.stringify(data));
+            //window.parent.document.getElementById('mainframe').contentWindow.popupNotification(data.pds);
+        }
+
+    </script>
+
+    <style>
+        html {
+            font-family: sans-serif;
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+        }
+
+        a {
+            background-color: transparent;
+        }
+
+            a:active,
+            a:hover {
+                outline: 0;
+            }
+
+        abbr[title] {
+            border-bottom: 1px dotted;
+        }
+
+        b,
+        strong {
+            font-weight: bold;
+        }
+
+        dfn {
+            font-style: italic;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin: 0.67em 0;
+        }
+
+        mark {
+            background: #ff0;
+            color: #000;
+        }
+
+        small {
+            font-size: 80%;
+        }
+
+        sub,
+        sup {
+            font-size: 75%;
+            line-height: 0;
+            position: relative;
+            vertical-align: baseline;
+        }
+
+        sup {
+            top: -0.5em;
+        }
+
+        sub {
+            bottom: -0.25em;
+        }
+
+        img {
+            border: 0;
+        }
+
+        svg:not(:root) {
+            overflow: hidden;
+        }
+
+        figure {
+            margin: 1em 40px;
+        }
+
+        hr {
+            -webkit-box-sizing: content-box;
+            -moz-box-sizing: content-box;
+            box-sizing: content-box;
+            height: 0;
+        }
+
+        pre {
+            overflow: auto;
+        }
+
+        code,
+        kbd,
+        pre,
+        samp {
+            font-family: monospace, monospace;
+            font-size: 1em;
+        }
+
+        button,
+        input,
+        optgroup,
+        select,
+        textarea {
+            color: inherit;
+            font: inherit;
+            margin: 0;
+        }
+
+        button {
+            overflow: visible;
+        }
+
+        button,
+        select {
+            text-transform: none;
+        }
+
+        button,
+        html input[type="button"],
+        input[type="reset"],
+        input[type="submit"] {
+            -webkit-appearance: button;
+            cursor: pointer;
+        }
+
+            button[disabled],
+            html input[disabled] {
+                cursor: default;
+            }
+
+            button::-moz-focus-inner,
+            input::-moz-focus-inner {
+                border: 0;
+                padding: 0;
+            }
+
+        input {
+            line-height: normal;
+        }
+
+        fieldset {
+            border: 1px solid #c0c0c0;
+            margin: 0 2px;
+            padding: 0.35em 0.625em 0.75em;
+        }
+
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+
+        td,
+        th {
+            padding: 0;
+        }
+
+        html {
+            font-size: 10px;
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #333333;
+            background-color: #ffffff;
+        }
+
+        input,
+        button,
+        select,
+        textarea {
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+        }
+
+        a {
+            color: #337ab7;
+            text-decoration: none;
+        }
+
+            a:hover,
+            a:focus {
+                color: #23527c;
+                text-decoration: underline;
+            }
+
+            a:focus {
+                outline: 5px auto -webkit-focus-ring-color;
+                outline-offset: -2px;
+            }
+
+        output {
+            display: block;
+            padding-top: 7px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555555;
+        }
+
+        .form-control {
+            display: block;
+            width: 100%;
+            height: 34px;
+            padding: 6px 12px;
+            font-size: 14px;
+            line-height: 1.42857143;
+            color: #555555;
+            background-color: #ffffff;
+            background-image: none;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+        }
+
+            .form-control:focus {
+                border-color: #66afe9;
+                outline: 0;
+                -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+                box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, 0.6);
+            }
+
+            .form-control::-moz-placeholder {
+                color: #999999;
+                opacity: 1;
+            }
+
+            .form-control:-ms-input-placeholder {
+                color: #999999;
+            }
+
+            .form-control::-webkit-input-placeholder {
+                color: #999999;
+            }
+
+            .form-control::-ms-expand {
+                border: 0;
+                background-color: transparent;
+            }
+
+            .form-control[disabled],
+            .form-control[readonly],
+            fieldset[disabled] .form-control {
+                background-color: #eeeeee;
+                opacity: 1;
+            }
+
+            .form-control[disabled],
+            fieldset[disabled] .form-control {
+                cursor: not-allowed;
+            }
+
+        textarea.form-control {
+            height: auto;
+        }
+
+        input[type="search"] {
+            -webkit-appearance: none;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .radio,
+        .checkbox {
+            position: relative;
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+            .radio label,
+            .checkbox label {
+                min-height: 20px;
+                padding-left: 20px;
+                margin-bottom: 0;
+                font-weight: normal;
+                cursor: pointer;
+            }
+
+            .radio input[type="radio"],
+            .radio-inline input[type="radio"],
+            .checkbox input[type="checkbox"],
+            .checkbox-inline input[type="checkbox"] {
+                position: absolute;
+                margin-left: -20px;
+                margin-top: 4px \9;
+            }
+
+            .radio + .radio,
+            .checkbox + .checkbox {
+                margin-top: -5px;
+            }
+
+        .radio-inline,
+        .checkbox-inline {
+            position: relative;
+            display: inline-block;
+            padding-left: 20px;
+            margin-bottom: 0;
+            vertical-align: middle;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+            .radio-inline + .radio-inline,
+            .checkbox-inline + .checkbox-inline {
+                margin-top: 0;
+                margin-left: 10px;
+            }
+
+        input[type="radio"][disabled],
+        input[type="checkbox"][disabled],
+        input[type="radio"].disabled,
+        input[type="checkbox"].disabled,
+        fieldset[disabled] input[type="radio"],
+        fieldset[disabled] input[type="checkbox"] {
+            cursor: not-allowed;
+        }
+
+        .radio-inline.disabled,
+        .checkbox-inline.disabled,
+        fieldset[disabled] .radio-inline,
+        fieldset[disabled] .checkbox-inline {
+            cursor: not-allowed;
+        }
+
+        .radio.disabled label,
+        .checkbox.disabled label,
+        fieldset[disabled] .radio label,
+        fieldset[disabled] .checkbox label {
+            cursor: not-allowed;
+        }
+
+        .form-control-static {
+            padding-top: 7px;
+            padding-bottom: 7px;
+            margin-bottom: 0;
+            min-height: 34px;
+        }
+
+            .form-control-static.input-lg,
+            .form-control-static.input-sm {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+        .input-sm {
+            height: 30px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+
+        select.input-sm {
+            height: 25px;
+            line-height: 20px;
+            width: 280px;
+        }
+
+        textarea.input-sm,
+        select[multiple].input-sm {
+            height: auto;
+        }
+
+        .form-group-sm .form-control {
+            height: 30px;
+            padding: 5px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-radius: 3px;
+        }
+
+        .form-group-sm select.form-control {
+            height: 30px;
+            line-height: 30px;
+        }
+
+        .form-group-sm textarea.form-control,
+        .form-group-sm select[multiple].form-control {
+            height: auto;
+        }
+
+        .form-group-sm .form-control-static {
+            height: 30px;
+            min-height: 32px;
+            padding: 6px 10px;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .input-lg {
+            height: 46px;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.3333333;
+            border-radius: 6px;
+        }
+
+        select.input-lg {
+            height: 46px;
+            line-height: 46px;
+        }
+
+        textarea.input-lg,
+        select[multiple].input-lg {
+            height: auto;
+        }
+
+        .form-group-lg .form-control {
+            height: 46px;
+            padding: 10px 16px;
+            font-size: 18px;
+            line-height: 1.3333333;
+            border-radius: 6px;
+        }
+
+        .form-group-lg select.form-control {
+            height: 46px;
+            line-height: 46px;
+        }
+
+        .form-group-lg textarea.form-control,
+        .form-group-lg select[multiple].form-control {
+            height: auto;
+        }
+
+        .form-group-lg .form-control-static {
+            height: 46px;
+            min-height: 38px;
+            padding: 11px 16px;
+            font-size: 18px;
+            line-height: 1.3333333;
+        }
+
+        .hide {
+            display: none !important;
+        }
+
+        .show {
+            display: block !important;
+        }
+
+        .invisible {
+            visibility: hidden;
+        }
+
+        .text-hide {
+            font: 0/0 a;
+            color: transparent;
+            text-shadow: none;
+            background-color: transparent;
+            border: 0;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+        /*Start Side-------------------------------------*/
+
+        .sidenav {
+            height: 100%;
+            width: 0px;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #3c3c3c;
+            overflow-x: hidden;
+            transition: 0.1s;
+            padding-top: 5px;
+        }
+
+            .sidenav a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                /*transition: 0.1s;*/
+            }
+
+                .sidenav a:hover, .offcanvas a:focus {
+                    color: #f1f1f1;
+                }
+
+            .sidenav .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+        @media screen and (max-height: 450px) {
+            .sidenav {
+                padding-top: 5px;
+            }
+
+                .sidenav a {
+                    font-size: 18px;
+                }
+        }
+        /*End Side-------------------------------------*/
+    </style>
+    
+    <script>
+        function dial() {
+            apiDial($('#txtPhoneNo').val());
+        }
+        
+        function openNav() {
+            document.getElementById("mySidenav").style.width = "100%";
+           
+        }
+
+        function closeNav() {
+            document.getElementById("mySidenav").style.width = "0";
+        }
+        
+        function openNumpad() {
+            document.getElementById("myNumpad").style.width = "45%";
+        }
+
+        function closeNumpad() {
+            document.getElementById("myNumpad").style.width = "0";
+        }
+    </script>
+    
+</h:head>
+<h:body onload="loginPhone()" onunload="logoutPhone()">
+    <div id="mySidenav" class="sidenav">
+        <table width="100%" border="0">
+            <tr>
+                <td width="3%">&nbsp;</td>
+                <td width="32%">
+                    <table border="0" width="100%">
+                        <tr>                        
+                            <td class="label" style="color:#FFF" align="center" colspan="2">Transfer</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <select id="cmbTransferMode" style="width:130px" class="form-control input-sm">
+                                    <option value="Phone">Phone No.</option>
+                                    <option value="Agent">Agent</option>
+                                    <option value="Service">Service</option>
+                                    <option value="Supervisor">Supervisor</option>
+                                    <option value="ExternalRoute">External Route</option>
+                                </select>
+                            </td>
+                            <td>
+                                <table id="trExternalRoute" style="display:none" width="100%">
+                                    <tr>
+                                        <td align="center">
+                                            <select id="cmbTransferExternalRoute" class="form-control input-sm" style="width:130px"></select>
+                                        </td>
+                                        <td align="center">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayDialConsultToExternalRoute();">Call</button>
+                                            </div>
+                                            </td><td align="center" valign="middle">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayTransferToExternalRoute();">Transfer</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="trService" style="display:none" width="100%">
+                                    <tr>
+                                        <td align="center">
+                                            <select id="cmbTransferService" class="form-control input-sm" style="width:130px"></select>
+                                        </td>
+                                        <td align="center">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayDialConsultToService();">Call</button>
+                                            </div>
+                                            </td><td align="center" valign="middle">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayTransferToService();">Transfer</button>
+                                            </div>   
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="trSupervisor" style="display:none" width="100%">
+                                    <tr>
+                                        <td align="center">
+                                            <select id="cmbTransferSupervisor" class="form-control input-sm" style="width:130px"></select>
+                                        </td>
+                                        <td align="center">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayDialConsultToSupervisor();">Call</button>
+                                            </div>
+                                            </td><td align="center" valign="middle">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayTransferToSupervisor();">Transfer</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="trAgent" style="display:none" width="100%">
+                                    <tr>
+                                        <td align="center">
+                                            <select id="cmbTransferAgent" class="form-control input-sm" style="width:130px"></select>
+                                        </td>
+                                        <td align="center">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayDialConsultToUser();">Call</button>
+                                            </div>
+                                            </td><td align="center" valign="middle">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayTransferToUser();">Transfer</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table id="trPhoneNo" width="100%" cellpadding="2">
+                                    <tr>
+                                        <td align="center">
+                                             <div tyle="background-color: #fcebb6;width:100px;height: 15px;border-radius: 5px;font-size:14px;color:#5e412f;font-family: Arial;display:table">
+                                                <input id="txtTransferPhoneNo" class="form-control input-sm" style="width:100px;height:15px"  placeholder="PhoneNo."  type="text" />
+                                             </div>
+                                        </td>
+                                        <td align="center" valign="middle">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayDialConsultToPhoneNo();">Call</button>
+                                            </div>
+                                            </td><td align="center" valign="middle">
+                                            <div style="background-color: #f07818;width:80px;height: 25px;border-radius: 5px;">
+                                            <button style="background-color: #f07818;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiThreeWayTransferToPhoneNo();">Transfer</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="20%">
+                    <div id="pl3Party" style="height:100%;width:100%;">
+                        <table style="height:100%;width:100%">
+                            <tr>
+                                <td align="center" colspan="3">
+                                    <div class="label label-default" style="color:#FFF">Third Party Line: <label id="lb3rdPartyState">Inactive</label></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                    <div style="background-color: #9ebc6f;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayHold3rdParty" class="btn btn-info btn-sm" style="background-color: #9ebc6f;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayHold3rdParty()">Hold</button></div>
+                                </td>
+                                <td align="center">
+                                    <div style="background-color: #9ebc6f;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayUnHold3rdParty" class="btn btn-info btn-sm" style="background-color: #9ebc6f;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayUnHold3rdParty()">UnHold</button></div>
+                                </td>
+                                <td align="center">
+                                    <div style="background-color: #9ebc6f;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayHangup3rdParty" class="btn btn-info btn-sm" style="background-color: #9ebc6f;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayHangup3rdParty()">Hangup</button></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td width="20%">
+                    <div id="plCustomer" style="height:100%;width:100%;">
+                        <table style="height:100%;width:100%">
+                            <tr>
+                                <td align="center" colspan="3">
+                                    <div class="label label-default" style="color:#FFF">Customer Line: <label id="lbCustomerState" style="color:#F90">Inactive</label></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                <div style="background-color: #f0a830;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayHoldCustomer" class="btn btn-info btn-sm" style="background-color: #f0a830;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayHoldCustomer()">Hold</button></div>
+                                    </td>
+                                    <td align="center">
+                                    <div style="background-color: #f0a830;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayUnHoldCustomer" class="btn btn-info btn-sm" style="background-color: #f0a830;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayUnHoldCustomer()">UnHold</button></div>
+                                    </td>
+                                    <td align="center">
+                                    <div style="background-color: #f0a830;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayHangupCustomer" class="btn btn-info btn-sm" style="background-color: #f0a830;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayHangupCustomer()">Hangup</button></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td width="20%">
+                    <div id="plAgent" style="height:100%;width:100%;">
+                        <table style="height:100%;width:100%">
+                            <tr>
+                                <td align="center" colspan="3">
+                                    <div class="label label-default" style="color:#FFF"><label>Agent Line</label></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="center">
+                                <div style="background-color: #0198ab;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayConferrence" class="btn btn-info btn-sm" style="background-color: #0198ab;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayConferrence()">Conference</button></div>
+                                    </td>
+                                    <td align="center">
+                                    <div style="background-color: #0198ab;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeTransferCall" class="btn btn-info btn-sm" style="background-color: #0198ab;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayTransfer()">Transfer</button></div>
+                                    </td>
+                                    <td align="center">
+                                    <div style="background-color: #0198ab;width:80px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWayRelease" class="btn btn-info btn-sm" style="background-color: #0198ab;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px"  onclick="apiThreeWayRelease()">Release</button></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </td>
+                <td width="5%" align="center">
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div id="myNumpad" class="sidenav">
+        <table width="100%" height="60px" >
+            <tr>
+                <td align="left" >
+                    <table width="90%" align="left" cellpadding="4" cellspacing="4">
+                        <tr>
+                            <td width="20px">&nbsp;</td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #78c0a8;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('1')">1</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #66afe9;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('2')">2</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #0198ab;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('3')">3</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #9ebc6f;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('4')">4</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #F90;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('5')">5</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #f07818;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('6')">6</button></div>
+                            </td>
+                       
+                            <td align="center" valign="middle">
+                                <div style="background-color: darksalmon;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('7')">7</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #99f;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('8')">8</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: #f8b9b7;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('9')">9</button></div>
+                            </td>  
+                            <td align="center" valign="middle">
+                                <div style="background-color: rosybrown;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('0')">0</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: plum;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:22px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('*')">*</button></div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div style="background-color: lightskyblue;width:40px;height: 40px;border-radius: 2px;">
+                                <button style="background-color: transparent;width:40px;height: 40px;font-size:18px;color:white;font-family: Arial;display:table;padding:1px" 
+                                        onclick="apiExtPhone('#')">#</button></div>
+                            </td> 
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" class="closebtn" onclick="closeNumpad()">&times;</a>
+                </td>
+            </tr>
+        </table>        
+    </div>
+    <table border="0" style="width: 100%;height: 70px; background-color: #3c3c3c;padding: 0;margin: 0;border-radius: 5px;">
+        <tr>
+            <td width="20px">&nbsp;</td>
+            <td width="120px" align="center" valign="middle">                
+                <div style="background-color: #9ebc6f;width:120px;height: 60px;border-radius: 5px;display:table">
+                    <span id="panelState" style="font-size:20px;color:#ffffff;font-family: Arial;font-weight: bold;">Offline</span>
+                    <br />
+                    <span id="minutes" style="font-size:25px;color:#ffffff;font-family: Arial;font-weight: bold;">00</span>
+                    <span style="font-size:25px;color:#ffffff;font-family: Arial;font-weight: bold;">:</span>
+                    <span id="seconds" style="font-size:25px;color:#ffffff;font-family: Arial;font-weight: bold;">00</span>
+                </div>
+            </td>
+            <td width="3px">&nbsp;</td>
+            <td align="left" valign="middle">
+                <div id="toobarDial" style="background-color: #78c0a8;width:420px;height: 63px;border-radius: 5px;font-size:16px;color:white;font-family: Arial;font-weight: bold;display:table">
+                    <table cellspacing="4" height="60px" width="100%">
+                        <tr align="center" valign="middle">
+                            <td colspan="6">
+                                <div id="txtPhoneNo" style="background-color: #fcebb6;width:280px;height: 20px;border-radius: 5px;font-size:16px;color:#5e412f;font-family: Arial;display:table">
+                                    <input style="display:none;width:280px;background: transparent;border: none;" placeholder="PhoneNo." type="number" />
+                                </div>
+                                <select id="cmbNextCall" class="form-control input-sm"></select>
+                            </td>
+                        </tr>
+                        <tr align="center" valign="middle">
+                            <td align="center" valign="middle">
+                                <div id="btnHangup" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="apiHangup();">Hangup</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnThreeWay" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button id="btnThreeWay" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="openNav()">3Way</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnExt" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button id="btnExt" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="openNumpad()">Ext.</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnHold" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button id="btnHold" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="apiHold();">Hold</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnUnhold" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button id="btnUnhold" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="apiUnHold();">UnHold</button>
+                                </div>
+                            </td>
+                            <td>
+                                <div id="btnNextcall" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button id="btnNextcall" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="apiNextCall();">Next Call</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnJunkCall" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button id="btnJunkCall" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;padding:4px;display: table" onclick="apiJunkCall();">Junk Call</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td width="3px"></td>
+            <td align="left" valign="middle">
+                <div style="background-color: #78c0a8;width:300px;height: 63px;border-radius: 5px;font-size:16px;color:white;font-family: Arial;font-weight: bold;display:table">
+                    <table cellspacing="4" height="60px" align="center" valign="middle">
+                        <tr>
+                            <td colspan="4" width="100%" align="center" valign="middle">
+                                <select id="cmbNotreadyReason" class="form-control input-sm"></select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" valign="middle">
+                                <div id="btnReady" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiReady();">Ready</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnNotReady" style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;">
+                                    <button style="background-color: #f07818;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiNotReady();">Not Ready</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnPark" style="background-color: #f0a830;width:100px;height: 25px;border-radius: 5px;">
+                                    <button style="background-color: #f0a830;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiNotReadyPark();">Park</button>
+                                </div>
+                            </td>
+                            <td align="center" valign="middle">
+                                <div id="btnTakeCall" style="background-color: #f0a830;width:100px;height: 25px;border-radius: 5px;">
+                                    <button style="background-color: #f0a830;width:100px;height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;display:table;padding:4px" onclick="apiTakeLogin();">Log In</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+            <td width="3px">&nbsp;</td>
+            <td>
+
+                <table>
+                    <tr>
+                        <td align="left">
+                            <div style="height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;font-weight: bold;display:inline-table">ANI: <span id="lbAniValue">##########</span></div>
+                            <div style="height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;font-weight: bold;display:inline-table">Name: <span id="lbCustomerName">##########</span></div>
+                            <div style="height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;font-weight: bold;display:inline-table">DNIS: <span id="lbDnisValue">##########</span></div>
+                            <div style="height: 25px;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;font-weight: bold;display:inline-table">Track ID: <span id="lbTrackId">##########</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td valign="middle" align="left" style="color:#FFF">
+                            <span id="panelMessage"></span>
+                        </td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+</h:body>
+</html>

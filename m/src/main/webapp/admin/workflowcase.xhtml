@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Case Workflow</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 15%; text-align: right; }
+                    .colStyle2 { width: 85%; text-align: left; }
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText class="gray03" value="Case Type: "/>
+                    <h:selectOneMenu id="caseType" value="#{workflowCaseController.caseTypeId}"
+                                     immediate="true"
+                                     styleClass="select08"
+                                     valueChangeListener="#{workflowCaseController.caseTypeListener}">
+                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{workflowCaseController.caseTypeList}"/>
+                        <a4j:ajax event="change" render="caseType, caseTopic, caseDetail, caseRequest, data" execute="@this"/>
+                    </h:selectOneMenu>
+                    
+                    <h:outputText class="gray03" value="Case Topic: "/>
+                    <h:selectOneMenu id="caseTopic" value="#{workflowCaseController.caseTopicId}"
+                                     styleClass="select08"
+                                     valueChangeListener="#{workflowCaseController.caseTopicListener}">
+                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{workflowCaseController.caseTopicList}"/>
+                        <a4j:ajax event="change" render="caseTopic, caseDetail, caseRequest, data" execute="@this"/>
+                    </h:selectOneMenu>
+                    
+                     <h:outputText class="gray03" value="Case Detail: "/>
+                     <h:selectOneMenu id="caseDetail" value="#{workflowCaseController.caseDetailId}"
+                                      immediate="true"
+                                      styleClass="select08"
+                                      valueChangeListener="#{workflowCaseController.caseDetailListener}">
+                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{workflowCaseController.caseDetailList}"/>
+                        <a4j:ajax event="change" render="caseDetail, caseRequest, data" execute="@this"/>
+                     </h:selectOneMenu>
+                     
+                     <h:outputText class="gray03" value="Reason of Request: "/>
+                     <h:selectOneMenu id="caseRequest" value="#{workflowCaseController.caseRequestId}"
+                                      immediate="true"
+                                      styleClass="select08">
+                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{workflowCaseController.caseRequestList}"/>
+                        <a4j:ajax event="change" render="data" execute="@this" listener="#{workflowCaseController.searchAction}"/>
+                     </h:selectOneMenu>
+                     
+                     <h:outputText class="gray03" value="Service Type: "/>
+                     <h:selectOneMenu id="serviceType" value="#{workflowCaseController.serviceTypeId}"
+                                      immediate="true" styleClass="select08"
+                                      valueChangeListener="#{workflowCaseController.serviceTypeListener}">
+                         <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{workflowCaseController.serviceTypeList}"/>
+                        <a4j:ajax event="change" render="serviceType, businessUnit, location, data" execute="@this"/>
+                    </h:selectOneMenu>
+                     
+                     <h:outputText class="gray03" value="Business Unit: "/>
+                     <h:selectOneMenu id="businessUnit" value="#{workflowCaseController.businessUnitId}"
+                                      immediate="true" styleClass="select08"
+                                      valueChangeListener="#{workflowCaseController.businessUnitListener}">
+                         <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                         <f:selectItems value="#{workflowCaseController.businessUnitList}"/>
+                        <a4j:ajax event="change" render="businessUnit, location, data" execute="@this"/>
+                    </h:selectOneMenu>
+                      
+                     <h:outputText class="gray03" value="Location: "/>
+                     <h:selectOneMenu id="location" value="#{workflowCaseController.locationId}"
+                                      immediate="true" styleClass="select08">
+                         <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                         <f:selectItems value="#{workflowCaseController.locationList}"/>
+                        <a4j:ajax event="change" render="data" execute="@this" listener="#{workflowCaseController.searchAction}"/>
+                    </h:selectOneMenu>
+                     
+                   <h:outputText class="gray03" value="User Group: "/>
+                   <h:selectOneMenu id="userGroup" value="#{workflowCaseController.userGroupId}">
+                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{workflowCaseController.userGroupList}"/>
+                        <a4j:ajax event="change" render="data" execute="@this" listener="#{workflowCaseController.searchAction}"/>
+                    </h:selectOneMenu>
+
+                </h:panelGrid>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{workflowCaseController.editAction}" immediate="true"
+                                 rendered="#{workflowCaseController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{workflowCaseController.deleteAction}" 
+                                 rendered="#{workflowCaseController.deletePermitted}"  onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+               <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                               value="#{workflowCaseController.workflowCases}" rows="#{global.maxrows}" var="list"
+                               onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                               onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 8%;text-align: left;"><h:outputText value="Case Type"/></rich:column>
+                            <rich:column style="width: 13%;text-align: left;"><h:outputText value="Case Topic"/></rich:column>
+                            <rich:column style="width: 13%;text-align: left;"><h:outputText value="Case Detail"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Reason Of Request"/></rich:column>
+                            <rich:column style="width: 7%;text-align: left;"><h:outputText value="Service Type"/></rich:column>
+                            <rich:column style="width: 7%;text-align: left;"><h:outputText value="Business Unit"/></rich:column>
+                            <rich:column style="width: 7%;text-align: left;"><h:outputText value="Location"/></rich:column>
+                            <rich:column style="width: 8%;text-align: left;"><h:outputText value="Create Case By"/></rich:column>
+                            <rich:column style="width: 6%;text-align: left;"><h:outputText value="Low"/></rich:column>
+                            <rich:column style="width: 6%;text-align: left;"><h:outputText value="Medium"/></rich:column>
+                            <rich:column style="width: 6%;text-align: left;"><h:outputText value="High"/></rich:column>
+                            <rich:column style="width: 6%;text-align: left;"><h:outputText value="Immediately"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:selectBooleanCheckbox value="#{workflowCaseController.selectedIds[list.workflowCasePK]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseDetail.caseTopicId.caseTypeId.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseDetail.caseTopicId.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseDetail.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseRequest.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.serviceType.name}"/>
+                    </rich:column>
+                   <rich:column>
+                        <h:outputText value="#{list.businessUnit.name}"/>
+                    </rich:column>
+                   <rich:column>
+                        <h:outputText value="#{list.location.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.userGroup.name}" action="#{workflowCaseController.editAction}">
+                            <f:param name="userGroupId" value="#{list.userGroup.id}"/>
+                            <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                            <f:param name="businessUnitId" value="#{list.businessUnit.id}"/>
+                            <f:param name="locationId" value="#{list.location.id}"/>
+                            <f:param name="lowRuleId" value="#{list.lowPriorityWorkflowRuleId.id}"/>
+                            <f:param name="mediumRuleId" value="#{list.mediumPriorityWorkflowRuleId.id}"/>
+                            <f:param name="highRuleId" value="#{list.highPriorityWorkflowRuleId.id}"/>
+                            <f:param name="immediateRuleId" value="#{list.immediatelyPriorityWorkflowRuleId.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                       <h:outputText value="#{list.lowPriorityWorkflowRuleId.name}" rendered="#{list.lowPriorityWorkflowRuleId ne null}"/>
+                       <h:outputText value="-" rendered="#{list.lowPriorityWorkflowRuleId eq null}"/>
+                    </rich:column>
+                    <rich:column>
+                       <h:outputText value="#{list.mediumPriorityWorkflowRuleId.name}" rendered="#{list.mediumPriorityWorkflowRuleId ne null}"/>
+                       <h:outputText value="-" rendered="#{list.mediumPriorityWorkflowRuleId eq null}"/>
+                    </rich:column>
+                    <rich:column>
+                       <h:outputText value="#{list.highPriorityWorkflowRuleId.name}" rendered="#{list.highPriorityWorkflowRuleId ne null}"/>
+                       <h:outputText value="-" rendered="#{list.highPriorityWorkflowRuleId eq null}"/>
+                    </rich:column>
+                    <rich:column>
+                       <h:outputText value="#{list.immediatelyPriorityWorkflowRuleId.name}" rendered="#{list.immediatelyPriorityWorkflowRuleId ne null}"/>
+                       <h:outputText value="-" rendered="#{list.immediatelyPriorityWorkflowRuleId eq null}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

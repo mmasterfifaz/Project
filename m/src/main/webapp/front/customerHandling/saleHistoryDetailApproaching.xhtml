@@ -1,0 +1,88 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich">
+    <rich:dataTable id="purchaseOrderDetailList" value="#{saleHistoryController.saleHistoryList}"
+                    styleClass="tableline01 tb_contact_case_detail" rows="10" var="list"
+                    style="width: 100%" headerClass="subh01">
+        <f:facet name="header">
+            <rich:columnGroup>
+                <rich:column style="text-align: left;"><h:outputText value="Reference No." /></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Insure Person" /></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Product Name"/></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Plan" /></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Sum Insure"/></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Total Collect"/></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Purchased Date" /></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Sale Date"/></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Update Date"/></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="TMR Name"/></rich:column>
+                <rich:column style="text-align: left;"><h:outputText value="Status"/></rich:column>
+            </rich:columnGroup>
+        </f:facet>
+        <rich:column>
+            <h:commandLink title="#{list.refNo == null ? list.poId : list.refNo}"
+                           value="#{list.refNo == null ? list.poId : list.refNo}"
+                           action='#{saleHistoryController.toRegistrationForm("edit",list.poId)}'
+                           rendered="#{list.categoryType eq 'life' || list.categoryType eq 'nonlife' || list.categoryType eq 'motor'}">
+            </h:commandLink>
+            <h:commandLink title="#{list.refNo == null ? list.poId : list.refNo}"
+                           value="#{list.refNo == null ? list.poId : list.refNo}"
+                           action="#{saleHistoryController.toRegistrationFormPoRetail}"
+                           rendered="#{list.categoryType eq 'retail'}">
+                <f:param name="poId" value="#{list.poId}"/>
+            </h:commandLink>
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.insurePerson}" />
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.productName}" />
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.planName}" />
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.sumInsure}">
+                <f:convertNumber pattern="#,##0.00"/>
+            </h:outputText>
+        </rich:column>
+        <rich:column style="text-align: right">
+            <h:outputText value="#{list.totalCollect}">
+                <f:convertNumber pattern="#,##0.00"/>
+            </h:outputText>
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.purchaseDate}" >
+                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+            </h:outputText>
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.saleDate}" >
+                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+            </h:outputText>
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.updateDate}" >
+                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+            </h:outputText>
+        </rich:column>
+        <rich:column>
+            <h:outputText value="#{list.tmrName}" />
+        </rich:column>
+        <rich:column>
+            <h:outputText value="Yes" rendered="#{fn:contains(list.status, 'Y')}" />
+            <h:outputText value="No" rendered="#{fn:contains(list.status, 'N')}" />
+            <h:outputText value="Followup" rendered="#{fn:contains(list.status, 'F')}" />
+        </rich:column>
+        <f:facet name="footer">
+            <rich:dataScroller fastControls="hide" maxPages="${global.maxpages}" renderIfSinglePage="false"/>
+        </f:facet>
+    </rich:dataTable>
+    <h:panelGroup rendered="#{saleHistoryController.emessage ne null}" style="width:90%;">
+        <h:outputText value="#{saleHistoryController.emessage}" style="color:red;margin:10px;"/>
+    </h:panelGroup>  
+</ui:composition>

@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administrator</ui:define>
+            <ui:define name="title2">Configuration</ui:define>
+
+            <ui:define name="panel">
+                
+                <img src="../img/bplus02.png" style="display: inline"/> <h:commandLink  action="configurationautocase.xhtml" value="Automatic Close Case Configuration" />
+                <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01" value="#{configurationController.list}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Property"/></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Value" /></rich:column>
+                            <rich:column style="width: 60%;text-align: left;"><h:outputText value="Description" /></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+
+                    <rich:column style="vertical-align:top">
+                        <h:commandLink action="#{configurationController.editAction}">
+                            <h:outputText value="#{list.property}"/>
+                            <f:param name="property" value="#{list.property}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column style="vertical-align:top">
+                        <h:outputText value="#{list.value}" />
+                    </rich:column>
+                    <rich:column style="vertical-align:top">
+                        <h:outputText value="#{list.description}" />
+                    </rich:column>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

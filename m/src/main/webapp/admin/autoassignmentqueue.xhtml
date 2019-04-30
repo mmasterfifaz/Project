@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminmainsearch.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Auto Assignment - Queue Status</ui:define>
+    <ui:define name="search">
+        <style>
+            .colStyle1 { width: 15%; text-align: right; }
+            .colStyle2 { width: 85%;}
+        </style>
+        <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">                    
+            <h:outputText class="gray03" value="From Import Date: "/>
+            <h:panelGroup><rich:calendar value="#{autoAssignmentQueueController.importDateFrom}"
+                                        locale="#{msg.locale}"
+                                        popup="true"
+                                        inputClass="textfield"  buttonClass="rfcalbtn"
+                                        datePattern="#{msg.datePattern}" inputSize="10"/>
+                    <h:outputText class="gray03" value="To: "/><span style="width: 5px"/> 
+                    <rich:calendar value="#{autoAssignmentQueueController.importDateTo}"
+                                   locale="#{msg.locale}"
+                                   popup="true"
+                                   inputClass="textfield"  buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" inputSize="10"/>
+            </h:panelGroup>
+            <h:outputText class="gray03" value="Assign Status :"/>
+            <h:selectOneMenu value="#{autoAssignmentQueueController.status}" styleClass="select01">
+                <f:selectItem itemLabel="#{msg.all}"/>
+                <f:selectItem itemValue="assigned" itemLabel="Asssigned"/>
+                <f:selectItem itemValue="duplicate" itemLabel="Duplicate"/>
+                <f:selectItem itemValue="pending" itemLabel="Pending"/>
+            </h:selectOneMenu>
+
+            <h:outputText value=""/>
+            <a4j:commandButton image="/img/b_search.png" 
+                               action="#{autoAssignmentQueueController.searchAutoAssignList}"
+                               render="dataList, msgData, totalRec"
+                               limitRender="true"/>
+        </h:panelGrid>
+    </ui:define>
+
+    <ui:define name="button">
+    </ui:define>
+
+    <ui:define name="panel">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr><td colspan="2">
+             <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                             value="#{autoAssignmentQueueController.autoAssigmentList}" rows="#{global.maxrows}" var="list"
+                             onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                             onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column style="text-align: left;width: 12%;"><h:outputText value="Import Date" /></rich:column>
+                        <rich:column style="text-align: left;width: 12%;"><h:outputText value="Transaction Date"/></rich:column>
+                        <rich:column style="text-align: left;width: 8%;"><h:outputText value="Reference No."/></rich:column>
+                        <rich:column style="text-align: left;width: 13%;"><h:outputText value="Name"/></rich:column>
+                        <rich:column style="text-align: left;width: 15%;"><h:outputText value="Email"/></rich:column>
+                        <rich:column style="text-align: left;width: 8%;"><h:outputText value="Telephone"/></rich:column>
+                        <rich:column style="text-align: left;width: 7%;"><h:outputText value="Language"/></rich:column>
+                        <rich:column style="text-align: left;width: 8%;"><h:outputText value="Source"/></rich:column>
+                        <rich:column style="text-align: left;width: 10%;"><h:outputText value="Marketing List Name"/></rich:column>
+                        <rich:column style="text-align: left;width: 7%;"><h:outputText value="Assign Status"/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+                <rich:column>
+                    <h:outputText value="#{list.createDate}">
+                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{autoAssignmentQueueController.convertStrToDate(list.transactionDate)}">
+                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.referenceId}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.firstName} #{list.lastName}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.email}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.telephone}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.language}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.source}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.marketingListName}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText style="color: #00A600" rendered="#{list.assignStatus eq 'assigned'}" value="Assigned"/>
+                    <h:outputText style="color: red" rendered="#{list.assignStatus eq 'duplicate'}" value="Duplicate"/>
+                    <h:outputText style="color: #0099FF" rendered="#{list.assignStatus eq null}" value="Pending"/>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                </f:facet>
+            </rich:dataTable>
+        </td></tr>
+
+        <tr>
+            <td colspan="2">
+                <table width="100%">
+                    <tr height="50px">
+                    <td align="center">
+                        <h:panelGroup id="msgData">
+                            <h:outputText id="txtNoData" rendered="#{autoAssignmentQueueController.autoAssigmentList.size() eq 0}" style="color:red" value=" No Data"/>
+                            <h:commandLink actionListener="#{autoAssignmentQueueController.exportListener}" 
+                                           rendered="#{autoAssignmentQueueController.autoAssigmentList.size() ne 0 and autoAssignmentQueueController.exportPermitted}" >
+                                <img alt="Report" src="../img/bb_exportcus.png"/></h:commandLink>
+                        </h:panelGroup>
+                    </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+
+        <tr>
+            <td align="right">
+                <h:panelGroup id="totalRec" >
+                    <h:outputText class="gray03" rendered="#{autoAssignmentQueueController.autoAssigmentList.size() > 0}" 
+                                  value="Total Records: "/>
+                    <h:outputText style="color: #F90;font-weight: bold" rendered="#{autoAssignmentQueueController.autoAssigmentList.size() > 0}" 
+                                  value="#{autoAssignmentQueueController.autoAssigmentList.size()}"/>
+
+                </h:panelGroup>
+            </td>
+            <td width="1"></td>
+        </tr>
+    </table>
+
+
+    </ui:define>
+
+</ui:composition>
+</h:body>
+</html>

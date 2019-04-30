@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing List Upload : Summary</ui:define>
+            <ui:define name="button">
+
+
+
+
+
+            </ui:define>
+            <ui:define name="panel">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td align="left">
+                            <br/><br/><br/><br/><br/>
+                            <table width="50%%" border="0" cellspacing="0" cellpadding="3">
+                                <tr>
+                                    <td align="right" class="black01">Total Records : </td>
+                                    <td align="">1,000</td>
+                                </tr>
+                                <tr>
+                                    <td align="right" class="black01">New Prospect : </td>
+                                    <td align="">900</td>
+                                </tr>
+                                <tr>
+                                    <td align="right" class="black01">Existing Customer : </td>
+                                    <td align="">100</td>
+                                </tr>
+                                <tr>
+                                    <td align="right" class="black01">Total Loaded : </td>
+                                    <td align="">1,000</td>
+                                </tr>
+                            </table>
+                            <br/><br/><br/><br/><br/>                            
+                        </td>
+                    </tr>
+                </table>
+
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="50%" align="left">
+                            <h:commandButton action="marketingcriteria.jsf" image="/resources/img/b_back.png"/>
+                        </td>
+                        <td width="50%" align="right">
+                        </td>
+                    </tr>
+                </table>
+
+            </ui:define>
+
+            <ui:define name="popupModal">
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

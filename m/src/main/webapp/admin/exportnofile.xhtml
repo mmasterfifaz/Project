@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Sales Management</ui:define>
+            <ui:define name="title2">Export No File</ui:define>
+            <ui:define name="button"> </ui:define>
+            <ui:define name="search">
+                <h:panelGroup id="searchPanel">
+                    <table width="100%">
+
+                        <tr><td width="150" align="right">Marketing :</td>
+                            <td>
+                                <h:selectOneMenu id="marketingId"
+                                                 value="#{exportNofileController.marketingId}"
+                                                 required="true"
+                                                 requiredMessage="Marketing is required"
+                                                 styleClass="select08"
+                                                 valueChangeListener="#{exportNofileController.onMarketingIdChange}">
+                                    <f:selectItems value="#{exportNofileController.marketingList}"/>
+                                    <f:validateRequired/>
+                                    <rich:validator />
+                                </h:selectOneMenu>
+                                <rich:message for="marketingId" style="color:red"/>
+                            </td>
+                        </tr>
+                        <tr><td></td>
+                            <td>
+                                <a4j:commandButton actionListener="#{exportNofileController.searchActionListener}" 
+                                                   render="data,dataSearch,messageMergeError,listError" image="/img/b_search.png"
+                                                   limitRender="true" />
+                            </td>
+                        </tr>
+                    </table>
+                </h:panelGroup>
+            </ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="dataSearch">
+                    <h:outputText value = "#{exportNofileController.cntRecords}"/>
+                    <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" value="#{exportNofileController.list}" rows="#{global.maxrows}" var="list">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName1}</rich:column>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName2}</rich:column>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName3}</rich:column>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName4}</rich:column>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName5}</rich:column>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName6}</rich:column>
+                                <rich:column styleClass="subh01">#{exportNofileController.colName7}</rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column>
+                            #{list.col1}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col2}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col3}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col4}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col5}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col6}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col7}
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </h:panelGroup>
+                <table width="100%"><tr>
+                        <td align="center"><a4j:commandButton action="#{exportNofileController.exportListener}" image="/img/bb_exportcus.png" render="errorDetail"/></td>
+                    </tr>
+                    <tr><td align="center"><h:outputLabel id="errorDetail" value="#{exportNofileController.errorDetail}" style="color: red"/></td></tr></table>
+                <br/>
+                <table width="100%"><tr>
+                        <td align="right"><a href="../admin/nolog.jsf" >Go to No File History Page..</a></td>
+                    </tr></table>
+            </ui:define>
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

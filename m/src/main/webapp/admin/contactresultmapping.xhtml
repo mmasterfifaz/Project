@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+    <ui:composition template="../templates/adminmain.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2">PDS System Code Mapping</ui:define>
+        <ui:define name="button">
+            <h:commandButton image="../img/b_add.png" action="#{contactResultMappingController.editAction}" rendered="#{contactResultMappingController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{contactResultMappingController.deleteAction}" rendered="#{contactResultMappingController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+        </ui:define>
+        <ui:define name="panel">
+            <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                            value="#{contactResultMappingController.list}" rows="#{global.maxrows}" var="list">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Code" /></rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Name" /></rich:column>
+                        <rich:column style="width: 30%;text-align: left;"><h:outputText value="Contact Result"/></rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column >
+                    <h:selectBooleanCheckbox value="#{contactResultMappingController.selectedIds[list.id]}"/>
+                </rich:column>
+                <rich:column>
+                    <h:commandLink  value="#{list.code}" action="#{contactResultMappingController.editAction}">
+                        <f:param name="id" value="#{list.id}"/>
+                    </h:commandLink>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.name}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.contactResultId.name}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.description}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                </f:facet>
+            </rich:dataTable>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

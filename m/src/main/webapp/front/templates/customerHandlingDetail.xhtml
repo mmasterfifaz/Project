@@ -1,0 +1,153 @@
+<ui:composition template="../templates/mainmenu.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="panel">
+    <div id="body_wrapper">
+        <div id="body_header">
+            <div id="body_header_left">
+                <div id="body_header_right">
+                    <div id="customer_title">
+                         #{msg.customerNameSearch} <span class="blue04">#{sessionScope['customerDetail'].initial} #{sessionScope['customerDetail'].name} #{sessionScope['customerDetail'].surname}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="customer_detail_wrapper">
+        <div id="customer_detail_left">
+            <div id="customer_detail_right">
+                <div id="customer_detail">
+                    <div id="customer_image_wrapper">
+                        <div id="customer_image">
+                            
+                        </div>
+                        <div id="customer_comment">
+                            
+                        </div>
+                    </div>
+                    <div id="customer_infomation">
+                        <dl>
+                            <dd>
+                                #{msg.dateOfBirth}
+                            </dd>
+                            <dt>
+                                <h:outputText  value="#{sessionScope['customerDetail'].dob}">
+                                    <f:convertDateTime pattern="#{vars.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                #{msg.ageCustomerDetail}
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].age}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                #{msg.creditLimit}
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].creditLimit}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                #{msg.creditTerm}
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].creditTerm}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                #{msg.privilege}
+                            </dd>
+                            <dt>
+                               #{sessionScope['customerDetail'].privilege}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                #{msg.address}
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].currentAddressLine1}
+                            </dt>
+                        </dl>
+                    </div>
+                    <div id="customer_telephone">
+                        <dl>
+                            <dd>
+                                <h:graphicImage library="img" name="pic_home.png" alt="" />
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].homePhone}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                <h:graphicImage library="img" name="pic_office.png" alt="" />
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].officePhone}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                <h:graphicImage library="img" name="pic_mobile.png" alt="" />
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].mobilePhone}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                <h:graphicImage library="img" name="pic_fax.png" alt="" />
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].fax}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                <h:graphicImage library="img" name="pic_mail.png" alt="" />
+                            </dd>
+                            <dt>
+                                #{sessionScope['customerDetail'].email}
+                            </dt>
+                        </dl>
+                        <dl>
+                            <dd>
+                                <h:graphicImage library="img" name="add_cust_no.png" alt="" />
+                            </dd>
+                            <dt>
+
+                            </dt>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer_left">
+            <div class="footer_right">
+            </div>
+        </div>
+    </div>
+        <ui:insert name="detail">
+            
+        </ui:insert>
+        <ui:insert name="navigator">
+            
+        </ui:insert>
+    </ui:define>
+</ui:composition>

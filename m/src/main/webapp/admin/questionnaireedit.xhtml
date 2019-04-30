@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Questionnaire: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{questionnaireEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Name:</td>
+                        <td><h:inputText id="name" value="#{questionnaireEditController.qaForm.name}" styleClass="textfield" 
+                                         required="true" requiredMessage="#{msg.require} ">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{questionnaireEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Description:</td>
+                        <td><h:inputTextarea id="description" value="#{questionnaireEditController.qaForm.description}" cols="50" rows="5" />                   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" align="center">
+                            <table width="39%" align="center" border="0" cellspacing="0" cellpadding="4">
+                                <tr>
+                                    <td style="width: 150px;" class="blue04" align="left">Available Questionnaire Category</td>
+                                    <td style="width: 10px;">&nbsp;</td>
+                                    <td style="width: 240px;" class="blue04" align="left">Selected Questionnaire Category</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3" align="left">
+                                        <rich:pickList id="qaCategory" switchByDblClick="true" orderable="true" 
+                                                       listHeight="250px" listWidth="250px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{questionnaireEditController.selectedCategory}" 
+                                                       required="true" requiredMessage="Selected Category is required">
+                                            <f:selectItems value="#{questionnaireEditController.qaCatergoryList}"/>
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                        </rich:pickList>
+                                        <span style="padding-left:10px"/>
+                                        <rich:message for="qaCategory" style="color:red"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        <table width="100%"><tr>
+                            <td valign="top" align="left" width="33%">
+                                <h:commandButton image="../img/b_back.png" action="#{questionnaireEditController.backAction}" immediate="true"/>
+                            </td>
+                            <td valign="top" align="center" width="34%">
+                            <h:commandButton image="../img/b_save.png" action="#{questionnaireEditController.saveAction}" rendered="#{questionnaireEditController.savePermitted and questionnaireEditController.editUsed}"/> 
+                            </td>
+                            <td valign="top" align="right" width="33%"></td>
+                        </tr></table>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

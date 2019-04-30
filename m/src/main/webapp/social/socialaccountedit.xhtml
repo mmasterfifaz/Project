@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Social Account : Add/Edit</ui:define>
+            <ui:define name="head">
+                <script type="text/javascript" src="#{request.contextPath}/includes/setcontrollerproperty.js"/>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{socialAccountEditController.mode}"/>
+                <h:inputHidden value="#{socialAccountEditController.soAccount.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{socialAccountEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Code:</td>
+                        <td><h:inputText id="code" value="#{socialAccountEditController.soAccount.code}" styleClass="textfield" size="50" required="true" maxlength="50"
+                                         requiredMessage="Code is required">
+                                
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{socialAccountEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Name:</td>
+                        <td valign="top"><h:inputText id="name" value="#{socialAccountEditController.soAccount.name}" styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Name is required">
+                            
+                        </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Channel Type:</td>
+                        <td valign="top">
+                            <h:inputHidden id="soChannelId" value="#{socialAccountEditController.soChannelId}"/>
+
+                            <a4j:jsFunction name="rerenderAgain"
+                                            render="gp11,gp12,gp21,gp22">
+                            </a4j:jsFunction>
+
+                            <a4j:jsFunction name="dummy" 
+                                            oncomplete="dummy2();">
+                                <a4j:param name="param1" assignTo="#{socialAccountEditController.soChannelId}"/>
+                            </a4j:jsFunction>
+
+                            <a4j:jsFunction name="dummy2" 
+                                            actionListener="#{socialAccountEditController.changeChannel}"
+                                            immediate="true"
+                                            render="gp11,gp12,gp21,gp22">
+                            </a4j:jsFunction>
+                            <table border="0" cellpadding="2" cellspacing="1">
+                                <tr>
+                            <a4j:repeat value="#{socialAccountEditController.soChannels}" var="list">
+                                <td>
+                                <input type="radio" name="soChannelIdFrm" value="#{list.id}" onclick="setControllerRadioObject('frm:soChannelId','soChannelIdFrm');dummy(this.value)"/>
+                                </td>
+                                <td>
+                                <img alt="" src="#{request.contextPath}/img/social/#{list.pictureLarge}"/>
+                                </td>
+                            </a4j:repeat>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top"><h:inputText id="description" value="#{socialAccountEditController.soAccount.description}" styleClass="textfield" size="50" required="false"
+                                                      requiredMessage="Description is required">
+                            
+                        </h:inputText>
+                            <rich:message for="description" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">
+                            <h:panelGroup id="gp11">
+                            <h:panelGroup rendered="#{socialAccountEditController.soChannelId eq '4'}">
+                                * Pantip Cafe:
+                            </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                        <td valign="top">
+                            <h:panelGroup id="gp12">
+                            <h:panelGroup rendered="#{socialAccountEditController.soChannelId eq '4'}">
+                                <h:selectOneMenu id="ptRoom" value="#{socialAccountEditController.soAccount.ptRoom}">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItem itemLabel="ราชดำเนิน" itemValue="rajdumnern"/>
+                                    <f:selectItem itemLabel="รัชดา" itemValue="ratchada"/>
+                                    <f:selectItem itemLabel="มาบุญครอง" itemValue="mbk"/>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td align="right" valign="top">
+                                <h:panelGroup id="gp21">
+                                <h:panelGroup rendered="#{socialAccountEditController.soChannelId ne '1'}">
+                                    * Keyword:
+                                </h:panelGroup>
+                                </h:panelGroup>
+                            </td>
+                            <td valign="top">
+                                <h:panelGroup id="gp22">
+                                <h:panelGroup rendered="#{socialAccountEditController.soChannelId ne '1'}">
+                                    <h:inputText id="keyword" value="#{socialAccountEditController.soAccount.keyword}" styleClass="textfield" size="50" required="true"
+                                                 requiredMessage="Keyword is required">
+                                        
+                                    </h:inputText>
+                                    <rich:message for="keyword" style="color:red"/>
+                                </h:panelGroup>
+                                </h:panelGroup>
+                            </td>
+                        </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{socialAccountEditController.soAccount.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{socialAccountEditController.saveAction}" rendered="#{socialAccountEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{socialAccountEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+                <script type="text/javascript">
+                    setWebRadioObject('frm:soChannelId','soChannelIdFrm');
+                </script>
+
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

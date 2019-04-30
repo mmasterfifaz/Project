@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Select Customer</ui:define>
+    <ui:param name="modalId" value="selectCustomer"/>
+    <ui:param name="width" value="800"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup style="display: inline">
+            <h:column>#{msg.customerNameSearch}<h:inputText styleClass="textfield" value="#{popupSelectCustomerController.customerName}"/>
+            <a4j:commandButton image="/resources/img/bb_search.png" 
+                               render="custList" 
+                               limitRender="true" execute="@this" immediate="true"
+                               actionListener="#{popupSelectCustomerController.searchCustomerListener}" style="vertical-align: baseline"/></h:column>
+        </h:panelGroup>
+        <rich:dataTable id="custList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                        value="#{popupSelectCustomerController.searchCustomerList}" rows="10" var="list">
+            <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column style="width: 3%;text-align: left;"></rich:column>
+                    <rich:column style="width: 97%;text-align: left;"><h:outputText value="Customer Name" /></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+            <rich:column>
+                
+            </rich:column>
+            <rich:column>
+                <a4j:commandLink title="Customer Name"
+                                 value="#{list.customerName}"
+                                 render="recPanel"
+                                 limitRender="true"
+                                 onclick="#{rich:component('selectCustomer')}.hide();"
+                                 actionListener="#{o.selectRecCustomerListener}">
+                    <f:param name="recCustomerId" value="#{list.customerId}"/>
+                    <f:param name="recCustomerName" value="#{list.customerName}"/>
+                </a4j:commandLink>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="5"/>
+            </f:facet>
+        </rich:dataTable>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,1032 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:ajax="https://ajax4jsf.dev.java.net/ajax" xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="21"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <style type="text/css">
+            <!--
+            div.scrollMotor {
+                height: 100px;
+                width: 200px;
+                overflow: auto;
+                border: 0px solid #666;
+                background-color: #FFFFFF;
+                padding: 0px;
+            }
+            -->
+        </style>
+    </ui:define>
+    <ui:define name="title1">#{msg.saleManagement}</ui:define>
+    <ui:define name="title2">#{msg.saleApproach}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+
+    <ui:define name="detail_1">
+        <!-- BEGIN PROGRAM TOP-MENU (Select Campaign, Product Category Tab ) -->        
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="bottom" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                        <tr>
+                            <td width="160"><h2 class="style1" style="margin-bottom: 12px">#{msg.saleApproach}</h2></td>
+                            <!-- BEGIN CAMPAIGN FIELD -->
+                            <td width="250">
+                                <h:selectOneMenu id="campaign" 
+                                                 style="margin-bottom: 12px"
+                                                 value="#{saleApproachingController.campaignId}">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect} Campaign" itemValue="0"/>
+                                    <f:selectItems value="#{saleApproachingController.campaignList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                    <a4j:ajax event="change"
+                                              queueId="mainQueue"
+                                              render="panelTab,mainPanel" 
+                                              limitRender="true"
+                                              execute="@this"
+                                              listener="#{saleApproachingController.campaignChangeListener}"/>
+                                </h:selectOneMenu>
+                            </td>
+                            <!-- END CAMPAIGN FIELD -->
+                            <!-- BEGIN PRODUCT CATEGORY TAB  -->
+                            <td valign="bottom">
+                                <h:panelGroup id="panelTab" style="border: 0px;padding: 0px;margin: 0px; vertical-align: bottom">
+                                    <h:panelGroup style="border: 0px;padding: 0px;margin: 0px; vertical-align: bottom" rendered="#{saleApproachingController.campaignId ne 0}">
+                                        <table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:1px; vertical-align: bottom;">
+                                            <tr>
+                                                <td width="5"></td>
+                                                <td>
+                                                    <a4j:commandLink rendered="#{saleApproachingController.showTabLife and saleApproachingController.defaultCategoryType ne 'life'}"
+                                                                     execute="@this"
+                                                                     limitRender="true"
+                                                                     immediate="true"
+                                                                     actionListener="#{saleApproachingController.tabListener}">
+                                                        <img src="#{request.contextPath}/img/tb_life01.png" 
+                                                             id="btnLife" name="btnLife" 
+                                                             border="0" alt="Life" title="Life" 
+                                                             onmouseout="changeImage('btnLife', '#{request.contextPath}/img/tb_life01.png')" 
+                                                             onmouseover="changeImage('btnLife', '#{request.contextPath}/img/tb_life02.png')"/>
+                                                        <f:param name="categoryType" value="life"/>
+                                                        <a4j:ajax queueId="mainQueue" render="panelTab,mainPanel"/>
+                                                    </a4j:commandLink>
+                                                    <h:graphicImage url="/img/tb_life02.png" rendered="#{saleApproachingController.defaultCategoryType eq 'life'}"/>
+                                                </td>
+                                                <td>
+                                                    <a4j:commandLink rendered="#{saleApproachingController.showTabNonLife and saleApproachingController.defaultCategoryType ne 'nonlife'}"
+                                                                     execute="@this"
+                                                                     limitRender="true"
+                                                                     immediate="true"
+                                                                     actionListener="#{saleApproachingController.tabListener}">
+                                                        <img src="#{request.contextPath}/img/tb_nonlife01.png"
+                                                             id="btnNonlife" name="btnNonlife" border="0" alt="Non-Life" title="Non-Life"
+                                                             onmouseout="changeImage('btnNonlife', '#{request.contextPath}/img/tb_nonlife01.png')"
+                                                             onmouseover="changeImage('btnNonlife', '#{request.contextPath}/img/tb_nonlife02.png')"/>
+                                                        <f:param name="categoryType" value="nonlife"/>
+                                                        <a4j:ajax queueId="mainQueue"  render="panelTab,mainPanel"/>
+                                                    </a4j:commandLink>
+                                                    <h:graphicImage url="/img/tb_nonlife02.png" rendered="#{saleApproachingController.defaultCategoryType eq 'nonlife'}"/>
+                                                </td>
+                                                <td>
+                                                    <a4j:commandLink rendered="#{saleApproachingController.showTabMotor and saleApproachingController.defaultCategoryType ne 'motor'}"
+                                                                     onmouseout="MM_swapImgRestore()"
+                                                                     onmouseover="MM_swapImage('motor', '', '#{request.contextPath}/img/tb_motor02.png', 1)"
+                                                                     execute="@this"
+                                                                     limitRender="true"
+                                                                     render="panelTab,mainPanel"
+                                                                     actionListener="#{saleApproachingController.tabListener}">
+                                                        <img src="#{request.contextPath}/img/tb_motor01.png" name="motor" border="0" alt="Motor" title="Motor"/>
+                                                        <f:param name="categoryType" value="motor"/>
+                                                        <a4j:ajax queueId="mainQueue"/>
+                                                    </a4j:commandLink>
+                                                    <h:graphicImage url="/img/tb_motor02.png" rendered="#{saleApproachingController.defaultCategoryType eq 'motor'}"/>
+                                                </td>
+                                                <td>
+                                                    <a4j:commandLink rendered="#{saleApproachingController.showTabMotorAdvance and saleApproachingController.defaultCategoryType ne 'motoradvance'}"
+                                                                     onmouseout="MM_swapImgRestore()" 
+                                                                     onmouseover="MM_swapImage('motoradvance', '', '#{request.contextPath}/img/tb_motoradvance02.png', 1)"
+                                                                     execute="@this"
+                                                                     immediate="true"
+                                                                     limitRender="true"
+                                                                     actionListener="#{saleApproachingController.tabListener}">
+                                                        <img src="#{request.contextPath}/img/tb_motoradvance01.png" name="motoradvance" border="0" alt="Motor Advance" title="Motor Advance"/>
+                                                        <f:param name="categoryType" value="motoradvance"/>
+                                                        <a4j:ajax queueId="mainQueue" render="panelTab,mainPanel"/>
+                                                    </a4j:commandLink>
+                                                    <h:graphicImage url="/img/tb_motoradvance02.png" rendered="#{saleApproachingController.defaultCategoryType eq 'motoradvance'}"/>
+                                                </td>
+                                                <td>
+                                                    <a4j:commandLink rendered="#{saleApproachingController.showTabRetail and saleApproachingController.defaultCategoryType ne 'retail'}"
+                                                                     onmouseout="MM_swapImgRestore()" 
+                                                                     onmouseover="MM_swapImage('retail', '', '#{request.contextPath}/img/tb_retail02.png', 1)"
+                                                                     execute="@this"
+                                                                     immediate="true"
+                                                                     limitRender="true"
+                                                                     actionListener="#{saleApproachingController.tabListener}">
+                                                        <img src="#{request.contextPath}/img/tb_retail01.png" name="retail" border="0" alt="Retail" title="Retail"/>
+                                                        <f:param name="categoryType" value="retail"/>
+                                                        <a4j:ajax queueId="mainQueue" render="panelTab,mainPanel"/>
+                                                    </a4j:commandLink>
+                                                    <h:graphicImage url="/img/tb_retail02.png" rendered="#{saleApproachingController.defaultCategoryType eq 'retail'}"/>
+                                                </td>
+                                            </tr>                                                    
+                                        </table>
+                                    </h:panelGroup>
+                                </h:panelGroup></td>
+                            <!-- END PRODUCT CATEGORY TAB  -->                            
+                            <td align="right">
+                                <h:commandButton image="/img/b_shopping_cart.png"
+                                                 alt="Shopping Cart"
+                                                 action="/front/customerHandling/shoppingCart.jsf"
+                                                 rendered="#{saleApproachingController.showTabRetail}"/></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <!-- END PROGRAM TOP-MENU (Select Campaign, Product Category Tab ) -->       
+        <!-- BEGIN FORM -->        
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top" height="300">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="right" class="subh03" style="background: url('#{request.contextPath}/img/bgsum.gif') repeat-x bottom;">
+                                <table border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="59"><a href="#"><img src="#{request.contextPath}/img/b01_productlist02.png" id="Image61" name="Image61" border="0" onmouseout="changeImage('Image61', '#{request.contextPath}/img/b01_productlist02.png')" onmouseover="changeImage('Image61', '#{request.contextPath}/img/b01_productlist02.png')"/></a></td>
+                                        <td width="22"><img src="#{request.contextPath}/img/arr04.png" width="22" height="28"/></td>
+                                        <td width="67"><a href="#"><img src="#{request.contextPath}/img/b03_registra01.png" id="Image63" name="Image63" border="0" onmouseout="changeImage('Image63', '#{request.contextPath}/img/b03_registra01.png')" onmouseover="changeImage('Image63', '#{request.contextPath}/img/b03_registra02.png')"/></a></td>
+                                        <td width="22"><img src="#{request.contextPath}/img/arr04.png" width="22" height="28"/></td>
+                                        <td width="80"><a href="#"><img src="#{request.contextPath}/img/b04_sale01.png" id="Image65" name="Image65" width="68" height="28" border="0" onmouseout="changeImage('Image65', '#{request.contextPath}/img/b04_sale01.png')" onmouseover="changeImage('Image65', '#{request.contextPath}/img/b04_sale02.png')"/></a></td>
+                                        <td width="34"><img src="#{request.contextPath}/img/arr04.png" width="22" height="28"/></td>
+                                        <td width="96"><a href="#"><img src="#{request.contextPath}/img/b05_payment01.png" id="Image66" name="Image66" width="96" height="28" border="0" onmouseout="changeImage('Image66', '#{request.contextPath}/img/b05_payment01.png')" onmouseover="changeImage('Image66', '#{request.contextPath}/img/b05_payment02.png')"/></a></td>
+                                        <td width="37"><img src="#{request.contextPath}/img/arr04.png" width="22" height="28"/></td>
+                                        <td width="56"><a href="#"><img src="#{request.contextPath}/img/b06_saleresult01.png" id="Image68" name="Image68" width="56" height="28" border="0" onmouseout="changeImage('Image68', '#{request.contextPath}/img/b06_saleresult01.png')" onmouseover="changeImage('Image68', '#{request.contextPath}/img/b06_saleresult02.png')"/></a></td>
+                                        <td width="30"><img src="#{request.contextPath}/img/arr04.png" width="22" height="28"/></td>
+                                        <td width="78"><a href="#"><img src="#{request.contextPath}/img/b07_confirmation01.png" id="Image70" name="Image70" width="65" height="28" border="0" onmouseout="changeImage('Image70', '#{request.contextPath}/img/b07_confirmation01.png')" onmouseover="changeImage('Image70', '#{request.contextPath}/img/b07_confirmation02.png')"/></a></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h:panelGroup rendered="#{true}">
+                        <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                            <tr>
+                                <td>
+                                    <h:panelGroup id="mainPanel">
+                                        <h:panelGroup rendered="#{saleApproachingController.campaignId ne 0}">
+                                            <a4j:region>
+                                                <h:panelGroup rendered="#{saleApproachingController.defaultCategoryType eq 'life' or saleApproachingController.defaultCategoryType eq 'motoradvance'}">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                                        <tr>
+                                                            <!-- BEGIN LEFT FORM -->
+                                                            <td valign="top" width="240">
+                                                                <h:selectOneMenu value="#{saleApproachingController.productCategoryId}">
+                                                                    <f:selectItem itemValue="0" itemLabel="All Product Category"/>
+                                                                    <f:selectItems value="#{saleApproachingController.productCategoryList}" 
+                                                                                   var="list" 
+                                                                                   itemLabel="#{list[1]}"
+                                                                                   itemValue="#{list[0]}"/>
+                                                                    <a4j:ajax event="change" 
+                                                                              queueId="mainQueue"
+                                                                              render="datatreeLife,detailLife,panelPriceLife" 
+                                                                              listener="#{saleApproachingController.changeProductCategoryListener}"
+                                                                              limitRender="true" execute="@this"/>
+                                                                </h:selectOneMenu>
+                                                                <div class="scrollProduct">
+                                                                    <rich:dataTable id="datatreeLife" value="#{saleApproachingController.productList}" var="list">
+                                                                        <rich:column style="border-bottom: 1px dotted #CCCCCC;width: 240px" sortBy="#{list[1]}">
+                                                                            <h:commandLink value="#{list[1]}">
+                                                                                <f:param name="productId" value="#{list[0]}"/>
+                                                                                <f:param name="contactResultPlanId" value="#{list[2]}"/>
+                                                                                <a4j:ajax event="click"
+                                                                                          queueId="mainQueue"
+                                                                                          render="detailLife,contactSummaryPopupContainer"
+                                                                                          limitRender="true"
+                                                                                          execute="@this"
+                                                                                          immediate="true"
+                                                                                          oncomplete="return resetRediobuttonContactBar()"
+                                                                                          listener="#{saleApproachingController.selectedProductListener}"/>
+                                                                            </h:commandLink>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                </div>
+                                                            </td>
+                                                            <!-- END LEFT FORM -->
+                                                            <!-- BEGIN MAIN FORM -->
+                                                            <td valign="top">
+                                                                <div class="scrollProduct"
+                                                                     style="border: 10px; background-image: url('#{request.contextPath}/img/bg_00.gif'); background-repeat: repeat-X;">
+                                                                    <h:panelGroup id="detailLife">
+                                                                        <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                                                                            <tr>
+                                                                                <td colspan="2" class="line01">
+                                                                                    <h:outputText style="font-weight: bold;text-decoration: none;padding-bottom: 8px;color: #ec5a13;font-size: 14px;"
+                                                                                                  value="#{saleApproachingController.product.name}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td width="75%" valign="top" style="border-right: 1px dotted #cbcbc3;" class="line01">
+                                                                                    <table border="0" cellspacing="0" cellpadding="5">
+                                                                                        <tr>
+                                                                                            <td valign="top">
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <h:graphicImage url="/img/picproduct01.png" width="140" height="140"
+                                                                                                                            rendered="#{saleApproachingController.product.productThumbnail eq null}"/>
+                                                                                                            <h:graphicImage url="/upload/product/#{saleApproachingController.product.id}/#{saleApproachingController.product.productThumbnail}"
+                                                                                                                            rendered="#{saleApproachingController.product.productThumbnail ne null}" width="140" height="140"/>
+
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                            <td valign="top" align="left">
+                                                                                                <h:outputText class="blue04" value="Please select product" rendered="#{saleApproachingController.product eq null}" />
+                                                                                                <h:outputText  value="#{saleApproachingController.description}" escape="false" rendered="#{saleApproachingController.product ne null}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                                <td width="25%" valign="top" class="line01">
+                                                                                    <h:panelGrid id="panelPriceLife" columns="2" cellpadding="3" rendered="#{saleApproachingController.productFlexField1 ne 'CMI' and saleApproachingController.productFlexField1 ne 'VMI'}">
+                                                                                        <h:outputText value="Date :" rendered="#{saleApproachingController.defaultCategoryType eq 'motoradvance'}"/>
+                                                                                        <rich:calendar 
+                                                                                            value="#{saleApproachingController.dateStart}"
+                                                                                            inputClass="textfield" inputSize="14" buttonClass="rfcalbtn"
+                                                                                            required="true"
+                                                                                            requiredMessage="#{msg.require}"
+                                                                                            locale="#{msg.locale}"
+                                                                                            datePattern="#{msg.datePattern}"
+                                                                                            defaultTime="23:59"
+                                                                                            valueChangeListener="#{saleApproachingController.dateStartListener}"
+                                                                                            rendered="#{saleApproachingController.defaultCategoryType eq 'motoradvance'}">
+                                                                                            <a4j:ajax event="change" 
+                                                                                                      queueId="mainQueue"
+                                                                                                      render="ageLife,priceLife,stampDutyLife,vatLife,netPremiumLife,totalPriceLife,productPlanCoverageLife" limitRender="true" execute="@this"/>
+
+                                                                                            <rich:validator />
+                                                                                        </rich:calendar>
+
+                                                                                        <h:outputText value="#{msg.age} :" rendered="#{saleApproachingController.defaultCategoryType eq 'life'}"/>
+                                                                                        <h:outputText value="Year :" rendered="#{saleApproachingController.defaultCategoryType eq 'motoradvance'}"/>
+                                                                                        <h:panelGroup>
+                                                                                            <h:inputText id="agelife"
+                                                                                                         value="#{saleApproachingController.age}"
+                                                                                                         valueChangeListener="#{saleApproachingController.ageValueChangeListener}"
+                                                                                                         size="5"
+                                                                                                         required="true"
+                                                                                                         style="text-align: right"
+                                                                                                         requiredMessage="#{msg.require}"
+                                                                                                         onkeypress="return isNumberKey(event);">
+                                                                                                <a4j:ajax event="keyup" queueId="mainQueue" immediate="true"
+                                                                                                          render="panelButtonlife,panelPriceLife1,priceLife,stampDutyLife,vatLife,netPremiumLife,totalPricelife,productPlanCoverageLife"/>
+                                                                                            </h:inputText>
+                                                                                            <rich:message for="agelife" style="color:red; display: inline-table"/>
+                                                                                        </h:panelGroup>
+
+                                                                                        <h:outputText value="Gender :"
+                                                                                                      rendered="#{saleApproachingController.product.gender}"/>
+                                                                                        <h:panelGroup rendered="#{saleApproachingController.product.gender}">
+                                                                                            <h:selectOneMenu id="genderlife"
+                                                                                                             value="#{saleApproachingController.gender}"
+                                                                                                             rendered="#{saleApproachingController.product.gender}"
+                                                                                                             valueChangeListener="#{saleApproachingController.genderActionListener}"
+                                                                                                             required="true"
+                                                                                                             requiredMessage="#{msg.require}">
+                                                                                                <f:selectItem itemLabel="Select"/>
+                                                                                                <f:selectItem itemLabel="#{msg.male}" itemValue="M"/>
+                                                                                                <f:selectItem itemLabel="#{msg.female}" itemValue="F"/>
+                                                                                                <a4j:ajax event="change" queueId="mainQueue"
+                                                                                                          render="msgAge,productPlanlife,paymentModeIdlife,panelButtonlife,msgAge,panelPricelife1,pricelife,stampDutylife,vatlife,netPremiumlife,totalPricelife,productPlanCoveragelife"/>
+                                                                                            </h:selectOneMenu>
+                                                                                            <rich:message for="genderlife" style="color:red; display: inline-table"/>
+                                                                                        </h:panelGroup>
+
+                                                                                        <h:outputText value="#{msg.paymentMode} :"
+                                                                                                          rendered="#{saleApproachingController.product.paymentMode ne null and saleApproachingController.product.paymentMode ne ''}"/>
+                                                                                        <h:panelGroup rendered="#{saleApproachingController.product.paymentMode ne null and saleApproachingController.product.paymentMode ne ''}">
+                                                                                            <h:selectOneMenu id="paymentModeIdLife"
+                                                                                                             required="true"
+                                                                                                             requiredMessage="#{msg.require}"
+                                                                                                             value="#{saleApproachingController.paymentModeId}"
+                                                                                                             valueChangeListener="#{saleApproachingController.paymentModeValueChangeListener}"
+                                                                                                             rendered="#{saleApproachingController.product.paymentMode ne null and saleApproachingController.product.paymentMode ne ''}">
+                                                                                                <f:selectItem itemLabel="Select"/>
+                                                                                                <f:selectItems value="#{saleApproachingController.paymentModeList}" var="list" itemValue="#{list[0]}" itemLabel="#{list[1]}"/>
+                                                                                                <a4j:ajax event="change" queueId="mainQueue"
+                                                                                                          render="msgAge,panelButtonLife,productPlanLife,panelPriceLife1,priceLife,stampDutyLife,vatLife,netPremiumLife,totalPriceLife,productPlanCoverageLife"/>
+
+                                                                                            </h:selectOneMenu>
+                                                                                            <rich:message for="paymentModeIdLife" style="color:red; display: inline-table"/>
+                                                                                        </h:panelGroup>
+
+                                                                                        <h:outputText value="#{msg.productPlan} :"
+                                                                                                      rendered="#{saleApproachingController.product ne null}"/>
+                                                                                        <h:panelGroup rendered="#{saleApproachingController.product ne null}">
+                                                                                            <h:selectOneMenu id="productPlanLife"
+                                                                                                             value="#{saleApproachingController.productPlanId}"
+                                                                                                             valueChangeListener="#{saleApproachingController.productPlanValueChangeListener}"
+                                                                                                             required="true"
+                                                                                                             requiredMessage="#{msg.require}">
+                                                                                                <f:selectItem itemLabel="Select" itemValue="0"/>
+                                                                                                <f:selectItems value="#{saleApproachingController.productPlanList}" var="list" itemValue="#{list[0]}" itemLabel="#{list[2]}"/>
+                                                                                                <a4j:ajax event="change" queueId="mainQueue"
+                                                                                                          render="msgAge,panelButtonlife,panelPriceLife1,priceLife,stampDutyLife,vatLife,netPremiumLife,totalPriceLife,productPlanCoverageLife"/>
+                                                                                            </h:selectOneMenu>
+                                                                                            <rich:message for="productPlanNonlife" style="color:red; display: inline-table"/>
+                                                                                        </h:panelGroup>
+                                                                                    </h:panelGrid>
+
+                                                                                    <h:panelGrid id="panelPriceLife1" columns="2" cellpadding="3" rendered="#{saleApproachingController.productFlexField1 ne 'CMI' and saleApproachingController.productFlexField1 ne 'VMI'}">
+                                                                                        <h:panelGroup rendered="#{saleApproachingController.productPlanDetail ne null and saleApproachingController.productPlanDetail ne '0'}">
+                                                                                            <h:panelGrid columns="2" cellpadding="3">
+
+                                                                                                <h:outputText value="#{msg.price} :"/>
+                                                                                                <h:outputText id="priceLife" value="#{saleApproachingController.price}">
+                                                                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                                                                </h:outputText>
+
+                                                                                                <h:outputText value="#{msg.stampDuty} :"/>
+                                                                                                <h:outputText id="stampDutyLife" value="#{saleApproachingController.stampDuty}">
+                                                                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                                                                </h:outputText>
+
+                                                                                                <h:outputText value="#{msg.vat} :"/>
+                                                                                                <h:outputText id="vatLife" value="#{saleApproachingController.vat}">
+                                                                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                                                                </h:outputText>
+
+                                                                                                <h:outputText value="#{msg.netPremium} :"/>
+                                                                                                <h:outputText id="netPremiumLife" value="#{saleApproachingController.netPremium}">
+                                                                                                    <f:convertNumber pattern="#,##0.00"/>
+                                                                                                </h:outputText>
+                                                                                                <!-- 09/30/2015 BEGIN total price will be shown after select payment method at register form -->
+                                                                                                <ui:remove>
+                                                                                                    <h:outputText value="#{msg.totalPrice} :"/>
+                                                                                                    <h:outputText id="totalPriceLife" value="#{saleApproachingController.totalPrice}">
+                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                    </h:outputText>
+                                                                                                </ui:remove>
+                                                                                                <!-- 09/30/2015 END total price will be shown after select payment method at register form -->
+                                                                                            </h:panelGrid>
+                                                                                        </h:panelGroup>
+                                                                                    </h:panelGrid>
+
+                                                                                    <h:panelGrid id="panelButtonLife" columns="1" cellpadding="3">
+
+                                                                                        <h:commandButton value="Register" image="/img/b_registernow2.png"
+                                                                                                         action="#{saleApproachingController.toRegister}" immediate="true"/>
+
+                                                                                    </h:panelGrid>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </h:panelGroup>
+                                                                </div>
+                                                            </td>
+                                                            <!-- END MAIN FORM -->
+                                                        </tr>
+                                                    </table>
+                                                </h:panelGroup>
+                                            </a4j:region>
+                                            <a4j:region>
+                                                <h:panelGroup rendered="#{saleApproachingController.defaultCategoryType eq 'nonlife'}">
+                                                    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                                                        <tr>
+                                                            <td valign="top" width="240">
+                                                                <h:selectOneMenu value="#{saleApproachingController.productCategoryId}">
+                                                                    <f:selectItem itemValue="0" itemLabel="All Product Category"/>
+                                                                    <f:selectItems value="#{saleApproachingController.productCategoryList}" 
+                                                                                   var="list" 
+                                                                                   itemLabel="#{list[1]}"
+                                                                                   itemValue="#{list[0]}"/>
+                                                                    <a4j:ajax event="change" 
+                                                                              queueId="mainQueue"
+                                                                              render="datatreeNonlife,detailNonlife,panelPriceNonlife" 
+                                                                              listener="#{saleApproachingController.changeProductCategoryListener}"
+                                                                              limitRender="true" execute="@this"/>
+                                                                </h:selectOneMenu>
+                                                                <div class="scrollProduct">
+                                                                    <rich:dataTable id="datatreeNonlife" value="#{saleApproachingController.productList}" var="list">
+                                                                        <rich:column style="border-bottom: 1px dotted #CCCCCC;width: 240px" sortBy="#{list[1]}">
+                                                                            <h:commandLink value="#{list[1]}">
+                                                                                <f:param name="productId" value="#{list[0]}"/>
+                                                                                <f:param name="contactResultPlanId" value="#{list[2]}"/>
+                                                                                <a4j:ajax event="click"
+                                                                                          queueId="mainQueue"
+                                                                                          render="detailNonlife,contactSummaryPopupContainer"
+                                                                                          limitRender="true"
+                                                                                          execute="@this"
+                                                                                          immediate="true"
+                                                                                          oncomplete="return resetRediobuttonContactBar()"
+                                                                                          listener="#{saleApproachingController.selectedProductListener}"/>
+                                                                            </h:commandLink>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                </div>
+                                                            </td>
+                                                            <td valign="top">
+
+                                                                <div class="scrollProduct"
+                                                                     style="border: 10px; background-image: url('#{request.contextPath}/img/bg_00.gif'); background-repeat: repeat-X;">
+                                                                    <h:panelGroup id="detailNonlife">
+                                                                        <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                                                                            <tr>
+                                                                                <td colspan="2" class="line01">
+                                                                                    <h:outputText style="font-weight: bold;text-decoration: none;padding-bottom: 8px;color: #ec5a13;font-size: 14px;"
+                                                                                                  value="#{saleApproachingController.product.name}"/>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <tr>
+                                                                                <td width="75%" valign="top" style="border-right: 1px dotted #cbcbc3;" class="line01">
+                                                                                    <table border="0" cellspacing="0" cellpadding="5">
+                                                                                        <tr>
+                                                                                            <td valign="top">
+                                                                                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <h:graphicImage url="/img/picproduct01.png" width="140" height="140"
+                                                                                                                            rendered="#{saleApproachingController.product.productThumbnail eq null}"/>
+                                                                                                            <h:graphicImage url="/upload/product/#{saleApproachingController.product.id}/#{saleApproachingController.product.productThumbnail}"
+                                                                                                                            rendered="#{saleApproachingController.product.productThumbnail ne null}" width="140" height="140"/>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table>
+                                                                                            </td>
+                                                                                            <td valign="top" align="left">
+                                                                                                <h:outputText class="blue04" value="Please select product" rendered="#{saleApproachingController.product eq null}" />
+                                                                                                <h:outputText  value="#{saleApproachingController.description}" escape="false" rendered="#{saleApproachingController.product ne null}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                </td>
+                                                                                <td width="25%" valign="top" class="line01">
+                                                                                    <a4j:region>
+                                                                                        <h:panelGrid id="panelPriceNonlife" columns="2" cellpadding="3">   
+                                                                                            <h:outputText value="#{msg.age} :" rendered="#{saleApproachingController.defaultCategoryType eq 'nonlife'}"/>
+                                                                                            <h:panelGroup>
+                                                                                                <h:inputText id="ageNonlife"
+                                                                                                             value="#{saleApproachingController.age}"
+                                                                                                             valueChangeListener="#{saleApproachingController.ageValueChangeListener}"
+                                                                                                             size="5"
+                                                                                                             style="text-align: right"
+                                                                                                             required="true"
+                                                                                                             requiredMessage="#{msg.require}" 
+                                                                                                             onkeypress="return isNumberKey(event);">
+                                                                                                    <a4j:ajax event="keyup" queueId="mainQueue" immediate="true"
+                                                                                                              render="panelButtonNonlife,msgAge,panelPriceNonlife1,priceNonlife,stampDutyNonlife,vatNonlife,netPremiumNonlife,totalPriceNonlife,productPlanCoverageNonlife"/>
+                                                                                                </h:inputText>
+                                                                                                <rich:message for="ageNonlife" style="color:red; display: inline-table"/>
+                                                                                            </h:panelGroup>
+
+                                                                                            <h:outputText value="Gender :"
+                                                                                                          rendered="#{saleApproachingController.product.gender}"/>
+                                                                                            <h:panelGroup rendered="#{saleApproachingController.product.gender}">
+                                                                                                <h:selectOneMenu id="genderNonlife"
+                                                                                                                 value="#{saleApproachingController.gender}"
+                                                                                                                 rendered="#{saleApproachingController.product.gender}"
+                                                                                                                 valueChangeListener="#{saleApproachingController.genderActionListener}"
+                                                                                                                 required="true"
+                                                                                                                 requiredMessage="#{msg.require}">
+                                                                                                    <f:selectItem itemLabel="Select"/>
+                                                                                                    <f:selectItem itemLabel="#{msg.male}" itemValue="M"/>
+                                                                                                    <f:selectItem itemLabel="#{msg.female}" itemValue="F"/>
+                                                                                                    <a4j:ajax event="change" queueId="mainQueue"
+                                                                                                              render="msgAge,productPlanNonlife,paymentModeIdNonlife,panelButtonNonlife,msgAge,panelPriceNonlife1,priceNonlife,stampDutyNonlife,vatNonlife,netPremiumNonlife,totalPriceNonlife,productPlanCoverageNonlife"/>
+                                                                                                </h:selectOneMenu>
+                                                                                                <rich:message for="genderNonlife" style="color:red; display: inline-table"/>
+                                                                                            </h:panelGroup>
+
+                                                                                            <h:outputText value="#{msg.paymentMode} :"
+                                                                                                          rendered="#{saleApproachingController.product.paymentMode ne null and saleApproachingController.product.paymentMode ne ''}"/>
+                                                                                            <h:panelGroup rendered="#{saleApproachingController.product.paymentMode ne null and saleApproachingController.product.paymentMode ne ''}">
+                                                                                                <h:selectOneMenu id="paymentModeIdNonlife"
+                                                                                                                 required="true"
+                                                                                                                 requiredMessage="#{msg.require}"
+                                                                                                                 value="#{saleApproachingController.paymentModeId}"
+                                                                                                                 valueChangeListener="#{saleApproachingController.paymentModeValueChangeListener}"
+                                                                                                                 rendered="#{saleApproachingController.product.paymentMode ne null and saleApproachingController.product.paymentMode ne ''}">
+                                                                                                    <f:selectItem itemLabel="Select"/>
+                                                                                                    <f:selectItems value="#{saleApproachingController.paymentModeList}" var="list" itemValue="#{list[0]}" itemLabel="#{list[1]}"/>
+                                                                                                    <a4j:ajax event="change" queueId="mainQueue"
+                                                                                                              render="msgAge,panelButtonNonlife,productPlanNonlife,msgAge,panelPriceNonlife1,priceNonlife,stampDutyNonlife,vatNonlife,netPremiumNonlife,totalPriceNonlife,productPlanCoverageNonlife"/>
+
+                                                                                                </h:selectOneMenu>
+                                                                                                <rich:message for="paymentModeIdNonlife" style="color:red; display: inline-table"/>
+                                                                                            </h:panelGroup>
+
+                                                                                            <h:outputText value="#{msg.productPlan} :"
+                                                                                                          rendered="#{saleApproachingController.product ne null}"/>
+                                                                                            <h:panelGroup rendered="#{saleApproachingController.product ne null}">
+                                                                                                <table>
+                                                                                                    <tr>
+                                                                                                        <td>
+                                                                                                            <h:selectOneMenu id="productPlanNonlife"
+                                                                                                                        value="#{saleApproachingController.productPlanId}"
+                                                                                                                        valueChangeListener="#{saleApproachingController.productPlanValueChangeListener}"
+                                                                                                                        required="true"
+                                                                                                                        requiredMessage="#{msg.require}">
+                                                                                                                <f:selectItem itemLabel="Select" itemValue="0"/>
+                                                                                                                <f:selectItems value="#{saleApproachingController.productPlanList}" var="list" itemValue="#{list[0]}" itemLabel="#{list[2]}"/>
+                                                                                                                <a4j:ajax event="change" queueId="mainQueue" 
+                                                                                                                          render="msgAge,panelButtonNonlife,msgAge,panelPriceNonlife1,priceNonlife,stampDutyNonlife,vatNonlife,netPremiumNonlife,totalPriceNonlife,productPlanCoverageNonlife"/>
+                                                                                                            </h:selectOneMenu>
+                                                                                                            <rich:message for="productPlanNonlife" style="color:red; display: inline-table"/>
+                                                                                                        </td>
+                                                                                                        <td width="25%" valign="top">
+                                                                                                            <span></span>
+                                                                                                            <h:panelGroup id ="familyPlanNonlifeButton">
+                                                                                                                <h:outputLink value="#{request.contextPath}/share/familyplanlist.jsf" target="_blank"  styleClass="gray02link" rendered="#{saleApproachingController.product.familyProductType eq 2}">
+                                                                                                                    <h:graphicImage value="/img/b_calculator2.png"/>
+                                                                                                                    <f:param name="productId" value="#{saleApproachingController.productId}"/>
+                                                                                                                    <f:param name="familyProductLogic" value="#{saleApproachingController.product.familyProductLogic}"/>
+                                                                                                                </h:outputLink>
+                                                                                                            </h:panelGroup>
+                                                                                                        </td>
+                                                                                                    </tr>
+                                                                                                </table> 
+                                                                                            </h:panelGroup>
+
+                                                                                        </h:panelGrid>
+
+                                                                                        <h:panelGroup id="msgAge">
+                                                                                            <h:panelGroup rendered="#{saleApproachingController.showEMsgAgeOutOfRange}">
+                                                                                                <h:panelGrid columns="2" cellpadding="3">
+                                                                                                    <h:outputText value="Age out of range." style="color: red"/>
+                                                                                                </h:panelGrid>
+                                                                                            </h:panelGroup>
+                                                                                        </h:panelGroup>
+
+                                                                                        <h:panelGroup id="panelPriceNonlife1">
+                                                                                            <h:panelGroup rendered="#{saleApproachingController.product ne null and saleApproachingController.productPlanDetail ne null and saleApproachingController.productPlanDetail ne '0'}">
+                                                                                                <h:panelGrid columns="2" cellpadding="3">
+
+                                                                                                    <h:outputText value="#{msg.price} :"/>
+                                                                                                    <h:outputText id="priceNonlife" value="#{saleApproachingController.price}">
+                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                    </h:outputText>
+
+                                                                                                    <h:outputText value="#{msg.stampDuty} :"/>
+                                                                                                    <h:outputText id="stampDutyNonlife" value="#{saleApproachingController.stampDuty}">
+                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                    </h:outputText>
+
+                                                                                                    <h:outputText value="#{msg.vat} :"/>
+                                                                                                    <h:outputText id="vatNonlife" value="#{saleApproachingController.vat}">
+                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                    </h:outputText>
+
+                                                                                                    <h:outputText value="#{msg.netPremium} :"/>
+                                                                                                    <h:outputText id="netPremiumNonlife" value="#{saleApproachingController.netPremium}">
+                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                    </h:outputText>
+                                                                                                    <!-- 09/30/2015 BEGIN total price will be shown after select payment method at register form -->    
+                                                                                                    <ui:remove>
+                                                                                                        <h:outputText value="#{msg.totalPrice} :"/>
+                                                                                                        <h:outputText id="totalPriceNonlife" value="#{saleApproachingController.totalPrice}">
+                                                                                                            <f:convertNumber pattern="#,##0.00"/>
+                                                                                                        </h:outputText>
+                                                                                                    </ui:remove>
+                                                                                                    <!-- 09/30/2015 END total price will be shown after select payment method at register form -->    
+                                                                                                        
+                                                                                                </h:panelGrid>
+                                                                                            </h:panelGroup>
+                                                                                        </h:panelGroup>
+                                                                                        
+                                                                                        <table width="80%" align="left">
+                                                                                            <tr><td>
+                                                                                                <h:panelGroup id="productPlanCoverageNonlife">
+                                                                                                    <h:panelGroup rendered="#{saleApproachingController.productPlanDetail ne null and saleApproachingController.productPlanDetail ne '0' and 
+                                                                                                                              saleApproachingController.product.productPlanCoverage eq '1'}">
+                                                                                                        <rich:dataTable value="#{saleApproachingController.coverageInfoList}" style="width: 100%;" styleClass="tableline01" headerClass="subh01"
+                                                                                                                        rows="#{global.maxrows}" var="list">
+                                                                                                            <f:facet name="header">
+                                                                                                                <rich:columnGroup>
+                                                                                                                    <rich:column style="text-align: center; color: #000000"><h:outputText value="Code"/></rich:column>
+                                                                                                                    <rich:column style="text-align: center; color: #000000"><h:outputText value="Net Premium"/></rich:column>
+                                                                                                                    <rich:column style="text-align: center; color: #000000"><h:outputText value="Sum Insured"/></rich:column>
+                                                                                                                </rich:columnGroup>
+                                                                                                            </f:facet>
+                                                                                                                <rich:column style="text-align: left;"><h:outputText value="#{list.code}"/></rich:column>
+                                                                                                                <rich:column style="text-align: right;">
+                                                                                                                    <h:outputText value="#{saleApproachingController.convertStringToInt(list.premium_Amt)}">
+                                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                                    </h:outputText>
+                                                                                                                </rich:column>
+                                                                                                                <rich:column style="text-align: right;">
+                                                                                                                    <h:outputText value="#{saleApproachingController.convertStringToInt(list.sum_Insured)}">
+                                                                                                                        <f:convertNumber pattern="#,##0.00"/>
+                                                                                                                    </h:outputText>
+                                                                                                                </rich:column>
+                                                                                                        </rich:dataTable>
+                                                                                                    </h:panelGroup>
+                                                                                                </h:panelGroup>
+                                                                                            </td></tr>
+                                                                                        </table>
+                                                                                        														
+ 
+                                                                                        <h:panelGrid id="panelButtonNonlife" columns="1" cellpadding="3">
+
+                                                                                            <h:commandButton value="Register" image="/img/b_registernow2.png"
+                                                                                                             action="#{saleApproachingController.toRegister}"
+                                                                                                             disabled="#{saleApproachingController.product eq null or saleApproachingController.productPlanDetail eq null}"/>
+
+                                                                                        </h:panelGrid>
+                                                                                    </a4j:region>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </h:panelGroup>
+
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </h:panelGroup>
+                                            </a4j:region>
+                                            <a4j:region>
+                                                <h:panelGroup rendered="#{saleApproachingController.defaultCategoryType eq 'motor'}">
+                                                    <table border="0" cellspacing="0" cellpadding="3">
+                                                        <tr>
+                                                            <td>Product Category : </td>
+                                                            <td rowspan="6" valign="top">
+                                                                <div class="scrollMotor">
+                                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td>
+                                                                                <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                                                    <h:selectBooleanCheckbox id="selectProductCategoryAll" value="#{saleApproachingController.checkProductCategoryAll}">
+                                                                                        <a4j:ajax event="click" 
+                                                                                                  queueId="mainQueue"
+                                                                                                  render="selectProductCategoryAll,productCategoryList" 
+                                                                                                  limitRender="true"
+                                                                                                  listener="#{saleApproachingController.checkProductCategoryAllListener}">
+                                                                                            <f:param name="checkProductCategoryAll" value="#{saleApproachingController.checkProductCategoryAll}"/>
+                                                                                        </a4j:ajax>
+                                                                                    </h:selectBooleanCheckbox>
+                                                                                    <h:outputText value="All"/>
+                                                                                </h:panelGrid>
+                                                                            </td>
+                                                                        </tr> 
+                                                                        <tr>
+                                                                            <td> 
+                                                                                <h:panelGroup id="productCategoryList">
+                                                                                    <a4j:repeat value="#{saleApproachingController.productCategoryList}" var="list">
+                                                                                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                                                            <h:selectBooleanCheckbox value="#{saleApproachingController.selectedIds[list[0]]}"/>
+                                                                                            <h:outputText value="#{list[1]}"/>
+                                                                                        </h:panelGrid>
+                                                                                    </a4j:repeat>
+                                                                                </h:panelGroup>
+                                                                            </td>
+
+                                                                        </tr>                       
+                                                                    </table>
+                                                                </div>
+
+                                                            </td>                                                            
+                                                            <td>Product Plan Category : </td>
+                                                            <td rowspan="6" valign="top">
+                                                                <div class="scrollMotor">
+                                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                                        <tr>
+                                                                            <td><h:selectBooleanCheckbox id="selectProductPlanCategoryAll" value="#{saleApproachingController.checkProductPlanCategoryAll}">
+                                                                                    <a4j:ajax event="click" 
+                                                                                              queueId="mainQueue"
+                                                                                              render="selectProductPlanCategoryAll,productPlanCategoryList" 
+                                                                                              limitRender="true"
+                                                                                              listener="#{saleApproachingController.checkProductPlanCategoryAllListener}">
+                                                                                        <f:param name="checkProductPlanCategoryAll" value="#{saleApproachingController.checkProductPlanCategoryAll}"/>
+                                                                                    </a4j:ajax>
+                                                                                </h:selectBooleanCheckbox>
+                                                                                <h:outputText value="All"/></td>
+                                                                        </tr> 
+                                                                        <tr>
+                                                                            <td> 
+                                                                                <h:panelGroup id="productPlanCategoryList">
+                                                                                    <a4j:repeat value="#{saleApproachingController.productPlanCategoryList}" var="list">
+                                                                                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                                                            <h:selectBooleanCheckbox value="#{saleApproachingController.selectedIds1[list.id]}" label="#{list.name}" title="#{list.name}"/>
+                                                                                            <h:outputText value="#{list.name}"/>
+                                                                                        </h:panelGrid>
+                                                                                    </a4j:repeat>
+                                                                                </h:panelGroup></td>
+
+                                                                        </tr>                       
+                                                                    </table>
+                                                                </div>
+                                                            </td>
+                                                            <td align="right" valign="top">Model Type :</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="modelTypeId" 
+                                                                                 value="#{saleApproachingController.modelTypeId}"
+                                                                                 styleClass="select08"
+                                                                                 valueChangeListener="#{saleApproachingController.modelTypeChangeListener}">
+                                                                    <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                    <f:selectItems value="#{saleApproachingController.modelTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                    <a4j:ajax event="change" 
+                                                                              queueId="mainQueue"
+                                                                              render="brandId,modelId,modelYear" 
+                                                                              limitRender="true" 
+                                                                              execute="@this"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                            <td rowspan="6" valign="bottom">
+                                                                <a4j:commandButton actionListener="#{saleApproachingController.searchActionListener}" 
+                                                                                   render="productList,notfound" 
+                                                                                   limitRender="true" 
+                                                                                   image="/img/b_search.png">
+                                                                    <a4j:ajax queueId="mainQueue"/>
+                                                                </a4j:commandButton></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="right" valign="top">Brand :</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="brandId" 
+                                                                                 value="#{saleApproachingController.brandId}"
+                                                                                 styleClass="select08"
+                                                                                 valueChangeListener="#{saleApproachingController.brandChangeListener}">
+                                                                    <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                    <f:selectItems value="#{saleApproachingController.brandList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                    <a4j:ajax event="change" 
+                                                                              queueId="mainQueue"
+                                                                              render="modelId,modelYear" 
+                                                                              limitRender="true" 
+                                                                              execute="@this"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="right" valign="top">Model :</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="modelId" 
+                                                                                 value="#{saleApproachingController.modelId}"
+                                                                                 styleClass="select08">
+                                                                    <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                    <f:selectItems value="#{saleApproachingController.modelList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                    <a4j:ajax event="change" 
+                                                                              queueId="mainQueue"
+                                                                              render="modelYear" 
+                                                                              limitRender="true" 
+                                                                              execute="@this"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="right" valign="top">Year :</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="modelYear" 
+                                                                                 value="#{saleApproachingController.modelYear}"
+                                                                                 styleClass="select08">
+                                                                    <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                    <f:selectItems value="#{saleApproachingController.modelYearList}"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="right" valign="top">Sum Insured Min. :</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="sumInsuredMin" 
+                                                                                 value="#{saleApproachingController.sumInsuredMin}">
+                                                                    <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="1" itemValue="1"/>
+                                                                    <f:selectItem itemLabel="50,001" itemValue="50001"/>
+                                                                    <f:selectItem itemLabel="100,001" itemValue="100001"/>
+                                                                    <f:selectItem itemLabel="150,001" itemValue="150001"/>
+                                                                    <f:selectItem itemLabel="200,001" itemValue="200001"/>
+                                                                    <f:selectItem itemLabel="250,001" itemValue="250001"/>
+                                                                    <f:selectItem itemLabel="300,001" itemValue="300001"/>
+                                                                    <f:selectItem itemLabel="350,001" itemValue="350001"/>
+                                                                    <f:selectItem itemLabel="400,001" itemValue="400001"/>
+                                                                    <f:selectItem itemLabel="450,001" itemValue="450001"/>
+                                                                    <f:selectItem itemLabel="500,001" itemValue="500001"/>
+                                                                    <f:selectItem itemLabel="550,001" itemValue="550001"/>
+                                                                    <f:selectItem itemLabel="600,001" itemValue="600001"/>
+                                                                    <f:selectItem itemLabel="650,001" itemValue="650001"/>
+                                                                    <f:selectItem itemLabel="700,001" itemValue="700001"/>
+                                                                    <f:selectItem itemLabel="750,001" itemValue="750001"/>
+                                                                    <f:selectItem itemLabel="800,001" itemValue="800001"/>
+                                                                    <f:selectItem itemLabel="850,001" itemValue="850001"/>
+                                                                    <f:selectItem itemLabel="900,001" itemValue="900001"/>
+                                                                    <f:selectItem itemLabel="950,001" itemValue="950001"/>
+                                                                    <f:selectItem itemLabel="1,000,001" itemValue="1000001"/>
+                                                                </h:selectOneMenu>
+                                                                Max. :
+                                                                <h:selectOneMenu id="sumInsuredMax" 
+                                                                                 value="#{saleApproachingController.sumInsuredMax}">
+                                                                    <f:selectItem itemLabel="All" itemValue="0"/>
+                                                                    <f:selectItem itemLabel="50,000" itemValue="50000"/>
+                                                                    <f:selectItem itemLabel="100,000" itemValue="100000"/>
+                                                                    <f:selectItem itemLabel="150,000" itemValue="150000"/>
+                                                                    <f:selectItem itemLabel="200,000" itemValue="200000"/>
+                                                                    <f:selectItem itemLabel="250,000" itemValue="250000"/>
+                                                                    <f:selectItem itemLabel="300,000" itemValue="300000"/>
+                                                                    <f:selectItem itemLabel="350,000" itemValue="350000"/>
+                                                                    <f:selectItem itemLabel="400,000" itemValue="400000"/>
+                                                                    <f:selectItem itemLabel="450,000" itemValue="450000"/>
+                                                                    <f:selectItem itemLabel="500,000" itemValue="500000"/>
+                                                                    <f:selectItem itemLabel="550,000" itemValue="550000"/>
+                                                                    <f:selectItem itemLabel="600,000" itemValue="600000"/>
+                                                                    <f:selectItem itemLabel="650,000" itemValue="650000"/>
+                                                                    <f:selectItem itemLabel="700,000" itemValue="700000"/>
+                                                                    <f:selectItem itemLabel="750,000" itemValue="750000"/>
+                                                                    <f:selectItem itemLabel="800,000" itemValue="800000"/>
+                                                                    <f:selectItem itemLabel="850,000" itemValue="850000"/>
+                                                                    <f:selectItem itemLabel="900,000" itemValue="900000"/>
+                                                                    <f:selectItem itemLabel="950,000" itemValue="950000"/>
+                                                                    <f:selectItem itemLabel="1,000,000" itemValue="1000000"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td align="right" valign="top">Claim Type :</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="claimType" 
+                                                                                 value="#{saleApproachingController.claimType}">
+                                                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                                                    <f:selectItem itemLabel="อู่ประกัน" itemValue="อู่ประกัน"/>
+                                                                    <f:selectItem itemLabel="อู่ห้าง" itemValue="อู่ห้าง"/>
+                                                                </h:selectOneMenu>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <rich:dataTable id="productList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                    value="#{saleApproachingController.dataList}" 
+                                                                    rows="#{global.maxrows}" 
+                                                                    var="list"
+                                                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                    onrowmouseout="this.style.backgroundColor='#F8F8F8'">  
+                                                        <f:facet name="header">
+                                                            <rich:columnGroup>
+                                                                <rich:column style="text-align: left;">บริษัทประกัน</rich:column>
+                                                                <rich:column style="text-align: left;">ประเภทประกัน</rich:column>
+                                                                <rich:column style="text-align: left;">ชนิด</rich:column>
+                                                                <rich:column style="text-align: left;">ยี่ห้อ</rich:column>
+                                                                <rich:column style="text-align: left;">รุ่น</rich:column>
+                                                                <rich:column style="text-align: left;">ปี</rich:column>
+                                                                <rich:column style="text-align: left;">ชื่อ</rich:column>
+                                                                <rich:column style="text-align: left;">ประเภทอู่</rich:column>
+                                                                <rich:column style="text-align: left;">Package</rich:column>
+                                                                <rich:column style="text-align: left;">ทุนประกัน</rich:column>
+                                                                <rich:column style="text-align: left;">เบี้ย</rich:column>
+                                                                <rich:column style="text-align: left;"></rich:column>
+                                                            </rich:columnGroup>
+                                                        </f:facet>
+
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.product.productCategory.name}"/>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <h:outputText value="#{list.productPlanCategory.name}"/>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <h:outputText value="#{list.product.modelType.name}"/>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <h:outputText value="#{list.product.model.brand.name}"/>
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.product.model.name}"/>
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.product.modelYear}"/>
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <a4j:commandLink value="#{list.product.name}" 
+                                                                             actionListener="#{saleApproachingController.selectedProductListener}" 
+                                                                             render="productdetailpopup" limitRender="true" execute="@this"
+                                                                             oncomplete="Richfaces.showModalPanel('productdetailpopup');" >
+                                                                <f:param name="productId" value="#{list.product.id}"/>
+                                                                <a4j:ajax queueId="mainQueue"/>
+                                                            </a4j:commandLink>                                                                           
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.claimType}"/>
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.name}"/>
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.motorLoss}">
+                                                                <f:convertNumber pattern="#,##0.00"/>
+                                                            </h:outputText>
+                                                        </rich:column>
+                                                        <rich:column >
+                                                            <h:outputText value="#{list.netPremium}">
+                                                                <f:convertNumber pattern="#,##0.00"/>
+                                                            </h:outputText>
+                                                        </rich:column>
+                                                        <rich:column >
+
+                                                            <h:commandButton value="Register" image="/img/b_registernow2.png"
+                                                                             actionListener="#{userSession.showContactSummaryListener}"
+                                                                             action="#{saleApproachingController.toRegister}">
+                                                                <f:param name="productPlanId" value="#{list.id}"/>
+                                                            </h:commandButton>
+
+                                                        </rich:column>
+                                                        <f:facet name="footer">
+                                                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" 
+                                                                               renderIfSinglePage="false" 
+                                                                               render="productList">
+                                                            </rich:dataScroller>                                
+                                                        </f:facet>
+                                                    </rich:dataTable>
+                                                    <center>
+                                                        <h:panelGroup id="notfound">
+                                                            <h:outputText value=" Data not found" 
+                                                                          rendered="#{empty saleApproachingController.dataList}"></h:outputText>
+                                                        </h:panelGroup>
+                                                    </center>
+                                                </h:panelGroup>
+                                            </a4j:region>
+                                            <h:panelGroup rendered="#{saleApproachingController.defaultCategoryType eq 'retail'}">
+                                                retail
+                                            </h:panelGroup>
+
+
+                                        </h:panelGroup>  
+                                    </h:panelGroup>
+
+                                </td>
+                            </tr>
+                        </table>  
+
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{false}">
+
+                    </h:panelGroup>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="popupModal">
+
+        <rich:popupPanel id="productdetailpopup" width="1000" height="700" style="padding: 0 0 0 0; border-style: none" >
+            <h:form id="frmPopup">
+                <table width="1000" border="0" align="center" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td><img src="#{request.contextPath}/img/box12.png" width="5" height="48"/></td>
+                        <td width="100%" background="#{request.contextPath}/img/box16.png" bgcolor="#FFFFFF">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+                                <tr><td><h2><img src="#{request.contextPath}/icon/product02.png" width="32" height="32" hspace="5" align="absmiddle" />Product Information</h2></td>
+
+                                    <td align="right"><a href="#" class="close" onclick="#{rich:component('productdetailpopup')}.hide()">Close X</a>&#160;&#160;</td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td><img src="#{request.contextPath}/img/box13.png" width="5" height="48"/></td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#FFFFFF"></td>
+                        <td bgcolor="#FFFFFF" valign="top">
+                            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td style="width: 100%;height: 480px;" valign="top"><div class="scroll">    
+                                        <h:outputText  value="#{saleApproachingController.product.description}" escape="false"/>
+                                    </div></td></tr>
+                            </table>
+                        </td>
+                        <td bgcolor="#FFFFFF"></td>
+                    </tr>
+                    <tr>
+                        <td><img src="#{request.contextPath}/img/box15.png" width="5" height="5"/></td>
+                        <td bgcolor="#FFFFFF"><img src="#{request.contextPath}/img/sp.gif" width="5" height="5"/></td>
+                        <td><img src="#{request.contextPath}/img/box14.png" width="5" height="5"/></td>
+                    </tr>
+                </table>
+            </h:form>
+        </rich:popupPanel>
+    </ui:define>
+</ui:composition>

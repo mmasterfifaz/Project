@@ -1,0 +1,141 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <ui:define name="javascript">
+    </ui:define>
+    <ui:define name="title1">#{msg.toDoListTitle}</ui:define>
+    <ui:define name="title2">#{msg.pending}</ui:define>
+    <ui:define name="type">#{msg.pending}</ui:define>
+    <ui:define name="detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.pending}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                        <td><a href="#{request.contextPath}/front/todolist/incoming.jsf">
+                                                <img src="#{request.contextPath}/img/tb_incoming01.png" id="sub01" name="sub01" border="0" width="69" height="25"
+                                                      onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_incoming01.png')" 
+                                                      onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_incoming02.png')"/></a></td>
+                                        <td><a href="#{request.contextPath}/front/todolist/pending.jsf">
+                                                <img src="#{request.contextPath}/img/tb_pending02.png" id="sub02" name="sub02" border="0" /></a></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="250" align="right">
+                                <ui:include id="search" src="includeCaseSearch.xhtml"> </ui:include>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+        <rich:dataTable style="width: 100%" id="dataList" styleClass="tableline01" value="#{toDoListController.pendingList}" 
+                        rows="#{global.maxrows}" var="list">
+            <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column styleClass="subh01" style="width: 3%"></rich:column>
+                    <rich:column styleClass="subh01" ></rich:column>
+                    <rich:column styleClass="subh01" ></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.caseIDTitle}" /></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.createDateTitle}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.customer}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.caseTypeTitle}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.caseTopicTitle}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="#{msg.caseDetailTitle}"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="Delegate To"/></rich:column>
+                    <rich:column styleClass="subh01"><h:outputText value="Acceptance Status"/></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+            <rich:column>
+                 <h:graphicImage library="icon" name="p_immediate.png" title="Immediate" alt="Immediate" rendered="#{list.contactCase.priority eq 'immediate'}" style="padding: 0px; border: 0px"/>
+                 <h:graphicImage library="icon" name="p_high.png" title="High" alt="High" rendered="#{list.contactCase.priority eq 'high'}" style="padding: 0px; border: 0px"/>
+                 <h:graphicImage library="icon" name="p_medium.png" title="Medium" alt="Medium" rendered="#{list.contactCase.priority eq 'medium'}" style="padding: 0px; border: 0px"/>
+                 <h:graphicImage library="icon" name="p_low.png" title="Low" alt="Low" rendered="#{list.contactCase.priority eq 'low'}" style="padding: 0px; border: 0px"/>
+            </rich:column>
+            <rich:column>
+                <h:graphicImage library="icon" name="over-due-close.png" title="Over due close" alt="Over due close" rendered="#{list.overClose}" style="padding: 0px; border: 0px"/>
+            </rich:column>
+            <rich:column>
+                <h:graphicImage library="icon" name="reject.png" title="Reject" alt="Reject Case" rendered="#{list.rejectFlag}" style="padding: 0px; border: 0px"/>
+            </rich:column>
+            <rich:column>
+                <h:commandLink title="#{list.contactCase.code}" value="#{list.contactCase.code}" action="#{toDoListController.editCase}" >
+                    <f:param name="from" value="activity"/>
+                    <f:param name="selectId" value="#{list.contactCase.id}"/>
+                    <f:param name="customerId" value="#{list.contactCase.customerId.id}"/>
+                </h:commandLink>
+                <h:graphicImage library="icon" name="clip.png" title="Attach File" alt="Attach File" rendered="#{list.contactCase.attachFile}" width="16" height="16"  style="padding: 0px; border: 0px;display: inline"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactCase.createDate}">
+                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactCase.customerId.name}"/>&#160;&#160;<h:outputText value="#{list.contactCase.customerId.surname}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactCase.caseDetailId.caseTopicId.caseTypeId.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactCase.caseDetailId.caseTopicId.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.contactCase.caseDetailId.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:graphicImage library="icon" name="outbound.png" alt="Task Delegate" width="15" height="16" style="display: inline"
+                                rendered="#{(list.receiver_user ne list.sender) and (list.sender ne '')}" />
+                <h:outputText value=" #{list.receiver_user}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.receiver_status }"/>
+            </rich:column>
+            <f:facet name="footer">
+               <rich:dataScroller fastControls="hide" maxPages="${global.maxpages}" renderIfSinglePage="false"/>
+            </f:facet>
+        </rich:dataTable>
+            <table border="0" cellspacing="0" cellpadding="0" style="margin-left: 4px; margin-top: 10px">
+                <tr>
+                    <td><h:graphicImage library="icon" name="over-due-close_key.png" alt="Over due close" style="display: inline-block"/></td>
+                    <td>#{msg.overDueClose}</td>
+                    <td>&#160;&#160;<h:graphicImage library="icon" name="reject.png" alt="Reject Case" style="display: inline-block"/></td>
+                    <td>#{msg.reject}</td>
+                    <td>&#160;&#160;<h:graphicImage library="icon" name="p_immediate.png" alt="Immediate" style="display: inline-block" /></td>
+                    <td>Immediate Priority</td>
+                    <td>&#160;&#160;<h:graphicImage library="icon" name="p_high.png" alt="High" style="display: inline-block" /></td>
+                    <td>High Priority</td>
+                    <td>&#160;&#160;<h:graphicImage library="icon" name="p_medium.png" alt="Medium" style="display: inline-block" /></td>
+                    <td>Medium Priority</td>
+                    <td>&#160;&#160;<h:graphicImage library="icon" name="p_low.png" alt="Low" style="display: inline-block" /></td>
+                    <td>Low Priority</td>
+                </tr>
+            </table>
+            </td>
+            <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><div/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+    <ui:define name="popupModal"></ui:define>
+</ui:composition>

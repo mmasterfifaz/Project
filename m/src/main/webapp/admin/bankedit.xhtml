@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Bank Issuer: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{bankEditController.mode}"/>
+                <h:inputHidden value="#{bankEditController.bank.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{bankEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Code:</td>
+                        <td><h:inputText id="code" value="#{bankEditController.bank.code}" styleClass="textfield" size="10" required="true" maxlength="10"
+                                         requiredMessage="Code is required">
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Thai Name:</td>
+                        <td valign="top"><h:inputText id="name" value="#{bankEditController.bank.name}" styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Name is required">
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{bankEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">English Name:</td>
+                        <td valign="top"><h:inputText id="nameEn" value="#{bankEditController.bank.nameEn}" styleClass="textfield" size="50">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">VISA Card No.:</td>
+                        <td valign="top">
+                            <h:inputText id="visa" value="#{bankEditController.cardIssuerVisa.cardList}" styleClass="textfield" size="100">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">MASTER Card No.:</td>
+                        <td valign="top">
+                            <h:inputText id="master" value="#{bankEditController.cardIssuerMaster.cardList}" styleClass="textfield" size="100">
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{bankEditController.bank.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{bankEditController.saveAction}" rendered="#{bankEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{bankEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

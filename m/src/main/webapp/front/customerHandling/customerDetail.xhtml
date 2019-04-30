@@ -1,0 +1,268 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:ajax="https://ajax4jsf.dev.java.net/ajax">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="21"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+    </ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.caseManagement} / #{msg.caseHanding}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+
+    <ui:define name="detail_1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td><h2 class="style1">#{msg.caseHistory}</h2></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top">
+                    <table width="100%" border="0" cellspacing="1" cellpadding="2">
+                        <tr>
+                            <td style="width: 100%;text-align: left;" colspan="4">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                                <tr>
+                                    <td bgcolor="#E0DED2" width="39%" style="padding-left: 4px"><h4>Contact Information</h4></td>
+                                    <td bgcolor="#E0DED2" width="31%" style="padding-left: 4px"><h4>Case Information</h4></td>
+                                    <td bgcolor="#E0DED2" width="25%" style="padding-left: 4px"><h4>Related Activity </h4></td>
+                                </tr>
+                                </table>
+                                <rich:dataTable id="contactCaseList" style="width: 100%" headerClass="subh01"
+                                            value="#{customerHandlingDetailController.contactCaseList}"
+                                            styleClass="tableline01 tb_contact_case_detail"
+                                            var="list"
+                                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                            onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column styleClass="subh01" style="width: 2%;text-align: left;"></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 6%;text-align: left;"><h:outputText value="#{msg.channelTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 9%;text-align: left;"><h:outputText value="#{msg.contactDateTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 8%;text-align: left;"><h:outputText value="#{msg.resultTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 8%;text-align: left;"><h:outputText value="#{msg.contactToTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 6%;text-align: left;"><h:outputText value="#{msg.createByTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 7%;text-align: left;"><h:outputText value="#{msg.serviceTypeTitle}"/></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 8%;text-align: left;"><h:outputText value="#{msg.caseTypeTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 6%;text-align: left;"><h:outputText value="#{msg.statusTitle}"/></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 10%;text-align: left;"><h:outputText value=""/>#{msg.referenceNo}</rich:column>
+                                        <rich:column styleClass="subh01" style="width: 10%;text-align: left;"><h:outputText value="#{msg.activityTypeTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 8%;text-align: left;"><h:outputText value="#{msg.activityDetailTitle}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="width: 7%;text-align: left;"><h:outputText value="#{msg.channelTitle}"/></rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column style="vertical-align: top">
+                                    <h:graphicImage library="icon" name="p_immediate.png" title="Immediate" alt="Immediate" rendered="#{list.priority eq 'immediate'}" style="padding: 0px; border: 0px"/>
+                                    <h:graphicImage library="icon" name="p_high.png" title="High" alt="High" rendered="#{list.priority eq 'high'}" style="padding: 0px; border: 0px"/>
+                                    <h:graphicImage library="icon" name="p_medium.png" title="Medium" alt="Medium" rendered="#{list.priority eq 'medium'}" style="padding: 0px; border: 0px"/>
+                                    <h:graphicImage library="icon" name="p_low.png" title="Low" alt="Low" rendered="#{list.priority eq 'low'}" style="padding: 0px; border: 0px"/>
+                                </rich:column>
+                                 <rich:column style="vertical-align: top">
+                                     <h:graphicImage library="icon" name="callcenter.png" style="display: inline"/>
+                                    <h:graphicImage library="icon" name="outbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Outbound'}" style="display: inline" />
+                                    <h:graphicImage library="icon" name="inbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Inbound'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_phone.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'Phone Call'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_fax.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'Fax'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_mail.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'Email'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_document.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'Document'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_postalmail.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'Postal Mail'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_system.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'System'}" style="display: inline" />
+                                    <h:graphicImage library="img" name="channel_walkin.png" title="#{list.chChannel}" alt="#{list.chChannel}" rendered="#{list.chChannel == 'Walk-in'}" style="display: inline" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.chContactDate}" >
+                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.chResult}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.chTelNo}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.chCsrName}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.serviceTypeName}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.caseType}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.status}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:panelGroup rendered="#{frontMenuController.caseViewPermitted and list.viewLocation}">
+                                        <h:commandLink title="#{list.code}" value="#{list.code}" action="#{customerHandlingDetailController.editCase}" >
+                                            <f:param name="from" value="activity"/>
+                                            <f:param name="selectId" value="#{list.id}"/>
+                                        </h:commandLink>
+                                        <h:graphicImage library="icon" name="clip.png" title="Attach File" alt="Attach File" rendered="#{list.attachFile}" width="16" height="16"  style="padding: 0px; border: 0px;display: inline"/>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{not frontMenuController.caseViewPermitted or not list.viewLocation}">
+                                        <h:outputText value="#{list.code}"/>
+                                    </h:panelGroup>
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="#{list.activityTypeName}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                    <h:outputText value="-" rendered="#{list.activityDescription == ''}" />
+                                    <h:outputText value="#{list.activityDescription}" />
+                                </rich:column>
+                                <rich:column style="vertical-align: top">
+                                     <h:panelGroup rendered="#{list.channelName.length() > 0}">
+                                        <h:graphicImage library="icon" name="callcenter.png" style="display: inline" />
+                                        <h:graphicImage library="icon" name="outbound.png" title="#{list.channelName}" rendered="#{list.channelName.endsWith('Outbound')}" style="display: inline" />
+                                        <h:graphicImage library="icon" name="inbound.png" title="#{list.channelName}" rendered="#{list.channelName.endsWith('Inbound')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_phone.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('Phone Call')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_fax.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('Fax')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_mail.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('Email')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_document.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('Document')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_postalmail.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('Postal Mail')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_system.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('System')}" style="display: inline" />
+                                        <h:graphicImage library="img" name="channel_walkin.png" title="#{list.channelName}" rendered="#{list.channelName.startsWith('Walk-in')}" style="display: inline" />
+                                    </h:panelGroup>
+                                </rich:column>
+                                <f:facet name="footer"></f:facet>
+                            </rich:dataTable>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        <!-- Campaign, Billing Reminder, Sale History-->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="50%" valign="top">
+                        <!-- Campaign-->
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.campaign}</h2></td>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                <td valign="top" height="130">
+                                    <rich:dataTable id="campaignProductList" value="#{customerHandlingDetailController.campaignProductList}" rows="5"
+                                                    var="list" style="width: 100%" styleClass="tableline01" headerClass="subh01">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="#{msg.campaign}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="Product" /></rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column>
+                                    <h:outputText value="#{list[0]}" />
+                                </rich:column>
+                                <rich:column>
+                                    <h:outputText value="#{list[1]}" />
+                                </rich:column>
+                                <f:facet name="footer">
+
+                                </f:facet>
+                            </rich:dataTable>
+                                </td>
+                                <td width="4" class="bg_right"></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                            </tr>
+                        </table>
+                        <!-- Campaign-->
+                    </td>
+                    
+                    <td width="50%" valign="top">
+                        <!-- Sale History-->
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.saleHistory}</h2></td>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                <td valign="top" height="130">
+                            <rich:dataTable id="saleHistoryList" value="#{customerHandlingDetailController.saleHistoryList}" var="list"
+                                            rows="5" style="width: 100%" styleClass="tableline01" headerClass="subh01">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="Marketing" /></rich:column>
+                                        <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="#{msg.referenceNo}" /></rich:column>
+                                        <rich:column styleClass="subh01" style="text-align: left;"><h:outputText value="#{msg.saleDate}" /></rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column>
+                                    <h:outputText value="#{list[0]}" />
+                                </rich:column>
+                                <rich:column>
+                                    <h:commandLink  value="#{list[1]}"  action='#{customerHandlingDetailController.toRegistrationForm( (list[3] eq null ? "" : list[3])  )}' />
+                                </rich:column>
+                                <rich:column>
+                                    <h:outputText value="#{list[2]}" >
+                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </rich:column>
+                                <f:facet name="footer">
+
+                                </f:facet>
+                            </rich:dataTable>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+            <!-- Sale History-->
+            </td>
+            </tr>
+            </table>
+    <h:panelGroup rendered="#{customerHandlingDetailController.emessage ne null}" style="width:90%;">
+        <h:outputText value="#{customerHandlingDetailController.emessage}" style="color:red;margin:10px;"/>
+    </h:panelGroup>         
+        <!-- Campaign, Billing Reminder, Sale History-->
+    </ui:define>
+
+</ui:composition>

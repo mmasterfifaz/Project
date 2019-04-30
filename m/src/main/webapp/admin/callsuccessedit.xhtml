@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Call Success: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{callSuccessEditController.mode}"/>
+        <h:inputHidden value="#{callSuccessEditController.callsuccessReason.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:outputText value="#{callSuccessEditController.message}" style="color:red"/>&nbsp;</td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">* Code:</td>
+                <td><h:inputText id="code" value="#{callSuccessEditController.callsuccessReason.code}" styleClass="textfield" size="10" required="true" maxlength="10"
+                    requiredMessage="Code is required"/>
+                    <h:message for="code" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">* Name:</td>
+                <td valign="top"><h:inputText id="name" value="#{callSuccessEditController.callsuccessReason.name}" styleClass="textfield" size="50" required="true"
+                    requiredMessage="Name is required"/>
+                    <h:message for="name" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{callSuccessEditController.callsuccessReason.status}"/> Enable
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:commandButton image="../img/b_save.png" action="#{callSuccessEditController.saveAction}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{callSuccessEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

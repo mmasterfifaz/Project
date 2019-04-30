@@ -1,0 +1,73 @@
+<ui:composition template="../templates/popupeditblank.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:param name="modalId" value="myScriptPopup"/>
+
+    <ui:define name="search1">        
+        <script src="#{request.contextPath}/includes/checking.js" type="text/javascript"/>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td ><h2><img src="#{request.contextPath}/img/icon_my_script.png" width="32" height="32" hspace="5" align="absmiddle" style="display: inline;"/>My Script</h2></td>
+                <td width="260" align="right">
+                    <table width="260" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="24"></td>
+                            <td width="205" align="left"></td>
+                            <td width="24"></td>
+                            <td width="7"><img src="#{request.contextPath}/img/sp.gif" width="5" height="5" /></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="60" align="right"></td>
+        </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="leftcontent">
+       
+    </ui:define>
+    <ui:define name="content">
+        <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+        <table width="100%" border="0" align="center" cellpadding="2" cellspacing="0">
+            <tr>
+                <td align="left" valign="top"><h:outputText value="#{myScriptPopupController.message}" style="color:red"/>
+                </td>
+            </tr>
+            <tr>
+                <td align="left" valign="top"><span style="color:red">*</span> Topic:<span style="width: 15px"/>
+                    <h:inputText id="code" value="#{myScriptPopupController.usersScript.topic}" styleClass="textfield" size="50" required="true" maxlength="50"
+                                     requiredMessage="#{msg.require}">
+                    </h:inputText>
+                    <rich:message for="code" style="color:red"/>
+                </td>
+            </tr>
+            <tr>
+            <td style="vertical-align: top;">
+            <span style="color:red">*</span> Description: 
+                <h:inputTextarea id="description" cols="80" rows="25" value="#{myScriptPopupController.usersScript.description}" />
+                <script type="text/javascript">
+                    CKEDITOR.replace('frm:description'  ,{ toolbar : 'MyScript',
+                                    filebrowserBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                    filebrowserImageBrowseUrl : '#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Image&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                    filebrowserFlashBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Flash&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/'}
+                                );
+                </script>
+                <rich:message for="description" style="color:red"/>
+            </td>
+            </tr>
+
+            <tr>
+                <td valign="top"><h:commandButton image="/img/b_save.png" action="#{myScriptPopupController.saveAction}"/>
+                <h:commandButton image="/img/b_back.png"
+                                   action="#{myScriptPopupController.backAction}"
+                                   immediate="true"><f:param name="mode" value="view"/></h:commandButton>
+            </td>
+            </tr>
+        </table>
+           
+    </ui:define>
+</ui:composition>

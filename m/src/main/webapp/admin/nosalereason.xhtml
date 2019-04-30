@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminmainsearch.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">No Sale Reason</ui:define>
+    <ui:define name="button">
+        <h:commandButton image="../img/b_add.png" action="#{nosaleReasonController.editAction}" rendered="#{nosaleReasonController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{nosaleReasonController.deleteAction}" rendered="#{nosaleReasonController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+    </ui:define>
+   <ui:define name="search">
+        <table width="100%">
+            <tr>
+                <td width="150" align="right">Name :</td>
+                <td align="left">
+                    <h:inputText styleClass="textfield" value="#{nosaleReasonController.txtSearch}"/>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Status :</td>
+                <td align="left">
+                    <h:selectOneMenu id="status" value="#{nosaleReasonController.status}">
+                        <f:selectItem itemValue="" itemLabel="All"/>
+                        <f:selectItem itemValue="1" itemLabel="Enable" />
+                        <f:selectItem itemValue="0" itemLabel="Disable" />
+                    </h:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><a4j:commandButton actionListener="#{nosaleReasonController.searchActionListener}" status="actionStatus" 
+                                       render="dataList" limitRender="true" image="/img/b_search.png"/>
+                </td>
+            </tr>
+        </table>
+    </ui:define>
+    <ui:define name="panel">
+        <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                        value="#{nosaleReasonController.nosaleReasonList}" rows="#{global.maxrows}" var="list">
+           <f:facet name="header">
+               <rich:columnGroup>
+                   <rich:column style="text-align: left;width: 3%;">&nbsp;</rich:column>
+                   <rich:column style="text-align: left;"><h:outputText value="Name"/></rich:column>
+                   <rich:column style="text-align: left;"><h:outputText value="Status"/></rich:column>
+               </rich:columnGroup>
+           </f:facet>
+
+            <rich:column >
+             <h:selectBooleanCheckbox value="#{nosaleReasonController.selectedIds[list.id]}"/>
+            </rich:column>
+            <rich:column>
+                <h:commandLink title="View Detail" value="#{list.name}" action="#{nosaleReasonController.editAction}">
+                    <f:param name="id" value="#{list.id}"/>
+                 </h:commandLink>
+             </rich:column>
+             <rich:column>
+                 <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+            </f:facet>
+        </rich:dataTable>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

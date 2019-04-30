@@ -1,0 +1,573 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Campaign Management: Un-Assignment</ui:define>
+            <ui:define name="head">
+                <style>
+                    <!--
+                    div.scroll {
+                        height: 200px;
+                        overflow: auto;
+                        border: 0px solid #666;
+                        background-color: #fff;
+                        padding: 8px;
+                    }
+                    -->
+                </style>
+                <script type="text/javascript" src="campaignunassignment.js"/>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{campaignUnAssignmentController.campaign.id}"/>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td bgcolor="#E8E7D5"><table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td width="100" class="gray03">Campaign Name:</td>
+                                <td class="blue04" align="left"><h:outputText value="#{campaignSummaryController.campaign.name}"/></td>
+                                <td width="60" class="gray03">Start Date:</td>
+                                <td class="blue04">
+                                    <h:outputText value="#{campaignSummaryController.campaign.startDate}">
+                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText></td>
+                                <td width="60" class="gray03">End Date:</td>
+                                <td class="blue04">
+                                    <h:outputText value="#{campaignSummaryController.campaign.endDate}">
+                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </td>
+                                <td width="60" class="gray03">Description:</td>
+                                <td class="blue04"><h:outputText value="#{campaignSummaryController.campaign.description}"/></td>
+                                <td width="50" align="center">                               
+                                </td>
+                            </tr>
+                        </table></td>
+                    </tr>
+                </table>
+                <table width="95%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr><td><a4j:region id="criteriaPanel">
+                    <tr>
+                        <td>
+                        <h:panelGroup rendered="#{campaignUnAssignmentController.managerPermitted}">
+                            <table>
+                                <tr>
+                                    <td width="120" align="right" valign="middle" class="gray03">Unassignment Mode:</td>
+                                    <td valign="top">
+                                        <h:selectOneRadio id="unAssignmentMode" value="#{campaignUnAssignmentController.unAssignmentMode}" required="true" requiredMessage="#{msg.require}">
+                                            <f:selectItem itemValue="manager" itemLabel="Manager" />
+                                            <f:selectItem itemValue="supervisor" itemLabel="Supervisor" />
+                                            <a4j:ajax event="click" render="statusChange, selectingUser, userGroupList, userList" 
+                                                      execute="@this" listener="#{campaignUnAssignmentController.assignmentModeChangeListener}" />
+                                                                
+                                            <rich:validator />
+                                        </h:selectOneRadio>
+                                        <rich:message for="unAssignmentMode" style="color:red"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                            <tr>
+                                <td bgcolor="#FFFFFF"><table width="100%" border="0" cellpadding="6" cellspacing="0" id="tableline">
+                                    <tr>
+                                        <td width="25%" valign="bottom"><h4>Product</h4></td>
+                                        <td width="15%" valign="bottom"><h4>List Type</h4></td>
+                                        <td width="25%" valign="bottom"><h4>Marketing List</h4></td>
+                                        <td width="35%" valign="bottom"><h4>Contact Status</h4></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="center" class="line01"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" id="tableline01">
+                                            <tr>
+                                                <td bgcolor="#FFFFFF"><div class="scroll">
+                                                    <rich:dataTable style="width: 100%;" value="#{campaignUnAssignmentController.productList}" var="productList">
+                                                        <rich:column style="text-align: left;">
+                                                            <h:selectBooleanCheckbox id="product" value="#{campaignUnAssignmentController.selectedProductIds[productList.id]}" />
+                                                            <h:outputText value="#{productList.name}"/>
+                                                        </rich:column>
+                                                    </rich:dataTable>
+                                                </div>
+                                                </td>
+                                            </tr>
+                                        </table></td>
+                                        <td align="center" class="line01"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" id="tableline01">
+                                            <tr>
+                                            <td bgcolor="#FFFFFF"><div class="scroll">
+                                                <table width="100%" border="0" cellpadding="2" cellspacing="2" id="tableline01">
+                                                    <tr><td align="left" >
+                                                    <h:selectBooleanCheckbox id="newList"
+                                                                                value="#{campaignUnAssignmentController.newList}" 
+                                                                                valueChangeListener="#{campaignUnAssignmentController.newlistTypeChangeListener}">
+                                                        <a4j:ajax event="click" limitRender="true" render="newList,marketing,statusChange,userList"
+                                                                  listener="#{campaignUnAssignmentController.clearValueListener}"/>
+                                                    </h:selectBooleanCheckbox>New List
+                                                    </td></tr>
+                                                    <tr><td align="left" >
+                                                        <h:selectBooleanCheckbox id="oldList"
+                                                                                    value="#{campaignUnAssignmentController.oldList}"
+                                                                                    valueChangeListener="#{campaignUnAssignmentController.oldlistTypeChangeListener}">
+                                                            <a4j:ajax event="click" limitRender="true" render="oldList,marketing,statusChange,userList"
+                                                                      listener="#{campaignUnAssignmentController.clearValueListener}"/>
+                                                        </h:selectBooleanCheckbox>Old List
+                                                    </td></tr>
+                                                </table>
+                                            </div></td>
+                                        </tr>
+                                        </table></td>
+                                        <td align="center" class="line01"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" id="tableline01">
+                                            <tr>
+                                                <td bgcolor="#FFFFFF"><div class="scroll">
+                                                        <rich:dataTable id="marketing" style="width: 100%" value="#{campaignUnAssignmentController.marketingList}" var="marketingList">
+                                                            <rich:column style="text-align: left;">
+                                                                <h:selectBooleanCheckbox id="marketing" value="#{campaignUnAssignmentController.selectedMarketingIds[marketingList.id]}" >
+                                                                     <a4j:ajax event="change" render="advanceCriteria" execute="@this"
+                                                                               listener="#{campaignUnAssignmentController.initAdvanceCriteria}"/>
+                                                                </h:selectBooleanCheckbox>                                                                
+                                                                <h:outputText value="#{marketingList.code}: #{marketingList.name}"/>
+                                                            </rich:column>
+                                                        </rich:dataTable>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table></td>
+                                        <td align="center" class="line01"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                            <tr>
+                                                <td bgcolor="#FFFFFF"><div class="scroll">
+                                                    <h:panelGroup id="statusChange">
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tableline01">
+                                                        <tr>
+                                                            <td width="100" valign="top" align="left"><h:selectBooleanCheckbox value="#{campaignUnAssignmentController.contactStatusAssigned}" disabled="#{campaignUnAssignmentController.unAssignmentMode eq 'manager'}"/>Assigned</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" align="left"><h:selectBooleanCheckbox value="#{campaignUnAssignmentController.contactStatusViewed}" disabled="#{campaignUnAssignmentController.unAssignmentMode eq 'manager'}"/>Viewed</td>
+                                                        </tr>
+                                                        <tr><td>
+                                                        <h:panelGroup id="oldListType" rendered="#{(campaignUnAssignmentController.oldList eq true) or ((campaignUnAssignmentController.oldList eq false) and (campaignUnAssignmentController.newList eq false))}">
+                                                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td valign="top" align="left"><h:selectBooleanCheckbox  id="openallbox" value="#{campaignUnAssignmentController.contactStatusOpened}" onclick="checkAllOpen()" disabled="#{campaignUnAssignmentController.unAssignmentMode eq 'manager'}"/>Opened</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td valign="top" align="left">
+                                                                    <rich:dataTable id="openTable" style="width: 100%" value="#{campaignUnAssignmentController.opensaleReasonList}" var="openList">
+                                                                        <rich:column style="width: 10%;text-align: left;">
+                                                                        </rich:column>
+                                                                        <rich:column style="width: 90%;text-align: left;">
+                                                                            <h:selectBooleanCheckbox id="openbox" value="#{campaignUnAssignmentController.selectedOpenIds[openList.id]}"  disabled="#{campaignUnAssignmentController.unAssignmentMode eq 'manager'}"/>
+                                                                            <h:outputText value="#{openList.name}"/>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                </td>
+                                                            </tr>  
+                                                            <tr>
+                                                                <td valign="top" align="left"><h:selectBooleanCheckbox id="followupallbox" value="#{campaignUnAssignmentController.contactStatusFollowup}" onclick="checkAllFollowup()" disabled="#{campaignUnAssignmentController.unAssignmentMode eq 'manager'}"/>Follow Up </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td valign="top" align="left">
+                                                                    <rich:dataTable id="followupTable" style="width: 100%"
+                                                                                    value="#{campaignUnAssignmentController.followupsaleReasonList}" var="followupList">
+                                                                        <rich:column style="width: 10%;text-align: left;"> </rich:column>
+                                                                        <rich:column style="width: 90%;text-align: left;">
+                                                                            <h:selectBooleanCheckbox id="followupbox" value="#{campaignUnAssignmentController.selectedFollowupIds[followupList.id]}"  disabled="#{campaignUnAssignmentController.unAssignmentMode eq 'manager'}"/>
+                                                                            <h:outputText value="#{followupList.name}"/>
+                                                                        </rich:column>
+                                                                    </rich:dataTable>
+                                                                </td>
+                                                            </tr>  
+                                                            </table>
+                                                        </h:panelGroup>
+                                                        </td></tr>
+                                                    </table>
+                                                    </h:panelGroup>
+                                                </div></td>
+                                            </tr>
+                                        </table></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" valign="bottom"><h4>Criteria</h4></td>
+                                        <td colspan="2" valign="bottom"><h4>User</h4></td>
+                                    </tr>
+                                    <tr>
+                                        
+                                        <!-- BEGIN CRITERIA -->
+                                        <td align="center" colspan="2" valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0" id="tableline01">
+                                            <tr>
+                                                <td bgcolor="#FFFFFF">
+                                                    <table width="100%" border="0" cellpadding="4" cellspacing="0" >
+                                                        
+                                                        <!-- BEGIN CRITERIA SEARCH LIST -->
+                                                        <tr>
+                                                            <td valign="top" style="height: 240px;">
+                                                                <table border="0" cellpadding="6" cellspacing="0" width="100%">
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <h:selectBooleanCheckbox id="name" value="#{campaignUnAssignmentController.selectName}"/>Name:
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <h:inputText id="keywordText" styleClass="textfield" size="20" maxlength="50" value="#{campaignUnAssignmentController.customerName}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <h:selectBooleanCheckbox id="surname" value="#{campaignUnAssignmentController.selectSurname}"/>Surname:
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <h:inputText id="keywordTextSurname" styleClass="textfield" size="20" maxlength="50" value="#{campaignUnAssignmentController.customerSurname}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                                <h:selectBooleanCheckbox id="gender" value="#{campaignUnAssignmentController.selectGender}"/>Gender:
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <h:selectOneMenu styleClass="select01" value="#{campaignUnAssignmentController.gender}">
+                                                                                <f:selectItem itemLabel="Male" itemValue="M"/>
+                                                                                <f:selectItem itemLabel="Female" itemValue="F"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <h:selectBooleanCheckbox id="age" value="#{campaignUnAssignmentController.selectAge}"/>Age: 
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <h:inputText id="fromage" label="From Age" styleClass="textfield" size="5" maxlength="3" 
+                                                                                            onkeypress="return isNumberKey(event)"
+                                                                                            validatorMessage="#{msg.numberRequire}" value="#{campaignUnAssignmentController.fromage}">
+                                                                                <f:validateDoubleRange minimum="0" maximum="200"/>
+                                                                                                    
+                                                                                <rich:validator />
+                                                                            </h:inputText> and<span style="padding-left:5px"/>
+                                                                            <h:inputText id="toage" label="To Age" styleClass="textfield" size="5" maxlength="3"
+                                                                                            onkeypress="return isNumberKey(event)"
+                                                                                            validatorMessage="#{msg.numberRequire}" value="#{campaignUnAssignmentController.toage}">
+                                                                                <f:validateDoubleRange minimum="0" maximum="200"/>
+                                                                                                    
+                                                                                <rich:validator />
+                                                                            </h:inputText>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <h:selectBooleanCheckbox id="homePhone" value="#{campaignUnAssignmentController.selectHomephone}"/>Home Phone: 
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <h:panelGroup id="homePhonePanel">
+                                                                                <h:selectOneMenu styleClass="select01" value="#{campaignUnAssignmentController.homePhonePrefix}">  
+                                                                                    <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                                                    <f:selectItem itemValue="02" itemLabel="กรุงเทพ" />
+                                                                                    <f:selectItem itemValue="upc" itemLabel="ต่างจังหวัด" />
+                                                                                    <f:selectItem itemValue="032" itemLabel="032" />
+                                                                                    <f:selectItem itemValue="034" itemLabel="034" />
+                                                                                    <f:selectItem itemValue="035" itemLabel="035" />
+                                                                                    <f:selectItem itemValue="036" itemLabel="036" />
+                                                                                    <f:selectItem itemValue="037" itemLabel="037" />
+                                                                                    <f:selectItem itemValue="038" itemLabel="038" />
+                                                                                    <f:selectItem itemValue="039" itemLabel="039" />
+                                                                                    <f:selectItem itemValue="042" itemLabel="042" />
+                                                                                    <f:selectItem itemValue="043" itemLabel="043" />
+                                                                                    <f:selectItem itemValue="044" itemLabel="044" />
+                                                                                    <f:selectItem itemValue="053" itemLabel="053" />
+                                                                                    <f:selectItem itemValue="054" itemLabel="054" />
+                                                                                    <f:selectItem itemValue="055" itemLabel="055" />
+                                                                                    <f:selectItem itemValue="073" itemLabel="073" />
+                                                                                    <f:selectItem itemValue="074" itemLabel="074" />
+                                                                                    <f:selectItem itemValue="075" itemLabel="075" />
+                                                                                    <f:selectItem itemValue="076" itemLabel="076" />
+                                                                                    <f:selectItem itemValue="077" itemLabel="077" />
+                                                                                </h:selectOneMenu><a href="../img/telephoneprefix.png" target="_blank"> View Telephone Prefix</a>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <h:selectBooleanCheckbox id="officePhone" value="#{campaignUnAssignmentController.selectOfficePhone}"/>Office Phone: 
+                                                                        </td>
+                                                                        <td align="left" >
+                                                                            <h:panelGroup id="officePhonePanel">
+                                                                            <h:selectOneMenu styleClass="select01"  value="#{campaignUnAssignmentController.officePhonePrefix}">  
+                                                                                <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                                                <f:selectItem itemValue="02" itemLabel="กรุงเทพ" />
+                                                                                <f:selectItem itemValue="upc" itemLabel="ต่างจังหวัด" />
+                                                                                <f:selectItem itemValue="032" itemLabel="032" />
+                                                                                <f:selectItem itemValue="034" itemLabel="034" />
+                                                                                <f:selectItem itemValue="035" itemLabel="035" />
+                                                                                <f:selectItem itemValue="036" itemLabel="036" />
+                                                                                <f:selectItem itemValue="037" itemLabel="037" />
+                                                                                <f:selectItem itemValue="038" itemLabel="038" />
+                                                                                <f:selectItem itemValue="039" itemLabel="039" />
+                                                                                <f:selectItem itemValue="042" itemLabel="042" />
+                                                                                <f:selectItem itemValue="043" itemLabel="043" />
+                                                                                <f:selectItem itemValue="044" itemLabel="044" />
+                                                                                <f:selectItem itemValue="053" itemLabel="053" />
+                                                                                <f:selectItem itemValue="054" itemLabel="054" />
+                                                                                <f:selectItem itemValue="055" itemLabel="055" />
+                                                                                <f:selectItem itemValue="073" itemLabel="073" />
+                                                                                <f:selectItem itemValue="074" itemLabel="074" />
+                                                                                <f:selectItem itemValue="075" itemLabel="075" />
+                                                                                <f:selectItem itemValue="076" itemLabel="076" />
+                                                                                <f:selectItem itemValue="077" itemLabel="077" />
+                                                                            </h:selectOneMenu><a href="../img/telephoneprefix.png" target="_blank"> View Telephone Prefix</a>
+                                                                        </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td align="left">
+                                                                            <h:selectBooleanCheckbox id="mobilePhone" value="#{campaignUnAssignmentController.selectMobilePhone}"/>Mobile Phone: 
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <h:panelGroup id="mobilePhonePanel">
+                                                                            <h:selectOneMenu styleClass="select01"  value="#{campaignUnAssignmentController.mobilePhonePrefix}">  
+                                                                                <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                                                <f:selectItem itemValue="080" itemLabel="080" />
+                                                                                <f:selectItem itemValue="081" itemLabel="081" />
+                                                                                <f:selectItem itemValue="082" itemLabel="082" />
+                                                                                <f:selectItem itemValue="083" itemLabel="083" />
+                                                                                <f:selectItem itemValue="084" itemLabel="084" />
+                                                                                <f:selectItem itemValue="085" itemLabel="085" />
+                                                                                <f:selectItem itemValue="086" itemLabel="086" />
+                                                                                <f:selectItem itemValue="087" itemLabel="087" />
+                                                                                <f:selectItem itemValue="088" itemLabel="088" />
+                                                                                <f:selectItem itemValue="089" itemLabel="089" />
+                                                                                <f:selectItem itemValue="090" itemLabel="090" />
+                                                                            </h:selectOneMenu>
+                                                                        </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <!-- END CRITERIA SEARCH LIST -->
+                                                        
+                                                        <!-- BEGIN CRITERIA ADVANCE SEARCH LIST -->  
+                                                        <tr>
+                                                            <td valign="top" align="left">
+                                                                <rich:togglePanel id="toggle1" activeItem="plus" switchType="client" cycledSwitching="plus,sub" 
+                                                                                  style="width: 100%; border: 0; padding: 0; margin: 0">
+                                                                    <rich:togglePanelItem name="plus">
+                                                                        <h:commandLink>
+                                                                            <rich:toggleControl targetPanel="toggle1" targetItem="sub"/> 
+                                                                            <img src="#{request.contextPath}/img/bplus.png" alt="" style="display: inline"/>  Advance Search   
+                                                                        </h:commandLink>
+                                                                    </rich:togglePanelItem> 
+
+                                                                    <rich:togglePanelItem name="sub">
+                                                                        <h:commandLink>
+                                                                            <rich:toggleControl targetPanel="toggle1" targetItem="plus"/> 
+                                                                            <img src="#{request.contextPath}/img/b_subtract.png" alt="" style="display: inline"/> Advance Search
+                                                                        </h:commandLink>
+                                                                        <h:panelGroup>
+                                                                            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                                                            <tr><td>
+                                                                                <rich:dataGrid style="width: 100%" columns="1" id="advanceCriteria" 
+                                                                                               value="#{campaignUnAssignmentController.selectedAdvanceCriteria}" var="advanceCriteriaList">
+                                                                                    <rich:dataTable style="width: 100%" value="#{advanceCriteriaList}" var="advanceField">
+                                                                                        <rich:columnGroup>
+                                                                                            <rich:column style="width: 5%">
+                                                                                                <h:selectBooleanCheckbox value="#{advanceField.selected}"/>
+                                                                                            </rich:column>
+
+                                                                                            <rich:column style="text-align: left;width: 30%">
+                                                                                                <h:outputText value="#{advanceField.mappingName}"/>
+                                                                                            </rich:column>
+
+                                                                                            <rich:column style="text-align: left;width: 60%">                                     
+                                                                                                <h:panelGroup rendered="#{advanceField.type eq 'String'}">
+                                                                                                    <h:inputText styleClass="textfield" size="20" maxlength="20" value="#{advanceField.keyword}"/>
+                                                                                                </h:panelGroup>     
+
+                                                                                                <h:panelGroup rendered="#{advanceField.type eq 'Number'}">
+                                                                                                     <h:selectOneMenu value="#{advanceField.criteria}" >                                                                            
+                                                                                                        <f:selectItem itemLabel="&#62;" itemValue="&#62;"/>
+                                                                                                        <f:selectItem itemLabel="&#62;&#61;" itemValue="&#62;&#61;"/>
+                                                                                                        <f:selectItem itemLabel="&#60;" itemValue="&#60;"/>
+                                                                                                        <f:selectItem itemLabel="&#60;&#61;" itemValue="&#60;&#61;"/>
+                                                                                                        <f:selectItem itemLabel="&#61;" itemValue="&#61;"/>
+                                                                                                        <f:selectItem itemLabel="&#60;&#62;" itemValue="&#60;&#62;"/>   
+                                                                                                        <f:selectItem itemLabel="between" itemValue="between"/>
+                                                                                                        <f:ajax event="change" render="toValNum" immediate="true" execute="@this" />
+                                                                                                    </h:selectOneMenu> <span style="padding-left:5px"/>
+                                                                                                    <h:inputText styleClass="textfield" size="5" maxlength="10" 
+                                                                                                                 onkeypress="return isNumberFloatKey(event)" validatorMessage="#{msg.numberRequire}" value="#{advanceField.fromValue}">
+                                                                                                        <rich:validator />
+                                                                                                    </h:inputText>
+                                                                                                    <h:panelGroup id="toValNum" >
+                                                                                                        <h:outputText value="(and)" rendered="#{advanceField.criteria eq 'between'}"/>
+                                                                                                        <span style="padding-left:5px"/>                                                                    
+                                                                                                        <h:inputText styleClass="textfield" size="5" maxlength="10" rendered="#{advanceField.criteria eq 'between'}"
+                                                                                                                     onkeypress="return isNumberFloatKey(event)" validatorMessage="#{msg.numberRequire}" value="#{advanceField.toValue}">
+                                                                                                            <rich:validator />
+                                                                                                        </h:inputText>
+                                                                                                    </h:panelGroup>
+                                                                                                </h:panelGroup>     
+
+                                                                                                <h:panelGroup rendered="#{advanceField.type eq 'Date'}">
+                                                                                                    <h:selectOneMenu value="#{advanceField.criteria}" >
+                                                                                                        <f:selectItem itemLabel="on" itemValue="on"/>
+                                                                                                        <f:selectItem itemLabel="before" itemValue="before"/>
+                                                                                                        <f:selectItem itemLabel="after" itemValue="after"/>
+                                                                                                        <f:selectItem itemLabel="between" itemValue="between"/>
+                                                                                                        <f:selectItem itemLabel="not equal to" itemValue="notEqual"/>
+                                                                                                        <f:ajax event="change" render="toValDate" immediate="true" execute="@this" />
+                                                                                                    </h:selectOneMenu>
+                                                                                                    <br/>
+                                                                                                    <span style="padding-left:5px"/>
+                                                                                                    <rich:calendar value="#{advanceField.fromValueDate}" 
+                                                                                                                   inputClass="textfield" inputSize="8" buttonClass="rfcalbtn" 
+                                                                                                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}" >
+                                                                                                    </rich:calendar>
+                                                                                                    <h:panelGroup id="toValDate" >
+                                                                                                        <h:outputText value="(and)" rendered="#{advanceField.criteria eq 'between'}"/>
+                                                                                                        <span style="padding-left:5px"/>
+                                                                                                        <rich:calendar value="#{advanceField.toValueDate}" rendered="#{advanceField.criteria eq 'between'}"
+                                                                                                                       inputClass="textfield" inputSize="8" buttonClass="rfcalbtn" 
+                                                                                                                       datePattern="#{msg.datePattern}" locale="#{msg.locale}" >
+                                                                                                        </rich:calendar>
+                                                                                                    </h:panelGroup>
+                                                                                                </h:panelGroup>
+
+                                                                                            </rich:column>
+                                                                                    </rich:columnGroup>
+                                                                            </rich:dataTable>
+                                                                                </rich:dataGrid>
+                                                                            </td></tr>
+                                                                            <tr>
+                                                                                <td class="gray03">&nbsp;</td>
+                                                                                <td>&nbsp;</td>
+                                                                            </tr>
+                                                                            </table>
+                                                                        </h:panelGroup>
+                                                                    </rich:togglePanelItem> 
+                                                                </rich:togglePanel>      
+                                                            </td>
+                                                        </tr>
+                                                        <!-- END CRITERIA ADVANCE SEARCH LIST -->
+                                                        
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table></td>
+                                        <!-- END CRITERIA -->
+                                        
+                                        <!-- BEGIN USER -->
+                                        <td align="center" valign="top" colspan="2"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                            <tr>
+                                                <td bgcolor="#FFFFFF">
+                                                    <table width="100%" border="0" cellpadding="4" cellspacing="0" >
+                                                        <tr>
+                                                            <td valign="top">
+                                                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                                                    <tr>
+                                                                        <td align="left" width="190">
+                                                                            <h:selectOneRadio id="selectingUser" value="#{campaignUnAssignmentController.selectingUser}" 
+                                                                                                layout="lineDirection" required="true" requiredMessage="#{msg.require}">
+                                                                                <f:selectItem itemValue="all" itemLabel="All Users" />
+                                                                                <f:selectItem itemValue="group" itemLabel="User Group"/>
+                                                                                <a4j:ajax event="click" render="userGroupList, userList" execute="@this" listener="#{campaignUnAssignmentController.userSelectingChangeListener}"/>
+                                                                            </h:selectOneRadio><rich:message for="selectingUser" style="color:red"/>
+                                                                        </td>
+                                                                        <td align="left" width="180">
+                                                                            <h:selectOneMenu id="userGroupList" value="#{campaignUnAssignmentController.userGroupId}" 
+                                                                                                disabled="#{campaignUnAssignmentController.selectingUser ne 'group'}"
+                                                                                                required="true" requiredMessage="#{msg.require}">
+                                                                                <f:selectItem itemLabel="--Please Select--"/>
+                                                                                <f:selectItems value="#{campaignUnAssignmentController.userGroupList}"/>
+                                                                            </h:selectOneMenu><rich:message for="userGroupList" style="color:red"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <a4j:commandButton image="../img/b_search_criteria.png" onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'}); return true;">
+                                                                                <a4j:ajax event="click"  limitRender="true" render="userList"                                                                                          
+                                                                                          oncomplete="#{rich:component('waitPopup')}.hide;"
+                                                                                          listener="#{campaignUnAssignmentController.initSelectedUser}"/>
+                                                                            </a4j:commandButton>
+                                                                            <h:outputText id="exceed" style="color:red" value="#{campaignUnAssignmentController.messageExceed}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top"><div class="scroll">
+                                                                <rich:dataTable id="userList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                                value="#{campaignUnAssignmentController.selectedUnassignmentUser}"  var="userList"
+                                                                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                                                    <f:facet name="header" >
+                                                                        <rich:columnGroup rendered="#{campaignUnAssignmentController.selectingUser ne null}">
+                                                                            <rich:column style="width: 5%;text-align: left;">
+                                                                                <input type="checkbox" name="userallbox" onclick="checkAllUser()" checked="true"/>
+                                                                            </rich:column>
+                                                                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="User Name"/></rich:column>
+                                                                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Totals" title="Total Remain"/></rich:column>
+                                                                            <rich:column style="width: 45%;text-align: left;"><h:outputText value="Unassign Records"/></rich:column>
+                                                                        </rich:columnGroup>
+                                                                    </f:facet>
+                                                                    <rich:column style="text-align: left;">
+                                                                        <h:selectBooleanCheckbox id="userbox" value="#{userList.selected}"/>
+                                                                    </rich:column>
+                                                                    <rich:column style="text-align: left;">
+                                                                        <h:outputText value="#{userList.user.name} #{userList.user.surname}"/>
+                                                                    </rich:column>
+                                                                    <rich:column style="text-align: left;">
+                                                                        <h:outputText value="#{userList.totals}"/>
+                                                                    </rich:column>
+                                                                    <rich:column style="text-align: left;">
+                                                                        <h:inputText id="recordno" maxlength="5" size="5" 
+                                                                                    onkeypress="return isNumberKey(event)" value="#{userList.record}">
+                                                                            <a4j:ajax event="blur" listener="#{campaignUnAssignmentController.checkRecord}" 
+                                                                                      render="exceed" limitRender="true"/>
+                                                                        </h:inputText>
+                                                                    </rich:column>
+                                                                </rich:dataTable></div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table></td>
+                                        <!-- END USER -->
+                                        
+                                    </tr>
+                                </table></td>
+                            </tr>
+                        </table></td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top"><div id="bbb">
+                                <h:commandButton action="#{campaignUnAssignmentController.backAction}" 
+                                                 actionListener="#{campaignSummaryController.initialize()}"
+                                                 image="../img/b_back.png" immediate="true">
+                                    <f:param name="tab" value="unassignment"/>
+                                    <f:param name="id" value="#{campaignUnAssignmentController.campaign.id}"/>
+                                </h:commandButton>
+                                <h:commandButton image="../img/b_proceed.png"
+                                                 onclick="if (!checkSubmit()) return false;
+                                                          else {#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'}); return true;}"
+                                                 actionListener="#{campaignUnAssignmentController.saveAction}">
+                                    <f:param name="tab" value="unassignment"/>
+                                    <f:param name="id" value="#{campaignUnAssignmentController.campaign.id}"/>
+                                </h:commandButton>
+                            </div></td>
+                    </tr>
+                    </a4j:region></td></tr>
+                </table>
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

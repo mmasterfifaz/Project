@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Address Directory: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{phoneDirectoryEditController.mode}"/>
+                <h:inputHidden value="#{phoneDirectoryEditController.phoneDirectory.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{phoneDirectoryEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Category:</td>
+                        <td>
+                             <h:selectOneMenu id="phoneCategory" value="#{phoneDirectoryEditController.phoneDirectoryCategoryId}"
+                                              required="true" requiredMessage="Category is required">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{phoneDirectoryEditController.phoneCategoreList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                             </h:selectOneMenu>
+                            <rich:message for="phoneCategory" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Name:</td>
+                        <td valign="top">
+                            <h:inputText id="name" value="#{phoneDirectoryEditController.phoneDirectory.name}" styleClass="textfield" size="30" 
+                                         required="true" requiredMessage="Name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Surname:</td>
+                        <td valign="top">
+                            <h:inputText id="surname" value="#{phoneDirectoryEditController.phoneDirectory.surname}" styleClass="textfield" size="30"
+                                         required="true" requiredMessage="Surname is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="surname" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"> Description:</td>
+                        <td valign="top">
+                            <h:inputTextarea styleClass="textfield03" rows="5" cols="50" value="#{phoneDirectoryEditController.phoneDirectory.description}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"> Email:</td>
+                        <td valign="top">
+                            <h:inputText id="email" value="#{phoneDirectoryEditController.phoneDirectory.email}" styleClass="textfield" size="30"/>
+                        </td>
+                    </tr>
+                    <tr style="height: 30px">
+                        <td align="right" valign="top" class="gray03"> </td>
+                        <td valign="top"></td>
+                    </tr>
+                     <tr>
+                        <td align="right" valign="top" class="gray03"> Telephone No.</td>
+                        <td valign="top">
+                            <rich:dataTable id="phoneDirectoryTelephone" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{phoneDirectoryEditController.phoneDirectoryTelephoneList}" var="phonelist" rowKeyVar="idx">
+                                <rich:column style="width: 2%;vertical-align: top">
+                                    <h:outputText value="#{idx+1}."/>
+                                </rich:column>
+                                <rich:column style="width: 15%;vertical-align: top">
+                                    <h:inputText id="label"  value="#{phonelist.phoneNo}" styleClass="textfield"  size="15"/>
+                                </rich:column>
+                                <rich:column style="width: 15%;vertical-align: top">
+                                    <h:selectOneMenu id="phoneType" value="#{phonelist.phoneType}" style="width: 100px;">
+                                        <f:selectItem itemValue="extension" itemLabel="Extension"/>
+                                        <f:selectItem itemValue="home" itemLabel="Home"/>
+                                        <f:selectItem itemValue="office" itemLabel="Office"/>
+                                        <f:selectItem itemValue="mobile" itemLabel="Mobile"/>
+                                        <f:selectItem itemValue="main" itemLabel="Main"/>
+                                    </h:selectOneMenu>
+                                </rich:column>
+                                <rich:column style="width: 18%;vertical-align: top;" >
+                                    <h:outputText class="gray03" value="Description:" />
+                                </rich:column>
+                                <rich:column style="width: 50%;vertical-align: top">
+                                    <h:inputTextarea styleClass="textfield03" rows="3" cols="20" 
+                                                     value="#{phonelist.description}" />
+                                </rich:column>
+                            </rich:dataTable>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{phoneDirectoryEditController.phoneDirectory.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandButton image="../img/b_save.png" action="#{phoneDirectoryEditController.saveAction}" rendered="#{phoneDirectoryEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{phoneDirectoryEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

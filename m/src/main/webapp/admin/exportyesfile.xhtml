@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Sales Management</ui:define>
+            <ui:define name="title2">Export Yes File</ui:define>
+            <ui:define name="button"> </ui:define>
+            <ui:define name="search">
+                <h:panelGroup id="searchPanel">
+                    <table width="100%">
+                        <tr><td width="150" align="right">Generate By :</td>
+                            <td>
+                                <h:selectOneRadio id="generateBy" value="#{exportYesfileController.generateBy}">                                                 
+                                    <f:selectItem itemLabel="Date" itemValue="date"/>
+                                    <f:selectItem itemLabel="Ref No" itemValue="refno" />
+                                    <a4j:ajax event="change" render="generateByPanel,dataSearch,listRefNumber,mergedocumentsId,listError,messageMergeError,messageError" 
+                                              execute="@this" listener="#{exportYesfileController.clearGenerateTypeChange}"/>                                             
+                                </h:selectOneRadio>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="150" align="right" colspan="2">
+                                <h:panelGroup id="generateByPanel">
+                                    <table width="100%">
+                                        <tr>
+                                            <td width="150" align="right">
+                                                <h:panelGroup rendered="#{exportYesfileController.generateBy eq 'date'}" >
+                                                    <tr><td width="150" align="right">Approved date:</td>
+                                                        <td align="left"><rich:calendar id="fromdate"
+                                                                                        value="#{exportYesfileController.fromDate}"
+                                                                                        inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                                                        datePattern="#{msg.datePattern}"
+                                                                                        locale="#{msg.locale}"/>
+                                                            to <span style="width: 5px"/> <rich:calendar id="todate"
+                                                                                                         value="#{exportYesfileController.toDate}"
+                                                                                                         inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                                                                         datePattern="#{msg.datePattern}"
+                                                                                                         locale="#{msg.locale}"/>
+
+                                                        </td>
+                                                    </tr>
+                                                    <tr><td width="150" align="right">Export :</td>
+                                                        <td>
+                                                            <h:selectOneRadio value="#{exportYesfileController.exportMode}">
+                                                                <f:selectItem itemLabel="All" itemValue="all"/>
+                                                                <f:selectItem itemLabel="Only New" itemValue="new"/>
+                                                            </h:selectOneRadio>
+                                                        </td>
+                                                    </tr>
+                                                    <tr><td width="150" align="right">Product :</td>
+                                                        <td>
+                                                            <h:selectOneMenu id="productId"
+                                                                             value="#{exportYesfileController.productId}"
+                                                                             required="true"
+                                                                             requiredMessage="Product is required"
+                                                                             styleClass="select08" 
+                                                                             valueChangeListener="#{exportYesfileController.onProductIdChange}">
+                                                                <f:selectItems value="#{exportYesfileController.productList}"/>
+                                                                <a4j:ajax event="change" render="paymentMethodId, mergedocumentsId" execute="@this"/>
+                                                                <f:validateRequired/>
+                                                                <rich:validator />
+                                                            </h:selectOneMenu>
+                                                            <rich:message for="productId" style="color:red"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr><td width="150" align="right">Payment Method :</td>
+                                                        <td>
+                                                            <h:selectOneMenu id="paymentMethodId"
+                                                                             value="#{exportYesfileController.paymentMethodId}"
+                                                                             required="true"
+                                                                             requiredMessage="PaymentMethod is required"
+                                                                             styleClass="select08">
+                                                                <f:selectItems value="#{exportYesfileController.paymentMethodList}"/>
+                                                                <f:validateRequired/>
+                                                                <rich:validator />
+                                                            </h:selectOneMenu>
+                                                            <rich:message for="paymentMethodId" style="color:red"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td width="200" align="right">Payment Approved Reason :</td>
+                                                        <td><h:selectOneMenu id="approvalReasonId"  value="#{exportYesfileController.lastpaymentApprovedReason}"
+                                                                             styleClass="select08">
+                                                                <f:selectItems value="#{exportYesfileController.approvalReasonList}" />
+                                                                <a4j:ajax event="change" execute="@this" />
+                                                            </h:selectOneMenu>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{exportYesfileController.generateBy eq 'refno'}">
+                                                    <tr >
+                                                        <td width="200" align="right">List of Ref Number :</td>
+                                                        <td valign="middle">
+                                                            <h:inputText id="listRefNumber" style="width: 235px;" value="#{exportYesfileController.listRefNumber}">
+                                                                
+                                                            </h:inputText>&nbsp; 
+                                                            <a4j:commandButton actionListener="#{exportYesfileController.refreshAction}" 
+                                                                               render="mergedocumentsId,listError,dataSearch" image="/img/btn_refresh.png"
+                                                                               limitRender="true"/>&nbsp;
+                                                            <h:outputText id="listError" style="color:red" value="#{exportYesfileController.messageError}"/>
+                                                        </td>                                                       
+                                                    </tr>    
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>                                        
+                                    </table>
+                                </h:panelGroup>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td width="200" align="right">Merge Document :</td>
+                            <td><h:selectOneMenu id="mergedocumentsId"  value="#{exportYesfileController.mergedocumentId}"                                              
+                                                 styleClass="select08">                                                 
+                                    <f:selectItem itemValue="" itemLabel="Select Merge Document" />
+                                    <f:selectItems value="#{exportYesfileController.mergeDocumentList}" var="list" itemLabel="#{list.title}" itemValue="#{list.id}"/>                                    
+                                </h:selectOneMenu>
+                                <h:outputText id="messageMergeError" style="color:red" value="#{exportYesfileController.messageMergeError}"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="200" align="right">Format :</td>
+                            <td>
+                                <h:panelGroup id="formatsId">
+                                    <ui:remove>
+                                    <h:selectOneMenu  value="#{exportYesfileController.formatId}" valueChangeListener="#{exportYesfileController.onFormatIdChange}" styleClass="select08" >
+                                        <f:selectItem itemLabel="PDF" itemValue="1"/>
+                                        <f:selectItem itemLabel="WORD" itemValue="2"/>
+                                        <f:selectItem itemLabel="EXCEL" itemValue="3" />
+                                        <a4j:ajax event="change" render="formatsId" execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <h:outputText style="color: red" value="#{exportYesfileController.excelDetail}"/>
+                                    </ui:remove>
+                                    
+                                    <h:selectOneMenu  value="#{exportYesfileController.formatId}" styleClass="select08" >
+                                        <f:selectItem itemLabel="PDF" itemValue="1"/>
+                                        <f:selectItem itemLabel="WORD" itemValue="2"/>
+                                        <f:selectItem itemLabel="EXCEL" itemValue="3" />
+                                        <a4j:ajax event="change" render="formatsId" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </td>
+                        </tr>
+
+                        <tr><td></td>
+                            <td>
+                                <a4j:commandButton actionListener="#{exportYesfileController.searchActionListener}" 
+                                                   render="data,dataSearch,messageMergeError,listError" image="/img/b_search.png"
+                                                   limitRender="true" />
+                            </td>
+                        </tr>
+                    </table>
+                </h:panelGroup>
+            </ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="dataSearch">
+                    <h:outputText value = "#{exportYesfileController.cntRecords}"/>
+                    <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" value="#{exportYesfileController.list}" rows="#{global.maxrows}" var="list">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName1}</rich:column>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName2}</rich:column>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName3}</rich:column>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName4}</rich:column>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName5}</rich:column>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName6}</rich:column>
+                                <rich:column styleClass="subh01">#{exportYesfileController.colName7}</rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column>
+                            #{list.col1}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col2}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col3}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col4}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col5}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col6}
+                        </rich:column>
+                        <rich:column>
+                            #{list.col7}
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </h:panelGroup>
+                <table width="100%"><tr>
+                        <td align="center"><a4j:commandButton action="#{exportYesfileController.exportListener}" image="/img/bb_exportcus.png" render="errorDetail"/></td>
+                    </tr>
+                    <tr><td align="center"><h:outputLabel id="errorDetail" value="#{exportYesfileController.errorDetail}" style="color: red"/></td></tr></table>
+                <br/>
+                <table width="100%"><tr>
+                        <td align="right"><a href="../admin/yeslog.jsf" >Go to Yes File History Page..</a></td>
+                    </tr></table>
+            </ui:define>
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

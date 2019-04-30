@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Declaration Form: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{declarationFormEditController.mode}"/>
+                <h:inputHidden value="#{declarationFormEditController.declarationForm.id}"/>
+                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>   
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{declarationFormEditController.message}" style="color:red"/></td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Form Name:</td>
+                        <td><h:inputText id="name" value="#{declarationFormEditController.declarationForm.name}" styleClass="textfield" size="30" required="true"
+                                         requiredMessage="Form name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{declarationFormEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top"><h:inputTextarea id="remark" cols="40" rows="5"  value="#{declarationFormEditController.declarationForm.description}">
+                            </h:inputTextarea>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="right" valign="top">File Name :</td>
+                        <td valign="top" colspan="2">
+                            <h:panelGroup id="fileName">
+                            <rich:fileUpload id="fileUpload" fileUploadListener="#{declarationFormEditController.uploadListener}"
+                                             maxFilesQuantity="1" rendered="#{declarationFormEditController.declarationForm.merge_file eq null}" 
+                                             immediateUpload="true" listHeight="63px" >
+                                <a4j:ajax event="clear" render="fileUpload"
+                                          listener="#{declarationFormEditController.clearUploadData}"/>
+                            </rich:fileUpload>
+                            <h:panelGroup rendered="#{!(declarationFormEditController.declarationForm.merge_file eq null)}">
+                                    #{declarationFormEditController.declarationForm.merge_file}
+                                    &nbsp;&nbsp;&nbsp;<a4j:commandButton image="../img/b_delete.png"
+                                                                         actionListener="#{declarationFormEditController.deleteFileNameListener}"
+                                                                         render="fileName , fileUpload"
+                                                                         limitRender="true"/>
+                            </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Merge Data View :</td>
+                        <td>
+                                <h:selectOneMenu id="mergeDataView"  style="width: 120px;"
+                                                 value="#{declarationFormEditController.declarationForm.viewName}"
+                                                 required="true" requiredMessage="Merge Data View is required">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItems value="#{declarationFormEditController.mergeDataViewList}"/>
+                                    <rich:validator />
+                                </h:selectOneMenu>
+                                <rich:message for="mergeDataView" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="status" value="#{declarationFormEditController.declarationForm.enable}"/> Enable
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2">
+                            <rich:dataGrid style="width: 100%" columns="2" 
+                                           value="#{declarationFormEditController.declarationFieldInfoValues}" var="fieldinfo">
+                                <h:panelGroup>
+                                    <rich:dataTable style="width: 100%" value="#{fieldinfo}" var="field" headerClass="subh01">
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column style="text-align: left;width: 25%">Field Name</rich:column>
+                                                <rich:column style="text-align: left;width: 5%">Selected</rich:column>
+                                                <rich:column style="text-align: left;width: 5%">Required</rich:column>
+                                                <rich:column style="text-align: left;width: 20%">Custom Name</rich:column>
+                                                <rich:column style="text-align: left;width: 20%">Control Type</rich:column>
+                                                <rich:column style="text-align: left;width: 10%">Items</rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+                                        <rich:column>
+                                            <h:outputText value="#{field.displayName}"/>
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:selectBooleanCheckbox value="#{field.selected}">
+                                            </h:selectBooleanCheckbox>
+                                        </rich:column>             
+                                        <rich:column>
+                                            <h:selectBooleanCheckbox value="#{field.required}"/>
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:inputText value="#{field.customName}" styleClass="textfield" size="10"/>
+                                        </rich:column> 
+                                        <rich:column>
+                                            <h:selectOneMenu value="#{field.controlType}" style="width: 100px" rendered="#{
+                                                                      field.name eq 'fx1' ||
+                                                                      field.name eq 'fx2' ||
+                                                                      field.name eq 'fx3' ||
+                                                                      field.name eq 'fx4' ||
+                                                                      field.name eq 'fx5' ||
+                                                                      field.name eq 'fx6' ||
+                                                                      field.name eq 'fx7' ||
+                                                                      field.name eq 'fx8' ||
+                                                                      field.name eq 'fx9' ||
+                                                                      field.name eq 'fx10' ||
+                                                                      field.name eq 'fx11' ||
+                                                                      field.name eq 'fx12' ||
+                                                                      field.name eq 'fx13' ||
+                                                                      field.name eq 'fx14' ||
+                                                                      field.name eq 'fx15' ||
+                                                                      field.name eq 'fx16' ||
+                                                                      field.name eq 'fx17' ||
+                                                                      field.name eq 'fx18' ||
+                                                                      field.name eq 'fx19' ||
+                                                                      field.name eq 'fx20'
+                                                                      }">
+                                                <f:selectItem itemLabel="Text Field" itemValue="#{msg.textFieldControl}"/>
+                                                <f:selectItem itemLabel="Text Box" itemValue="#{msg.textBoxControl}"/>
+                                                <f:selectItem itemLabel="Radio Button" itemValue="radio"/>
+                                                <f:selectItem itemLabel="Check Box" itemValue="checkbox"/>
+                                                <f:selectItem itemLabel="Combo Box" itemValue="#{msg.comboBoxControl}"/>
+                                                <ui:remove>
+                                                <f:selectItem itemLabel="Suggestion Box" itemValue="#{msg.suggestionBoxControl}"/>
+                                                </ui:remove>
+                                                <f:selectItem itemLabel="Calendar" itemValue="#{msg.calendarControl}"/>
+                                            </h:selectOneMenu>
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:inputText value="#{field.items}" size="10" styleClass="textfield" rendered="#{
+                                                                      field.name eq 'fx1' ||
+                                                                      field.name eq 'fx2' ||
+                                                                      field.name eq 'fx3' ||
+                                                                      field.name eq 'fx4' ||
+                                                                      field.name eq 'fx5' ||
+                                                                      field.name eq 'fx6' ||
+                                                                      field.name eq 'fx7' ||
+                                                                      field.name eq 'fx8' ||
+                                                                      field.name eq 'fx9' ||
+                                                                      field.name eq 'fx10' ||
+                                                                      field.name eq 'fx11' ||
+                                                                      field.name eq 'fx12' ||
+                                                                      field.name eq 'fx13' ||
+                                                                      field.name eq 'fx14' ||
+                                                                      field.name eq 'fx15' ||
+                                                                      field.name eq 'fx16' ||
+                                                                      field.name eq 'fx17' ||
+                                                                      field.name eq 'fx18' ||
+                                                                      field.name eq 'fx19' ||
+                                                                      field.name eq 'fx20'}"/>
+                                            
+                                        </rich:column>
+                                    </rich:dataTable>
+                                    <h:outputText></h:outputText>
+                                </h:panelGroup>
+                                <br/>
+                                <br/>
+                            </rich:dataGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{declarationFormEditController.saveAction}" rendered="#{declarationFormEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{declarationFormEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

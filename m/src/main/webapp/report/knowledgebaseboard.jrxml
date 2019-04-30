@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Knowledgebase Top 20" pageWidth="595" pageHeight="842" whenNoDataType="NoDataSection" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="165"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="knowledgebaseUpdate_date" class="java.util.Date"/>
+	<parameter name="knowledgebaseId" class="java.lang.Integer"/>
+	<parameter name="knowledgebaseName" class="java.lang.String"/>
+	<parameter name="knowledgebaseUpdate_by" class="java.lang.String"/>
+	<parameter name="knowledgebaseVersion" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select ROW_NUMBER()
+        OVER (ORDER BY total desc, topic asc) AS no, kbrpt.topic as topic, kbrpt.total as total from (
+SELECT TOP 20 kb.topic, SUM(rpt.useful_total) as total
+  FROM rpt_contact_history_knowledge rpt
+  inner join knowledgebase kb on rpt.knowledgebase_id = kb.id
+  group by kb.topic
+  order by total desc, kb.topic) as kbrpt]]>
+	</queryString>
+	<field name="comment" class="java.lang.String"/>
+	<field name="adddate" class="java.util.Date"/>
+	<field name="addby" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="97" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Right" isUsingCache="false">
+				<reportElement x="438" y="0" width="117" height="37"/>
+				<imageExpression><![CDATA["maxarlogo.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="366" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="24" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Board Knowledge Base ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="37" width="555" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="0" y="41" width="555" height="50" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<line>
+				<reportElement x="0" y="94" width="555" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="412" y="45" width="36" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="412" y="65" width="36" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Update]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy">
+				<reportElement x="448" y="45" width="100" height="20"/>
+				<textElement>
+					<font size="14" pdfFontName="browa.ttf"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{knowledgebaseUpdate_by}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy">
+				<reportElement x="448" y="65" width="100" height="20"/>
+				<textElement>
+					<font size="14" pdfFontName="browa.ttf"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{knowledgebaseUpdate_date}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy">
+				<reportElement x="39" y="65" width="363" height="20"/>
+				<textElement>
+					<font size="14" pdfFontName="browa.ttf"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{knowledgebaseVersion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="65" width="36" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Version]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy">
+				<reportElement x="39" y="45" width="363" height="20"/>
+				<textElement>
+					<font size="14" pdfFontName="browa.ttf"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{knowledgebaseName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="45" width="36" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Topic]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="2" width="142" height="20"/>
+				<textElement/>
+				<text><![CDATA[By]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="242" y="2" width="306" height="20"/>
+				<textElement/>
+				<text><![CDATA[Comment]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{adddate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="142" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{addby}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="1" width="306" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{comment}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="180" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed Date "+ (new SimpleDateFormat("dd MMM yyyy HH:mm")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+ String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="5" splitType="Stretch">
+			<elementGroup/>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="20" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

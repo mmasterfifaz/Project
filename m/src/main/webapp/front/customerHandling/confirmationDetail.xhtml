@@ -1,0 +1,536 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <style>
+        .colStyle1 { width:15%; text-align: right;}
+        .colStyle2 { width:85%; text-align: left;}
+    </style>
+    <table width="100%" border="0" cellpadding="4" cellspacing="0">
+        <tr>
+            <td><h:outputText value="#{confirmationController.confirmScript}" escape="false"/></td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="product">
+        <tr>
+            <td class="line01"><a name="a1"/><h2>#{confirmationController.product.name}</h2></td>
+        </tr>
+        <tr>
+            <td><h:outputText value="#{confirmationController.message}" style="color: red"/></td>
+        </tr>
+        <tr>
+            <td bgcolor="#EDD3E7" class="line01"><h4 class="gray05 style2">1. Customer Information</h4></td>
+        </tr>
+        <tr>
+            <td class="line01">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="100%"  valign="top">
+                    <a4j:repeat value="#{confirmationController.regInfo}" var="registration">
+                        <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td class="line01"><h4><h:outputText value="#{registration.groupTitle}" rendered="#{registration.groupTitle ne null}"/></h4></td>
+                            </tr>
+                            <tr>
+                                <td>
+                            <h:panelGrid width="100%" cellpadding="2" cellspacing="0" columns="2" columnClasses="colStyle1,colStyle2">
+                                <h:outputText value="#{registration.initial}:" rendered="#{registration.initial ne null}"/>
+                                <h:panelGroup rendered="#{registration.initial ne null}">
+                                    <h:outputText id="initial" value="#{registration.po.initial}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.name}:" rendered="#{registration.name ne null}"/>
+                                <h:panelGroup rendered="#{registration.name ne null}">
+                                    <h:outputText id="name" value="#{registration.po.name}"
+                                                  rendered="#{registration.name ne null}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.surname}:" rendered="#{registration.surname ne null}"/>
+                                <h:panelGroup rendered="#{registration.surname ne null}">
+                                    <h:outputText id="surname" value="#{registration.po.surname}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.idno}:" rendered="#{registration.idno ne null}"/>
+                                <h:panelGroup rendered="#{registration.idno ne null}">
+                                    <h:outputText id="idno" value="#{registration.po.idno}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.dob}:" rendered="#{registration.dob ne null}"/>
+                                <h:panelGrid columns="2" cellpadding="2" cellspacing="0" rendered="#{registration.dob ne null}">
+                                    <h:outputText value="#{registration.po.dob}">
+                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                    <h:outputText id="age" value="Age: #{registration.age}"/>
+                                </h:panelGrid>
+
+                                <h:outputText value="#{registration.gender}:" rendered="#{registration.gender ne null}"/>
+                                <h:panelGrid rendered="#{registration.gender ne null}">
+                                    <h:outputText  id="gender" value="#{registration.po.gender}"/>
+                                </h:panelGrid>
+
+                                <h:outputText value="#{registration.weight}:" rendered="#{registration.weight ne null}"/>
+                                <h:panelGroup rendered="#{registration.weight ne null}">
+                                    <h:outputText id="weight" value="#{registration.po.weight}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.height}:" rendered="#{registration.height ne null}"/>
+                                <h:panelGroup rendered="#{registration.height ne null}">
+                                    <h:outputText id="height" value="#{registration.po.height}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.bmi}:" rendered="#{registration.bmi ne null}"/>
+                                <h:outputText id="bmi" value="#{registration.bmiValue}" rendered="#{registration.bmi ne null}"/>
+
+                                <h:outputText value="#{registration.maritalStatus}:" rendered="#{registration.maritalStatus ne null}"/>
+                                <h:panelGroup rendered="#{registration.maritalStatus ne null}">
+                                    <h:outputText id="maritalStatus" value="#{registration.po.maritalStatus}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.nationality}:" rendered="#{registration.nationality ne null}"/>
+                                <h:panelGroup rendered="#{registration.nationality ne null}">
+                                    <h:outputText id="nationality" value="#{registration.po.nationality}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.homePhone}:" rendered="#{registration.homePhone ne null}"/>
+                                <h:panelGroup rendered="#{registration.homePhone ne null}">
+                                    <h:outputText id="homephone" value="#{registration.po.homePhone}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.officePhone}:" rendered="#{registration.officePhone ne null}"/>
+                                <h:panelGroup rendered="#{registration.officePhone ne null}">
+                                    <h:outputText id="officephone" value="#{registration.po.officePhone}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.mobilePhone}:" rendered="#{registration.mobilePhone ne null}"/>
+                                <h:panelGroup rendered="#{registration.mobilePhone ne null}">
+                                    <h:outputText id="mobilephone" value="#{registration.po.mobilePhone}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.email}:" rendered="#{registration.email ne null}"/>
+                                <h:panelGroup rendered="#{registration.email ne null}">
+                                    <h:outputText id="email" value="#{registration.po.email}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.occupation}:" rendered="#{registration.occupation ne null}"/>
+                                <h:panelGroup rendered="#{registration.occupation ne null}">
+                                    <h:outputText id="occupationCategory" value="#{registration.occ.occupationCategory.name}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="" rendered="#{registration.occupation ne null}"/>
+                                <h:panelGroup rendered="#{registration.occupation ne null}">
+                                    <h:outputText id="occupation" value="#{registration.occ.name }"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="#{registration.job}:" rendered="#{registration.job ne null}"/>
+                                <h:panelGroup rendered="#{registration.job ne null}">
+                                    <h:outputText id="jobdescription" value="#{registration.po.jobDescription}"/>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            </td>
+                            </tr>
+                            <tr>
+                                <td>
+                            <a4j:repeat value="#{registration.flexFields}" var="fx">
+                                <h:panelGrid width="100%" cellpadding="2" cellspacing="0" columns="2" columnClasses="colStyle1,colStyle2">
+                                    <h:outputText value="#{fx.flexField}:" rendered="#{fx.flexField ne null}"/>
+                                    <h:outputText id="fx1" value="#{fx.poFlexField}" rendered="#{fx.flexField ne null}"/>
+                                </h:panelGrid>
+                            </a4j:repeat>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                            <h:panelGrid cellpadding="0" cellspacing="0" columns="2" width="100%">
+                                <h:panelGroup rendered="#{registration.currentAddress1 ne null}">
+                                    <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                                        <tr>
+                                            <td class="line01" colspan="2"><h4>Current Address</h4></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" width="30%">Full Name:</td>
+                                            <td width="70%">
+                                        <h:outputText id="currentaddress1fullname" value="#{registration.po.currentFullname}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line1:</td>
+                                            <td>
+                                        <h:outputText id="currentaddress1line1" value="#{registration.po.currentAddressLine1}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line2:</td>
+                                            <td>
+                                        <h:outputText id="currentaddress1line2" value="#{registration.po.currentAddressLine2}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Province:</td>
+                                            <td>
+                                        <h:outputText id="currentaddress1province"
+                                                      value="#{registration.po.currentDistrict.provinceId.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">District:</td>
+                                            <td>
+                                        <h:outputText id="currentaddress1district"
+                                                         value="#{registration.po.currentDistrict.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Postal Code:</td>
+                                            <td>
+                                        <h:outputText id="currentaddress1postal" value="#{registration.po.currentPostalCode}"
+                                                      styleClass="textfield"/>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{registration.homeAddress1 ne null}">
+                                    <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                            <td class="line01" colspan="2"><h4>Home Address</h4></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" width="30%">Full Name:</td>
+                                            <td width="70%">
+                                        <h:outputText id="homeaddress1fullname" value="#{registration.po.homeFullname}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line1:</td>
+                                            <td>
+                                        <h:outputText id="homeaddress1line1" value="#{registration.po.homeAddressLine1}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line2:</td>
+                                            <td>
+                                        <h:outputText id="homeaddress1line2" value="#{registration.po.homeAddressLine2}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Province:</td>
+                                            <td>
+                                        <h:outputText id="homeaddress1province"
+                                                      value="#{registration.po.homeDistrict.provinceId.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">District:</td>
+                                            <td>
+                                        <h:outputText id="homeaddress1district"
+                                                      value="#{registration.po.homeDistrict.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Postal Code:</td>
+                                            <td>
+                                        <h:outputText id="homeaddress1postal" value="#{registration.po.homePostalCode}"/>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{registration.billingAddress1 ne null}">
+                                    <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                            <td class="line01" colspan="2"><h4>Billing Address</h4></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" width="30%">Full Name:</td>
+                                            <td width="70%">
+                                        <h:outputText id="billingaddress1fullname" value="#{registration.po.billingFullname}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line1:</td>
+                                            <td>
+                                        <h:outputText id="billingaddress1line1" value="#{registration.po.billingAddressLine1}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line2:</td>
+                                            <td>
+                                        <h:outputText id="billingaddress1line2" value="#{registration.po.billingAddressLine2}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Province:</td>
+                                            <td>
+                                        <h:outputText id="billingaddress1province"
+                                                      value="#{registration.po.billingDistrict.provinceId.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">District:</td>
+                                            <td>
+                                        <h:outputText id="billingaddress1district"
+                                                      value="#{registration.po.billingDistrict.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Postal Code:</td>
+                                            <td>
+                                        <h:outputText id="billingaddress1postal" value="#{registration.po.billingPostalCode}"/>
+                                        </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{registration.shippingAddress1 ne null}">
+                                    <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                            <td class="line01" colspan="2"><h4>Shipping Address</h4></td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" width="30%">Full Name:</td>
+                                            <td width="70%">
+                                        <h:outputText id="shippingaddress1fullname" value="#{registration.po.shippingFullname}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line1:</td>
+                                            <td>
+                                        <h:outputText id="shippingaddress1line1" value="#{registration.po.shippingAddressLine1}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Address Line2:</td>
+                                            <td>
+                                        <h:outputText id="shippingaddress1line2" value="#{registration.po.shippingAddressLine2}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Province:</td>
+                                            <td>
+                                        <h:outputText id="shippingaddress1province"
+                                                     value="#{registration.po.shippingDistrict.provinceId.name}"/>
+                                        </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">District:</td>
+                                            <td>
+                                                <h:outputText id="shippingaddress1district"
+                                                              value="#{registration.po.shippingDistrict.name}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right">Postal Code:</td>
+                                            <td>
+                                                <h:outputText id="shippingaddress1postal" value="#{registration.po.shippingPostalCode}"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                            </td>
+                            </tr>
+                        </table>
+                    </a4j:repeat>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="bottom"><a href="#a2"><img src="#{request.contextPath}/icon/down.png" width="42" height="42"/></a></td>
+        </tr>
+    </table>
+</td>
+</tr>
+</table>
+<table width="100%" border="0" cellpadding="4" cellspacing="0" id="product2">
+    <tr>
+        <td bgcolor="#DBDD84" class="line01">
+            <div id="hproduct2">
+                <h4><span class="style3">2. Sale Approval</span><a name="a2" id="a2"></a></h4>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td rowspan="2" valign="top">
+                <rich:dataTable value="#{confirmationController.questionnaires}" var="questionnairelist">
+                    <rich:column>
+                        <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td colspan="2">#{questionnairelist.no} #{questionnairelist.question}</td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="baseline" width="30%">
+                                    <h:outputText value="#{questionnairelist.purchaseOrderQuestionaire.answer}"/>
+                                </td>
+                                <td valign="bottom" width="70%">
+                                    <h:outputText value="#{questionnairelist.purchaseOrderQuestionaire.description}" rendered="#{questionnairelist.purchaseOrderQuestionaire.description ne null}"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </rich:column>
+                </rich:dataTable>
+        </td>
+        <td width="50" align="right" valign="top"><a href="#a1"><img src="#{request.contextPath}/icon/up.png" width="42" height="42"/></a></td>
+    </tr>
+    <tr>
+        <td align="right" valign="bottom"><a href="#a3"><img src="#{request.contextPath}/icon/down.png" width="42" height="42"/></a></td>
+    </tr>
+</table>
+</td>
+</tr>
+<tr>
+    <td></td>
+</tr>
+</table>
+
+<table width="100%" border="0" cellpadding="4" cellspacing="0" id="product3">
+    <tr>
+        <td bgcolor="#F4CDCD" class="line01"><div id="hproduct3">
+                <h4><span class="style4">3. Payment Information</span><a name="a3" id="a"></a></h4>
+            </div></td>
+    </tr>
+    <tr>
+        <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td rowspan="2" valign="top" align="left">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                            <tr>
+                                <td align="right" width="15%">#{msg.paymentMethodReg} :</td>
+                                <td width="85%">
+                                    <h:outputText value="#{confirmationController.tempPurchaseOrder.paymentMethod}"/>
+                                </td>
+                            </tr>
+                            <tr>
+                    <td align="right">#{msg.cardTypeReg} :</td>
+                    <td>
+                <h:outputText value="#{confirmationController.tempPurchaseOrder.cardType}"/>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">#{msg.cardHolderNameReg} :</td>
+        <td><h:outputText value="#{confirmationController.tempPurchaseOrder.cardHolderName}"/></td>
+    </tr>
+    <tr>
+        <td align="right">#{msg.cardNo} :</td>
+        <td><h:outputText value="#{confirmationController.tempPurchaseOrder.cardNo}"/>
+        </td>
+    </tr>
+    <tr>
+        <td align="right">#{msg.cardExpiryDateReg} :</td>
+        <td><h:outputText value="#{confirmationController.tempPurchaseOrder.cardExpiryMonth}"/>/
+    <h:outputText value="#{confirmationController.tempPurchaseOrder.cardExpiryYear}"/></td>
+    </tr>
+    <tr>
+        <td align="right">#{msg.traceNoReg} :</td>
+        <td><h:outputText value="#{confirmationController.tempPurchaseOrder.traceNo}" styleClass="textfield"/></td>
+    </tr>
+</table>
+
+</td>
+<td width="50" align="right" valign="top"><a href="#a2"><img src="#{request.contextPath}/icon/up.png" width="42" height="42"/></a></td>
+</tr>
+<tr>
+    <td align="right" valign="bottom"><a href="#a4"><img src="#{request.contextPath}/icon/down.png" width="42" height="42"/></a></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+    <td></td>
+</tr>
+</table>
+<table width="100%" border="0" cellpadding="4" cellspacing="0" id="product4">
+    <tr>
+        <td bgcolor="#AAD9F2" class="line01"><div id="hproduct4">
+                <h4><span class="style5">4. Sale Result</span><a name="a4" id="a4"></a></h4>
+            </div></td>
+    </tr>
+    <tr>
+        <td><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1566" rowspan="2" valign="top">
+                        <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td width="150" align="right" valign="top"></td>
+                                <td align="right"></td>
+                            </tr>
+                            <tr>
+                                <td width="100" align="right" valign="top"><span class="blue04">Sale Result:</span></td>
+                                <td><table border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td valign="top">&#160;</td>
+                                            <td valign="top">
+                                        <h:outputText value="Yes" rendered="#{fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'Y') ? true : false}"/>
+                                        <h:outputText value="No" rendered="#{fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'N') ? true : false}"/>
+                                        <h:outputText value="Follow Up" rendered="#{fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'F') ? true : false}"/>
+                                </td>
+                                <td valign="top">
+                                <h:panelGrid id="panelReason" columns="2" cellspacing="0" cellpadding="1">
+                                <h:outputText value="&#160;" style="line-height: 25px"/>
+                                <h:outputText value=" "/>
+
+                                <h:outputText value="Reason :" rendered="#{confirmationController.tempPurchaseOrder.nosaleReason ne null and (fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'N') ? true : false)}"/>
+                                <h:panelGroup rendered="#{confirmationController.tempPurchaseOrder.nosaleReason ne null and (fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'N') ? true : false)}">
+                                    <h:outputText value="#{confirmationController.tempPurchaseOrder.nosaleReason.name}"
+                                                  rendered="#{confirmationController.tempPurchaseOrder.nosaleReason ne null and (fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'N') ? true : false)}"/>
+                                </h:panelGroup>
+
+                                <h:outputText value="Reason :" rendered="#{confirmationController.tempPurchaseOrder.followupsaleReason ne null and (fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'F') ? true : false)}"/>
+                                <h:panelGroup rendered="#{confirmationController.tempPurchaseOrder.followupsaleReason ne null and (fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'F') ? true : false)}">
+                                    <h:outputText value="#{confirmationController.tempPurchaseOrder.followupsaleReason.name}"
+                                                  rendered="#{confirmationController.tempPurchaseOrder.followupsaleReason ne null and (fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'F') ? true : false)}"/>
+                                </h:panelGroup>
+                                <h:outputText value="Schedule :" rendered="#{(fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'F') ? true : false)}"/>
+                                <h:panelGroup rendered="#{(fn:contains(confirmationController.tempPurchaseOrder.saleResult, 'F') ? true : false)}">
+                                    <h:outputText value="#{confirmationController.tempPurchaseOrder.followupsaleDate}" rendered="#{confirmationController.tempPurchaseOrder.followupsaleDate ne null}">
+                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </h:panelGroup>
+                            </h:panelGrid>
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+    <tr>
+        <td align="left"></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td colspan="2" align="center">
+            <h:commandButton image="/img/b_back.png" action="#{registrationFrontController.selfAction}">
+                <f:param name="tempPurchaseOrderId" value="#{confirmationController.tempPurchaseOrder.id}"/>
+                <f:param name="productId" value="#{confirmationController.product.id}"/>
+            </h:commandButton>
+            <h:commandButton id="savebutton"
+                             image="/img/b_confirm.png"
+                             action="#{confirmationController.saveAction}">
+            </h:commandButton>
+        </td>
+    </tr>
+    <tr>
+        <td align="left"></td>
+        <td height="40"></td>
+    </tr>
+</table>
+<br/></td>
+<td width="50" align="right" valign="top"><a href="#a3"><img src="#{request.contextPath}/icon/up.png" width="42" height="42"/></a></td>
+</tr>
+<tr>
+    <td align="center" valign="bottom"></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+    <td></td>
+</tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+    </tr>
+</table>
+</ui:composition>

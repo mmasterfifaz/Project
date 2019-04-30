@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Social Report</ui:define>
+            <ui:define name="title2">Statistic of Approval Email by Day</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainPanel1">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date From:</td>
+                        <td><rich:calendar value="#{statisticApprovalEmailByDayReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{statisticApprovalEmailByDayReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Social Service Type:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="soSevice" value="#{statisticApprovalEmailByDayReport.soServiceId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticApprovalEmailByDayReport.soServiceList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Source Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="sorucetype" value="#{statisticApprovalEmailByDayReport.sourceTypeID}" styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{performanceByUser.channelList}" />
+                            </h:selectOneMenu>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Case Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="casetype" value="#{statisticApprovalEmailByDayReport.soCaseTypeId}" style="width: 350px;"
+                                             valueChangeListener="#{statisticApprovalEmailByDayReport.soCaseTypeListener}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticApprovalEmailByDayReport.soCaseTypeList}" />
+                                <a4j:ajax event="change" render="subcasetype" execute="@this"/>
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Case Topic:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="subcasetype" value="#{statisticApprovalEmailByDayReport.soSubCaseTypeId}" style="width: 350px;"
+                                             disabled="#{statisticApprovalEmailByDayReport.soSubCaseTypeList.size() eq 0}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticApprovalEmailByDayReport.soSubCaseTypeList}" />
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Output Type:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{statisticApprovalEmailByDayReport.outputFormat}">
+                                <f:selectItems value="#{statisticApprovalEmailByDayReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink  action="blank.xhtml" actionListener="#{statisticApprovalEmailByDayReport.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png"/>
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+                 </h:panelGroup> 
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

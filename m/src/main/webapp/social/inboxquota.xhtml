@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administrator</ui:define>
+            <ui:define name="title2">Inbox Quota</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="User Group"/>
+                    <h:selectOneMenu value="#{inboxQuotaController.userGroupId}" styleClass="select08">
+                        <f:selectItem itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{inboxQuotaController.userGroupList}"/>
+                    </h:selectOneMenu>
+
+                    <h:outputText value="User Name"/>
+                    <h:inputText value="#{inboxQuotaController.keyword}" styleClass="textfield"/>
+                    
+                    <h:outputText value=""/>
+                    <a4j:commandButton actionListener="#{inboxQuotaController.searchActionListener}" render="data" limitRender="true" image="/img/b_search.png"/>
+
+                </h:panelGrid>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_edit02.png" action="#{inboxQuotaController.editAction}" 
+                                 rendered="#{inboxQuotaController.editPermitted}">
+                </h:commandButton>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{inboxQuotaController.usersList}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;width: 3%;">&nbsp;</rich:column>
+                            <rich:column style="text-align: left;width: 47%;"><h:outputText value="Login Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 25%;"><h:outputText value="Inbox Quota"/></rich:column>
+                            <rich:column style="text-align: left;width: 25%;"><h:outputText value="Inbox Quota Per Day"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value=""/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.loginName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.soOnhandQuota}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.soInboxQuota}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

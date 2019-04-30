@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Social Priority</ui:define>
+            <ui:define name="button">
+                <ui:remove>
+                <h:commandButton image="../img/b_add.png" action="#{socialPriorityController.editAction}" rendered="#{socialPriorityController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{socialPriorityController.deleteAction}"  rendered="#{socialPriorityController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+                </ui:remove>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:messages globalOnly="true"/>
+                <rich:dataTable width="100%" columnsWidth="3%,*,70%" styleClass="tableline01" value="#{socialPriorityController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <ui:remove>
+                            <rich:column styleClass="subh01">&nbsp;</rich:column>
+                            </ui:remove>
+                            <rich:column styleClass="subh01"><h:outputText value="Code" /></rich:column>
+                            <rich:column styleClass="subh01"><h:outputText value="Name"/></rich:column>
+                            <rich:column styleClass="subh01"><h:outputText value="Status"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <ui:remove>
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{socialPriorityController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    </ui:remove>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{socialPriorityController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

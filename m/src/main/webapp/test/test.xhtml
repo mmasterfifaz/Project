@@ -1,0 +1,26 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <h:form>
+        <h:graphicImage id="pictureUpload" url="../upload/temp/#{testUploadController.fileName}" width="100" height="100"/>
+        <a4j:commandButton image="../img/b_add.png"
+                           oncomplete="Richfaces.showModalPanel('fileUpload')"
+                           render="upload"></a4j:commandButton>
+    </h:form>
+    <rich:popupPanel id="fileUpload" width="500" height="300" style="padding: 0 0 0 0; border-style: none" >
+
+        <h:form>
+            <rich:fileUpload fileUploadListener="#{testUploadController.listener}"
+                             maxFilesQuantity="1"
+                             id="upload"
+                             immediateUpload="true"
+                             acceptedTypes="jpg, gif, png, bmp" allowFlash="false"
+                             onfileuploadcomplete="Richfaces.hideModalPanel('fileUpload')">
+                <a4j:ajax event="uploadcomplete" render="pictureUpload" />
+            </rich:fileUpload>
+        </h:form>
+    </rich:popupPanel>
+</ui:composition>

@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<head>
+
+    <link rel="stylesheet" href="#{request.contextPath}/includes/dijit/themes/claro/claro.css"/>
+
+    <script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+    <script type="text/javascript">
+
+        require(["dojox/charting/Chart", "dojox/charting/axis2d/Default", "dojox/charting/plot2d/#{socialAnalysisReport.graphType}", "dojox/charting/themes/Electric",
+            "dojox/charting/action2d/Highlight", "dojox/charting/action2d/MoveSlice", "dojox/charting/action2d/Tooltip", "dojox/charting/widget/Legend",
+            "dojo/ready"],
+                function(Chart, Default, chartType, chartTheme, Highlight, MoveSlice, Tooltip, Legend, ready){
+                    ready(function(){
+                        var c = new Chart("graphStatic2");
+                        c.setTheme(chartTheme);
+                        c.addPlot("default", {
+                            type: chartType,
+                            markers: true, tension: "S",
+                            gap: 20,
+                            animate:{duration: 800}
+                        })
+                        c.addAxis("x", {
+                            majorTick: {length:3},
+                            minorTick: {length:3},
+                            minorTicks: true,
+                            minorLabels: true,
+                            microTicks: false,
+//                            labels: [{value: 0, text: "0"}, {value: 1, text: "jan"}, {value: 2, text: "feb"}, {value: 3, text: "mar"}, {value: 4, text: "jan"}, {value: 5, text: "jan"}]
+                            labels: [{value: 0, text: "0"} #{socialAnalysisReport.graphLabels}]
+                        });
+                        c.addAxis("y", {
+                            vertical: true,
+                            min: 0,
+                            majorTick: {length:3},
+                            minorTicks: true,
+                            minorLabels: true,
+                            microTicks: false
+                        })
+
+                        #{socialAnalysisReport.graphSerie1}
+
+                        var anim_a = new MoveSlice(c, "default");
+                        var anim_b = new Highlight(c, "default");
+                        var anim_c = new Tooltip(c, "default");
+                        c.render();
+                        var lg = new Legend({chart: c}, "graphStatic2Legend");
+                    });
+                });
+    </script>
+
+</head>
+<body class="claro">
+<table width="100%" style="margin-left: auto;margin-right: auto; background-color:#252525">
+    <tr><td align="center"><h:outputText style="font-size:x-large;font-weight:bold;color:#E1E1D9" value="#{socialAnalysisReport.graphTitle}"/></td></tr>
+    <tr><td><div id="graphStatic2" style="height: 480px;"></div></td></tr>
+</table>
+
+<br/>
+<table style="margin-left: auto;margin-right: auto; border:1px solid lightgrey"><tr><td><div id="graphStatic2Legend"/></td></tr></table>
+
+</body>
+</html>

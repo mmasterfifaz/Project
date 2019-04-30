@@ -1,0 +1,114 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Sale Approval</ui:define>
+            <ui:define name="button"></ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr><td width="150" align="right">Sale Date:</td>
+                        <td align="left"><rich:calendar id="fromsaledate"
+                                                        value="#{saleApprovalController.fromDate}"
+                                                        inputClass="textfield" buttonClass="rfcalbtn" inputSize="8"
+                                                        datePattern="#{msg.datePattern}"
+                                                        locale="#{msg.locale}"/>
+                            to <span style="width: 5px"/> <rich:calendar id="tosaledate"
+                                                                         value="#{saleApprovalController.toDate}"
+                                                                         inputClass="textfield" buttonClass="rfcalbtn" inputSize="8"
+                                                                         datePattern="#{msg.datePattern}"
+                                                                         locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr><td align="right">TMR:</td>
+                        <td><h:inputText value="#{saleApprovalController.tmrName}" styleClass="textfield"/></td>
+                    </tr>
+                    <tr><td align="right">Approval Status:</td>
+                        <td><h:selectOneMenu value="#{saleApprovalController.approvalStatus}" styleClass="select08">
+                                <f:selectItem itemValue="all" itemLabel="All"/>
+                                <f:selectItem itemValue="#{msg.approvalWaitingValue}" itemLabel="#{msg.approvalWaiting}"/>
+                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr><td align="right">Sales Result:</td>
+                        <td><h:panelGrid columns="2" cellpadding="0" cellspacing="0"><h:selectOneMenu value="#{saleApprovalController.salesResult}" styleClass="select08">
+                                    <f:selectItem itemValue="all" itemLabel="All"/>
+                                    <f:selectItem itemValue="Y" itemLabel="Yes"/>
+                                    <f:selectItem itemValue="N" itemLabel="No"/>
+                                    <f:selectItem itemValue="F" itemLabel="Follow Up"/>
+                                </h:selectOneMenu>
+                                
+                            </h:panelGrid></td>
+                    </tr>
+                    </ui:remove>
+                    <tr><td></td>
+                        <td><a4j:commandButton actionListener="#{saleApprovalController.searchActionListener}" render="data" limitRender="true" image="/img/b_search.png"/>
+                        </td></tr>
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{saleApprovalController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 10%;text-align: left;">Ref No.</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Sales Date</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Customer ID</rich:column>
+                            <rich:column style="width: 20%;text-align: left;">Customer Name</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Sales Result</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">TMR</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Update By</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Payment Status</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Approval Status</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        #{list.refNo}
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.saleDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        #{list.customerId}
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="" value="#{list.customerName}" action="#{saleApprovalController.editAction}">
+                            <f:param name="frompage" value="saleapproval"/>
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                        
+                    </rich:column>
+                    <rich:column>
+                        #{list.saleResult}
+                    </rich:column>
+                    <rich:column>
+                        #{list.tmrName}
+                    </rich:column>
+                    <rich:column>
+                        #{list.updateBy}
+                    </rich:column>
+                    <rich:column>
+                        #{list.paymentStatus}
+                    </rich:column>
+                    <rich:column>
+                        #{list.approvalStatus}
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

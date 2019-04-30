@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Social Report</ui:define>
+            <ui:define name="title2">Statistic Report of Agent Performance by Date</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainPanel1">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date From:</td>
+                        <td><rich:calendar value="#{statisticAgentPerformanceByDateReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{statisticAgentPerformanceByDateReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Priority:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="priority" value="#{statisticAgentPerformanceByDateReport.soPriorityId}" styleClass="select08" >
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.soPriorityList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Status:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="status" value="#{statisticAgentPerformanceByDateReport.soCaseStatus}" styleClass="select08" >
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.soCaseStatusList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Grouping of User:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{statisticAgentPerformanceByDateReport.userOption}" valueChangeListener="#{statisticAgentPerformanceByDateReport.userOptionListener}">
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.userOptionList}"/>
+                                <a4j:ajax event="click" render="mainPanel1" execute="@this"/>                                
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="4">
+                            <h:panelGroup id="serviceTypePanel" rendered="#{statisticAgentPerformanceByDateReport.userOption eq 1}">
+                             <tr>
+                                <td width="200" align="right" valign="top">Social Service Type: </td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="soSevice" value="#{statisticAgentPerformanceByDateReport.soServiceId}"  
+                                                      valueChangeListener="#{statisticAgentPerformanceByDateReport.userServiceListener}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{statisticAgentPerformanceByDateReport.soServiceList}"/>
+                                    <a4j:ajax event="change" render="soSevice,user" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            <h:panelGroup id="userGroupPanel" rendered="#{statisticAgentPerformanceByDateReport.userOption eq 0}">
+                            <tr>
+                                <td width="200" align="right" valign="top">User Group:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="usergroup" value="#{statisticAgentPerformanceByDateReport.userGroupId}" 
+                                                     valueChangeListener="#{statisticAgentPerformanceByDateReport.userGroupListener}" styleClass="select08" >
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{statisticAgentPerformanceByDateReport.usergroupList}"/>
+                                        <a4j:ajax event="change" render="usergroup, user" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="user" value="#{statisticAgentPerformanceByDateReport.userId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.usersList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Account ID:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="account"  value="#{statisticAgentPerformanceByDateReport.accountID}" styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.accountList}" />
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Source Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="sorucetype" value="#{statisticAgentPerformanceByDateReport.sourceTypeID}" valueChangeListener="#{statisticAgentPerformanceByDateReport.soSourceTypeListener}"  styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.channelList}" />
+                                <a4j:ajax event="change" render="message" execute="@this"/>
+                            </h:selectOneMenu>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Message Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="message" value="#{statisticAgentPerformanceByDateReport.soMessageId}" styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.soMessageList}" />
+                            </h:selectOneMenu>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Case Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="casetype" value="#{statisticAgentPerformanceByDateReport.soCaseTypeId}" style="width: 350px;"
+                                             valueChangeListener="#{statisticAgentPerformanceByDateReport.soCaseTypeListener}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.soCaseTypeList}" />
+                                <a4j:ajax event="change" render="subcasetype" execute="@this"/>
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Case Topic:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="subcasetype" value="#{statisticAgentPerformanceByDateReport.soSubCaseTypeId}" style="width: 350px;"
+                                             disabled="#{statisticAgentPerformanceByDateReport.soSubCaseTypeList.size() eq 0}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.soSubCaseTypeList}" />
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Output Type:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{statisticAgentPerformanceByDateReport.outputFormat}">
+                                <f:selectItems value="#{statisticAgentPerformanceByDateReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink  action="blank.xhtml" actionListener="#{statisticAgentPerformanceByDateReport.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png"/>
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+                 </h:panelGroup> 
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

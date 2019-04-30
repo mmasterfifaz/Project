@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Company Logo</ui:define>
+            <ui:define name="button"></ui:define>
+            <ui:define name="search"></ui:define>
+            <ui:define name="panel">
+                <table>
+                    <tr><td align="right" valign="top">&nbsp;</td></tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:panelGroup id="logo">
+                                <h:graphicImage value="/upload/companylogo/logo.png" style="max-height: 72px; max-width: 200px"/>
+                            </h:panelGroup>
+                        </td>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td>
+                            <h:commandButton image="../img/b_edit03.png" action="#{companyLogoController.editAction}" rendered="#{companyLogoController.addPermitted}" immediate="true"/>
+                        </td>
+                    </tr>
+                    <tr><td align="right" valign="top">&nbsp;</td></tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Address Directory</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText class="gray03" value="Category :"/>
+                    <h:selectOneMenu value="#{phoneDirectoryController.phoneDirectoryCategoryId}">
+                        <f:selectItem itemLabel="All" itemValue="0"/>
+                        <f:selectItems value="#{phoneDirectoryController.phoneCategoreList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                    </h:selectOneMenu>
+                                        
+                    <h:outputText class="gray03" value="Name:"/>
+                    <h:inputText styleClass="textfield" value="#{phoneDirectoryController.name}"/>
+                    
+                    <h:outputText class="gray03" value="Surname:"/>
+                    <h:inputText styleClass="textfield" value="#{phoneDirectoryController.surname}"/>
+                    
+                    <h:outputText class="gray03" value="Telephone No:"/>
+                    <h:inputText styleClass="textfield" value="#{phoneDirectoryController.phoneNo}"/>
+                    
+                    <h:outputText class="gray03" value="Email:"/>
+                    <h:inputText styleClass="textfield" value="#{phoneDirectoryController.email}"/>
+                    
+                    <h:outputText value=""/>
+                    <a4j:commandButton image="/img/b_search.png" 
+                                       actionListener="#{phoneDirectoryController.searchActionListener}" 
+                                       render="dataList"
+                                       limitRender="true"/>
+                </h:panelGrid>
+                
+                </ui:define>
+                <ui:define name="button">
+                    <h:commandButton image="../img/b_add.png" action="#{phoneDirectoryController.editAction}" 
+                                     rendered="#{phoneDirectoryController.addPermitted}"/>
+                    <h:commandButton image="../img/b_delete.png" action="#{phoneDirectoryController.deleteAction}" 
+                                     rendered="#{phoneDirectoryController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+                </ui:define>
+                <ui:define name="panel">
+                    <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{phoneDirectoryController.phoneDirectoryList}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Category" /></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Name" /></rich:column>
+                            <rich:column style="width: 27%;text-align: left;"><h:outputText value="Description" /></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Email" /></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Telephone No."/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:columnGroup>
+                        <rich:column>
+                            <h:selectBooleanCheckbox value="#{phoneDirectoryController.selectedIds[list.id]}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.phoneDirectoryCategory.name}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:commandLink title="View Detail" action="#{phoneDirectoryController.editAction}">
+                                <h:outputText value="#{list.name} #{list.surname}"/>
+                                <f:param name="id" value="#{list.id}"/>
+                            </h:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.description}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.email}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:panelGroup rendered="#{not empty list.phoneDirectoryTelephoneCollection}">
+                                <a4j:repeat value="#{list.phoneDirectoryTelephoneCollection}" var="list1" rowKeyVar="idx">
+                                    <h:outputText value="#{list1.phoneNo}"/><h:outputText value=", " rendered="#{list.phoneDirectoryTelephoneCollection.size()-1 > idx}"/>
+                                </a4j:repeat>
+                            </h:panelGroup>
+                        </rich:column>
+                    </rich:columnGroup>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>

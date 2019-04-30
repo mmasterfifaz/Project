@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<head>
+    <style type="text/css">
+        <!--
+        .rich-tabhdr-side-cell {
+            border:none;
+        }
+        .rich-tab-inactive {
+            cursor: pointer;
+            background-image : url(../img/tb_01.png);
+            border:none;
+            height: 20px;
+            color: #000000;
+        }
+        .rich-tab-active {
+            background-image : url(../img/tb_02.png);
+            border:none;
+            height: 20px;
+            color: #FFFFFF;
+        }
+        .rich-tabpanel-content {
+            border-width: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+        .rich-tab-bottom-line {
+            border-color: #75b8d1;
+            border-width: 2px;
+        }
+        -->
+    </style>
+    <script type="text/javascript" >
+        function onLoad() {
+            //alert('onloaddd');
+        }
+
+    </script>
+    <script type="text/javascript" src="#{request.contextPath}/includes/setcontrollerproperty.js"/>
+</head>
+<body>
+
+    <h:inputHidden value="#{socialAnalysisReport.graphName}"/>
+    <!--<div id="graphStatic3" style="width: 600px; height: 400px;"></div>-->
+    <div id="graphStatic3" style="height: 480px;"></div>
+    <table style="margin-left: auto;margin-right: auto; border:1px solid lightgrey"><tr><td><div id="graphStatic3Legend"/></td></tr></table>
+
+    <script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+    <script type="text/javascript">
+        dojo.require("dojox.charting.Chart2D");
+        dojo.require("dojox.charting.widget.Legend");
+        dojo.require("dojox.charting.action2d.Tooltip");
+        dojo.require("dojox.charting.action2d.Highlight");
+
+        makeCharts3 = function() {
+//---------------------------------------------------------
+            var chart3 = new dojox.charting.Chart2D("graphStatic3");
+//                        chart3.setTheme(Claro);
+            chart3.addPlot("default", {
+                type: "#{socialAnalysisReport.graphType}", markers: true, tension: "S",
+                gap: 20,
+                animate:{duration: 500}
+            })
+
+            #{socialAnalysisReport.graphSerie1}
+
+            var tip3 = new dojox.charting.action2d.Tooltip(chart3, "default");
+            var highlight3 = new dojox.charting.action2d.Highlight(chart3, "default");
+
+            chart3.addAxis("x", {
+                majorTick: {length:3},
+                minorTick: {length:3},
+                minorTicks: true,
+                minorLabels: true,
+                microTicks: false,
+//                            labels: [{value: 0, text: "0"}, {value: 1, text: "jan"}, {value: 2, text: "feb"}, {value: 3, text: "mar"}, {value: 4, text: "jan"}, {value: 5, text: "jan"}]
+                labels: [{value: 0, text: "0"} #{socialAnalysisReport.graphLabels}]
+            });
+
+            chart3.addAxis("y", {
+                vertical: true,
+                min: 0,
+                majorTick: {length:3},
+                minorTicks: true,
+                minorLabels: true,
+                microTicks: false
+            });
+
+            chart3.render();
+            var legend3 = new dojox.charting.widget.Legend({chart: chart3}, "graphStatic3Legend");
+        };
+        dojo.addOnLoad(makeCharts3);
+    </script>
+
+
+<script type="text/javascript">
+    onLoad();
+</script>
+
+</body>
+</html>

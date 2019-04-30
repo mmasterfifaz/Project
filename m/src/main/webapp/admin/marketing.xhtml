@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing List Upload</ui:define>
+            <ui:define name="search">
+                  <table width="" border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="right">Marketing List Upload Name :</td>
+                        <td>
+                            <h:inputText styleClass="textfield" value="#{marketingController.keyword}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td>
+                            <a4j:commandButton image="/img/b_search.png" 
+                                               actionListener="#{marketingController.searchActionListener}" 
+                                               render="dataList"
+                                               limitRender="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{marketingController.editAction}"  rendered="#{marketingController.addPermitted}"
+                                 actionListener="#{marketingEditController.initializeListener}"/>
+                <ui:remove>
+                    <h:commandButton image="../img/b_delete.png" action="#{marketingController.deleteAction}" rendered="#{marketingController.deletePermitted}"  
+                                 onclick="return checkDelete(this.form)"/>
+                </ui:remove>
+                <h:commandButton image="../img/b_purgelist.png" action="#{marketingController.purgeAction}" 
+                                 rendered="#{marketingController.purgePermitted}"  
+                                 onclick="if(checkSelectData(this.form)) { if(!confirm('Confirm to Purge List?\nSELECTED LIST DATA WILL BE DELETE!!!')) { return false; } else {#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})} } else { return false; }" />
+                
+                <h:commandButton image="../img/b_segmentation.png" action="#{marketingController.segmentationAction}" rendered="#{false}"/>
+
+                <h:commandButton image="../img/b_close_auto_dial.png" action="#{marketingController.EOCAction}"
+                                 rendered="#{marketingController.EOCPermitted}"
+                                 onclick="if(checkSelectData(this.form)) { if(!confirm('To close auto-dial list is to change the list status to Close.\n\nIn order to terminate the auto-dial attempt, \nplease proceed further step in Telephony system.\n\nAre you sure to change list status to Closed?')) { return false; } else {#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})} } else { return false; }" />
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{marketingController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Code" /></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Start Date"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="End Date"/></rich:column>
+                            <rich:column style="text-align: left;"><h:outputText value="Total Record"/></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Last Update"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Update By"/></rich:column>
+                            <rich:column style="width: 10%;text-align: center;"></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column>
+                        <h:selectBooleanCheckbox value="#{marketingController.selectedIds[list.id]}" rendered="#{marketingController.checkMarketingForPurge(list.id)}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{marketingController.editAction}"
+                                       actionListener="#{marketingEditController.initializeListener}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.startDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.endDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.totalRecord}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.updateDate}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.updateBy}"/>
+                    </rich:column>
+                    <rich:column style="text-align: center;">
+                        <h:commandButton image="../img/b_load_history.png" 
+                                         action="#{marketingController.historyAction}"
+                                         actionListener="#{marketingHistoryController.initialAction}"
+                                         rendered="#{list.datasource eq 'auto-file'}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show();"
+                            onstop="#{rich:component('waitPopup')}.hide();" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../social/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">File Upload</ui:define>
+    <ui:param name="modalId" value="popupFileUpload"/>
+    <ui:param name="width" value="500"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:form id="f2">
+            <rich:fileUpload id="fileUpload" fileUploadListener="#{m.uploadFileListener}"
+                             maxFilesQuantity="1"
+                             immediateUpload="true"
+                             listHeight="63px">
+                <a4j:ajax event="clear" render="fileUpload"/>
+            </rich:fileUpload>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Questionnaire Category: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainData" >
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{questionnaireCategoryEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">* Name:</td>
+                        <td><h:inputText id="name" value="#{questionnaireCategoryEditController.qaCategory.name}" styleClass="textfield" 
+                                         required="true" requiredMessage="#{msg.require} ">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{questionnaireCategoryEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">Description:</td>
+                        <td><h:inputTextarea id="description" value="#{questionnaireCategoryEditController.qaCategory.description}" cols="50" rows="5" />                   
+                        </td>
+                    </tr>
+                </table>
+                </h:panelGroup>        
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr><td>
+                        <a4j:commandButton image="../img/b_add.png"
+                                            limitRender="true"
+                                            render="data, mainData"
+                                            actionListener="#{questionnaireCategoryEditController.addQuestionListener}"/>
+                    </td></tr>
+                    <tr><td>
+                        <rich:dataTable id="data" style="width: 100%" headerClass="subh01"
+                                        value="#{questionnaireCategoryEditController.qaQuestionList}" var="list" >
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="text-align: left;" >Question Set</rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column style="vertical-align: top" >
+                                <h:panelGrid columns="1" width="100%">
+                                    <h:panelGroup>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td style="width: 85px;"><h:outputText value="Question #{list.seqNo}." style="font-weight: bold"/></td>
+                                                <td style="width: 130px;"><h:outputText value="Code: "/> 
+                                                    <h:inputText id="code"  value="#{list.code}" styleClass="textfield"  size="10"/></td>
+                                                <td style="width: 200px;"><h:outputText value="* Type: "/>
+                                                    <h:selectOneMenu id="type" value="#{list.type}" 
+                                                                    required="true" requiredMessage="#{msg.require}">
+                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                        <f:selectItems value="#{questionnaireCategoryEditController.typeList}"/>
+                                                        <a4j:ajax event="change" render="qaChoice" limitRender="true" execute="@this"/>
+                                                        <f:validateRequired/>                  
+                                                        <rich:validator />
+                                                    </h:selectOneMenu> <rich:message for="type" style="color:red"/></td>
+                                                <td style="width: 100px;"><h:outputText value="Item: " />
+                                                    <h:selectOneMenu id="item" value="#{list.noChoice}">
+                                                        <f:selectItems value="#{questionnaireCategoryEditController.itemList}"/>
+                                                        <a4j:ajax event="change" render="qaChoice" limitRender="true" 
+                                                            execute="@this" listener="#{questionnaireCategoryEditController.createChoiceList}"/>
+                                                    </h:selectOneMenu>
+                                                    </td>
+                                                <td style="width: 100px;"><h:selectBooleanCheckbox value="#{list.showNa}" /><h:outputText value="Show N/A"/></td>
+                                                <td style="width: 120px;"><h:selectBooleanCheckbox value="#{list.showRemark}" /><h:outputText value="Show Remark"/></td>
+                                                <td style="width: 20px;"><a4j:commandButton image="../img/b_insert.png"
+                                                                    limitRender="true"
+                                                                    render="data, mainData"
+                                                                    actionListener="#{questionnaireCategoryEditController.insertQuestionListener}"> 
+                                                        <f:param name="seqNo" value="#{list.seqNo}"/>
+                                                    </a4j:commandButton></td>
+                                                 <td style="width: 20px;"><a4j:commandButton image="../img/b_delete.png"
+                                                                    limitRender="true"
+                                                                    render="data"
+                                                                    immediate="true"
+                                                                    actionListener="#{questionnaireCategoryEditController.deleteQuestionListener}">
+                                                        <f:param name="seqNo" value="#{list.seqNo}"/>
+                                                    </a4j:commandButton></td>
+                                            </tr>
+                                            <tr><td colspan="7">&nbsp;</td></tr>
+                                            <tr><td align="right" valign="top"></td><td colspan="6" align="left">
+                                                    <h:inputTextarea id="question" label="Question" value="#{list.name}" cols="80" rows="5" 
+                                                                     required="true" requiredMessage="#{msg.require}">
+                                                        <f:validateRequired/>                  
+                                                        <rich:validator />
+                                                    </h:inputTextarea>
+                                                    <rich:message for="question" style="color:red"/>
+                                            </td></tr>
+                                            <tr><td colspan="7">&nbsp;</td></tr>
+                                            <tr><td colspan="7">
+                                                    <a4j:region>
+                                                    <rich:dataTable id="qaChoice" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                    value="#{list.qaChoiceCollection}" rows="20" var="choicelist">
+                                                        <f:facet name="header">
+                                                            <rich:columnGroup>
+                                                                <rich:column style="width: 10%;text-align: left">Item</rich:column>
+                                                                <rich:column style="width: 60%;text-align: left">Label</rich:column>
+                                                                <rich:column style="width: 20%;text-align: left">Value</rich:column>
+                                                                <rich:column style="width: 10%;text-align: left"><h:outputText value="Default" rendered="#{(list.type ne 'textfield') and (list.type ne 'dropdown')}"/></rich:column>
+                                                            </rich:columnGroup>
+                                                        </f:facet>
+                                                        <rich:column>
+                                                            <h:outputText value="#{choicelist.seqNo}."/>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <h:inputText id="label"  value="#{choicelist.label}" styleClass="textfield"  size="50" 
+                                                                         required="true" requiredMessage="#{msg.require}">
+                                                                <f:validateRequired/>                  
+                                                                <rich:validator />
+                                                            </h:inputText>
+                                                            <rich:message for="label" style="color:red"/>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <h:inputText value="#{choicelist.value}" size="5" onkeypress="return isNumberKey(event)"/>
+                                                        </rich:column>
+                                                        <rich:column>                                                            
+                                                            <h:selectBooleanCheckbox value="#{choicelist.default1}" rendered="#{(list.type ne 'textfield') and (list.type ne 'dropdown')}" >
+                                                                <a4j:ajax execute="@this" listener="#{questionnaireCategoryEditController.chkDefault}" 
+                                                                          render="qaChoice" limitRender="true" />
+                                                                <f:param name="questionNo" value="#{list.seqNo}"/>
+                                                                <f:param name="choiceNo" value="#{choicelist.seqNo}"/>
+                                                               
+                                                            </h:selectBooleanCheckbox> 
+                                                        </rich:column>
+                                                    </rich:dataTable>
+                                                    </a4j:region>
+                                            </td></tr>
+                                            <tr><td colspan="7">&nbsp;</td></tr>
+                                        </table>
+                                    </h:panelGroup>
+                                </h:panelGrid>
+                            </rich:column>
+                        </rich:dataTable>
+                    </td></tr>
+                </table> 
+                            
+                <table width="100%" cellpadding="6">
+                    <tr>
+                        <td align="left" valign="top" width="33%">
+                            <h:commandButton image="../img/b_back.png"
+                                             action="#{questionnaireCategoryEditController.backAction}" immediate="true"/></td>
+                        <td valign="top" align="center" width="34%">
+                             <h:commandButton image="../img/b_save.png" 
+                                             action="#{questionnaireCategoryEditController.saveAction}" 
+                                             rendered="#{questionnaireCategoryEditController.savePermitted and questionnaireCategoryEditController.editUsed}"/>
+                        </td>
+                        <td align="right" valign="top" width="33%">&nbsp;</td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

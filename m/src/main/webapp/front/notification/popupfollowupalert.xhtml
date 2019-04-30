@@ -1,0 +1,63 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <rich:popupPanel id='popupFollowupAlert' width="484" height="400" style="border-style: none">
+        <h:form id="popupFollowupAlertForm">
+
+            <h:inputHidden id="flAlertId" value="#{popupFollowupController.id}"/>
+            <table width="484" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="484" height="258" align="center" valign="top" background="#{request.contextPath}/img/call_alert_bg.png">
+                        <br/>
+                        <table width="98%" border="0" cellpadding="3" cellspacing="0" id="hbox01">
+                            <tr>
+                                <td align="left" valign="middle" ><h2>Follow Up Alert</h2></td>
+                                <td width="60" valign="middle" align="right"><a href="#" class="close" onclick="#{rich:component('popupFollowupAlert')}.hide()">Close X</a></td>
+                            </tr>
+                        </table>
+                        <h:panelGroup id="customerData">
+                            <table width="98%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center" valign="middle"><br/>
+
+                                        <table border="0" cellspacing="1" cellpadding="3">
+                                            <tr>
+                                                <td align="right" valign="top">Customer Name : </td>
+                                                <td align="left" valign="top"><h:outputText id="flAlertCustomerName" value=""/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Follow Up Date : </td>
+                                                <td align="left" valign="top"><h:outputText id="flAlertFollowupDate" value=""/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Detail :</td>
+                                                <td align="left"><h:outputText id="flAlertDetail" value=""/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top"></td>
+                                                <td align="left">
+                                                    <a4j:commandButton image="/img/b_accept.png"
+                                                                     actionListener="#{popupFollowupController.acceptActionListener}"
+                                                                     oncomplete="#{rich:component('popupFollowupAlert')}.hide()">
+                                                        <f:param name="id" value="#{popupFollowupController.id}"/>
+                                                    </a4j:commandButton>
+                                                </td>
+                                            </tr>
+
+                                        </table>
+                                    </td>
+                                    <td width="220" height="180"> </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </td>
+                </tr>
+            </table>
+        </h:form>
+    </rich:popupPanel>
+</ui:composition>

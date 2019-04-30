@@ -1,0 +1,375 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <h:panelGrid columns="2" border="0" cellpadding="0" cellspacing="0">
+        <h:panelGroup>
+            <rich:togglePanel id="toggleSeach" activeItem="plus" switchType="client" cycledSwitching="plus, sub" style="width: 100%; border: 0; padding: 0; margin: 0">
+                <rich:togglePanelItem name="plus">
+                    <h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+                        <h:panelGroup>
+                             <h:commandLink> 
+                                <rich:toggleControl targetPanel="toggleSeach" targetItem="sub"/> 
+                                <img src="#{request.contextPath}/img/sad01.png" alt="" border="0"/>
+                             </h:commandLink>
+                        </h:panelGroup>
+                    </h:panelGrid>
+                 </rich:togglePanelItem>
+                <rich:togglePanelItem  name="sub">
+                    <h:panelGroup>
+                        <h:panelGrid columns="1" border="0" cellpadding="0" cellspacing="0">
+                            <h:panelGroup>
+                                <h:commandLink> 
+                                    <rich:toggleControl targetPanel="toggleSeach" targetItem="plus"/> 
+                                    <img src="#{request.contextPath}/img/sad02.png" alt="" border="0"/>
+                                </h:commandLink> 
+                            </h:panelGroup>
+                        </h:panelGrid>
+                        <h:panelGroup layout="span" style="position: absolute; background-color: #FFFFFF; width: 350px">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.advanceSearch}</h2></td>
+                                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                    <td valign="top">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                                            <!-- Assigned Date -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Assigned Date :" rendered="#{campaignFrontController.renderedAssignedDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="assignedStartDate" value="#{campaignFrontController.assignedStartDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedAssignedDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="To :" rendered="#{campaignFrontController.renderedAssignedDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="assignedEndDate" value="#{campaignFrontController.assignedEndDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedAssignedDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            <!-- End Assigned Date -->
+                                            <!-- Followup Date -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Followup Date :" rendered="#{campaignFrontController.renderedFollowupDate}"/>
+                                                </td>
+       
+                                                <td>
+                                                    <rich:calendar id="followupStartDate" value="#{campaignFrontController.followupStartDate}"
+                                                                   inputClass="textfield" inputSize="20"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered="#{campaignFrontController.renderedFollowupDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="To :" rendered="#{campaignFrontController.renderedFollowupDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="followupEndDate" value="#{campaignFrontController.followupEndDate}"
+                                                                   inputClass="textfield" inputSize="20"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered="#{campaignFrontController.renderedFollowupDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            <!-- End Followup Date -->
+                                            <!-- Purchase Date -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Purchase Date :" rendered="#{campaignFrontController.renderedPurchaseDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="purchaseStartDate" value="#{campaignFrontController.purchaseStartDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedPurchaseDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="To :" rendered="#{campaignFrontController.renderedPurchaseDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="PurchaseEndDate" value="#{campaignFrontController.purchaseEndDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedPurchaseDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            <!-- End Purchase Date -->
+                                            <!-- Customer Name -->
+                                             <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Customer Name :" rendered="#{campaignFrontController.renderedCustomerName}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.customerName}"
+                                                                 rendered="#{campaignFrontController.renderedCustomerName}"/></td>
+                                            </tr>
+                                            <!-- End Customer Name -->
+                                            <!-- Customer Type -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Customer Type :" rendered="#{campaignFrontController.renderedCustomerType}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.customerType}"
+                                                                 rendered="#{campaignFrontController.renderedCustomerType}"/></td>
+                                            </tr>
+                                            <!-- End Customer Type -->
+                                            <!-- Campaign Name -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Campaign Name :" rendered="#{campaignFrontController.renderedCampaign}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.campaignName}"
+                                                                 rendered="#{campaignFrontController.renderedCampaign}"/></td>
+                                            </tr>
+                                            <!-- Campaign Name -->
+                                            <!-- RefNo -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Ref No.:" rendered="#{campaignFrontController.renderedRefNo}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.refNo}"
+                                                                 rendered="#{campaignFrontController.renderedRefNo}"/></td>
+                                            </tr>
+                                            <!-- End RefNo -->  
+                                            <!-- Last Reason -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Lastest Reason :" rendered="#{campaignFrontController.renderedLastReason}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.lastReason}"
+                                                                 rendered="#{campaignFrontController.renderedLastReason}"/></td>
+                                            </tr>
+                                            <!-- End Last Reson -->
+                                            <!-- QC Status -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="QC Status:" rendered="#{campaignFrontController.renderedQCStatus}"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText styleClass="textfield" value="#{campaignFrontController.approvalStatus}" rendered="#{campaignFrontController.renderedQCStatus}"/>
+                                                </td>
+                                            </tr>
+                                            <!-- End QC Sratus -->
+                                            <!-- Approval Status -->
+                                            <!--<tr>
+                                                <td align="right">
+                                                    <h:outputText value="Approval Status:" rendered="#{campaignFrontController.renderedApprovalStatus}"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText styleClass="textfield" value="#{campaignFrontController.approvalStatus}" rendered="#{campaignFrontController.renderedApprovalStatus}"/>
+                                                </td>
+                                            </tr>-->
+                                            <!-- End Approval Status -->
+                                            <!-- Lastest contact -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Lastest Contact Date :" rendered="#{campaignFrontController.renderedLastContact}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="lastestStartDate" value="#{campaignFrontController.lastestStartDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedLastContact}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="To :" rendered="#{campaignFrontController.renderedLastContact}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="lastestEndDate" value="#{campaignFrontController.lastestEndDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedLastContact}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            <!-- End Lastest connct -->
+                                            <!-- Update date -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Update Date :" rendered="#{campaignFrontController.renderedUpdateDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="updateStartDate" value="#{campaignFrontController.updateStartDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedUpdateDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="To :" rendered="#{campaignFrontController.renderedUpdateDate}"/>
+                                                </td>
+                                                <td>
+                                                    <rich:calendar id="updateEndDate" value="#{campaignFrontController.updateEndDate}"
+                                                                   inputClass="textfield" inputSize="10"
+                                                                   locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                                   datePattern="#{msg.datePattern}"
+                                                                   rendered ="#{campaignFrontController.renderedUpdateDate}">
+                                                    </rich:calendar>
+                                                </td>
+                                            </tr>
+                                            <!-- End update date -->
+                                            <!-- Contact Result -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Contact Result :" rendered="#{campaignFrontController.renderedContactResult}"/>
+                                                </td>
+                                                <td>
+                                                    <h:selectOneMenu id="contactResult" style="width: 200px;"
+                                                                     rendered="#{campaignFrontController.renderedContactResult}"
+                                                                     value="#{campaignFrontController.contactResultId}">
+                                                        <f:selectItem itemLabel="All"/>
+                                                        <f:selectItems value="#{campaignFrontController.contactResultList}"/>
+                                                    </h:selectOneMenu>
+                                                    
+                                                </td>
+                                            </tr>
+                                            <!-- End Contact Result -->
+                                            <!-- Remark -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Remark :" rendered="#{campaignFrontController.renderedRemark}"/>
+                                                </td>
+                                                <td>
+                                                    <h:inputText styleClass="textfield" value="#{campaignFrontController.remark}" rendered="#{campaignFrontController.renderedRemark}"/>
+                                                </td>
+                                            </tr>
+                                            <!-- End Remark -->
+                                            <!-- Gender -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Gender :" rendered="#{campaignFrontController.renderedGender}"/>
+                                                </td>
+                                                <td>
+                                                    <h:selectOneRadio id="gender" 
+                                                                      rendered="#{campaignFrontController.renderedGender}"
+                                                                      value="#{campaignFrontController.gender}">
+                                                        <f:selectItem itemLabel="#{msg.male}" itemValue="M"/>
+                                                        <f:selectItem itemLabel="#{msg.female}" itemValue="F"/>
+                                                    </h:selectOneRadio>
+                                                </td>
+                                            </tr>
+                                            <!-- End Gender -->
+                                            <!-- Age -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Age From :" rendered="#{campaignFrontController.renderedAge}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.ageStart}"
+                                                                 rendered="#{campaignFrontController.renderedAge}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="To :" rendered="#{campaignFrontController.renderedAge}"/>
+                                                </td>
+                                                <td><h:inputText styleClass="textfield" 
+                                                                 value="#{campaignFrontController.ageEnd}"
+                                                                 rendered="#{campaignFrontController.renderedAge}"/></td>
+                                            </tr>
+                                            <!-- End Age -->
+                                            <!-- Sale Result -->
+                                            <tr>
+                                                <td align="right">
+                                                    <h:outputText value="Sale Result :" rendered="#{campaignFrontController.renderedSaleResult}"/>
+                                                </td>
+                                                <td>
+                                                    <h:selectOneMenu id="saleResult"
+                                                                     rendered="#{campaignFrontController.renderedSaleResult}"
+                                                                     value="#{campaignFrontController.saleResult}">
+                                                        <f:selectItem itemLabel="All"/>
+                                                        <f:selectItem itemLabel="Yes" itemValue="Y"/>
+                                                        <f:selectItem itemLabel="No" itemValue="N"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <!-- End Sale Result -->
+                                        </table>
+                                    </td>
+                                    <td width="4" class="bg_right"></td>
+                                </tr>
+                            </table>
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                 </rich:togglePanelItem>
+            </rich:togglePanel>
+        </h:panelGroup>
+        <h:panelGroup>
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td><h:inputText value="#{campaignFrontController.txtSearch}" size="45" styleClass="textfield"
+                                 style="width: 152; height: 18px">
+                    <a4j:ajax event="keyup"
+                                 render="dataList"
+                                 limitRender="true"
+                                 listener="#{campaignFrontController.searchListener}"/>
+                </h:inputText>
+                <!--                                                    <input name="textfieldsearch" type="text" maxlength="25" style="width: 152; height: 18px"/>-->
+                </td>
+                <td>
+                <a4j:commandButton actionListener="#{campaignFrontController.searchActionListener}"
+                                   type="submit"
+                                   image="/img/b_search01.png"
+                                   render="dataList, totalRec"
+                                   limitRender="true"
+                                   style="margin-left: 1px"/>
+<!--                                                    <a href="#" onMouseOut="MM_swapImgRestore()" onMouseOver="MM_swapImage('s02','','#{request.contextPath}/img/b_search02.png',1)"><img src="#{request.contextPath}/img/b_search01.png" name="s02" border="0"/></a>-->
+                </td>
+                </tr>
+            </table>
+        </h:panelGroup>
+    </h:panelGrid>
+</ui:composition>

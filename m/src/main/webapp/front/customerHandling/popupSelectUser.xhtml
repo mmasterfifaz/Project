@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Select User</ui:define>
+    <ui:param name="modalId" value="selectUser"/>
+    <ui:define name="popupDetail">
+        <h:form id="f2">
+        <h:panelGrid>
+            <h:column> User Name :<h:inputText styleClass="textfield" value="#{popupSelectUser.keyword}"/>
+                <a4j:commandButton image="../../resources/img/bb_search.png" render="userList" limitRender="true" 
+                                   actionListener="#{popupSelectUser.popupSearchAction}" style="vertical-align: baseline"/></h:column>
+        </h:panelGrid>
+        <rich:dataTable id="userList" style="width: 100%" styleClass="tableline01" headerClass="subh01" 
+                        value="#{popupSelectUser.users}" rows="5" var="list">
+            <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column style="text-align: left;">&nbsp;</rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="Name" /></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="Surname"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="Login Name"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="User Group"/></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+
+            <rich:column ></rich:column>
+            <rich:column>
+                <a4j:commandLink title="View Detail" 
+                                 value="#{list.name}"
+                                 render="userReceiverLabel, userReceiver,userReceiverName,userReceiverEmailLabel,userReceiverEmail,userReceiverPhoneLabel,userReceiverPhone" execute="@this" limitRender="true"
+                                 onclick="#{rich:component('selectUser')}.hide();"
+                                 action="#{m.selectUserListener}">
+                    <f:param name="userReceiverId" value="#{list.id}"/>
+                    <f:param name="userReceiverName" value="#{list.loginName}"/>
+                </a4j:commandLink>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.surname}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.loginName}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.userGroup.name}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="5" renderIfSinglePage="false"/>
+            </f:facet>
+        </rich:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

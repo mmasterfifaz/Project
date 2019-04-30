@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Document</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 15%; text-align: right; }
+                    .colStyle2 { width: 85%;}
+                </style>
+            <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                        <h:outputText value="Title :"/>
+                            <h:inputText value="#{documentController.title}" styleClass="textfield"/>
+                            
+                            
+                        <h:outputText value="File Name :"/>
+                            <h:inputText value="#{documentController.fileName}" styleClass="textfield"/>
+                        
+                    
+                        <h:outputText value="Modify Date :"/>
+                        <h:panelGroup><rich:calendar  id="dateFrom"
+                                           value="#{documentController.dateFrom}"
+                                           inputClass="textfield" inputSize="12" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="00:00"/>
+                            To :<rich:calendar id="dateTo"
+                                           value="#{documentController.dateTo}"
+                                           inputClass="textfield" inputSize="12" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="23:59"/>
+                        </h:panelGroup>
+                        
+                        <h:outputText value="Document Type :"/>
+                            <h:selectOneMenu id="documentId" styleClass="select08" value="#{documentController.documentUploadTypeId}"  >
+                                <f:selectItem itemLabel="Please Select" itemValue="0"/>
+                                <f:selectItems value="#{documentController.documentUploadTypeList}" />
+                            </h:selectOneMenu>
+                        
+                    
+                        <h:outputText value="Assign To :"/>
+                            <h:selectOneMenu styleClass="select08" value="#{documentController.userGroupId}"  >
+                                <f:selectItem itemLabel="Please Select" itemValue="0"/>
+                                <f:selectItems value="#{documentController.userGroupList}" />
+                            </h:selectOneMenu>
+                        
+                            
+                        <h:outputText value="Status :"/>
+                            <h:selectOneMenu value="#{documentController.status}">
+                                <f:selectItem itemLabel="Please Select" itemValue=""/>
+                                <f:selectItem itemLabel="Enable" itemValue="enable"/>
+                                <f:selectItem itemLabel="Disable" itemValue="disable"/>
+                            </h:selectOneMenu>
+                        
+                        <h:outputText value=""/>
+                            <a4j:commandButton image="/img/b_search.png" 
+                            actionListener="#{documentController.searchActionListener}" 
+                            render="data"
+                            limitRender="true" />
+            </h:panelGrid>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{documentController.editAction}" rendered="#{documentController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{documentController.deleteAction}" rendered="#{documentController.deletePermitted}"  onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01" 
+                                value="#{documentController.list}" rows="#{global.maxrows}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%">&nbsp;</rich:column>
+                            <rich:column style="text-align: left;width: 18%"><h:outputText value="Title"/></rich:column>
+                            <rich:column style="text-align: left;width: 27%"><h:outputText value="File Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 12%"><h:outputText value="Modify Date" /></rich:column>
+                            <rich:column style="text-align: left;width: 14%"><h:outputText value="Assign To"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%"><h:outputText value="Document Type"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%"><h:outputText value="Status"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{documentController.selectedIds[list.id]}" rendered="#{documentController.deletePermitted}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.title}" action="#{documentController.editAction}" rendered="#{documentController.editPermitted}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                        <h:outputText value="#{list.title}" rendered="#{not documentController.editPermitted}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a href="#{request.contextPath}#{fn:substringAfter(list.fileName, ':')}" target="_blank">#{fn:substringBefore(list.fileName, ':')}</a>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.createDate}" rendered="#{list.updateDate eq null}">
+                            <f:convertDateTime pattern="dd MMM yyy hh:mm" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                        <h:outputText value="#{list.updateDate}" rendered="#{list.updateDate ne null}">
+                            <f:convertDateTime pattern="dd MMM yyy hh:mm" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.userGroup.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.documentUploadType.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

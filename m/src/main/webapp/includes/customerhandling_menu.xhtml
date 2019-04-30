@@ -1,0 +1,167 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<ui:composition>
+        <table width="255" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td><img src="#{request.contextPath}/img/mainmenu01.png" alt="" width="255" height="20"/></td>
+            </tr>
+            <tr>
+                <td background="#{request.contextPath}/img/mainmenu_bg.png"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td align="left" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="20"></td>
+                                        <td><table width="100%" border="0" cellpadding="3" cellspacing="0" class="tableMenuCust">
+                                                <tr>
+                                                    <td height="40" colspan="2" class="blue05">#{msg.customerHandling}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline"/>#{msg.customerInformation}</strong></td>
+                                                </tr>
+                                              <h:panelGroup rendered="#{frontMenuController.customerProfileViewPermitted}">
+                                                    <tr>
+                                                        <td width="27"></td>
+                                                        <td width="">
+                                                            <a4j:commandLink action="/front/customerHandling/customerEdit.jsf?faces-redirect=true" value="#{msg.customerProfile}" rendered="#{frontMenuController.customerProfileViewPermitted}" render="toggle1" immediate="true" execute="@this" styleClass="black01">
+                                                                
+                                                            </a4j:commandLink>                                                            
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.customerHistoryViewPermitted}" >
+                                                    <tr>
+                                                        <td width="27"></td>
+                                                        <td width="">
+                                                            <a4j:commandLink action="/front/customerHandling/customerhistoricalsummary.jsf?faces-redirect=true" value="#{msg.customerhistorical}" render="toggle1" immediate="true" execute="@this" styleClass="black01">
+                                                                
+                                                            </a4j:commandLink>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.telephoneLogViewPermitted}" >
+                                                    <tr>
+                                                        <td width="27"></td>
+                                                        <td width="">
+                                                            <a4j:commandLink action="/front/customerHandling/telephoneLog.jsf" value="Telephone Log" render="toggle1" immediate="true" execute="@this" styleClass="black01">
+                                                                
+                                                            </a4j:commandLink>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <tr>
+                                                    <td colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline"/>#{msg.caseManagement}</strong></td>
+                                                </tr>
+                                                <h:panelGroup rendered="#{frontMenuController.customerHandlingViewPermitted}">
+                                                    <tr>
+                                                        <td width="27"></td>
+                                                        <td width="">
+                                                            <a4j:commandLink action="/front/customerHandling/customerDetail.jsf?faces-redirect=true" value="#{msg.caseHanding}" render="toggle1" immediate="true" execute="@this"  styleClass="black01">
+                                                                
+                                                            </a4j:commandLink>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.caseAddPermitted}">
+                                                    <tr>
+                                                        <td></td>
+                                                        <td width="">
+                                                            <a4j:commandLink action="/front/customerHandling/caseHandlingEdit.jsf?faces-redirect=true" value="#{msg.createCase}" render="toggle1" immediate="true" execute="@this"  styleClass="black01">
+                                                                
+                                                            </a4j:commandLink>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.casehistoryViewPermitted}">
+                                                <tr>
+                                                    <td></td>
+                                                    <td width="">
+                                                        <a4j:commandLink action="/front/customerHandling/caseHistory.jsf?faces-redirect=true" value="#{msg.caseHistory}" render="toggle1" immediate="true" execute="@this"  styleClass="black01">
+                                                            
+                                                        </a4j:commandLink>
+                                                    </td>
+                                                </tr>
+                                                </h:panelGroup>
+                                                <tr>
+                                                    <td colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline"/>#{msg.saleManagement}</strong></td>
+                                                </tr>
+                                                <h:panelGroup rendered="#{frontMenuController.saleapproachingViewPermitted}">
+                                                <tr>
+                                                    <td width="27"></td>
+                                                    <td width="">
+                                                        <a4j:commandLink action="/front/customerHandling/saleApproaching.jsf?faces-redirect=true"  value="#{msg.saleApproach}" render="toggle1" immediate="true" execute="@this" styleClass="black01">
+
+                                                        </a4j:commandLink>
+                                                    </td>
+                                                </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.salehistoryViewPermitted}">
+                                                <tr>
+                                                    <td></td>
+                                                    <td width="">
+                                                        <a4j:commandLink action="/front/customerHandling/saleHistory.jsf?faces-redirect=true" value="#{msg.saleHistory}" render="toggle1" immediate="true" execute="@this" styleClass="black01">
+                                                            
+                                                        </a4j:commandLink>
+                                                    </td>
+                                                </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.shoppingcartViewPermitted}">
+                                                <tr>
+                                                    <td></td>
+                                                    <td width=""><a4j:commandLink action="/front/customerHandling/shoppingCart.jsf?faces-redirect=true"  value="#{msg.shoppingCart}" render="toggle1" immediate="true" execute="@this" styleClass="black01"/></td>
+                                                </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.contactHistoryViewPermitted}">
+                                                    <tr>
+                                                        <td colspan="2" class="treeline">
+                                                            <strong class="black01">                                                            
+                                                                <img src="#{request.contextPath}/img/bplus02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline"/>
+                                                                <a4j:commandLink action="/front/customerHandling/contactHistory.jsf?faces-redirect=true" value="Contact History" rendered="#{frontMenuController.contactHistoryViewPermitted}" render="toggle1" immediate="true" execute="@this" styleClass="black01">
+                                                                </a4j:commandLink>
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.auditLogViewPermitted}">
+                                                    <tr>
+                                                        <td colspan="2" class="treeline">
+                                                            <strong class="black01">                                                            
+                                                                <img src="#{request.contextPath}/img/bplus02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline"/>
+                                                                <a4j:commandLink action="/front/customerHandling/customerauditlog.jsf?faces-redirect=true" value="#{msg.auditLog}" render="toggle1" immediate="true" execute="@this" styleClass="black01"/>
+                                                            </strong>
+                                                        </td>
+                                                    </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.customerHandlingReportViewPermitted}">
+                                                <tr>
+                                                    <td colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline"/>Report</strong></td>
+                                                </tr>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{frontMenuController.caseListByCustomerReportViewPermitted}">
+                                                <tr>
+                                                    <td width="27"></td>
+                                                    <td width="">
+                                                        <a4j:commandLink action="/front/customerHandling/caseListByCustomer.jsf?faces-redirect=true" value="Case List by Customer" render="toggle1" immediate="true" execute="@this"  styleClass="black01">
+                                                        </a4j:commandLink>
+                                                    </td>
+                                                </tr>
+                                                </h:panelGroup>
+                                            </table>
+                                        </td>
+        <td width="20"></td>
+        </tr>
+        </table></td>
+        <td width="30" valign="top" align="left"><h:graphicImage library="img" name="customer_menu.png" styleClass="swap" /></td>
+        </tr>
+        </table></td>
+        </tr>
+        <tr>
+            <td><img src="#{request.contextPath}/img/mainmenu02.png" alt="" width="255" height="20" /></td>
+        </tr>
+        </table>
+</ui:composition>
+</html>

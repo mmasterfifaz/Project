@@ -1,0 +1,385 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Media Plan: Add/Edit</ui:define>
+            <ui:define name="title3">
+                <b>
+                    <a4j:commandLink value="Show Audit Log"
+                                     title="Show Audit Log" rendered="#{mediaPlanEditController.mediaplan.id ne null}"
+                                     oncomplete="#{rich:component('auditLog')}.show()"
+                                     actionListener="#{mediaPlanEditController.auditLogListener}"
+                                     render="auditLogList" >
+                        <f:param value="#{mediaPlanEditController.mediaplan.id}" name="mediaPlanId" />
+                    </a4j:commandLink>
+                </b>
+            </ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="panelGroupMediaPlan">
+                    <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td width="400" align="right" valign="top">&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">&nbsp;</td>
+                            <td valign="top"><h:outputText value="" style="color:red"/>&nbsp;</td>
+                        </tr>
+                        <ui:remove></ui:remove>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Spot Reference ID:</td>
+                            <td><h:inputText id="spotRefID" value="#{mediaPlanEditController.mediaplan.spotRefId}" styleClass="textfield" size="20" required="true" maxlength="50"
+                                             requiredMessage="Spot Ref ID is required">
+                                    <rich:validator/>
+                                </h:inputText>
+                                &#160;<rich:message id="msgSpotRefID" for="spotRefID" styleClass="required"/>
+                                <h:outputText id="msgDupRefNo" value="#{mediaPlanEditController.messageDup}" style="color:red"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Spot Type:</td>
+                            <td valign="top">
+                                <h:selectOneMenu id="spotType" value="#{mediaPlanEditController.mediaplan.spotType}" 
+                                                 required="true" requiredMessage="Spot Type is required">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItem itemValue="OD" itemLabel="OD"/>
+                                    <f:selectItem itemValue="OL" itemLabel="OL"/>
+                                    <f:selectItem itemValue="OW" itemLabel="OW"/>
+                                    <f:selectItem itemValue="PA" itemLabel="PA"/>
+                                    <f:selectItem itemValue="OF" itemLabel="OF"/>
+                                    <f:selectItem itemValue="OG" itemLabel="OG"/>
+                                    <f:selectItem itemValue="TV" itemLabel="TV"/>
+                                    <f:selectItem itemValue="TR" itemLabel="TR"/>
+                                    <f:selectItem itemValue="PR" itemLabel="PR"/>
+                                    <f:ajax event="change" execute="@this" immediate="true" />
+                                </h:selectOneMenu>
+                                &#160;<rich:message for="spotType" styleClass="required"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Day of Spot:</td>
+                            <td valign="top">
+                                <h:selectOneMenu id="dayOfSpot" value="#{mediaPlanEditController.mediaplan.dayOfSpot}" 
+                                                 required="true" requiredMessage="Day of Spot is required">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItem itemValue="MON" itemLabel="MON"/>
+                                    <f:selectItem itemValue="TUE" itemLabel="TUE"/>
+                                    <f:selectItem itemValue="WED" itemLabel="WED"/>
+                                    <f:selectItem itemValue="THU" itemLabel="THU"/>
+                                    <f:selectItem itemValue="FRI" itemLabel="FRI"/>
+                                    <f:selectItem itemValue="SAT" itemLabel="SAT"/>
+                                    <f:selectItem itemValue="SUN" itemLabel="SUN"/>
+                                    <f:ajax event="change" execute="@this" immediate="true" />
+                                </h:selectOneMenu>
+                                &#160;<rich:message for="dayOfSpot" styleClass="required"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Date of Spot:</td>
+                            <td valign="top">
+                                <rich:calendar id="dateOfSpot" value="#{mediaPlanEditController.mediaplan.dateOfSpot}" 
+                                               inputClass="textfield" inputSize="15" buttonClass="rfcalbtn" 
+                                               datePattern="#{msg.dateTimePattern}" locale="#{msg.locale}" defaultTime="00:00"
+                                               required="true" requiredMessage="Date of Spot is required" >
+                                    <rich:validator/>
+                                </rich:calendar>
+                                &#160;<rich:message id="msgDateOfSpot" for="dateOfSpot" style="color:red"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Spot Telephone Number:</td>
+                            <td><h:inputText id="spotTele" value="#{mediaPlanEditController.mediaplan.spotTelephoneNumber}" styleClass="textfield" size="20" required="true" maxlength="20" onkeypress="return isNumberKey(event);"
+                                             requiredMessage="Spot Telephone Number is required">
+                                    <rich:validator/>
+                                </h:inputText>
+                                &#160;<rich:message id="msgSpotTele" for="spotTele" styleClass="required"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Channel:</td>
+                            <td><h:inputText id="channel" value="#{mediaPlanEditController.mediaplan.channel}" styleClass="textfield" size="20" required="true" maxlength="20" 
+                                             requiredMessage="Channel is required">
+                                    <rich:validator/>
+                                </h:inputText>
+                                &#160;<rich:message id="msgChannel" for="channel" styleClass="required"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Program Name:</td>
+                            <td><h:inputText id="programName" value="#{mediaPlanEditController.mediaplan.programName}" styleClass="textfield" size="20" required="true" maxlength="100" 
+                                             requiredMessage="Program Name is required">
+                                    <rich:validator/>
+                                </h:inputText>
+                                &#160;<rich:message id="msgProgramName" for="programName" styleClass="required"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">* Program Type:</td>
+                            <td><h:inputText id="programType" value="#{mediaPlanEditController.mediaplan.programType}" styleClass="textfield" size="20" required="true" maxlength="50" 
+                                             requiredMessage="Program Type is required">
+                                    <rich:validator/>
+                                </h:inputText>
+                                &#160;<rich:message id="msgProgramType" for="programType" styleClass="required"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Show Time Start:</td>
+                            <td>
+                                <rich:inputNumberSpinner id="startTimeHH" step="1" minValue="0" maxValue="23" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.startTimeHH}" />
+                                <rich:inputNumberSpinner id="startTimeMM" step="1" minValue="0" maxValue="59" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.startTimeMM}" />
+                                <rich:inputNumberSpinner id="startTimeSS" step="1" minValue="0" maxValue="59" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.startTimeSS}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Show Time End:</td>
+                            <td>
+                                <rich:inputNumberSpinner id="endTimeHH" step="1" minValue="0" maxValue="23" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.endTimeHH}" />
+                                <rich:inputNumberSpinner id="endTimeMM" step="1" minValue="0" maxValue="59" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.endTimeMM}" />
+                                <rich:inputNumberSpinner id="endTimeSS" step="1" minValue="0" maxValue="59" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.endTimeSS}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Actual on Air Time:</td>
+                            <td>
+                                <rich:inputNumberSpinner id="acTimeHH" step="1" minValue="0" maxValue="23" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.acTimeHH}" />
+                                <rich:inputNumberSpinner id="acTimeMM" step="1" minValue="0" maxValue="59" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.acTimeMM}" />
+                                <rich:inputNumberSpinner id="acTimeSS" step="1" minValue="0" maxValue="59" inputSize="2" style="border-color:#bababa" value="#{mediaPlanEditController.acTimeSS}" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Section Break:</td>
+                            <td>
+                                <h:inputText id="sectionBreak" value="#{mediaPlanEditController.mediaplan.sectionBreak}" styleClass="textfield" size="20" maxlength="50" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Copy Length:</td>
+                            <td>
+                                <h:inputText id="copyLength" value="#{mediaPlanEditController.mediaplan.copyLength}" styleClass="textfield" size="20" maxlength="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Tape:</td>
+                            <td>
+                                <h:inputText id="tape" value="#{mediaPlanEditController.mediaplan.tape}" styleClass="textfield" size="20" maxlength="100" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Net Cost per Spot:</td>
+                            <td>
+                                <h:inputText id="netCost" value="#{mediaPlanEditController.netCostperSpot}" styleClass="textfield" size="20" onkeypress="return isNumberFloatKey(event);" />
+                                <h:panelGroup id ="msgNet"><h:outputText value="#{mediaPlanEditController.msgNet}" style="color:red" /></h:panelGroup>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Status:</td>
+                            <td valign="top">
+                                <h:selectOneMenu id="status" value="#{mediaPlanEditController.mediaplan.status}" >
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItem itemValue="ยกเลิก" itemLabel="ยกเลิก"/>
+                                    <f:selectItem itemValue="ทดแทน" itemLabel="ทดแทน"/>
+                                    <f:selectItem itemValue="เพิ่มเติม" itemLabel="เพิ่มเติม"/>
+                                    <f:ajax event="change" execute="@this" immediate="true" />
+                                </h:selectOneMenu>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Media Agency Remark:</td>
+                            <td>
+                                <h:inputText id="mediaRemark" value="#{mediaPlanEditController.mediaplan.mediaAgencyRemark}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">MTL Remark 1:</td>
+                            <td>
+                                <h:inputText id="mtlRemark1" value="#{mediaPlanEditController.mediaplan.mtlRemark1}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">MTL Remark 2:</td>
+                            <td>
+                                <h:inputText id="mtlRemark2" value="#{mediaPlanEditController.mediaplan.mtlRemark2}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">MTL Remark 3:</td>
+                            <td>
+                                <h:inputText id="mtlRemark3" value="#{mediaPlanEditController.mediaplan.mtlRemark3}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">MTL Remark 4:</td>
+                            <td>
+                                <h:inputText id="mtlRemark4" value="#{mediaPlanEditController.mediaplan.mtlRemark4}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Product Assign:</td>
+                            <td>
+                                <h:inputText id="productAssign" value="#{mediaPlanEditController.mediaplan.productAssign}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Product Code:</td>
+                            <td>
+                                <h:inputText id="productCode" value="#{mediaPlanEditController.mediaplan.productCode}" styleClass="textfield" size="20" maxlength="500" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Total Inbound Call:</td>
+                            <td>
+                                <h:inputText id="totalInboundCall" value="#{mediaPlanEditController.mediaplan.totalInboundCall}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Voice Box:</td>
+                            <td>
+                                <h:inputText id="voiceBox" value="#{mediaPlanEditController.mediaplan.voiceBox}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Abandon:</td>
+                            <td>
+                                <h:inputText id="abandon" value="#{mediaPlanEditController.mediaplan.abandon}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Accepted Call:</td>
+                            <td>
+                                <h:inputText id="acceptedCall" value="#{mediaPlanEditController.mediaplan.acceptedCall}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Unqualified Leads:</td>
+                            <td>
+                                <h:inputText id="unqualifiedLead" value="#{mediaPlanEditController.mediaplan.unqualifiedLeads}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Qualified Leads (SL):</td>
+                            <td>
+                                <h:inputText id="qualifiedLead" value="#{mediaPlanEditController.mediaplan.qualifiedLeads}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Referred Leads (hot list to MTL):</td>
+                            <td>
+                                <h:inputText id="referredLead" value="#{mediaPlanEditController.mediaplan.referredLeads}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Online MTL Leads (FB,GDN,Web):</td>
+                            <td>
+                                <h:inputText id="onlineLead" value="#{mediaPlanEditController.mediaplan.onlineLeads}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Data Duplication:</td>
+                            <td>
+                                <h:inputText id="dataDup" value="#{mediaPlanEditController.mediaplan.duplicationList}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Data Black List:</td>
+                            <td>
+                                <h:inputText id="dataBlack" value="#{mediaPlanEditController.mediaplan.blackList}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Exclusion (data duplication and blacklist):</td>
+                            <td>
+                                <h:inputText id="exclusion" value="#{mediaPlanEditController.mediaplan.exclusionLeads}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Effective Leads (ready for sales):</td>
+                            <td>
+                                <h:inputText id="effective" value="#{mediaPlanEditController.mediaplan.effectiveLeads}" styleClass="textfield" size="20" onkeypress="return isNumberKey(event);" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">&nbsp;</td>
+                            <td valign="top">
+                                <h:commandButton image="../img/b_back.png" action="#{mediaPlanEditController.backAction}" immediate="true" /> 
+                                &nbsp;
+                                <a4j:commandButton image="../img/b_save.png" action="#{mediaPlanEditController.saveAction}" 
+                                                   rendered="#{mediaPlanEditController.savePermitted}" render="msgDupRefNo,msgNet">
+
+                                </a4j:commandButton>
+                            </td>
+                        </tr>
+
+                    </table> 
+                </h:panelGroup>
+            </ui:define>
+            <ui:define name="popupModal">
+                <rich:popupPanel id="waitPanel" style="background-color: white; text-align:center">
+                    <h:outputText value="Please wait..." style="font-size:large" />
+                </rich:popupPanel>
+
+                <rich:popupPanel id="auditLog" autosized="true" shadowOpacity="0" width="800" height="600" style="padding: 0 0 0 0; border-style: none " >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Audit Log</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('auditLog')}.hide();
+                                        return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                                <rich:dataTable id="auditLogList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                value="#{mediaPlanEditController.auditLogs}" rows="10" var="list">
+                                    <f:facet name="header">
+                                        <rich:columnGroup>
+                                            <rich:column><h:outputText value="Activity Type"/></rich:column>
+                                            <rich:column><h:outputText value="Activity Date"/></rich:column>
+                                            <rich:column><h:outputText value="by User"/></rich:column>
+                                            <rich:column><h:outputText value="Audit Values"/></rich:column>
+                                        </rich:columnGroup>
+                                    </f:facet>
+                                    <rich:column>
+                                        <h:outputText value="#{list.actionType}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.actionDate}">
+                                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" />
+                                        </h:outputText>                
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.actionBy}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:inputTextarea value="#{list.actionDetail}" cols="60" rows="5" />
+                                    </rich:column>
+                                    <f:facet name="footer">
+                                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                                    </f:facet>
+                                </rich:dataTable>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </rich:popupPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

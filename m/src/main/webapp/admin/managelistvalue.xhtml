@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Manage List Value</ui:define>
+            <ui:define name="button">
+            </ui:define>
+            <ui:define name="panel">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="">
+                                <tr style="height: 30px">
+                                    <td width="20%"> </td>
+                                    <td width="30%"></td>
+                                    <td width="30%"> </td>
+                                    <td width="20%"> </td>
+                                </tr>
+                                <tr>
+                                    <td> </td>
+                                    <td><h:outputText value="List Group Name"/> </td>
+                                    <td><h:outputText value="List Group Detail"/> </td>
+                                    <td> </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td>
+                                        
+                                        <h:form> 
+                                            <h:selectOneListbox id="listgroupname" value = "#{manageListValueController.listSelected}" valueChangeListener="#{manageListValueController.onListSelectedListener}" style="height: 150px;"> 
+                                                <f:selectItems value="#{manageListValueController.manageList}" var="s" itemLabel="#{s.name}" itemValue="#{s.value}"/>
+                                                <a4j:ajax event="change" render="listgroupname,listdetail,data" execute="@this"/>
+                                                <f:validateRequired/>
+                                                <rich:validator />
+                                            </h:selectOneListbox>
+                                        </h:form>
+                                     
+                                    </td>
+                                    <td style="min-height: 152px;min-width: 700px;">
+                                        <div style="min-height:152px;">
+                                        <a4j:commandButton image="../img/b_add.png"
+                                                                    limitRender="true"
+                                                                    render="data"
+                                                                    actionListener="#{manageListValueController.addAction}"/>
+                                        <a4j:commandButton image="../img/b_delete.png"
+                                                                    limitRender="true"
+                                                                    render="data,listdetailPanel"
+                                                                    actionListener="#{manageListValueController.deleteAction}"/>
+
+                                        <h:panelGroup id="listdetailPanel">
+
+                                        <rich:dataTable id="listdetail" style="min-height: 152px;min-width: 700px" styleClass="tableline01" headerClass="subh01"
+                                         value="#{manageListValueController.list}" rows="#{global.maxrows}" var="list"
+                                         onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                         onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="min-width: 60px;text-align: left">&nbsp;</rich:column>
+                                                    <rich:column style="min-width: 100px;text-align: left"><h:outputText value="Code" /></rich:column>
+                                                    <rich:column style="min-width: 400px;text-align: left"><h:outputText value="Name"/></rich:column>
+                                                    <rich:column style="min-width: 100px;text-align: left"><h:outputText value="Seq. No."/></rich:column>
+                                                    <rich:column style="min-width: 40px;text-align: left">&nbsp;</rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+
+                                        <rich:column >
+                                            <h:selectBooleanCheckbox value="#{manageListValueController.selectedIds[list.id]}"/>
+                                        </rich:column>
+                                        <rich:column>
+                                            <a4j:commandLink id="link" value="#{list.code}" action="#{manageListValueController.editAction(list.id,list.code,list.name,list.seqNo)}" render="data"></a4j:commandLink>
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:outputText value="#{list.name}" />
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:outputText value="#{list.seqNo}" />
+                                        </rich:column>
+                                        <rich:column style="text-align: left">
+                                           
+                                        </rich:column>
+                                        <f:facet name="footer">
+                                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                        </f:facet>
+                                        </rich:dataTable>  
+                                        
+
+                                        </h:panelGroup>
+                                        </div>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td> 
+                                        <h:panelGroup id="data">
+                                        <br></br>
+                                        <br></br>
+                                        <h:outputText value="*Code :" rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}"/>
+                                        <h:panelGroup rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}">
+                                                <h:inputText id="code"  
+                                                     value="#{manageListValueController.code}"
+                                                     styleClass="textfield"
+                                                     required="true"
+                                                     requiredMessage="Code is required">
+                                                     <f:validateRequired/>                  
+                                                     <rich:validator />                   
+                                                </h:inputText>
+                                                <rich:message for="code" style="color:red"/>
+                                            </h:panelGroup>
+                                        <br></br>
+                                        <br></br>
+                                        <h:outputText value="*Name :" rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}"/>
+                                            <h:panelGroup rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}">
+                                                <h:inputText id="name"  
+                                                     value="#{manageListValueController.name}"
+                                                     styleClass="textfield"
+                                                     required="true"
+                                                     requiredMessage="Name is required">
+                                                    <f:validateRequired/>                  
+                                                    <rich:validator />                    
+                                                </h:inputText>
+                                                <rich:message for="name" style="color:red"/>
+                                            </h:panelGroup>
+                                        <br></br>
+                                        <br></br>
+                                        <h:outputText value="*SeqNo :" rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}"/>
+                                            <h:panelGroup rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}">
+                                                <h:inputText id="seqNo"  
+                                                     value="#{manageListValueController.seqNo}"
+                                                     styleClass="textfield"
+                                                     required="true"
+                                                     requiredMessage="Seq No is required">
+                                                    <f:validateRequired/>                  
+                                                    <rich:validator />                      
+                                                    
+                                                </h:inputText>
+                                                <rich:message for="seqNo" style="color:red"/>
+                                                
+                                            </h:panelGroup>
+                                        <br></br>
+                                        <br></br>
+                                        <h:outputText style="color:red" value="#{manageListValueController.messageDup}" />
+                                        <br></br>
+                                        <br></br>
+                                        
+                                        <a4j:commandButton image="../img/b_confirm.png"
+                                                                    limitRender="true"
+                                                                    render="data,listdetail,listdetailPanel"
+                                                                    rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}"
+                                                                    actionListener="#{manageListValueController.updateAction}"/>
+                                       <a4j:commandButton image="../img/b_delete02.png"
+                                                                    limitRender="true"
+                                                                    render="data"
+                                                                    immediate="true"
+                                                                    rendered="#{manageListValueController.listSelected ne '' and manageListValueController.isAdd}"
+                                                                    actionListener="#{manageListValueController.cancelAction}"/>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,1132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:p="http://primefaces.org/ui">
+<f:loadBundle basename="com.maxelyz.core.resource.messages" var="msg"/>
+<h:head>
+    <link rel="shortcut icon" href="#{request.contextPath}/icon/favicon.ico"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Maxar [<ui:insert name="title2"/>]</title>
+    <meta http-equiv="Expires" CONTENT="0"/>
+    <meta http-equiv="Cache-Control" CONTENT="no-cache"/>
+    <meta http-equiv="Pragma" CONTENT="no-cache"/>
+
+    <h:outputScript name="jsf.js" library="javax.faces" />
+    <h:outputScript name="jquery.js" />
+    <h:outputScript value="/jquery/jquery.purr.js"></h:outputScript>
+    <script type="text/javascript">
+        var apiUrl = "#{userSession.convertVoiceURL}";
+
+            function GetMP3DownloadUrlDirect(id, pTrackId, source) {
+            $.ajax({
+                url: apiUrl + "/ConvertVoiceAspect.svc/GetMP3DownloadUrlDirect",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "jsonp",
+                cache: false,
+                data: {
+                        trackId: pTrackId,
+                        source: source
+                },
+                success: function (result) {
+
+                    console.log('GetMP3DownloadUrlDirect Result : ' + result);
+                    closeWaitingPopup();
+                    popupMediaDownload(pTrackId, result);
+
+                }, error: function (jqXHR, exception) {
+                    if (jqXHR.status === 0) {
+                        console.log('Not connect.\n Verify Network.');
+                    } else if (jqXHR.status == 404) {
+                        console.log('Requested page not found. [404]');
+                    } else if (jqXHR.status == 500) {
+                        console.log('Internal Server Error [500].');
+                    } else if (exception === 'parsererror') {
+                        console.log('Requested JSON parse failed.');
+                    } else if (exception === 'timeout') {
+                        console.log('Time out error.');
+                    } else if (exception === 'abort') {
+                        console.log('Ajax request aborted.');
+                    } else {
+                        console.log('Uncaught Error.\n' + jqXHR.responseText);
+                    }
+                }
+            });
+        }
+
+
+            function GetAspectStreamingUrlDirect(id, pTrackId, source) {
+            $.ajax({
+                url: apiUrl + "/ConvertVoiceAspect.svc/GetMP3StreamUrlDirect",
+                type: "GET",
+                contentType: "application/json; charset=utf-8",
+                dataType: "jsonp",
+                cache: false,
+                data: {
+                        trackId: pTrackId,
+                        source: source
+                },
+                success: function (result) {
+
+                    console.log('GetMP3StreamUrlDirect Result : ' + result);
+                    closeWaitingPopup();
+                    mediaPlayer(pTrackId,result);
+
+                }, error: function (jqXHR, exception) {
+                    if (jqXHR.status === 0) {
+                        console.log('Not connect.\n Verify Network.');
+                    } else if (jqXHR.status == 404) {
+                        console.log('Requested page not found. [404]');
+                    } else if (jqXHR.status == 500) {
+                        console.log('Internal Server Error [500].');
+                    } else if (exception === 'parsererror') {
+                        console.log('Requested JSON parse failed.');
+                    } else if (exception === 'timeout') {
+                        console.log('Time out error.');
+                    } else if (exception === 'abort') {
+                        console.log('Ajax request aborted.');
+                    } else {
+                        console.log('Uncaught Error.\n' + jqXHR.responseText);
+                    }
+                }
+            });
+        }
+        
+        function closeWaitingPopup(){
+            #{rich:component('waitPopup')}.hide();
+        } 
+
+        function rejectCall() {         
+            #{rich:component('callAlertPopup')}.hide();
+        }
+
+        function showCallAlertPopup() {
+            #{rich:component('callAlertPopup')}.show();
+        }
+
+        function closeCallAlertPopup() {
+            #{rich:component('callAlertPopup')}.hide();
+            // SET INBOUND TO FALSE
+            jsDisableInbound();
+        }
+    </script>
+    
+    <script type="text/javascript">
+        /*
+        jQuery(document).ready(function() {
+            jQuery('.show-example').click(function () {
+                var notice = '<div class="notice">'
+                    + '<div class="notice-body">' 
+                    + '<img src="#{request.contextPath}/jquery/info.png" alt="" />'
+                    + '<h3>Purr Example</h3>'
+                    + '<p>This a normal Purr. It will fade out on its own.</p>'
+                    + '</div>'
+                    + '<div class="notice-bottom">'
+                    + '</div>'
+                    + '</div>';
+
+                jQuery(notice).purr( {
+                    usingTransparentPNG: true,
+                    fadeInSpeed: 500,
+                    fadeOutSpeed: 500,
+                    removeTimer: 5000 
+                });
+                return false;
+            });
+        });
+
+        function displayFollowup(data){
+            jQuery(document).ready(function() {
+                //jQuery('.show-example').click(function () {
+                var notice = '<div class="notice">'
+                    + '<div class="notice-body">' 
+                    + '<img src="#{request.contextPath}/jquery/info.png" alt="" />'
+                    + '<h3>Follow Up Alert</h3>'
+                    + '<p>Customer : ' + data.customerName + '<br/>'
+                    + 'Followup : ' + data.followupDate + '<br/>'
+                    + 'Remark : ' + data.detail + '</p>'
+                    + '</div>'
+                    + '<div class="notice-bottom">'
+                    + '</div>'
+                    + '</div>';
+
+                jQuery(notice).purr( {
+                    fadeInSpeed: 2000,
+                    fadeOutSpeed: 2000,
+                    removeTimer: 15000, 
+                    usingTransparentPNG: true
+                });
+                return false;
+                //});
+            });
+        }
+
+        function displayYesSale(data){
+            jQuery(document).ready(function() {
+                //jQuery('.show-example').click(function () {
+                var notice = '<div class="notice">'
+                    + '<div class="notice-body">' 
+                    + '<img src="#{request.contextPath}/jquery/info.png" alt="" />'
+                    + '<h3>Yes Sale Alert</h3>'
+                    + '<p>Reference No. : ' + data.refNo + '<br/>'
+                    + 'Customer : ' + data.customerName + '<br/>'
+                    + 'TMR : ' + data.userName + '</p>'
+                    + '</div>'
+                    + '<div class="notice-bottom">'
+                    + '</div>'
+                    + '</div>';
+
+                jQuery(notice).purr( {
+                    fadeInSpeed: 2000,
+                    fadeOutSpeed: 2000,
+                    removeTimer: 15000, 
+                    usingTransparentPNG: true
+                });
+                return false;
+                //});
+            });
+        }
+
+        function displayApproval(data){
+            jQuery(document).ready(function() {
+                //jQuery('.show-example').click(function () {
+                var notice = '<div class="notice">'
+                    + '<div class="notice-body">' 
+                    + '<img src="#{request.contextPath}/jquery/info.png" alt="" />'
+                    + '<h3>Approval Alert</h3>'
+                    + '<p>Reference No. : ' + data.refNo + '<br/>'
+                    + 'Customer : ' + data.customerName + '<br/>'
+                    + '' + data.detail + '</p>'
+                    + '</div>'
+                    + '<div class="notice-bottom">'
+                    + '</div>'
+                    + '</div>';
+
+                jQuery(notice).purr( {
+                    fadeInSpeed: 2000,
+                    fadeOutSpeed: 2000,
+                    removeTimer: 15000, 
+                    usingTransparentPNG: true
+                });
+                return false;
+                //});
+            });
+        }
+
+        function displayReconfirm(data){
+            jQuery(document).ready(function() {
+                //jQuery('.show-example').click(function () {
+                var notice = '<div class="notice">'
+                    + '<div class="notice-body">' 
+                    + '<img src="#{request.contextPath}/jquery/info.png" alt="" />'
+                    + '<h3>Re-Confirm Alert</h3>'
+                    + '<p>Reference No. : ' + data.refNo + '<br/>'
+                    + 'Customer : ' + data.customerName + '<br/>'
+                    + '' + data.detail + '</p>'
+                    + '</div>'
+                    + '<div class="notice-bottom">'
+                    + '</div>'
+                    + '</div>';
+
+                jQuery(notice).purr( {
+                    fadeInSpeed: 2000,
+                    fadeOutSpeed: 2000,
+                    removeTimer: 15000, 
+                    usingTransparentPNG: true
+                });
+                return false;
+                //});
+            });
+        }
+
+        function displayCase(data){
+            jQuery(document).ready(function() {
+                //jQuery('.show-example').click(function () {
+                var notice = '<div class="notice">'
+                    + '<div class="notice-body">' 
+                    + '<img src="#{request.contextPath}/jquery/info.png" alt="" />'
+                    + '<h3>Case Alert</h3>'
+                    + '<p>'
+                    + 'Customer : ' + data.customerName + '<br/>'
+                    + '' + data.detail + '</p>'
+                    + '</div>'
+                    + '<div class="notice-bottom">'
+                    + '</div>'
+                    + '</div>';
+
+                jQuery(notice).purr( {
+                    fadeInSpeed: 2000,
+                    fadeOutSpeed: 2000,
+                    removeTimer: 15000, 
+                    usingTransparentPNG: true
+                });
+                return false;
+                //});
+            });
+        }
+        */
+    </script>
+
+    <style>
+        #purr-container {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+        }
+
+        .notice {
+            position: relative;
+            width: 324px;
+        }
+
+        .notice .close {
+            position: absolute; 
+            top: 12px; 
+            right: 12px; 
+            display: block; 
+            width: 18px; 
+            height: 17px; 
+            text-indent: -9999px; 
+            background: url('#{request.contextPath}/jquery/purrClose.png') no-repeat 0 10px;
+        }
+
+        .notice-body {
+            min-height: 50px;
+            padding: 22px 22px 0 22px;
+            background: url('#{request.contextPath}/jquery/purrTop.png') no-repeat left top;
+            color: #f9f9f9;
+        }
+
+        .notice-body img {
+            width: 50px; 
+            margin: 0 10px 0 0; 
+            float: left;
+        }
+        .notice-body h3 {
+            margin: 0; 
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+
+        .notice-body p {
+            margin: 5px 0 0 60px; 
+        }
+
+        .notice-bottom {
+            height: 22px;
+            background: url('#{request.contextPath}/jquery/purrBottom.png') no-repeat left top;
+        }
+    </style>
+
+
+    <ui:insert name="javascript">Javascript</ui:insert>
+    <style>
+        .rich-tglctrl:link { text-decoration: none; }
+        .rich-tglctrl:hover { text-decoration: none; }
+        .rich-picklist-list{
+            border-style: solid;
+            border-color: #cccccc;
+            border-width: 1px;
+        }
+        .rich-dtascroller-table {
+            border-style: none;
+            background-color: #ffffff;
+            color: #000000;
+        }
+        .rich-datascr-button {
+            border-style: none;
+            background-color: #ffffff;
+        }
+        .rich-datascr-act {
+            border-top-color: #ffffff;
+            background-color: #ffffff;
+            font-weight: bold;
+            color: #000000;
+        }
+        .rich-datascr-inact {
+            border-style: none;
+            color: #cccccc;
+        }
+
+        .rich-table-subheadercell {
+            text-align: left; 
+            font-size: 11px;
+            color: #0198ab;
+            text-decoration: none;
+            background: url('#{request.contextPath}/img/bgsum.gif') repeat-x bottom;
+        }
+
+        .scroll {
+            height: 500px;
+            overflow-x: auto;
+            overflow-y: auto;
+
+            border: 0px solid #666;
+            background-color: #fff;
+            padding: 0px;
+
+        }
+
+        .scrollEmail {
+            height: 800px;
+            overflow-x: auto;
+            overflow-y: auto;
+
+            border: 0px solid #666;
+            background-color: #fff;
+            padding: 0px;
+
+        }
+
+        .scrollNews {
+            height: 120px;
+            overflow: auto;
+            overflow-x:hidden;
+            border: 0px solid #666;
+            background-color: #fff;
+            padding: 8px;
+        }
+
+        .bgSelectboxDial{
+            height:16px; 
+            font-size: 10pt; 
+            padding: 0px; 
+            border:0px;
+            width:110px;
+            margin-left: 30px;
+        }
+        .reasonWhite{
+            color: #FFFFFF;
+        }
+        #noti_Container {
+            position:relative;
+            border:0px solid;
+            width:16px;
+            height:16px;
+        }
+        .noti_bubble {
+            position:absolute;
+            top: -9px;
+            right:-9px;
+            padding:2px 2px 2px 2px;
+            background-color:red;
+            color:white;
+            font-weight:bold;
+            font-size:0.8em;
+            visibility: hidden;
+            border-radius:30px;
+            box-shadow:1px 1px 1px gray;
+        }
+
+        .noti {
+            color: #FFFFFF;
+        }
+
+        .noti td {
+            background-color: #394144; 
+            vertical-align: top;
+            border-bottom: 1px solid #5a5f65;
+            border-right: 1px solid #5a5f65;
+        }
+
+        .noti td a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+        .noti td a:hover {
+            color: #FFFFFF;
+            text-decoration: underline;
+        }
+
+        .ft td {
+            text-align: center;
+            background-color: #394144; 
+        }
+        .ft td a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+        .ft td a:hover {
+            color: #FFFFFF;
+            text-decoration: underline;
+        }
+    </style>
+    <script type="text/javascript" src="#{request.contextPath}/includes/disableenter.js"/>
+    <script type="text/javascript">
+            fcontent = '#{userSession.messageBroadcast}'.split('||'); //use for fading scroller
+    </script>
+    <script type="text/javascript">
+            window.history.forward(1);
+    </script>
+    <script type="text/javascript" src="#{request.contextPath}/includes/fadingscroller.js"/>
+    <script type="text/javascript" src="#{request.contextPath}/includes/telephony.js"/>
+    <script type="text/javascript" src="#{request.contextPath}/includes/customerInfo.js"/>
+    <script type="text/javascript" src="#{request.contextPath}/includes/checking.js"/>
+    <!--<script type="text/javascript" src="#{request.contextPath}/js/comet4j-0.1.7.js"/>-->
+    <script type="text/javascript" src="#{request.contextPath}/js/PopupWindow.js"/>
+    <script type="text/javascript" src="#{request.contextPath}/js/date_format.js"/>
+    <script type="text/javascript">
+        //var popBox = new PopupWindow("popBox");
+        //popBox.autoHide();
+        /*
+        function init() {
+            JS.Engine.on ({
+                start: function (cId, channelList, engine) {
+                    //alert ('connection has been established, the connection ID is:' + cId);
+                },
+                stop: function (cause, cId, url, engine) {
+                    //alert ('connection has been disconnected, the connection ID is:' + cId + 'disconnect reason:' + cause + 'connection address disconnect:' + url);
+                },
+                talker : function(data, timespan, engine) {
+                    switch (data.type) {
+                        case 'rename': 
+                            onRename(data, timespan);
+                            break;
+                        case 'talk': 
+                            onMessage(data, timespan);
+                            break;
+                        case 'up': 
+                            onJoin(data, timespan);
+                            break;
+                        case 'down': 
+                            onLeft(data, timespan);
+                            break;
+                        case 'health':
+                            onHealthMessage(data, timespan);
+                            break;
+                        case 'notification':
+                            onNotification(data, timespan);
+                            break;
+                        case 'followup':
+                            onAlertFollowup(data, timespan);
+                            break;
+                        case 'yessale':
+                            onAlertYesSale(data, timespan);
+                            break;
+                        case 'approval':
+                            onAlertApproval(data, timespan);
+                            break;
+                        case 'reconfirm':
+                            onAlertReconfirm(data, timespan);
+                            break;
+                        case 'case':
+                            onAlertCase(data, timespan);
+                            break;
+                        case 'email':
+                            EvalSound('sound1');
+                            break;
+                        default:
+                    }
+                }
+            }); 
+
+            start();
+        }
+
+        function start(){
+            //JS.Engine.start('#{request.contextPath}/conn');
+        }
+
+        function onHealthMessage(data, timespan) {
+            //alert('test 999');
+        }
+
+        function onJoin(data, timespan) {
+            var id = data.id;
+            //alert(id);
+        }
+
+        function onNotification(data, timespan) {
+            //window.status = "Hi ! " + data.userName + "[" + data.now + "]";
+
+            if(data.count !== 0){
+                document.getElementById("count").style.visibility = "visible";
+                document.getElementById("count").innerHTML = data.count;
+            }else{
+                document.getElementById("count").style.visibility = "hidden";
+            }
+
+        }
+
+        function onAlertFollowup(data, timespan) {
+            displayFollowup(data);
+            //Richfaces.showModalPanel('popupFollowupAlert');     
+            //document.getElementById("popupFollowupAlertForm:flAlertId").value = data.id; 
+            //document.getElementById("popupFollowupAlertForm:flAlertCustomerName").innerHTML = data.customerName; 
+            //document.getElementById("popupFollowupAlertForm:flAlertFollowupDate").innerHTML = data.followupDate; 
+            //document.getElementById("popupFollowupAlertForm:flAlertDetail").innerHTML = data.detail; 
+        }
+
+        function onAlertYesSale(data, timespan) {
+            displayYesSale(data);
+        }
+
+        function onAlertApproval(data, timespan) {
+            displayApproval(data);
+        }
+
+        function onAlertReconfirm(data, timespan) {
+            displayReconfirm(data);
+        }
+
+        function onAlertCase(data, timespan) {
+            displayCase(data);
+        }
+
+        function onLeft(data, timespan) {
+
+        }
+        */
+        function onAlertCallRinging(phoneno, manualCall, serviceName) {
+            callAlertSetInfo(phoneno, manualCall, serviceName);
+            showCallAlertPopup();            
+        }
+
+        function showContactSummaryPopup() {
+            #{rich:component('contactSummaryPopup')}.show();
+        }
+
+        function showCallAlertPopup() {
+            #{rich:component('callAlertPopup')}.show();
+        }
+        
+        function showNotificationPopup() {
+           console.log('Start Show Notification Popup');
+           if (typeof #{rich:component('notificationPopup')}.show === "undefined") {
+                alert('the property show is not defined...');
+           }else{
+               #{rich:component('notificationPopup')}.show();
+           }
+           console.log('End Show Notification Popup');
+        }
+
+        function clickHangup() {
+            document.getElementById("frm:clickCallH").value = "true";
+            document.getElementById("frm:showContactSummaryH").value = "true";
+            document.getElementById('frm:clickNextCallH').value = "false";
+        }
+        
+        function checkEndContact() { 
+            if(document.getElementById('frm:showContactSummaryH').value === 'true'){
+                if(document.getElementById('frm:clickCallH').value === 'true'){
+                    if(document.getElementById('frm:clickNextCallH').value === 'false'){
+                        if(checkClickContactResult()){
+                            alert("Please Click Next Call");
+                            return false;
+                        }
+                    }else{
+                        showContactSummaryPopup();
+                    }
+                }else{
+                    if('#{userSession.inboundCall}' === 'true'){
+                        if(document.getElementById('frm:clickNextCallH').value === 'false') {
+                            if('#{userSession.hasContactCases}' === 'true'){
+                                //showContactSummaryPopup();
+                                alert("Please Hang Up Telephone");
+                                return false;
+                            } else if(document.getElementById('frm:hasKnowledgeBase').value === 'true'){
+                                //showContactSummaryPopup();
+                                alert("Please Hang Up Telephone");
+                                return false;
+                            }
+                        }
+                    }
+                    showContactSummaryPopup(); 
+                }
+            }
+        }
+
+        function checkClickContactResult(){
+            if(document.getElementById('frm:contactResultHide') !== null){
+                if(document.getElementById('frm:contactResultHide').selectedIndex === 0){
+                    alert("Please Select Contact Result");
+                    document.getElementById('frm:contactResultHide').focus(); 
+                    return false;
+                }
+            }else if(document.getElementById('frm:contactResultShow') !== null){
+                if(document.getElementById('frm:contactResultShow').selectedIndex === 0){
+                    alert("Please Select Contact Result");
+                    document.getElementById('frm:contactResultShow').focus(); 
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function WriteToFile(str) {
+            //C:\Windows\Microsoft.NET\Framework\v2.0.50727\caspol.exe -m -ag Trusted_Zone -url http://192.168.8.125:8080/* FullTrust
+            try {
+                var fso, s;
+                fso = new ActiveXObject("Scripting.FileSystemObject");
+                var d = new Date();
+                var day = d.getDate();
+                var m = d.getMonth() + 1;
+                var y = d.getFullYear();
+                var strDate = y + '_' + m + '_' + day;
+                //var logFile = "C:\\" + strDate + "_save_dis.txt";
+                var logFile = "C:\\" + strDate + "_log.txt";
+
+                s = fso.OpenTextFile(logFile , 8, 1, -2);
+                s.WriteLine(d + ' : ' + str);
+                s.Close();
+            }catch(err){
+                var strErr = 'Error:';
+                //strErr += '\nID:' + id;
+                document.write(strErr);
+            }
+        }
+
+        function setContactResult(value){
+            if(value != null){
+                if(value != ""){
+                    var stra = value.split(":");
+                    if(stra[1] == "undefined" || stra[1] == ""){
+                        alert("Please Select Contact Result");
+                        if(document.getElementById('frm:contactResultHide') != null){
+                            document.getElementById('frm:contactResultHide').selectedIndex = 0;
+                        }
+
+                        if(document.getElementById('frm:contactResultShow') != null){
+                            document.getElementById('frm:contactResultShow').selectedIndex = 0;
+                        }
+                        return false;
+                    }
+                    document.getElementById('frm:contactResultId').value = stra[0];
+                    document.getElementById("frm:contactResultCode").value = stra[1];
+                }else{
+                    alert("Please Select Contact Result");
+                    return false;
+                }
+            }else{
+                alert("Please Select Contact Result");
+                return false;
+            }
+        }
+
+        function EvalSound(soundobj) {
+          var thissound=document.getElementById(soundobj);
+          thissound.Play();
+          if(document.getElementById("alertEmail") != null){
+            document.getElementById("alertEmail").style.display = 'block';
+          }
+          if(document.getElementById("frm:hSubPage") != null){
+              //alert(document.getElementById("frm:hSubPage").value);
+              if(document.getElementById("frm:hSubPage").value == 'AS'){
+                  refreshNewMail();
+              }
+          }
+    }
+
+    </script>
+    <script type="text/javascript">
+        function loginTelephony(){
+        if(parent.document.getElementById('telephonyframe') !== null){
+            var ifrm2 = parent.document.getElementById('telephonyframe');
+        //console.log(ifrm2);
+            //ifrm2.contentWindow.loginPhone('#{userSession.users.telephonyLoginName}', '#{userSession.users.telephonyPassword}', '#{userSession.stationNo}', '#{userSession.userGroup.telephonyServiceId}');
+        }
+    }
+    </script>
+    <a4j:outputPanel ajaxRendered="true">
+        <script type="text/javascript">
+            var contextpath = '#{request.contextPath}';
+            var expiretime = #{userSession.sessionTimeout} * 1000; //*60; //59 min ****** 60000 ms = 1 min ***********
+            setTimeout("alert('Session Expired\\nPlease Login again.');window.top.location=contextpath+'/login/frame.html';", expiretime);
+        </script>
+    </a4j:outputPanel>
+    <a4j:jsFunction name="refreshMainMenu" execute="@this" immediate="true" limitRender="true" render="mainMenu"></a4j:jsFunction>
+    <a4j:jsFunction name="refreshSubMenu" execute="@this" immediate="true" limitRender="true" render="subMenuSocial"></a4j:jsFunction>
+    <ui:insert name="head"/>      
+</h:head>
+<h:body>    
+    <rich:hotKey key="return" onkeydown="return false;"  enabledInInput="false" />
+    <rich:hotKey key="backspace" onkeydown="return false;" enabledInInput="false"/>
+    <h:outputStylesheet library="css" name="maxelyz.css"/>
+    <h:outputStylesheet library="css" name="scroll01.css"/>
+    <h:outputStylesheet library="css" name="popbox.css"/>
+    <!-- BEGIN : 2015/11/20 fixed richfaces calendar (locale thai) by overriding calendar.js -->
+    <!--<h:outputScript  library="js" name="caloverride.js" />-->
+    <!--<script type="text/javascript" src="#{request.contextPath}/resources/js/caloverride.js"/>-->
+    <!-- END : 2015/11/20 -->
+    <h:form id="frm">
+        <a4j:jsFunction name="jsDisableInbound" execute="@this" limitRender="true" immediate="true" 
+                        actionListener="#{userSession.disableInboundCall}" >
+        </a4j:jsFunction>
+        <div id="main_body">
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="15" align="left"></td>
+                    <td width="169" height="65" align="left"><img src="#{request.contextPath}/img/logo_client.png" /></td>
+                    <td align="left"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td height="25" align="right">
+                                    <!--
+                                    <a href="#" onclick="callAlert('0812')">Call Alert-Multiple</a>                                        
+                                    <a href="#" onclick="callAlert('0813334444')">Call Alert-Single</a>
+                                    -->                                     
+                                    <img src="#{request.contextPath}/img/icon_pre.png" width="16" height="16" align="absmiddle" style="display: inline-block" />
+                                    <h:panelGroup rendered="#{global.authenMethod ne 'ldap'}">
+                                    <a4j:commandLink id="changepassword" value="Change Password"
+                                                     render="changePasswordPopupContainer"
+                                                     actionListener="#{helperBean.changePasswordPopupListener}"
+                                                     oncomplete="#{rich:component('changePasswordPopup')}.show();"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     styleClass="gray02link"/> 
+                                    <img src="#{request.contextPath}/img/icon_people.png" width="16" height="16" align="absmiddle" style="display: inline-block"/>
+                                    </h:panelGroup>
+                                    <h:outputLink value="#{request.contextPath}/share/myscriptpopup.jsf" target="_blank"  styleClass="gray02link">My Script</h:outputLink>
+                                    <img src="#{request.contextPath}/img/icon_power.png" width="16" height="16" align="absmiddle" style="display: inline-block"/>
+                                    <a4j:commandLink id="logout" value="Log out "
+                                                     oncomplete="#{rich:component('logoutPopup')}.show();"
+                                                     execute="@this"
+                                                     limitRender="true"
+                                                     styleClass="gray02link"/> 
+                                </td>
+                            </tr>
+                            <tr>
+                                <td height="25" align="right" class="orange01">
+                                    <h:panelGroup rendered="#{agentStatusPopupController.showPermitted}" >
+                                    <span style="background: #444444; border-radius:5px; padding:2px; display: inline-block; text-align: center; width:150px">
+                                        <a4j:commandLink id="agentstatus" value="Agent Status : #{userSession.agentStatus}" 
+                                                         render="agentStatusPopupContainer,notreadyPopup"
+                                                         action="#{agentStatusPopupController.initialize}"
+                                                         oncomplete="#{rich:component('agentStatusPopup')}.show();"
+                                                         execute="@this" limitRender="true" 
+                                                         styleClass="#{userSession.agentStatus eq 'Ready'?'white01':'orange01'}" />
+                                    </span>
+                                    </h:panelGroup>
+                                    <span style="padding-left:10px"/> <strong>Agent :</strong> #{userSession.users.name} #{userSession.users.surname}<span style="padding-left:10px"/><strong>Login :</strong>&nbsp; #{userSession.loginTimeString}<span style="padding-left:10px"/></td>
+                            </tr>
+                        </table></td>
+                    <td width="148" height="65" align="right"><img src="#{request.contextPath}/img/logo_pic.png"/></td>
+                    <td width="15" align="right">&nbsp;</td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartop">
+                <tr>
+                    <td width="10"><img src="#{request.contextPath}/img/bba001.png" width="20" height="55"/></td>
+                    <td background="#{request.contextPath}/img/bbabg.png" valign="bottom"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                                <td width="50%"><table width="99%" border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td width="50"><img src="#{request.contextPath}/img/na01.gif" width="45" height="48"/></td>
+                                            <td width="60">
+                                                <c:if test="#{not request.requestURL.toString().contains('/admin/knowledgebase')}">
+                                                <style>
+                                                    .notification_badge {
+                                                        display:inline-block; padding-left:8px; padding-right:8px; text-align:center; border-radius:40%; font-size:12px;
+                                                        position:relative; top:-10px;
+                                                        color:#fff !important;
+                                                        background-color:#f44336 !important
+                                                    }
+                                                    .notification_btn {  
+                                                        background-image: url('#{request.contextPath}/img/notification.png') !important;                                     
+                                                    }
+                                                </style>
+                                                <a4j:jsFunction name="updateNotificationMessage" actionListener="#{notificationPopupController.actionNotificationMessage}" render="notificationPopupForm:notificationButton, notificationGroup">
+                                                    <a4j:param name="uuid" assignTo="#{userSession.notificationUuid}" />
+                                                    <a4j:param name="refId" assignTo="#{userSession.notificationRefId}" />
+                                                    <a4j:param name="phoneNumber" assignTo="#{userSession.notificationPhoneNumber}" />
+                                                </a4j:jsFunction>
+                                                <h:panelGroup id="notificationGroup">
+                                                    <p:commandLink id="notificationLink" update="notificationList, notificationCount">
+                                                        <h:graphicImage value="#{request.contextPath}" style="display:inline; vertical-align: bottom" rendered="false" />
+                                                        <img src="#{request.contextPath}/img/notification.png" style="display:inline; vertical-align: bottom" />
+                                                        <h:outputText id="notificationCount" value="#{userSession.notificationMessageCount}" styleClass="notification_badge" rendered="#{userSession.notificationMessageCount gt 0}" />
+                                                    </p:commandLink>
+                                                    <p:overlayPanel id="notificationPanel" widgetVar="notificationPanel" for="notificationLink" hideEffect="fade" style="width:500px">
+                                                        <p:dataList id="notificationList" value="#{userSession.notificationMessages}" var="notification" type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                                                            <f:facet name="header">
+                                                                Notifications
+                                                            </f:facet>
+                                                            <p:commandLink title="View Detail" styleClass="ui-icon ui-icon-search" style="float:left; margin-right:10px" onclick="popupNotification(#{userSession.getJsonNotificationMessages(notification)})" rendered="true" />
+                                                            <h:outputText value="#{notification.notifyDate}" style="display:inline-block">
+                                                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                                                            </h:outputText>, 
+                                                            <h:outputText value="#{userSession.getNotificationMessageCustomerName(notification)}" style="display:inline-block" />
+                                                        </p:dataList>
+                                                    </p:overlayPanel>
+                                                </h:panelGroup>
+                                                </c:if>                                            
+                                            </td>
+                                            <td><a href="#" class="blue06" ><ui:insert name="title1"/></a> <span class="blue02">/</span> <a href="#" class="blue06"><ui:insert name="title2"/></a></td>
+                                        </tr>
+                                    </table></td>
+                                <td width="50%">
+                                    <ui:insert name="agentscript">
+                                        <table width="99%" border="0" cellpadding="0" cellspacing="0" >
+                                            <tr>
+                                                <td width="85"><img src="#{request.contextPath}/img/msb01.gif"/></td>
+                                                <td class="white01"><div id="fscroller" style="width:550px;height:40px;overflow:hidden" onmouseover="stopFade();" onmouseout="Auto();"></div></td>
+                                            </tr>
+                                        </table>
+                                    </ui:insert>
+                                </td>
+                            </tr>
+                        </table></td>
+                    <td width="10"><img src="#{request.contextPath}/img/bba002.png" width="20" height="55"/></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="16" align="right" class="body_left"></td>
+                    <td height="425" valign="top"><table width="99%" border="0" cellspacing="0" cellpadding="0" style="margin-top:10px">
+                            <tr>
+                                <td width="30" valign="top">
+                                    <ui:insert name="sidemenu"/>
+                                </td>
+                                <td valign="top"><table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td width="200"><h1><ui:insert name="title1">Title 1</ui:insert></h1></td>
+                                            <td align="right" valign="bottom">
+                                                <h:panelGroup id="mainMenu">
+                                                <h:panelGroup rendered="#{not fn:contains(request.requestURI, '/admin/saleapprove')}">
+                                                <table border="0" cellpadding="0" cellspacing="0" id="tab">
+                                                    <tr>
+                                                        <td>
+                                                            <a4j:commandLink render="kbpanel,lblKbPanel,showContactSummaryH,contactSummaryPopupContainer,hasKnowledgeBase,pgContacSummaryPopup"
+                                                                             rendered="#{fn:contains(request.requestURI, 'customerHandling')}"
+                                                                             action="#{helperBean.endContactAction}"
+                                                                             actionListener="#{helperBean.contactSummaryPopupListener}"
+                                                                             oncomplete="checkEndContact()" execute="@this" limitRender="true">
+                                                                <img src="#{request.contextPath}/img/tb_end_contact_d.png" id="btnEndContact" name="btnEndContact" border="0"
+                                                                     onmouseout="changeImage('btnEndContact', '#{request.contextPath}/img/tb_end_contact_d.png')"
+                                                                     onmouseover="changeImage('btnEndContact', '#{request.contextPath}/img/tb_end_contact_l.png')"/>
+                                                            </a4j:commandLink>
+                                                        </td>
+                                                        <ui:remove>
+                                                        <td>
+                                                            <h:commandLink action="/front/customerHandling/contactsummary.xhtml?faces-redirect=true"
+                                                                           onmouseout="MM_swapImgRestore()"
+                                                                           onmouseover="MM_swapImage('mEndContact','','#{request.contextPath}/img/tb_end_contact_l.png',1)"
+                                                                           rendered="#{userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_end_contact_d.png" name="mEndContact" border="0"/>
+                                                            </h:commandLink>
+                                                        </td>
+                                                        </ui:remove>
+                                                        <td><h:commandLink action="/social/sclassignment.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.socialToDoListViewPermitted and not userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_social#{userSession.mainPage eq 'social' ? '02' : '01'}.png" 
+                                                                     onmouseout="changeImage('m10', '#{request.contextPath}/img/tb_social#{userSession.mainPage eq 'social' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m10', '#{request.contextPath}/img/tb_social02.png')"
+                                                                     id="m10" name="m10" width="59" height="25" border="0"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="/campaign/assignmentList.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.campaignViewPermitted and not userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_campaign#{userSession.mainPage eq 'campaign' ? '02' : '01'}.png" 
+                                                                     id="m01" name="m01" border="0"
+                                                                     onmouseout="changeImage('m01', '#{request.contextPath}/img/tb_campaign#{userSession.mainPage eq 'campaign' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m01', '#{request.contextPath}/img/tb_campaign02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="/front/todolist/incoming.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.toDoListViewPermitted and not userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_todolist#{userSession.mainPage eq 'todolist' ? '02' : '01'}.png" 
+                                                                     id="m02" name="m02" width="76" height="25" border="0"
+                                                                     onmouseout="changeImage('m02', '#{request.contextPath}/img/tb_todolist#{userSession.mainPage eq 'todolist' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m02', '#{request.contextPath}/img/tb_todolist02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="#{frontMenuController.checkSearchPermitted()}"
+                                                                           rendered="#{frontMenuController.searchViewPermitted and not userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_search#{userSession.mainPage eq 'search' ? '02' : '01'}.png" 
+                                                                     id="m03" name="m03" width="58" height="25" border="0"
+                                                                           onmouseout="changeImage('m03', '#{request.contextPath}/img/tb_search#{userSession.mainPage eq 'search' ? '02' : '01'}.png')" 
+                                                                           onmouseover="changeImage('m03', '#{request.contextPath}/img/tb_search02.png')"/></h:commandLink></td>
+                                                        <td><h:commandLink action="/front/customerHandling/customerDetail.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.customerHandlingViewPermitted and userSession.handlingCustomer }"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_customer#{userSession.mainPage eq 'customerHandling' ? '02' : '01'}.png" 
+                                                                     id="m04" name="m04" width="130" height="25" border="0"
+                                                                     onmouseout="changeImage('m04', '#{request.contextPath}/img/tb_customer#{userSession.mainPage eq 'customerHandling' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m04', '#{request.contextPath}/img/tb_customer02.png')"/></h:commandLink></td>
+                                                        <td><h:commandLink action="/report/index.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.reportViewPermitted and not userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <f:param name="page" value=""/>
+                                                                <img src="#{request.contextPath}/img/tb_report#{userSession.mainPage eq 'report' ? '02' : '01'}.png" 
+                                                                     id="m05" name="m05" width="59" height="25" border="0"
+                                                                     onmouseout="changeImage('m05', '#{request.contextPath}/img/tb_report#{userSession.mainPage eq 'report' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m05', '#{request.contextPath}/img/tb_report02.png')"/></h:commandLink></td>
+                                                        <td><h:commandLink action="#{contactSummaryController.contactSummaryAction}"
+                                                                           rendered="#{frontMenuController.adminViewPermitted and not userSession.handlingCustomer}"
+                                                                           immediate="true">
+                                                                <f:param name="page" value="/admin/index.xhtml?faces-redirect=true"/>
+                                                                <img src="#{request.contextPath}/img/tb_admin#{userSession.mainPage eq 'admin' ? '02' : '01'}.png" 
+                                                                     id="m06" name="m06" width="54" height="25" border="0"
+                                                                     onmouseout="changeImage('m06', '#{request.contextPath}/img/tb_admin#{userSession.mainPage eq 'admin' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m06', '#{request.contextPath}/img/tb_admin02.png')"/></h:commandLink></td>
+                                                        <td width="2">&nbsp;</td>
+                                                        <td><a4j:commandButton image="/img/icon_infoproduct.png"
+                                                                               value="Product" render="productPopupContainer"
+                                                                               actionListener="#{helperBean.productPopupListener}"
+                                                                               oncomplete="#{rich:component('productPopup')}.show();"  execute="@this" limitRender="true"/></td>
+
+                                                        <td><ui:remove>
+                                                                <a4j:commandButton image="/img/icon_infoknow.png"
+                                                                               value="Knowledge" render="knowledgePopupContainer"
+                                                                               actionListener="#{helperBean.knowledgePopupListener}"
+                                                                               oncomplete="#{rich:component('knowledgePopup')}.show();" execute="@this" limitRender="true"/>
+                                                            </ui:remove>
+                                                            <h:outputLink value="#{request.contextPath}/share/knowledgepopup.jsf" target="_blank" 
+                                                                          styleClass="gray02link"><h:graphicImage value="/img/icon_infoknow.png" style="border: none;display: inline-block"/>
+                                                            </h:outputLink>
+
+                                                        </td>
+                                                        <td width="2">&nbsp;</td>
+                                                        <td><a4j:commandButton image="/img/icon_infoobjection.png"
+                                                                               value="Objection Handling" render="objectionPopupContainer" 
+                                                                               actionListener="#{helperBean.objectionPopupListener}"
+                                                                               oncomplete="#{rich:component('objectionPopup')}.show();" execute="@this" limitRender="true"/></td>
+                                                        <td><ui:remove>
+                                                            <h:outputLink styleClass="gray02link" target="_blank" 
+                                                                          onclick="window.open('#{request.contextPath}/share/phonedirectorytelephone.jsf','phoneDirectory','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;">
+                                                                <h:graphicImage value="/img/icon_phonedirectory.png" style="border: none;display: inline-block"/>
+                                                            </h:outputLink>
+                                                            </ui:remove>
+                                                        </td>
+                                                        <td width="5">&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{fn:contains(request.requestURI, '/admin/saleapprove')}">
+                                                <table border="0" cellpadding="0" cellspacing="0" id="tab">
+                                                    <tr>
+
+
+                                                        <td><h:commandLink action="/campaign/assignmentList.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.campaignViewPermitted}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_campaign#{userSession.mainPage eq 'campaign' ? '02' : '01'}.png" name="m01" border="0"
+                                                                     onmouseout="changeImage('m01', '#{request.contextPath}/img/tb_campaign#{userSession.mainPage eq 'campaign' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m01', '#{request.contextPath}/img/tb_campaign02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="/front/todolist/incoming.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.toDoListViewPermitted}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_todolist#{userSession.mainPage eq 'todolist' ? '02' : '01'}.png" name="m02" width="76" height="25" border="0"
+                                                                     onmouseout="changeImage('m02', '#{request.contextPath}/img/tb_todolist#{userSession.mainPage eq 'todolist' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m02', '#{request.contextPath}/img/tb_todolist02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="#{frontMenuController.checkSearchPermitted()}"
+                                                                           rendered="#{frontMenuController.searchViewPermitted}"
+                                                                           immediate="true">
+                                                                <img src="#{request.contextPath}/img/tb_search#{userSession.mainPage eq 'search' ? '02' : '01'}.png" name="m03" width="58" height="25" border="0"
+                                                                     onmouseout="changeImage('m03', '#{request.contextPath}/img/tb_search#{userSession.mainPage eq 'search' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m03', '#{request.contextPath}/img/tb_search02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="/report/index.xhtml?faces-redirect=true"
+                                                                           rendered="#{frontMenuController.reportViewPermitted}"
+                                                                           immediate="true">
+                                                                <f:param name="page" value=""/>
+                                                                <img src="#{request.contextPath}/img/tb_report#{userSession.mainPage eq 'report' ? '02' : '01'}.png" name="m05" width="59" height="25" border="0"
+                                                                     onmouseout="changeImage('m05', '#{request.contextPath}/img/tb_report#{userSession.mainPage eq 'report' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m05', '#{request.contextPath}/img/tb_report02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td><h:commandLink action="#{contactSummaryController.contactSummaryAction}"
+                                                                           rendered="#{frontMenuController.adminViewPermitted}"
+                                                                           immediate="true">
+                                                                <f:param name="page" value="/admin/index.xhtml?faces-redirect=true"/>
+                                                                <img src="#{request.contextPath}/img/tb_admin#{userSession.mainPage eq 'admin' ? '02' : '01'}.png" name="m06" width="54" height="25" border="0"
+                                                                     onmouseout="changeImage('m06', '#{request.contextPath}/img/tb_admin#{userSession.mainPage eq 'admin' ? '02' : '01'}.png')" 
+                                                                     onmouseover="changeImage('m06', '#{request.contextPath}/img/tb_admin02.png')"/>
+                                                            </h:commandLink></td>
+                                                        <td width="10">&nbsp;</td>
+                                                        <td><a4j:commandButton image="/img/icon_infoproduct.png"
+                                                                               value="Product" render="productPopupContainer"
+                                                                               actionListener="#{helperBean.productPopupListener}"
+                                                                               oncomplete="#{rich:component('productPopup')}.show();" execute="@this" limitRender="true"/></td>
+                                                        <td>
+                                                            <ui:remove>
+                                                            <a4j:commandButton image="/img/icon_infoknow.png"
+                                                                               value="Knowledge" render="knowledgePopupContainer"
+                                                                               actionListener="#{helperBean.knowledgePopupListener}"
+                                                                               oncomplete="#{rich:component('knowledgePopup')}.show();" execute="@this" limitRender="true"/>
+                                                            </ui:remove>
+                                                            <h:outputLink value="#{request.contextPath}/share/knowledgepopup.jsf" target="_blank" 
+                                                                          styleClass="gray02link"><h:graphicImage value="/img/icon_infoknow.png" style="border: none"/>
+                                                            </h:outputLink>
+                                                        </td>
+                                                        <td width="2">&nbsp;</td>
+                                                        <td><a4j:commandButton image="/img/icon_infoobjection.png"
+                                                                               value="Objection Handling" render="objectionPopupContainer" 
+                                                                               actionListener="#{helperBean.objectionPopupListener}"
+                                                                               oncomplete="#{rich:component('objectionPopup')}.show();" execute="@this" limitRender="true"/></td>
+                                                        <td><h:outputLink styleClass="gray02link" target="_blank" 
+                                                                          onclick="window.open('#{request.contextPath}/share/phonedirectorytelephone.jsf','phoneDirectory','width=1250,height=550,left=30,top=80,scrollbars=1,resizable=1');return false;">
+                                                                <h:graphicImage value="/img/icon_phonedirectory.png" style="border: none"/>
+                                                            </h:outputLink></td>
+                                                        <td width="5">&nbsp;</td>
+                                                    </tr>
+                                                </table>
+                                                </h:panelGroup>
+                                                </h:panelGroup>
+                                                <script>refreshMainMenu()</script>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <ui:insert name="detail" >
+                                        Detail
+                                    </ui:insert>
+                                </td>
+                            </tr>
+                        </table></td>
+                    <td width="16" class="body_right"></td>
+                </tr>
+            </table>
+
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td width="21" align="right"><img src="#{request.contextPath}/img/foota01.png" width="20" height="45"/></td>
+                    <td valign="top" background="#{request.contextPath}/img/footabg.png">
+                        <div align="right" style="vertical-align: middle">
+                        </div>
+                       </td>
+                    <td width="21" align="left"><img src="#{request.contextPath}/img/foota02.png" width="20" height="45"/></td>
+                </tr>
+            </table>
+        </div>
+    </h:form>
+    
+    <span id="dummy"></span>
+    
+    <ui:include id="productPopupContainer" src="/share/productpopup.xhtml"/>
+    <ui:include id="objectionPopupContainer" src="/share/objectionpopup.xhtml"/>
+
+    <ui:include id="changePasswordPopupContainer" src="/share/changepasswordpopup.xhtml">
+        <ui:param name="showClose" value="1"/>
+    </ui:include>
+
+    <ui:include id="agentStatusPopupContainer" src="/share/agentstatuspopup.xhtml">
+        <ui:param name="showClose" value="1"/>
+    </ui:include>
+
+    <ui:include id="logoutPopupContainer" src="/share/logoutpopup.xhtml">
+        <ui:param name="showClose" value="1"/>
+    </ui:include>
+
+    <ui:insert name="popupModal"></ui:insert> 
+    <a4j:jsFunction name="callScript" render="toggle1">
+        <a4j:param name="param1" assignTo="#{userSession.refNo}"/>
+    </a4j:jsFunction>
+    <a4j:jsFunction name="logoutAction" actionListener="#{userSession.logoutActionListener}" immediate="true" oncomplete="#{rich:component('waitPopup')}.hide();"></a4j:jsFunction>
+    <ui:include src="/share/callalertpopup.xhtml"/>
+    <ui:include src="/share/notificationpopup.xhtml"/>
+    <!--<ui:include src="/front/notification/popupfollowupalert.xhtml"/>-->
+
+    <ui:include id="contactSummaryPopupContainer" 
+                src="/front/customerHandling/contactsummarypopup.xhtml"/>
+
+</h:body>
+</html>

@@ -1,0 +1,127 @@
+<ui:composition template="../../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:ajax="https://ajax4jsf.dev.java.net/ajax">
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/customerHandling/accountEdit.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="type">#{msg.accountAddEdit}</ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.accountAddEdit}</ui:define>
+    <ui:define name="detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.accountAddEdit}</h2></td>
+                            <td valign="bottom" height="48"></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="50%" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td align="right" valign="top" width="30%">
+                                            <h:outputLabel for="name"> <span class="required">#{msg.requireMarker}</span> #{msg.accountName}</h:outputLabel>
+                                            <h:inputHidden id="mode" value="#{accountEditController.mode}"/>
+                                        </td>
+                                        <td width="70%">
+                                            <rich:inplaceInput id="name" 
+                                                               defaultLabel="#{msg.clickEnterDetail}" 
+                                                               value="#{accountEditController.account.name}"
+                                                               required="true" 
+                                                               requiredMessage="#{msg.require}"
+                                                               styleClass="textfield"/>
+                                            &#160;<h:message for="name" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="department">#{msg.department}</h:outputLabel></td>
+                                        <td><rich:inplaceInput id="department"
+                                                               defaultLabel="#{msg.clickEnterDetail}"
+                                                               value="#{accountEditController.account.department}"
+                                                               styleClass="textfield"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="addressLine1">#{msg.addressLine1}</h:outputLabel></td>
+                                        <td><rich:inplaceInput id="addressLine1"
+                                                               defaultLabel="#{msg.clickEnterDetail}"
+                                                               value="#{accountEditController.account.addressLine1}"
+                                                               styleClass="textfield"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="addressLine2">#{msg.addressLine2}</h:outputLabel></td>
+                                        <td><rich:inplaceInput id="addressLine2" defaultLabel="#{msg.clickEnterDetail}" value="#{accountEditController.account.addressLine2}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="province">#{msg.province}</h:outputLabel></td>
+                                        <td>
+                                            <a4j:region>
+                                                <h:selectOneMenu id="province" value="#{accountEditController.account.provinceId}"
+                                                                 valueChangeListener="#{accountEditController.provinceListener}">
+                                                    <f:selectItems value="#{accountEditController.provinces}"/>
+                                                    <a4j:ajax event="change" render="districtId" execute="@this"/>
+                                                </h:selectOneMenu>
+                                            </a4j:region>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="districtId">#{msg.district}</h:outputLabel></td>
+                                        <td>
+                                            <h:selectOneMenu id="districtId" value="#{accountEditController.districtId}" disabled="#{accountEditController.districtDisabled}">
+                                                <f:selectItems value="#{accountEditController.districts}"/>
+                                            </h:selectOneMenu>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="postalCode">#{msg.postalCode}</h:outputLabel></td>
+                                        <td><rich:inplaceInput id="postalCode"  defaultLabel="#{msg.clickEnterDetail}" value="#{accountEditController.account.postalCode}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="remark">#{msg.remark}</h:outputLabel></td>
+                                        <td><rich:inplaceInput id="remark" defaultLabel="#{msg.clickEnterDetail}" value="#{accountEditController.account.remark}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"><h:outputLabel for="telephone">#{msg.telephone}</h:outputLabel></td>
+                                        <td><rich:inplaceInput id="telephone" defaultLabel="#{msg.clickEnterDetail}" value="#{accountEditController.account.telephone}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right"></td>
+                                        <td>
+                                    <h:commandButton image="/resources/img/b_save.png" action="#{accountEditController.saveAction}" rendered="#{accountEditController.savePermitted}"/>
+                                            <h:outputLink value="#{request.contextPath}/front/search/searchAccount.jsf"><h:graphicImage library="img" name="b_back.png" /></h:outputLink>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        <td width="50%" valign="top"></td>
+                    </tr>
+                </table>
+            </td>
+            <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+        </tr>
+    </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+            <td background="#{request.contextPath}/img/box07.png"></td>
+            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+        </tr>
+    </table>
+    </ui:define>
+</ui:composition>

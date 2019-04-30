@@ -1,0 +1,133 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Approval Rule Detail</ui:define>
+            <ui:define name="panel">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td align="left" valign="top">
+                
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" valign="top">Name :</td>
+                                    <td valign="top"><h:outputText value="#{approvalRuleDetailController.approvalRule.name}"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Rule for :</td>
+                                    <td valign="top"><h:outputText value="In Underwriting" rendered="#{approvalRuleDetailController.type eq 'uw'}"/>
+                                    <h:outputText value="Reject" rendered="#{approvalRuleDetailController.type eq 'reject'}"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">&nbsp;</td>
+                                    <td valign="top">
+                                        
+                                        <table border="0" cellpadding="3" cellspacing="0">
+                                            <tr>
+                                                <td>
+                                                    <h:selectOneMenu id="field" 
+                                                                     value="#{approvalRuleDetailController.fieldName}">
+                                                        <f:selectItem itemLabel="Select"/>
+                                                        <f:selectItem itemLabel="age" itemValue="age"/>
+                                                        <f:selectItem itemLabel="bmi" itemValue="bmi"/>
+                                                        <f:selectItem itemLabel="question1" itemValue="question1"/>
+                                                        <f:selectItem itemLabel="question2" itemValue="question2"/>
+                                                        <f:selectItem itemLabel="question3" itemValue="question3"/>
+                                                        <f:selectItem itemLabel="question4" itemValue="question4"/>
+                                                        <f:selectItem itemLabel="question5" itemValue="question5"/>
+                                                        <f:selectItem itemLabel="question6" itemValue="question6"/>
+                                                        <f:selectItem itemLabel="question7" itemValue="question7"/>
+                                                        <f:selectItem itemLabel="question8" itemValue="question8"/>
+                                                        <f:selectItem itemLabel="question9" itemValue="question9"/>
+                                                        <f:selectItem itemLabel="question10" itemValue="question10"/>
+                                                        <f:selectItem itemLabel="question11" itemValue="question11"/>
+                                                        <f:selectItem itemLabel="question12" itemValue="question12"/>
+                                                        <f:selectItem itemLabel="question13" itemValue="question13"/>
+                                                        <f:selectItem itemLabel="question14" itemValue="question14"/>
+                                                        <f:selectItem itemLabel="question15" itemValue="question15"/>
+                                                        <f:selectItem itemLabel="question16" itemValue="question16"/>
+                                                        <f:selectItem itemLabel="question17" itemValue="question17"/>
+                                                        <f:selectItem itemLabel="question18" itemValue="question18"/>
+                                                        <f:selectItem itemLabel="question19" itemValue="question19"/>
+                                                        <f:selectItem itemLabel="question20" itemValue="question20"/>
+                                                        <f:selectItem itemLabel="question21" itemValue="question21"/>
+                                                        <f:selectItem itemLabel="question22" itemValue="question22"/>
+                                                        <f:selectItem itemLabel="question23" itemValue="question23"/>
+                                                        <f:selectItem itemLabel="question24" itemValue="question24"/>
+                                                        <f:selectItem itemLabel="question25" itemValue="question25"/>
+                                                        <f:selectItem itemLabel="question26" itemValue="question26"/>
+                                                        <f:selectItem itemLabel="question27" itemValue="question27"/>
+                                                        <f:selectItem itemLabel="question28" itemValue="question28"/>
+                                                        <f:selectItem itemLabel="question29" itemValue="question29"/>
+                                                        <f:selectItem itemLabel="question30" itemValue="question30"/>
+                                                    </h:selectOneMenu>
+                                                    <rich:message for="field" style="color:red" />
+                                                </td>
+                                                <td>
+                                                    <h:selectOneMenu id="operator" 
+                                                                     value="#{approvalRuleDetailController.operator}">
+                                                        <f:selectItem itemLabel="Select"/>
+                                                        <f:selectItem itemLabel="&#62;" itemValue="&#62;"/>
+                                                        <f:selectItem itemLabel="&#62;&#61;" itemValue="&#62;&#61;"/>
+                                                        <f:selectItem itemLabel="&#60;" itemValue="&#60;"/>
+                                                        <f:selectItem itemLabel="&#60;&#61;" itemValue="&#60;&#61;"/>
+                                                        <f:selectItem itemLabel="&#61;" itemValue="&#61;"/>
+                                                        <f:selectItem itemLabel="&#60;&#62;" itemValue="&#60;&#62;"/>
+                                                    </h:selectOneMenu>
+                                                    <rich:message for="operator" style="color:red" />
+                                                </td>
+                                                <td>
+                                                    <h:inputText id="textValue" styleClass="textfield"
+                                                                 value="#{approvalRuleDetailController.textValue}">
+                                                    </h:inputText>
+                                                    <rich:message for="textValue" style="color:red" />
+                                                </td>
+                                                <td>
+                                                    <a4j:commandButton image="../img/b_add.png"
+                                                                       render="dataList,field,operator,textValue"
+                                                                       actionListener="#{approvalRuleDetailController.addActionListener}"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">&nbsp;</td>
+                                    <td valign="top">
+                                        <a4j:region id="step2region">
+                                            <h:selectManyListbox id="dataList" size="10" style="width: 300px" value="#{approvalRuleDetailController.selectedValues}">
+                                            <f:selectItems value="#{approvalRuleDetailController.approvalRuleDetailList}"
+                                                           var="list"
+                                                           itemLabel="#{list.fieldName} #{list.operation} #{list.value}"
+                                                           itemValue="#{list.approvalRuleDetailPK.seqNo}"/>
+                                        </h:selectManyListbox>
+                                        
+                                        <a4j:commandButton image="../img/b_remove02.png"
+                                                           render="dataList"
+                                                           actionListener="#{approvalRuleDetailController.removeActionListener}"/>
+                                        </a4j:region>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">&nbsp;</td>
+                                    <td valign="top">
+                                        <h:commandButton image="../img/b_save.png" action="#{approvalRuleDetailController.saveAction}"/>
+                                        <h:commandButton image="../img/b_back.png" action="#{approvalRuleDetailController.backAction}" immediate="true"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,1382 @@
+<ui:composition template="../includes/customerhandling_sidemenu.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+<ui:define name="detail">
+<style type="text/css">
+    <!--       
+        .rf-tt-cntr {
+            border:1px inset windowframe;
+            border-color: #0198ab;
+            font-family: Arial, Helvetica, sans-serif, Tahoma;
+            font-size: 14px;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #d8edff;
+        }
+        div.scroll {
+            height: 300px;
+            overflow: auto;
+            overflow-x:hidden;
+            border: 0px solid #666;
+            background-color: #fff;
+            padding: 8px;
+        }
+    -->
+</style>
+<script type="text/javascript">
+    var noClick=0;
+    function setFirstClick(no) {
+        noClick = no;
+    }
+
+    function clickNextCall() { 
+        if(document.getElementById('frm:contactResultHide') !== null){
+            if(document.getElementById('frm:contactResultHide').selectedIndex === 0){
+                alert("Please Select Contact Result");
+                document.getElementById('frm:contactResultHide').focus(); 
+                return false;
+            }
+        }
+
+        if(document.getElementById('frm:contactResultShow') !== null){
+            if(document.getElementById('frm:contactResultShow').selectedIndex === 0){
+                alert("Please Select Contact Result");
+                document.getElementById('frm:contactResultShow').focus();
+                return false;
+            }
+        }
+
+        document.getElementById('frm:contactNo').value = "";
+        document.getElementById('frm:extNo').value = "";
+        document.getElementById("frm:callNo").value = "";
+        document.getElementById("frm:callExt").value = "";
+        document.getElementById("frm:clickNextCallH").value = "true";
+        document.getElementById("frm:showContactSummaryH").value = "true";
+
+        initNextCall();
+    }
+
+    function upDateStateWrap() { 
+        onStateWrap();
+    }
+    
+    function upDateStateParked() { 
+        onStatePark();
+    }
+    
+    function upDateStateActive() { 
+        onStateActive();
+    }
+</script>
+
+    <rich:togglePanel id="toggle1" activeItem="sub" switchType="client" cycledSwitching="sub,plus" style="width: 100%; border: 0; padding: 0; margin: 0">
+        <rich:togglePanelItem name="plus">
+            <h:panelGrid columns="2" border="0" width="100%" cellpadding="0" cellspacing="0">
+                <h:panelGroup>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="33%"><span class="gray02">#{msg.customerNameSearch} </span><span class="blue04">#{userSession.customerDetail.initial} #{userSession.customerDetail.name} #{userSession.customerDetail.surname}</span></td>
+                                        <td width="32%" align="left"><ui:insert name="contactPerson"></ui:insert></td>
+                                        <td width="33%" align="left">
+                                            <ui:remove>
+                                            <h:panelGroup id ="panelRefNo1">
+                                            <h:panelGroup rendered="#{userSession.refNo ne null and userSession.refNo ne ''}">
+                                                <span class="gray02"><h:outputText value="Reference No. : "/></span><span class="blue04"><h:outputText value="#{userSession.refNo}"/></span>
+                                            </h:panelGroup>
+                                            </h:panelGroup>
+                                            </ui:remove>
+                                        </td>
+                                        <td width="2%" align="right">
+                                            <h:commandLink>
+                                                <rich:toggleControl targetPanel="toggle1" targetItem="sub"/> 
+                                                <img src="#{request.contextPath}/img/bplus.png" alt=""/>
+                                            </h:commandLink>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+
+                </h:panelGroup>
+                <td width="10px" align="right"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </h:panelGrid>
+        </rich:togglePanelItem> 
+        <rich:togglePanelItem name="sub">
+            <h:panelGroup>
+                <h:panelGrid columns="2" border="0" width="100%" cellpadding="0" cellspacing="0">
+                    <h:panelGroup>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td width="33%"><span class="gray02">#{msg.customerNameSearch} </span><span class="blue04">#{userSession.customerDetail.initial} #{userSession.customerDetail.name} #{userSession.customerDetail.surname}</span></td>
+                                            <td width="32%" align="left"><ui:insert name="contactPerson"></ui:insert></td>
+                                            <td width="33%" align="left">
+                                                <ui:remove>
+                                                <h:panelGroup id ="panelRefNo2">
+                                                <h:panelGroup rendered="#{userSession.refNo ne null and userSession.refNo ne ''}">
+                                                    <span class="gray02"><h:outputText value="Reference No. : "/></span><span class="blue04"><h:outputText value="#{userSession.refNo}"/></span>
+                                                </h:panelGroup>
+                                                </h:panelGroup>
+                                                </ui:remove>
+                                            </td>
+                                            <td width="2%" align="right">
+                                                <h:commandLink>
+                                                    <rich:toggleControl targetPanel="toggle1" targetItem="plus"/> 
+                                                    <img src="#{request.contextPath}/img/b_subtract.png" alt=""/>
+                                                </h:commandLink>
+
+
+                                            </td>
+                            </tr>
+                        </table>
+                        </td>
+                        </tr>
+                        </table>
+                    </h:panelGroup>
+                    <td width="10px" align="right"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </h:panelGrid>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top">
+                            <table width="100%" border="0" cellspacing="2" cellpadding="0">
+                                <tr>
+                                    <td width="20%" valign="top">
+                                        <table width="160" border="0" cellpadding="5" cellspacing="0" bgcolor="#F3F2E8">
+                                            <tr>
+                                                <td align="center">
+                                                <h:graphicImage id="pictureUpload"
+                                                                url="/upload/#{(userSession.customerDetail.picture == null || userSession.customerDetail.picture == '') ? 'temp/00_do_not_delete.png' : null}#{(userSession.customerDetail.picture == null || userSession.customerDetail.picture == '') ? null : 'customer/'}#{(userSession.customerDetail.picture == null || userSession.customerDetail.picture == '') ? null : userSession.customerDetail.id}#{(userSession.customerDetail.picture == null || userSession.customerDetail.picture == '') ? null : '/'}#{(userSession.customerDetail.picture == null || userSession.customerDetail.picture == '') ? null : userSession.customerDetail.picture}"
+                                                                width="100"
+                                                                height="100"/>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:graphicImage id="emoIcon"
+                                                                url="/icon/#{userSession.customerDetail.emoticon}.png"
+                                                                width="16"
+                                                                height="16"
+                                                                rendered="#{userSession.customerDetail.emoticon != null and userSession.customerDetail.emoticon != ''}"/> #{userSession.customerDetail.remark}</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="25%" valign="top">
+                                        <rich:dataTable style="width: 100%;text-align: left" headerClass="subh01" value="#{customerInfoController.column1}"  var="col1">
+                                            <rich:column>
+                                                <h:outputText class="gray03right" value="#{fn:substringBefore(col1, ':')}: "/>
+                                                <h:outputText value="#{fn:substringAfter(col1, ':')}"/>
+                                            </rich:column>
+                                        </rich:dataTable> 
+                                        
+                                        <br/>
+                                        <a4j:commandLink title="Show Detail"
+                                                       rendered="#{customerInfoController.column3.size() > 0 or customerInfoController.column4.size() > 0}"
+                                                       value="More Detail >>" >
+                                            <rich:tooltip mode="client" 
+                                                          horizontalOffset="-1" verticalOffset="0" layout="block">
+                                                <h4 style="font-size: 18px;">Additional Customer Information</h4><br/>
+                                                <div class="scroll">
+                                                     <table width="600px" border="0" cellspacing="0" cellpadding="0">
+                                                       <tr>
+                                                           <td width="5%" ></td>
+                                                           <td width="45%" valign="top">
+                                                               <rich:dataTable style="width: 100%;text-align: left" headerClass="subh01" value="#{customerInfoController.column3}"  var="col3">
+                                                                    <rich:column>
+                                                                        <h:outputText class="gray03right" value="#{fn:substringBefore(col3, ':')}: "/>
+                                                                        <h:outputText value="#{fn:substringAfter(col3, ':')}"/>
+                                                                    </rich:column>
+                                                                </rich:dataTable> 
+                                                            </td>
+                                                            <td width="5%" ></td>
+                                                            <td width="45%" valign="top">                           
+                                                                <rich:dataTable style="width: 100%;text-align: left" headerClass="subh01" value="#{customerInfoController.column4}"  var="col4">
+                                                                  <rich:column>
+                                                                        <h:outputText class="gray03right" value="#{fn:substringBefore(col4, ':')}: "/>
+                                                                        <h:outputText  value="#{fn:substringAfter(col4, ':')}"/>
+                                                                    </rich:column>
+                                                               </rich:dataTable> 
+                                                            </td>
+                                                       </tr>
+                                                   </table>
+                                                </div>
+                                            </rich:tooltip>
+                                          
+                                      </a4j:commandLink>
+                                        
+                                    </td>
+                                    <td width="5%" ></td>
+                                    <td width="25%" valign="top">                           
+                                       <rich:dataTable style="width: 100%;text-align: left" headerClass="subh01" value="#{customerInfoController.column2}"  var="col2">
+                                          <rich:column>
+                                                <h:outputText class="gray03right" value="#{fn:substringBefore(col2, ':')}: "/>
+                                                <h:outputText  value="#{fn:substringAfter(col2, ':')}"/>
+                                            </rich:column>
+                                       </rich:dataTable> 
+                                       
+                                    </td>
+                                    <td width="30%" valign="top" align="left">
+                                        
+                                        <a4j:region id="edit">
+                                            <h:panelGroup id="telephonyEdit">
+                                                <h:inputHidden id="contactResultId"/>
+                                                <h:inputHidden id="contactResultCode"/>
+
+                                                <h:panelGroup id="panelContactResult">
+                                                    <h:inputHidden id="contactResultId2" value="#{newContactController.mainContactResultId}"/>
+                                                    <h:inputHidden id="contactResultCode2" value="#{newContactController.mainContactResultCode}"/>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{userSession.telephonyEdit eq 'edit'}">
+                                                    <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                        </tr>
+                                                    </table>
+                                                    <h:panelGroup layout="div" id="panelTelephonyEdit" style="position: absolute; visibility: visible">
+                                                    <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td width="5"><h:graphicImage url="/img/tl_f01_2.png"/></td>
+                                                            <td background="#{request.contextPath}/img/tl_f02_2.png"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                            <td width="5"><h:graphicImage url="/img/tl_f03_2.png"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td background="#{request.contextPath}/img/tl_f04_2.png"></td>
+                                                            <td bgcolor="#90d3db" valign="top" align="center">
+
+                                                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                                                    <tr>
+                                                                        <td></td>
+                                                                        <td colspan="4" align="right"><h:graphicImage url="/img/tl_table01.png"/></td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td width="25" align="left"><h:graphicImage url="/img/tl_is07.png"/></td>
+                                                                        <td width="165" align="left" nowrap="true">
+                                                                            <h:inputText styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.contactPhone1}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                            ext.
+                                                                            <h:inputText styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.contactExt1}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                        </td>
+                                                                        <td width="25" align="left">
+                                                                            <input name="defaultNo" 
+                                                                                   type="radio" 
+                                                                                   value="contact1"/> 
+                                                                        </td>
+                                                                        <td width="60" align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.contactPhone1Close}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td width="145" align="right">
+                                                                            <h:selectOneMenu id="contactPhone1ReasonId" value="#{newContactController.customer.contactPhone1ReasonId}"
+                                                                                             styleClass="bgSelectboxDial" >
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is07.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.contactPhone2}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                            ext.
+                                                                            <h:inputText styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.contactExt2}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="contact2"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.contactPhone2Close}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">                                                                
+                                                                            <h:selectOneMenu id="contactPhone2ReasonId" value="#{newContactController.customer.contactPhone2ReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is07.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.contactPhone3}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                            ext.
+                                                                            <h:inputText styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.contactExt3}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="contact3"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.contactPhone3Close}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectOneMenu id="contactPhone3ReasonId" value="#{newContactController.customer.contactPhone3ReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is07.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.contactPhone4}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                            ext.
+                                                                            <h:inputText styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.contactExt4}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="contact4"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.contactPhone4Close}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectOneMenu id="contactPhone4ReasonId" value="#{newContactController.customer.contactPhone4ReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is07.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.contactPhone5}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                            ext.
+                                                                            <h:inputText styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.contactExt5}"
+                                                                                         disabled="#{not userSession.userGroup.allowAddTelephone}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="contact5"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.contactPhone5Close}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectOneMenu id="contactPhone5ReasonId" value="#{newContactController.customer.contactPhone5ReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is02.png"/></td>
+                                                                        <td align="left">
+                                                                                <h:inputText id="homePhone" styleClass="textfield"
+                                                                                             style="width:80px;margin-left:5px"
+                                                                                             value="#{newContactController.customer.homePhone}"
+                                                                                             disabled="#{not userSession.userGroup.allowEditTelephone}"
+                                                                                             rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                <h:outputText id="homePhoneText" 
+                                                                                              style="width:80px;margin-left:5px;display: inline-block"
+                                                                                              value="#{userSession.customerDetail.homePhoneHide}"
+                                                                                              rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+
+                                                                                ext.
+                                                                                <h:inputText id="homeExt" styleClass="textfield" 
+                                                                                             style="width:30px"
+                                                                                             value="#{newContactController.customer.homeExt}"
+                                                                                             disabled="#{not userSession.userGroup.allowEditTelephone}"
+                                                                                             rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                <h:outputText id="homeExtText" 
+                                                                                              style="width:30px"
+                                                                                              value="#{newContactController.customer.homeExt}"
+                                                                                              rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="home"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.homePhoneClose}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectOneMenu id="homePhoneReasonId" value="#{newContactController.customer.homePhoneReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is03.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText id="officePhone" styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.officePhone}"
+                                                                                         disabled="#{not userSession.userGroup.allowEditTelephone}"
+                                                                                         rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                            <h:outputText id="officePhoneText" 
+                                                                                          style="width:80px;margin-left:5px;display: inline-block"
+                                                                                          value="#{userSession.customerDetail.officePhoneHide}"
+                                                                                          rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                            ext.
+                                                                            <h:inputText id="officeExt" styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.officeExt}"
+                                                                                         disabled="#{not userSession.userGroup.allowEditTelephone}"
+                                                                                         rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                            <h:outputText id="officeExtText" 
+                                                                                          style="width:30px"
+                                                                                          rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="office"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.officePhoneClose}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectOneMenu id="officePhoneReasonId" value="#{newContactController.customer.officePhoneReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is04.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText id="mobilePhone" styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.mobilePhone}"
+                                                                                         disabled="#{not userSession.userGroup.allowEditTelephone}"
+                                                                                         rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                            <h:outputText id="mobilePhoneText"
+                                                                                          style="width:80px;margin-left:5px;display: inline-block"
+                                                                                          value="#{userSession.customerDetail.mobilePhoneHide}"
+                                                                                          rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                            <input name="defaultNo" type="radio" value="mobile"/> 
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectBooleanCheckbox value="#{newContactController.customer.mobilePhoneClose}">
+                                                                            </h:selectBooleanCheckbox>
+                                                                        </td>
+                                                                        <td align="right">
+                                                                            <h:selectOneMenu id="mobilePhoneReasonId" value="#{newContactController.customer.mobilePhoneReasonId}"
+                                                                                             styleClass="bgSelectboxDial">
+                                                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                                <f:selectItems value="#{newContactController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            </h:selectOneMenu>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is05.png"/></td>
+                                                                        <td align="left">
+                                                                            <h:inputText id="fax" styleClass="textfield"
+                                                                                         style="width:80px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.fax}"/>
+                                                                            ext.
+                                                                            <h:inputText id="faxExt" styleClass="textfield" 
+                                                                                         style="width:30px"
+                                                                                         value="#{newContactController.customer.faxExt}"/>
+                                                                        </td>
+                                                                        <td align="left">
+                                                                        </td>
+                                                                        <td align="right">
+                                                                        </td>
+                                                                        <td align="right">
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td><h:graphicImage url="/img/tl_is06.png"/></td>
+                                                                        <td colspan="4" align="left">
+                                                                            <h:inputText styleClass="textfield"
+                                                                                         style="width:130px;margin-left:5px"
+                                                                                         value="#{newContactController.customer.email}"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <script>initDefaultValue('#{newContactController.customer.telephoneDefault}')</script>
+                                                                <h:inputHidden id="defaultTelephoneValue" value="#{newContactController.customer.telephoneDefault}"/>
+                                                                <a4j:commandButton image="/img/tl_save.png"
+                                                                                   actionListener="#{newContactController.saveListener}"
+                                                                                   styleClass="pointer" 
+                                                                                   render="telephonyEdit,panelHiddenValue"
+                                                                                   limitRender="true"
+                                                                                   style="padding: 10px"
+                                                                                   onclick="saveTelephony()">
+                                                                </a4j:commandButton>
+
+                                                            </td>
+                                                            <td align="left" valign="top" width="5" background="#{request.contextPath}/img/tl_f05_2.png">
+                                                                <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td widht="5" background="#{request.contextPath}/img/tl_f04_2.png"></td>
+                                                            <td width="313" bgcolor="#90d3db">
+
+                                                            </td>
+                                                            <td width="77">
+                                                                 <h:panelGroup id="panelView">
+                                                                    <a4j:commandLink actionListener="#{userSession.changeTelephonyEditListener}"
+                                                                                        render="telephonyEdit,panelHiddenValue"
+                                                                                        immediate="true"
+                                                                                        rendered="#{userSession.telephonyEdit eq 'edit'}">
+                                                                        <f:param name="telephonyEdit" value="view"/>
+                                                                        <h:graphicImage url="/img/tl_tab02.png"/>
+                                                                    </a4j:commandLink>
+                                                                </h:panelGroup>
+                                                            </td>
+                                                            <td width="5"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                        </tr>
+                                                    </table>
+                                                    <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td widht="5"><h:graphicImage url="/img/tl_f06_2.png" width="5" height="5"/></td>
+                                                            <td background="#{request.contextPath}/img/tl_f07_3.png" width="313">
+
+                                                            </td>
+                                                            <td width="77">
+                                                                <h:graphicImage url="/img/tl_f07_4.png"/>
+                                                            </td>
+                                                            <td width="5"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                        </tr>
+                                                    </table>                                                    
+                                                    </h:panelGroup>
+                                                </h:panelGroup>
+                                                <h:panelGroup rendered="#{userSession.telephonyEdit eq 'view'}">
+                                                    <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                        <tr>
+                                                            <td width="5"><h:graphicImage url="/img/tl_f01.png"/></td>
+                                                            <td background="#{request.contextPath}/img/tl_f02.png"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                            <td width="5"><h:graphicImage url="/img/tl_f03.png" width="5" height="5"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td background="#{request.contextPath}/img/tl_f04.png"></td>
+                                                            <td bgcolor="#54bbc8" valign="top">
+                                                                <table border="0" cellspacing="0" cellpadding="0" style="margin-left: 30px">
+                                                                    <tr>
+                                                                        <td width="205" align="left" valign="middle" bgcolor="#54bbc8">
+                                                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                                                <tr>
+                                                                                    <td height="5"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                                                </tr>
+                                                                                <tr>
+                                                                                    <td height="41" align="left" valign="middle"  background="#{request.contextPath}/img/tl_number.png">
+                                                                                        <table border="0" cellpadding="0" cellspacing="0">
+                                                                                            <tr>
+                                                                                                <td width="25">
+                                                                                                    <input type="radio" id="rdoContactNo" name="rdoContactNo" value="insert" onclick="clickInsert();"
+                                                                                                           style="margin-left: 5px"/>                                            
+                                                                                                </td>
+                                                                                                <td width="100">
+                                                                                                    <h:inputText styleClass="textfield" id="contactNo" size="10" style="width: 100px"
+                                                                                                                 onkeypress="return isNumberKey(event)" onkeyup="setPhoneNo();"/>
+                                                                                                </td>
+                                                                                                <td width="25">ext.</td>
+                                                                                                <td width="52">
+                                                                                                    <h:inputText styleClass="textfield" id="extNo" value="#{userSession.dialExt}" 
+                                                                                                                 onkeypress="return isNumberKey(event)" size="5" style="width: 30px"
+                                                                                                                 onkeyup="setExtNo();"  >
+                                                                                                         <a4j:ajax event="blur" render="callExt"  execute="@this"/>
+                                                                                                    </h:inputText>
+                                                                                                </td>
+                                                                                            </tr>
+                                                                                        </table>
+
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                        <td valign="middle" align="left">
+                                                                            <a4j:commandLink actionListener="#{newContactController.toCloseNoListener}"
+                                                                                             render="panelTelephony"
+                                                                                             oncomplete="document.getElementById('frm:contactNo').value=''">
+                                                                                <img src="#{request.contextPath}/img/tl_icon07.png" id="btnClose" name="btnClose" border="0" alt="Close" title="Close"
+                                                                                     onmouseout="changeImage('btnClose', '#{request.contextPath}/img/tl_icon07.png')" 
+                                                                                     onmouseover="changeImage('btnClose', '#{request.contextPath}/img/tl_icon07_2.png')"/>
+                                                                            </a4j:commandLink>
+                                                                        </td>
+                                                                        <td valign="middle" align="left" width="5">
+                                                                            <ui:remove><h:graphicImage url="/img/tl_st02.png" alt=""/></ui:remove>
+                                                                        </td>
+                                                                        <td>
+                                                                            <h:inputHidden id="callNo" value="#{userSession.dialNo}"/>
+                                                                            <h:inputHidden id="callExt" value="#{userSession.dialExt}"/>
+                                                                            <!-- hide no. -->
+                                                                            <h:panelGroup id="panelHiddenValue">
+                                                                                <h:panelGroup id="panelHiddenValueNotNull" rendered="#{userSession.customerDetail ne null}">
+                                                                                    <h:inputHidden id="defaultPhoneNoHide" value="#{userSession.customerDetail.defaultPhoneNoHide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="defaultPhoneNoExtHide" value="#{userSession.customerDetail.defaultPhoneNoExtHide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="mobileHide" value="#{userSession.customerDetail.mobilePhoneHide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="homeHide" value="#{userSession.customerDetail.homePhoneHide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="officeHide" value="#{userSession.customerDetail.officePhoneHide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact1Hide" value="#{userSession.customerDetail.contactPhone1Hide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact2Hide" value="#{userSession.customerDetail.contactPhone2Hide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact3Hide" value="#{userSession.customerDetail.contactPhone3Hide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact4Hide" value="#{userSession.customerDetail.contactPhone4Hide}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact5Hide" value="#{userSession.customerDetail.contactPhone5Hide}" rendered="#{userSession.customerDetail ne null}"/>
+
+                                                                                    <h:inputHidden id="defaultPhoneNoShow" value="#{userSession.customerDetail.defaultPhoneNo}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="defaultPhoneNoExtShow" value="#{userSession.customerDetail.defaultPhoneNoExt}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="mobileShow" value="#{userSession.customerDetail.mobilePhone}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="homeShow" value="#{userSession.customerDetail.homePhone}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="officeShow" value="#{userSession.customerDetail.officePhone}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact1Show" value="#{userSession.customerDetail.contactPhone1}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact2Show" value="#{userSession.customerDetail.contactPhone2}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact3Show" value="#{userSession.customerDetail.contactPhone3}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact4Show" value="#{userSession.customerDetail.contactPhone4}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contact5Show" value="#{userSession.customerDetail.contactPhone5}" rendered="#{userSession.customerDetail ne null}"/>
+
+                                                                                    <h:inputHidden id="homeExtShow" value="#{userSession.customerDetail.homeExt}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="officeExtShow" value="#{userSession.customerDetail.officeExt}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contactExt1Show" value="#{userSession.customerDetail.contactExt1}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contactExt2Show" value="#{userSession.customerDetail.contactExt2}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contactExt3Show" value="#{userSession.customerDetail.contactExt3}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contactExt4Show" value="#{userSession.customerDetail.contactExt4}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                    <h:inputHidden id="contactExt5Show" value="#{userSession.customerDetail.contactExt5}" rendered="#{userSession.customerDetail ne null}"/>
+                                                                                </h:panelGroup>
+                                                                            </h:panelGroup>
+                                                                            <!-- hide no. -->
+                                                                            <h:panelGroup id="hiddenPanelValue" >
+                                                                                <h:inputHidden id="dialStatusH" value="#{userSession.dialStatus}"/>
+                                                                                <h:inputHidden id="showContactSummaryH" value="#{userSession.showContactSummary}"/>
+                                                                                <h:inputHidden id="hasKnowledgeBase" value="#{userSession.hasKnowledgeBase}"/>
+                                                                                <h:inputHidden id="clickNextCallH" value="#{userSession.clickNextCall}"/>
+                                                                                <h:inputHidden id="clickCallH" value="#{userSession.dialClicked}"/>
+                                                                            </h:panelGroup>
+                                                                            <a4j:jsFunction name="clickExtNo" execute="@this" immediate="true">
+                                                                                <a4j:param name="dialExt" assignTo="#{userSession.dialExt}"/>
+                                                                            </a4j:jsFunction>
+                                                                            <a4j:jsFunction name="changeButton" execute="@this" immediate="true">
+                                                                                <a4j:param name="param1" assignTo="#{userSession.dialStatus}"/>
+                                                                            </a4j:jsFunction>
+                                                                            <a4j:jsFunction name="changeButton1" execute="@this" immediate="true" 
+                                                                                            render="callNo,callExt,dialStatusH,showContactSummaryH,clickNextCallH,clickCallH,panelDial,contactResultCodeHide,contactResultCodeShow,panelButtonNonlife,panelButtonLife,productList">
+                                                                            </a4j:jsFunction>
+                                                                            <a4j:jsFunction name="onStateWrap" actionListener="#{userSession.synStateWrap}" immediate="true" execute="@this" 
+                                                                                            render="callNo,callExt,dialStatusH,showContactSummaryH,clickNextCallH,clickCallH,panelDial,contactResultCodeHide,contactResultCodeShow,panelButtonNonlife,panelButtonLife,productList">
+                                                                            </a4j:jsFunction>
+                                                                            <a4j:jsFunction name="onStatePark" actionListener="#{userSession.synStatePark}" immediate="true" execute="@this" 
+                                                                                            render="callNo,callExt,dialStatusH,showContactSummaryH,clickNextCallH,clickCallH,panelDial,contactResultCodeHide,contactResultCodeShow,panelButtonNonlife,panelButtonLife,productList">
+                                                                            </a4j:jsFunction>
+                                                                            <a4j:jsFunction name="onStateActive" actionListener="#{userSession.saveTelephonyTrackID}" immediate="true" execute="@this" >
+                                                                            </a4j:jsFunction>
+
+                                                                            <a4j:jsFunction name="resetRediobuttonContactBar" execute="@this" immediate="true"
+                                                                                            actionListener="#{newContactController.resetSelect}" render="panelContactStatus,panelTelephony">
+                                                                            </a4j:jsFunction>
+
+                                                                            <h:panelGroup id="panelDial">                                                                
+                                                                                <a4j:region>
+                                                                                    <h:panelGroup id="telephonyDial" >
+                                                                                        <h:panelGroup rendered="#{userSession.assignmentDetail ne null ? (userSession.assignmentDetail.dmc ? (userSession.assignmentDetail.callAttempt2 lt userSession.assignmentDetail.maxCall2 ? true : false) : (userSession.assignmentDetail.callAttempt lt userSession.assignmentDetail.maxCall ? true : false)) : true}">
+                                                                                            <h:panelGroup rendered="#{userSession.dialShow and not userSession.dialClicked and not newContactController.doNotCall}">
+                                                                                                <a4j:commandLink immediate="true" execute="@this" limitRender="true"
+                                                                                                                 oncomplete="clickCall()" actionListener="#{newContactController.resetSelect}" render="panelContactStatus,contactResultShow">
+                                                                                                    <img src="#{request.contextPath}/img/tl_icon01.png" id="btnDial" name="btnDial" alt="Dial" title="Dial"
+                                                                                                             onmouseout="changeImage('btnDial', '#{request.contextPath}/img/tl_icon01.png')" 
+                                                                                                             onmouseover="changeImage('btnDial', '#{request.contextPath}/img/tl_icon01_2.png')"/>
+                                                                                                </a4j:commandLink>
+                                                                                                <h:panelGroup rendered="#{newContactController.doNotCall}">
+                                                                                                    <h:panelGroup>
+                                                                                                        <img src="#{request.contextPath}/img/tl_icon01_dis.png" name="btnDial" border="0" alt="Dial" title="WRAP"/>
+                                                                                                    </h:panelGroup>
+                                                                                                </h:panelGroup>
+                                                                                            </h:panelGroup>
+                                                                                        </h:panelGroup>
+                                                                                    </h:panelGroup>
+
+                                                                                    <h:panelGroup id="telephonyActive" rendered="#{userSession.hangupShow}">
+                                                                                        <table border="0" cellpadding="0" cellspacing="0" >
+                                                                                            <tr>
+                                                                                                <td>
+                                                                                                    <a4j:commandLink actionListener="#{userSession.hangupTelephonyListener}"
+                                                                                                                     immediate="true" execute="@this" limitRender="true"
+                                                                                                                     render="panelDial, msgTele" oncomplete="clickHangup()">
+                                                                                                            <img src="#{request.contextPath}/img/tl_icon04.png" id="btnHang" name="btnHang" alt="Hangup" title="Hangup"
+                                                                                                                 onmouseout="changeImage('btnHang', '#{request.contextPath}/img/tl_icon04.png')" 
+                                                                                                                 onmouseover="changeImage('btnHang', '#{request.contextPath}/img/tl_icon04_2.png')"/>
+                                                                                                    </a4j:commandLink>
+                                                                                                </td>
+                                                                                                <ui:remove>
+                                                                                                <td>
+                                                                                                     <a4j:commandLink immediate="true" execute="@this" limitRender="true" 
+                                                                                                                      actionListener="#{userSession.extTelephonyListener}" 
+                                                                                                                      oncomplete="clickExt()" >
+                                                                                                             <img src="#{request.contextPath}/img/tl_icon05.png" id="btnExt" name="btnExt" alt="Ext." title="Ext."
+                                                                                                         onmouseout="changeImage('btnExt', '#{request.contextPath}/img/tl_icon05.png')" 
+                                                                                                         onmouseover="changeImage('btnExt', '#{request.contextPath}/img/tl_icon05_2.png')"/>
+                                                                                                    </a4j:commandLink>
+                                                                                                </td>
+                                                                                                </ui:remove>
+                                                                                            </tr>
+                                                                                        </table>
+                                                                                    </h:panelGroup>
+
+                                                                                    <h:panelGroup id="telephonyNextCall" rendered="#{userSession.nextcallShow}">
+                                                                                        <h:panelGroup rendered="#{newContactController.mainContactResultCode eq null or newContactController.mainContactResultCode eq ''}">
+                                                                                            <img src="#{request.contextPath}/img/tl_dis.png" border="0" alt="Next Call" title="Next Call"/>
+                                                                                        </h:panelGroup>
+                                                                                        <h:panelGroup rendered="#{newContactController.mainContactResultCode ne null and newContactController.mainContactResultCode ne ''}">
+                                                                                            <a4j:commandLink actionListener="#{helperBean.contactSummaryPopupListener}"
+                                                                                                            immediate="true"
+                                                                                                             render="panelDial"
+                                                                                                             onclick="clickNextCall();">
+                                                                                                <img src="#{request.contextPath}/img/tl_icon06.png" id="btnNextcall" name="btnNextcall" border="0" alt="Next Call" title="Next Call"
+                                                                                                     onmouseout="changeImage('btnNextcall', '#{request.contextPath}/img/tl_icon06.png')" 
+                                                                                                     onmouseover="changeImage('btnNextcall', '#{request.contextPath}/img/tl_icon06_2.png')"/>
+                                                                                            </a4j:commandLink>
+                                                                                        </h:panelGroup>
+                                                                                    </h:panelGroup>
+
+                                                                                </a4j:region>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                <ui:remove>
+                                                                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                                    <tr>
+                                                                        <td width="30"></td>
+                                                                        <td width="6"><h:graphicImage url="/img/tl_bullet01.png" width="6" height="10"/></td>
+                                                                        <td align="left">
+                                                                            <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                                                <tr>
+                                                                                    <td class="white01">
+                                                                                        <input id="textReason" value="" style="background-color:transparent;margin: 0px;padding: 0px;border:0px;width:100%;color: #FFFFFF" disabled="true"/>
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </table>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                                </ui:remove>
+                                                                <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                                    <tr>
+                                                                        <td width="20"></td>
+                                                                        <td align="left">
+                                                                            <h:panelGroup id="panelContactStatus">
+                                                                                <a4j:region>
+                                                                                    <h:panelGroup>
+                                                                                        <h:selectOneRadio value="#{newContactController.contactStatus}">
+                                                                                            <f:selectItems value="#{newContactController.contactStatusList}" 
+                                                                                                           itemDisabled="#{userSession.callCategory eq 'outbound' and (list[0] eq 'Unreachable' or list[0] eq 'CS')}"
+                                                                                                           var="list"  
+                                                                                                           itemValue="#{list[1]}" 
+                                                                                                           itemLabel="#{list[0]}"/>
+                                                                                            <a4j:ajax event="click" execute="@this"
+                                                                                                      listener="#{newContactController.contactStatusListener}" 
+                                                                                                      render="contactResultShow,contactResultHide" />
+                                                                                        </h:selectOneRadio>
+                                                                                    </h:panelGroup>
+                                                                                </a4j:region>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                        <td align="right" width="15">
+                                                                            <h:panelGroup id="panelPlus">
+                                                                                <a4j:commandButton image="/img/tl_open.png" 
+                                                                                                   actionListener="#{userSession.changeModeListener}"
+                                                                                                   render="panelPlus,panelSub,panelTelephony,rdoContactNo,contactNo,clickCallH,panelHiddenValue"
+                                                                                                   rendered="#{userSession.mode eq 'hide'}"
+                                                                                                   limitRender="true"
+                                                                                                   immediate="true"
+                                                                                                   execute="@this">
+                                                                                    <f:param name="mode" value="show"/>
+                                                                                </a4j:commandButton>
+                                                                            </h:panelGroup>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                            <td align="left" valign="top" width="5" background="#{request.contextPath}/img/tl_f05.png">
+                                                                <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <h:panelGroup layout="div" id="panelTelephony" style="position: absolute; visibility: visible;">
+                                                        <h:panelGroup rendered="#{userSession.mode eq 'show'}">
+                                                            <a4j:region>
+                                                            <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td width="5" background="#{request.contextPath}/img/tl_f04.png"></td>
+                                                                    <td align="left" bgcolor="#54bbc8">
+                                                                        <h:selectOneMenu id="contactResultShow"
+                                                                                         styleClass="bgSelectboxDial" style="width:200px" 
+                                                                                         value="#{newContactController.contactResultId}"
+                                                                                         valueChangeListener="#{newContactController.changeContactResultListener}">
+                                                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                            <f:selectItems value="#{newContactController.mainContactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            <a4j:ajax event="change" render="panelDial,panelContactResult" execute="@this"/>
+                                                                        </h:selectOneMenu>
+
+                                                                    </td>
+                                                                    <td align="left" valign="top" width="5" background="#{request.contextPath}/img/tl_f05.png">
+                                                                        <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td width="5" background="#{request.contextPath}/img/tl_f04.png"></td>
+                                                                    <td align="left" bgcolor="#54bbc8">
+                                                                        <table cellpadding="0" cellspacing="0" border="0">
+                                                                            <tr>
+                                                                                <td valign="top">
+                                                                                    <table cellpadding="2" cellspacing="0" border="0">
+                                                                                        <h:panelGroup rendered="#{userSession.customerDetail.contactPhone1 ne null and userSession.customerDetail.contactPhone1 ne ''}">
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.contactPhone1Close}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'contact1'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="contact1"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'contact1'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="contact1"/>
+                                                                                                    </h:panelGroup>
+
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.contactPhone1Close}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is01.png" alt="Contact Phone 1"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone1}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone1Hide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02" width="30"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactExt1}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'contact1'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.contactPhone1Close}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.contactPhone1Reason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </h:panelGroup>
+                                                                                        <h:panelGroup rendered="#{userSession.customerDetail.contactPhone2 ne null and userSession.customerDetail.contactPhone2 ne ''}">
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.contactPhone2Close}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'contact2'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="contact2"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'contact2'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="contact2"/>
+                                                                                                    </h:panelGroup>
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.contactPhone2Close}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is01.png" alt="Contact Phone 2"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone2}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone2Hide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02" width="30"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactExt2}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'contact2'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.contactPhone2Close}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.contactPhone2Reason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </h:panelGroup>
+                                                                                        <h:panelGroup rendered="#{userSession.customerDetail.contactPhone3 ne null and userSession.customerDetail.contactPhone3 ne ''}">
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.contactPhone3Close}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'contact3'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="contact3"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'contact3'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="contact3"/>
+                                                                                                    </h:panelGroup>
+
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.contactPhone3Close}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is01.png" alt="Contact Phone 3"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone3}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone3Hide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02" width="30"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactExt3}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'contact3'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.contactPhone3Close}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.contactPhone3Reason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </h:panelGroup>
+                                                                                        <h:panelGroup rendered="#{userSession.customerDetail.contactPhone4 ne null and userSession.customerDetail.contactPhone4 ne ''}">
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.contactPhone4Close}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'contact4'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="contact4"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'contact4'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" 
+                                                                                                               value="contact4"/>
+                                                                                                    </h:panelGroup>
+
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.contactPhone4Close}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is01.png" alt="Contact Phone 4"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone4}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone4Hide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02" width="30"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactExt4}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'contact4'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.contactPhone4Close}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.contactPhone4Reason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </h:panelGroup>
+                                                                                        <h:panelGroup rendered="#{userSession.customerDetail.contactPhone5 ne null and userSession.customerDetail.contactPhone5 ne ''}">
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{newContactController.customer.contactPhone5Close}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'contact5'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="contact5"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'contact5'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="contact5"/>
+                                                                                                    </h:panelGroup>
+
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.contactPhone5Close}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is01.png" alt="Contact Phone 5"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone5}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactPhone5Hide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02" width="30"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <h:outputText value="#{userSession.customerDetail.contactExt5}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'contact5'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.contactPhone5Close}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.contactPhone5Reason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        </h:panelGroup>
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.homePhoneClose}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'home'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="home"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'home'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="home"/>
+                                                                                                    </h:panelGroup>
+
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.homePhoneClose}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is02.png" alt="Home Phone"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.homePhone != null and userSession.customerDetail.homePhone ne '') ? fn:substring(userSession.customerDetail.homePhone, 0, fn:length(userSession.customerDetail.homePhone) - 4) : ''}"/><h:outputText value="#{(userSession.customerDetail.homePhone != null and userSession.customerDetail.homePhone ne '') ? '****' : ''}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.homePhone}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.homePhoneHide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02" width="30"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.homeExt == null or userSession.customerDetail.homeExt == '') ? '' : '****'}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.homeExt}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'home'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.homePhoneClose}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.homePhoneReason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.officePhoneClose}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'office'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="office"/>
+                                                                                                    </h:panelGroup>
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'office'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="office"/>
+                                                                                                    </h:panelGroup>
+
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.officePhoneClose}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is03.png" alt="Office Phone"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.officePhone != null and userSession.customerDetail.officePhone ne '') ? fn:substring(userSession.customerDetail.officePhone, 0, fn:length(userSession.customerDetail.officePhone) - 4) : ''}"/><h:outputText value="#{(userSession.customerDetail.officePhone != null and userSession.customerDetail.officePhone ne '') ? '****' : ''}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.officePhone}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.officePhoneHide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.officeExt == null or userSession.customerDetail.officeExt == '') ? '' : '****'}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.officeExt}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'office'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.officePhoneClose}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.officePhoneReason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td><h:panelGroup rendered="#{not newContactController.customer.mobilePhoneClose}">
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault eq 'mobile'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);" checked="true"
+                                                                                                               value="mobile"/>
+                                                                                                    </h:panelGroup> 
+                                                                                                    <h:panelGroup rendered="#{newContactController.customer.telephoneDefault ne 'mobile'}">
+                                                                                                        <input type="radio" id="rdoContactNo" name="rdoContactNo" 
+                                                                                                               onclick="clickContactNo(this.form);"
+                                                                                                               value="mobile"/>
+                                                                                                    </h:panelGroup> 
+                                                                                                </h:panelGroup>
+                                                                                                <h:panelGroup rendered="#{newContactController.customer.mobilePhoneClose}">
+                                                                                                <input type="radio" id="rdoContactNo" name="rdoContactNo" disabled="true"/>
+                                                                                                </h:panelGroup>
+                                                                                            </td>
+                                                                                            <td><h:graphicImage url="/img/tl_is04.png" alt="Mobile Phone"/></td>
+                                                                                            <td class="gray02" colspan="3">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.mobilePhone != null and userSession.customerDetail.mobilePhone ne '') ? fn:substring(userSession.customerDetail.mobilePhone, 0, fn:length(userSession.customerDetail.mobilePhone) - 4) : ''}"/><h:outputText value="#{(userSession.customerDetail.mobilePhone != null and userSession.customerDetail.mobilePhone ne '') ? '****' : ''}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.mobilePhone}" rendered="#{userSession.userGroup.hidePhoneNo eq null or userSession.userGroup.hidePhoneNo eq ''}"/>
+                                                                                                <h:outputText value="#{userSession.customerDetail.mobilePhoneHide}" rendered="#{userSession.userGroup.hidePhoneNo ne null and userSession.userGroup.hidePhoneNo ne ''}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st01.png" alt="Default" rendered="#{newContactController.customer.telephoneDefault eq 'mobile'}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:graphicImage url="/img/tl_st02.png" alt="Close" rendered="#{newContactController.customer.mobilePhoneClose}"/>
+                                                                                            </td>
+                                                                                            <td>
+                                                                                                <h:outputText styleClass="reasonWhite" value="#{newContactController.customer.mobilePhoneReason}"/>
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><h:graphicImage url="/img/tl_is05.png" alt="Fax Phone"/></td>
+                                                                                            <td class="gray02">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.fax != null and userSession.customerDetail.fax ne '') ? fn:substring(userSession.customerDetail.fax, 0, fn:length(userSession.customerDetail.fax) - 4) : ''}"/><h:outputText value="#{(userSession.customerDetail.fax != null and userSession.customerDetail.fax ne '') ? '****' : ''}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.fax}"/>
+                                                                                            </td>
+                                                                                            <td class="gray02"><h:outputText value="ext."/></td>
+                                                                                            <td class="gray02">
+                                                                                                <ui:remove><h:outputText value="#{(userSession.customerDetail.faxExt == null or userSession.customerDetail.faxExt == '') ? '' : '****'}"/></ui:remove>
+                                                                                                <h:outputText value="#{userSession.customerDetail.faxExt}"/>
+                                                                                            </td>
+                                                                                            <td>
+
+                                                                                            </td>
+                                                                                            <td>
+
+                                                                                            </td>
+                                                                                            <td>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td></td>
+                                                                                            <td><h:graphicImage url="/img/tl_is06.png" alt="Email"/></td>
+                                                                                            <td class="gray02" colspan="3"><h:outputText value="#{userSession.customerDetail.email}"/></td>
+                                                                                            <td>
+
+                                                                                            </td>
+                                                                                            <td>
+
+                                                                                            </td>
+                                                                                            <td>
+
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                    </table>
+                                                                                    <script>showDefaultNo();</script>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                    <td align="left" valign="top" width="5" background="#{request.contextPath}/img/tl_f05.png">
+                                                                        <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td width="5" background="#{request.contextPath}/img/tl_f04.png"></td>
+                                                                    <td align="left" bgcolor="#54bbc8"></td>
+                                                                    <td align="right" bgcolor="#54bbc8" valign="bottom" width="114">
+                                                                        <h:panelGroup id="panelSub">
+                                                                            <a4j:commandButton image="/img/tl_close.png" 
+                                                                                               actionListener="#{userSession.changeModeListener}"
+                                                                                               render="panelPlus,panelSub,panelTelephony,panelHiddenValue"
+                                                                                               rendered="#{userSession.mode eq 'show'}"
+                                                                                               immediate="true">
+                                                                                <f:param name="mode" value="hide"/>
+                                                                            </a4j:commandButton>
+                                                                        </h:panelGroup>
+                                                                    </td>
+                                                                    <td align="left" valign="top" width="5" background="#{request.contextPath}/img/tl_f05.png">
+                                                                        <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td width="5" background="#{request.contextPath}/img/tl_f04.png"></td>
+                                                                    <td align="left" bgcolor="#54bbc8"></td>
+                                                                    <td align="right" bgcolor="#54bbc8" valign="bottom" width="114">
+                                                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                                            <tr>
+                                                                                <td bgcolor="#FFFFFF">
+                                                                                        <a4j:commandLink actionListener="#{userSession.changeTelephonyEditListener}"
+                                                                                                         render="telephonyEdit,panelHiddenValue"
+                                                                                                         rendered="#{userSession.telephonyEdit eq 'view'}"
+                                                                                                         immediate="true">
+                                                                                            <f:param name="telephonyEdit" value="edit"/>
+                                                                                            <h:graphicImage url="/img/tl_tab01.png"/>
+                                                                                        </a4j:commandLink>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                    <td align="left" valign="top" width="5">
+                                                                        <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            </a4j:region>
+                                                        </h:panelGroup>
+                                                        <h:panelGroup rendered="#{userSession.mode eq 'hide'}">
+                                                            <a4j:region>
+                                                            <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                                <tr>
+                                                                    <td width="5" background="#{request.contextPath}/img/tl_f04.png"></td>
+                                                                    <td align="left" bgcolor="#54bbc8">
+                                                                        <h:selectOneMenu id="contactResultHide"
+                                                                                         styleClass="bgSelectboxDial" style="width:200px" 
+                                                                                         value="#{newContactController.contactResultId}"
+                                                                                         valueChangeListener="#{newContactController.changeContactResultListener}">
+                                                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                            <f:selectItems value="#{newContactController.mainContactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                                            <a4j:ajax event="valueChange" render="panelDial,panelContactResult" execute="@this"/>
+                                                                        </h:selectOneMenu>
+                                                                    </td>
+                                                                    <td align="right" bgcolor="#54bbc8" valign="bottom" width="114">
+                                                                        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+                                                                            <tr>
+                                                                                <td bgcolor="#FFFFFF">
+                                                                                    <h:panelGroup id="panelEdit">
+                                                                                        <a4j:commandLink actionListener="#{userSession.changeTelephonyEditListener}"
+                                                                                                         render="telephonyEdit,panelHiddenValue"
+                                                                                                         rendered="#{userSession.telephonyEdit eq 'view'}"
+                                                                                                         immediate="true">
+                                                                                            <f:param name="telephonyEdit" value="edit"/>
+                                                                                            <h:graphicImage url="/img/tl_tab01.png"/>
+                                                                                        </a4j:commandLink>
+                                                                                    </h:panelGroup>
+                                                                                </td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </td>
+                                                                    <td align="left" valign="top" width="5">
+                                                                        <h:graphicImage url="/img/clear.gif" width="1" height="1"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                            <script>defautNo();</script>
+                                                            
+                                                            </a4j:region>
+                                                        </h:panelGroup>
+                                                        <table width="400" border="0" cellpadding="0" cellspacing="0">
+                                                            <tr>
+                                                                <td widht="5"><h:graphicImage url="/img/tl_f06.png" width="5" height="5"/></td>
+                                                                <td width="276" background="#{request.contextPath}/img/tl_f07.png">
+
+                                                                </td>
+                                                                <td width="114">
+                                                                    <h:graphicImage url="/img/tl_f07_2.png" width="114" height="5"/>
+                                                                </td>
+                                                                <td width="5"><h:graphicImage url="/img/clear.gif" width="1" height="1"/></td>
+                                                            </tr>
+                                                        </table>
+                                                        
+                                                        <h:panelGroup id="msgTele"  >
+                                                            <h:outputText value=" #{userSession.msgTelephony} " 
+                                                                          style="background-color: #f07818;border-radius: 5px;font-size:14px;color:#fcebb6;font-family: Arial;display: table;" />
+                                                        </h:panelGroup>
+
+                                                    </h:panelGroup>
+                                                </h:panelGroup>  
+                                            </h:panelGroup>
+                                            </a4j:region>
+
+                                        <a4j:jsFunction name="setTelNoB4NextCall"
+                                                        immediate="true" 
+                                                        execute="@this" 
+                                                        limitRender="true"
+                                                        oncomplete="dialTelephony()">
+                                            <a4j:param name="param1" assignTo="#{userSession.dialNo}"/>
+                                            <a4j:param name="param2" assignTo="#{userSession.contactTo}"/>
+                                        </a4j:jsFunction>
+
+                                        <a4j:jsFunction name="dialTelephony"
+                                                        immediate="true" execute="@this" limitRender="true"
+                                                        render="panelDial, msgTele, hiddenPanelValue"
+                                                        actionListener="#{userSession.dialTelephonyListener}">
+                                        </a4j:jsFunction>
+
+                                        <a4j:jsFunction name="initNextCall" 
+                                                        actionListener="#{newContactController.nextCallListener}"
+                                                        render="contactSummaryPopupContainer,telephonyEdit,dialStatusH,showContactSummaryH,clickNextCallH,clickCallH"
+                                                        immediate="true">
+                                        </a4j:jsFunction>
+
+                                        <script>defautNo();</script>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5" alt=""/></td>
+                </tr>
+                </table>
+
+            </h:panelGroup>
+        </rich:togglePanelItem> 
+    </rich:togglePanel>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td width="10" style="background-image: url('#{request.contextPath}/img/box04.png'); background-repeat: repeat-x; background-position: left; width: 10px; height: 10px"></td>
+            <td style="background-image: url('#{request.contextPath}/img/box07.png'); background-repeat: repeat-x; background-position: bottom; height: 10px;"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+            <td width="10" style="background-image: url('#{request.contextPath}/img/box03.png'); background-repeat: repeat-x; background-position: right; width: 10px; height: 10px"></td>
+        </tr>
+    </table>   
+    
+    <ui:insert name="detail_1">Detail</ui:insert>
+    <h:panelGroup rendered="#{userSession.param1 ne null and userSession.param1 ne ''}">
+        <script>
+            //alert('#{userSession.param1}');
+            if(document.getElementById("frm:clickCallH") !== null)
+                document.getElementById("frm:clickCallH").value = "true";
+            if(document.getElementById("frm:showContactSummaryH") !== null)
+                document.getElementById("frm:showContactSummaryH").value = "true";
+            if(document.getElementById("frm:clickNextCallH") !== null)
+                document.getElementById('frm:clickNextCallH').value = "false";
+        </script>
+    </h:panelGroup>
+</ui:define>
+
+</ui:composition>

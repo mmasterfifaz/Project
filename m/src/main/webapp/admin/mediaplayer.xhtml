@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <title>Media Player : Track ID : #{mediaPlayerController.id}</title>
+    </h:head>
+    <h:body>
+        <table cellpadding="3" cellspacing="0" border="0" width="100%">
+            <tr>
+                <td valign="top">Track ID: #{mediaPlayerController.id}</td>
+            </tr>
+            <tr>
+                <td valign="top" align="center">
+                    <!--
+                    <audio controls="controls">
+                        <source src="#{mediaPlayerController.mediaPath}" type="audio/mpeg"></source>
+                        Your browser does not support the audio element.
+                    </audio>
+                    -->
+                        <OBJECT ID="MediaPlayer" WIDTH="300" HEIGHT="90" CLASSID="CLSID:22D6F312-B0F6-11D0-94AB-0080C74C7E95"
+                                STANDBY="Loading Windows Media Player components..." TYPE="application/x-oleobject">
+                            <PARAM NAME="FileName" VALUE="#{mediaPlayerController.mediaPath}"/>
+                            <PARAM name="ShowControls" VALUE="true"/>
+                            <param name="ShowStatusBar" value="true"/>
+                            <PARAM name="ShowDisplay" VALUE="false"/>
+                            <PARAM name="autostart" VALUE="true"/>
+                            <EMBED TYPE="application/x-mplayer2" SRC="#{mediaPlayerController.mediaPath}" NAME="MediaPlayer"
+                                   WIDTH="300" HEIGHT="90" ShowControls="true" ShowStatusBar="0" ShowDisplay="0" autostart="1"> </EMBED>
+                    </OBJECT>
+                </td>
+            </tr>
+        </table>
+    </h:body>
+</html>

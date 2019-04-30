@@ -1,0 +1,854 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing List Upload: Add</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="panelGroupMarketing">
+                    <h:inputHidden value="#{marketingEditController.mode}"/>
+                    <h:inputHidden value="#{marketingEditController.marketing.id}"/>
+                    <a4j:region id="regionStep1">
+                        <h:panelGroup id="panelGroupStep1">
+                            <h:panelGroup rendered="#{marketingEditController.step eq 1}" >
+                                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                    <tr>
+                                        <td width="400" align="right" valign="top">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top"><h:outputText value="#{marketingEditController.message}" style="color:red"/>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Code:</td>
+                                        <td><h:inputText id="code" value="#{marketingEditController.marketing.code}" styleClass="textfield" size="10" required="true" maxlength="10"
+                                                         requiredMessage="Code is required" disabled="#{marketingEditController.mode eq 'edit' and marketingEditController.marketing.datasource eq 'auto-file'}">
+                                                <rich:validator/>
+                                            </h:inputText>
+                                            &#160;<rich:message id="msgCode" for="code" styleClass="required"/>
+                                            <h:outputText value="#{marketingEditController.messageDup}" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Name:</td>
+                                        <td valign="top">
+                                            <h:inputText id="name" value="#{marketingEditController.marketing.name}" styleClass="textfield" size="50" required="true"
+                                                         requiredMessage="Name is required">
+                                                <rich:validator/>
+                                            </h:inputText>
+                                            &#160;<rich:message id="msgName" for="name" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Effective Date From:</td>
+                                        <td valign="top">
+                                            <rich:calendar id="startdate" value="#{marketingEditController.marketing.startDate}" 
+                                                           inputClass="textfield" inputSize="15" buttonClass="rfcalbtn" 
+                                                           datePattern="#{msg.dateTimePattern}" locale="#{msg.locale}" defaultTime="00:00"
+                                                           required="true" requiredMessage="Start Date is required">
+                                                <rich:validator/>
+                                            </rich:calendar>
+                                            &#160;<rich:message id="msgStartdate" for="startdate" style="color:red"/>
+                                            To:
+                                            <rich:calendar id="enddate" value="#{marketingEditController.marketing.endDate}" 
+                                                           inputClass="textfield" inputSize="15" buttonClass="rfcalbtn" 
+                                                           datePattern="#{msg.dateTimePattern}" locale="#{msg.locale}"  defaultTime="23:59"
+                                                           required="true" requiredMessage="End Date is required">
+                                                <rich:validator/>
+                                            </rich:calendar>
+                                            &#160;<rich:message id="msgEnddate" for="enddate" style="color:red"/>
+                                            <h:outputText value="#{marketingEditController.messageDate}" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">Description:</td>
+                                        <td valign="top">
+                                            <h:inputTextarea rows="5" cols="30" value="#{marketingEditController.marketing.description}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Data Source:</td>
+                                        <td valign="top">
+                                            <h:panelGroup rendered="#{marketingEditController.mode eq 'add'}">
+                                                <h:selectOneMenu  value="#{marketingEditController.marketing.datasource}">
+                                                    <f:selectItem itemLabel="File" itemValue="file"/>
+                                                    <a4j:ajax event="change" execute="@this" render="datasource"/>
+                                                </h:selectOneMenu>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{marketingEditController.mode eq 'edit'}">
+                                                <h:selectOneMenu  value="#{marketingEditController.marketing.datasource}" disabled="true">
+                                                    <f:selectItem itemLabel="File" itemValue="file"/>                                 
+                                                    <f:selectItem itemLabel="File-Auto" itemValue="auto-file"/>
+                                                    <a4j:ajax event="change" execute="@this" render="datasource"/>
+                                                </h:selectOneMenu>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h:panelGroup id="datasource">
+                                                <h:panelGroup rendered="#{marketingEditController.marketing.datasource eq 'file' or marketingEditController.marketing.datasource eq 'auto-file'}">
+                                                    <table border="0" width="100%" cellpadding="2" cellspacing="0">
+                                                        <tr>
+                                                            <td width="400" align="right" class="gray03">* Marketing List Source:</td>
+                                                            <td align="left"><h:selectOneMenu id="listSource" 
+                                                                                              value="#{marketingEditController.prospectlistSponsorId}" 
+                                                                                              disabled="#{marketingEditController.mode eq 'edit'}"
+                                                                                              required="true" requiredMessage="Marketing List Source is required">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                                    <f:selectItems value="#{marketingEditController.prospectlistSponsors}"/>
+                                                                    <rich:validator/>
+                                                                </h:selectOneMenu>
+                                                                &#160;<rich:message id="msgListSource" for="listSource" styleClass="required"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" valign="top" class="gray03">* Customer Duplicate Period:</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="custdupperiod" value="#{marketingEditController.marketing.periodCustomer}" disabled="#{marketingEditController.mode eq 'edit'}"
+                                                                                 required="true" requiredMessage="Duplicate Period is required">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                                    <f:selectItem itemValue="0" itemLabel="Do Not Check Duplicate"/>
+                                                                    <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                                    <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                                    <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                                    <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                                    <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                                    <f:selectItem itemValue="-1" itemLabel="Always Check Duplicate"/>
+                                                                </h:selectOneMenu>
+                                                                &#160;<rich:message for="custdupperiod" styleClass="required"/>
+                                                            </td>
+                                                        </tr>
+                                                        <ui:remove>
+                                                            <tr>
+                                                                <td align="right" valign="top" class="gray03">* Customer Duplicate Period:</td>
+                                                                <td valign="top">
+                                                                    <h:selectOneMenu id="dupPeriod" value="#{marketingEditController.marketing.dupType}" disabled="#{marketingEditController.mode eq 'edit'}"
+                                                                                     required="true" requiredMessage="Duplicate is required">
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItem itemValue="never" itemLabel="Merge when duplicate"/>
+                                                                        <f:selectItem itemValue="alway" itemLabel="Skip when duplicate"/>
+                                                                        <f:selectItem itemValue="time" itemLabel="Skip when duplicate in time"/>
+                                                                        <f:ajax event="change" render="monthsPeriod" execute="@this" immediate="true" />
+                                                                    </h:selectOneMenu>
+                                                                    &#160;<rich:message for="dupPeriod" styleClass="required"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top"></td>
+                                                                <td valign="top">
+                                                                    <h:panelGroup id="monthsPeriod">
+                                                                        <table  border="0" cellpadding="0" cellspacing="0">
+                                                                            <tr>
+                                                                                <td valign="middle"><rich:inputNumberSpinner id="months" step="1" minValue="1" maxValue="12" inputSize="3"
+                                                                                                                             style="border-color:#bababa"
+                                                                                                                             value="#{marketingEditController.dupPeriodMonth}" 
+                                                                                                                             disabled="#{marketingEditController.marketing.dupType ne 'time'}"
+                                                                                                                             required="true" requiredMessage="Months is required"/></td>
+                                                                                <td valign="bottom">&#160;Months</td>
+                                                                            </tr>
+                                                                        </table>
+                                                                    </h:panelGroup>
+                                                                    <rich:message for="months" styleClass="required"/>
+                                                                </td>
+                                                            </tr>
+                                                        </ui:remove>
+                                                        <tr>
+                                                            <td align="right" valign="top" class="gray03">* Opt-out Period:</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="opoutperiod" value="#{marketingEditController.marketing.periodBlacklist}" disabled="#{marketingEditController.mode eq 'edit'}"
+                                                                                 required="true" requiredMessage="Opt-out Period is required">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                                    <f:selectItem itemValue="0" itemLabel="Do Not Check Opt Out"/>
+                                                                    <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                                    <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                                    <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                                    <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                                    <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                                    <f:selectItem itemValue="-1" itemLabel="Always Check Opt Out"/>
+                                                                </h:selectOneMenu>
+                                                                &#160;<rich:message for="opoutperiod" styleClass="required"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" valign="top" class="gray03">* Yes Sale Duplicate Period:</td>
+                                                            <td valign="top">
+                                                                <h:selectOneMenu id="yessaleperiod" value="#{marketingEditController.marketing.periodYessale}" disabled="#{marketingEditController.mode eq 'edit'}"
+                                                                                 required="true" requiredMessage="Yes Sale Period is required">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                                    <f:selectItem itemValue="0" itemLabel="Do Not Check Duplicate"/>
+                                                                    <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                                    <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                                    <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                                    <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                                    <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                                    <f:selectItem itemValue="-1" itemLabel="Always Check Duplicate"/>
+                                                                </h:selectOneMenu>
+                                                                &#160;<rich:message for="yessaleperiod" styleClass="required"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" class="gray03">* File Format:</td>
+                                                            <td align="left">
+                                                                <h:selectOneMenu id="fileFormat" value="#{marketingEditController.fileTemplateId}" 
+                                                                                 disabled="#{marketingEditController.mode eq 'edit'}"
+                                                                                 required="true" 
+                                                                                 requiredMessage="File Format is required">
+                                                                    <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/> 
+                                                                    <f:selectItems value="#{marketingEditController.fileTemplates}"/>
+                                                                    <f:validateRequired/>                  
+                                                                    <rich:validator />
+                                                                    <a4j:ajax event="click" render="uploadPanel" limitRender="true" execute="@this"/>
+                                                                </h:selectOneMenu>
+                                                                <rich:message id="msgFileFormat" for="fileFormat" style="color:red"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" class="gray03">Check Format Telephone No.:</td>
+                                                            <td align="left"><h:selectBooleanCheckbox id="checkTelNo" value="#{marketingEditController.marketing.checkFormatTelNo}" disabled="#{marketingEditController.mode eq 'edit'}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" class="gray03">
+                                                                <h:outputText value="Auto Generate New Marketing List Period:" rendered="#{marketingEditController.marketing.datasource eq 'auto-file'}"/></td>
+                                                            <td align="left">
+                                                                <h:inputText value="#{marketingEditController.marketing.autoGeneratePeriod}" styleClass="textfield" disabled="#{marketingEditController.mode eq 'edit'}" rendered="#{marketingEditController.marketing.datasource eq 'auto-file'}"/>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td align="right" valign="top" class="gray03">
+                                                                <h:outputText value="* Filename:" rendered="#{marketingEditController.mode eq 'add'}"/>
+                                                            </td>
+                                                            <td align="left">
+                                                                <h:panelGroup id ="uploadPanel">
+                                                                    <rich:fileUpload id="fileUpload" fileUploadListener="#{marketingEditController.uploadCompleteListener}"
+                                                                                     ontyperejected="alert('Only csv files are accepted');" 
+                                                                                     acceptedTypes="csv" 
+                                                                                     maxFilesQuantity="1"
+                                                                                     immediateUpload="true"
+                                                                                     listHeight="63px"
+                                                                                     rendered="#{marketingEditController.mode eq 'add'}"
+                                                                                     disabled="#{marketingEditController.fileTemplateId eq null}">
+                                                                        <a4j:ajax event="clear" render="fileUpload" limitRender="true" execute="@this" listener="#{marketingEditController.clearFileUpload}"/>
+                                                                    </rich:fileUpload>
+                                                                </h:panelGroup>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top"><h:selectBooleanCheckbox id="autoDial" value="#{marketingEditController.marketing.autoDial}" style="display:none" /> <!--Auto Dial-->
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{marketingEditController.marketing.status}"/> Enable
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <td valign="top" align="center" colspan="2">
+                                            <table border="0" cellspacing="0" cellpadding="4">
+                                                <tr>
+                                                    <td width="380" class="blue04" style="padding-left: 10px">Available Manager</td>
+                                                    <td width="380" class="blue04" style="padding-left: 10px">Selected Manager</td>
+                                                </tr>
+                                                <tr>
+                                                    <td colspan="3">
+                                                        <rich:pickList id="managerList" switchByDblClick="true" 
+                                                                       listWidth="350px" listHeight="150px"
+                                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                                       value="#{marketingEditController.selectedUserGroup}" 
+                                                                       required="true" requiredMessage="Selected Manager is required">
+                                                            <f:selectItems value="#{marketingEditController.userGroupList}"/>
+                                                        </rich:pickList>
+                                                        <span style="padding-left:10px"/><h:message for="managerList" style="color:red"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top">
+                                            <h:selectBooleanCheckbox id="isLinkProduct" value="#{marketingEditController.marketing.isLinkProduct}" valueChangeListener="#{marketingEditController.linkProductListener}">
+                                                <a4j:ajax event="click" render="productPanel" limitRender="true" />
+                                            </h:selectBooleanCheckbox> Link to Product
+                                        </td>
+                                    </tr>
+                                    <tr> 
+                                        <td valign="top" align="center" colspan="2">
+                                            <h:panelGroup id ="productPanel">
+                                                <h:panelGroup rendered="#{marketingEditController.marketing.isLinkProduct}">
+                                                    <table border="0" cellspacing="0" cellpadding="4">
+                                                        <tr>
+                                                            <td width="380" class="blue04" style="padding-left: 10px">Available Product</td>
+                                                            <td width="380" class="blue04" style="padding-left: 10px">Selected Product</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <rich:pickList id="productList" switchByDblClick="true"
+                                                                               listWidth="350px" listHeight="150px"
+                                                                               addText="" addAllText="" removeText="" removeAllText=""
+                                                                               value="#{marketingEditController.selectedProduct}" 
+                                                                               required="#{marketingEditController.marketing.isLinkProduct}" requiredMessage="Selected Product is required">
+                                                                    <f:selectItems value="#{marketingEditController.productList}"/>
+                                                                </rich:pickList>
+                                                                <span style="padding-left:10px"/><h:message for="productList" style="color:red"/>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" style="padding-top:15px;">
+                                            <table width="98%" border="0" cellspacing="0" cellpadding="3">
+                                                <tr>
+                                                    <td class="line01" style="border: 1px dotted #CCCCCC;" colspan="2" ><h4>Flex Field</h4></td>
+                                                </tr>
+                                                <tr>
+                                                    <td width="50%" style="padding-top:15px;">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                                            <tr>
+                                                                <td align="right" valign="top">Tier Condition:</td>
+                                                                <td valign="top">
+                                                                    <h:selectOneMenu id="fx1" value="#{marketingEditController.listDetailfx1}" styleClass="select08" >
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItems value="#{marketingEditController.listDetailfx1List}" var="list" itemLabel="#{list.name}" itemValue="#{list.code}"/>
+                                                                    </h:selectOneMenu> 
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Tier Amount:</td>
+                                                                <td valign="top">
+                                                                    <h:inputText id="fx2" value="#{marketingEditController.marketing.fx2}" styleClass="textfield" maxlength="100">
+                                                                        <f:convertNumber maxFractionDigits="2"/>       
+                                                                        <f:validateRequired/>
+                                                                        <rich:validator />
+                                                                    </h:inputText>    
+                                                                    <rich:message for="fx2" style="color:red"/>          
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Submit Condition:</td>
+                                                                <td valign="top">
+                                                                    <h:selectOneMenu id="fx3" value="#{marketingEditController.listDetailfx3}" styleClass="select08" >
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItems value="#{marketingEditController.listDetailfx3List}" var="list" itemLabel="#{list.name}" itemValue="#{list.code}"/>
+                                                                    </h:selectOneMenu>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Rate Condition:</td>
+                                                                <td valign="top">
+                                                                    <h:selectOneMenu id="fx4" value="#{marketingEditController.listDetailfx4}" styleClass="select08" >
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItems value="#{marketingEditController.listDetailfx4List}" var="list" itemLabel="#{list.name}" itemValue="#{list.code}"/>
+                                                                    </h:selectOneMenu>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Clawback Condition:</td>
+                                                                <td valign="top">
+                                                                    <h:selectOneMenu id="fx5" value="#{marketingEditController.listDetailfx5}" styleClass="select08" >
+                                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                                        <f:selectItems value="#{marketingEditController.listDetailfx5List}" var="list" itemLabel="#{list.name}" itemValue="#{list.code}"/>
+                                                                    </h:selectOneMenu>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field6:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx6}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field7:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx7}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field8:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx8}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field9:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx9}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field10:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx10}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+
+                                                        </table>
+                                                    </td>
+                                                    <td width="50%" style="padding-top:15px;">
+                                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field11:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx11}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field12:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx12}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field13:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx13}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field14:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx14}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field15:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx15}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field16:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx16}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field17:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx17}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field18:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx18}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field19:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx19}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td align="right" valign="top">Flex Field20:</td>
+                                                                <td valign="top"><h:inputText value="#{marketingEditController.marketing.fx20}" styleClass="textfield" maxlength="100"/></td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>                            
+                                <table cellpadding="8" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td valign="top" align="left" width="33%">
+                                            <h:commandButton image="../img/b_back.png" action="#{marketingEditController.backAction}" immediate="true"
+                                                             actionListener="#{marketingEditController.clearFileUpload}"/>                                         
+                                        </td>
+                                        <td align="center" width="34%">
+                                            <h:commandButton image="../img/b_save.png" action="#{marketingEditController.saveAction}" 
+                                                             rendered="#{marketingEditController.mode eq 'edit' and marketingEditController.savePermitted}"/>
+                                        </td>
+                                        <td align="right" width="33%">
+                                            <a4j:commandButton image="../img/b_next.png" 
+                                                               actionListener="#{marketingEditController.nextStep1ToStep2}" 
+                                                               render="panelGroupMarketing"
+                                                               onclick="#{rich:component('waitPanel')}.show('', {height: '80px', width: '150px'})"
+                                                               oncomplete="#{rich:component('waitPanel')}.hide()"
+                                                               rendered="#{marketingEditController.savePermitted and marketingEditController.marketing.datasource ne 'customer'}"/>
+                                        </td>
+                                    </tr>
+                                </table> 
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </a4j:region>
+
+                    <a4j:region id="regionStep2">
+                        <h:panelGroup id="panelGroupStep2">
+                            <h:panelGroup rendered="#{marketingEditController.step eq 2}" >
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top" align="center" ><br/>
+                                            <h:outputText value="#{marketingEditController.message}" style="color:red"/>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" align="center" colspan="2">
+                                            <br/><br/>
+                                            <table cellpadding="3" cellspacing="0" border="0"> 
+                                                <tr>
+                                                    <td valign="top" align="right" width="150"><b>View Result</b></td>
+                                                    <td valign="top" width="50"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Total Records : </td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalRecords ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getTotalRecordsList}">
+                                                            <h:outputText value="#{marketingEditController.totalRecords}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalRecords eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Duplicate (Within) :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalDupWithin ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getDupWihtinList}">
+                                                            <h:outputText value="#{marketingEditController.totalDupWithin}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalDupWithin eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Duplicate (Yes Sale) :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalDupYes ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getDupYesList}">
+                                                            <h:outputText value="#{marketingEditController.totalDupYes}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalDupYes eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Duplicate (Customer) :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalDupCustomer ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,mParam,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getDupCustomerList}">
+                                                            <h:outputText value="#{marketingEditController.totalDupCustomer}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalDupCustomer eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Opt-out :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalOpOut ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getOpOutList}">
+                                                            <h:outputText value="#{marketingEditController.totalOpOut}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalOpOut eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Black List :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalBlacklist ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getBlackList}">
+                                                            <h:outputText value="#{marketingEditController.totalBlacklist}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalBlacklist eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Invalid Telephone No. :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalWrongPhoneNo ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getWrongPhoneNoList}">
+                                                            <h:outputText value="#{marketingEditController.totalWrongPhoneNo}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalWrongPhoneNo eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Invalid Format :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalBadFormat ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getWrongFormatList}">
+                                                            <h:outputText value="#{marketingEditController.totalBadFormat}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalBadFormat eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <h:panelGroup rendered="#{global.externalDnc}" >
+                                                <table cellpadding="3" cellspacing="0" border="0">
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03" width="150">DNC :</td>
+                                                        <td valign="top" align="right" width="50">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalDnc ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getDncList}">
+                                                                <h:outputText value="#{marketingEditController.totalDnc}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalDnc eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">MIB :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalMib ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getMibList}">
+                                                                <h:outputText value="#{marketingEditController.totalMib}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalMib eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </h:panelGroup>
+                                            <table cellpadding="3" cellspacing="0" border="0">
+                                                <tr><td height="10" width="150"></td><td width="50"></td></tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Total Loaded :</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{marketingEditController.totalLoaded ne 0}"
+                                                                          oncomplete="#{rich:component('marketingList')}.show()"
+                                                                          render="popupMarketingList,dataList,marketingListPanel"
+                                                                          actionListener="#{marketingEditController.getLoadedList}">
+                                                            <h:outputText value="#{marketingEditController.totalLoaded}" style="color: #4cae4c">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="0" rendered="#{marketingEditController.totalLoaded eq 0}"/>
+                                                    </td>
+                                                </tr>
+                                                <ui:remove>
+                                                    <tr>
+                                                        <td valign="top" align="right" style="color: #0099FF">Merge Customer :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalMergeCustomer ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getMergeList}">
+                                                                <h:outputText value="#{marketingEditController.totalMergeCustomer}" style="color: #0099FF">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalMergeCustomer eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                </ui:remove>
+                                            </table>
+                                            <br/><br/>
+                                            <table cellpadding="0" cellspacing="0" border="0"> 
+                                                <tr>
+                                                    <td valign="top" align="center">
+                                                        <a4j:commandButton id="btnSave2"
+                                                                           image="/img/b_proceed.png"
+                                                                           actionListener="#{marketingEditController.saveStep2Listener}"
+                                                                           render="panelGroupStep2"
+                                                                           rendered="#{marketingEditController.showBtnSave2 and marketingEditController.totalLoaded ne 0}"
+                                                                           style="margin: 3px"
+                                                                           onclick="if (!confirm('Confirm to Process?')) {
+                                                                                       return false;
+                                                                                   } else {
+                                                                           #{rich:component('waitPanel')}.show('', {height: '80px', width: '150px'});
+                                                                                   }"
+                                                                           oncomplete="#{rich:component('waitPanel')}.hide()"/>
+
+                                                        <a4j:commandButton image="/img/b_close.png" 
+                                                                           rendered="#{not marketingEditController.showBtnSave2}"
+                                                                           action="#{marketingEditController.backAction()}"
+                                                                           style="margin: 3px"/> 
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>    
+                                <table cellpadding="8" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td valign="top">
+                                            <a4j:commandButton image="../img/b_back.png" 
+                                                               actionListener="#{marketingEditController.previousStep2ToStep1}"
+                                                               rendered="#{marketingEditController.showBtnSave2 or marketingEditController.message ne ''}"
+                                                               render="panelGroupMarketing"/>
+                                        </td>
+                                        <td align="right"></td>
+                                    </tr>
+                                </table>       
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </a4j:region>
+
+                    <a4j:region id="regionStep3">
+                        <h:panelGroup id="panelGroupStep3">
+                            <h:panelGroup rendered="#{marketingEditController.step eq 3}" >
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td valign="top" align="center">
+                                            <br/><br/><br/>
+                                            <table cellpadding="3" cellspacing="0" border="0"> 
+                                                <tr>
+                                                    <td valign="top" align="right" width="150"><b>View Result</b></td>
+                                                    <td valign="top" width="50"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Total Records : </td>
+                                                    <td valign="top" align="right">      
+                                                        <h:outputText value="#{marketingEditController.totalRecords}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Duplicate (Within) :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalDupWithin}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Duplicate (Yes Sale) :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalDupYes}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Duplicate (Customer) :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalDupCustomer}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Opt-out :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalOpOut}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Black List :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalBlacklist}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Invalid Telephone No. :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalWrongPhoneNo}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Invalid Format :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalBadFormat}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <h:panelGroup rendered="#{global.externalDnc}" >
+                                                <table cellpadding="3" cellspacing="0" border="0">
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03" width="150">DNC :</td>
+                                                        <td valign="top" align="right" width="50">
+                                                            <h:outputText value="#{marketingEditController.totalDnc}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">MIB :</td>
+                                                        <td valign="top" align="right">
+                                                            <h:outputText value="#{marketingEditController.totalMib}">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </h:panelGroup>
+                                            <table cellpadding="3" cellspacing="0" border="0">
+                                                <tr><td height="10" width="150"></td><td width="50"></td></tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Total Loaded :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalLoaded}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <br/><br/>
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+                                                <tr>
+                                                    <td valign="top" align="left" width="33%">
+
+                                                        <a4j:commandButton image="../img/b_back.png" 
+                                                                           actionListener="#{marketingEditController.previousStep2ToStep1Edit}"
+                                                                           render="panelGroupMarketing"
+                                                                           style="margin: 3px"/>
+                                                    </td>
+                                                    <td valign="top" align="center" width="34%">
+
+                                                        <a4j:commandButton image="/img/b_close.png" 
+                                                                           action="#{marketingEditController.backAction}"
+                                                                           style="margin: 3px"/> 
+                                                    </td>
+                                                    <td valign="top" align="right" width="33%">
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>   
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </a4j:region>
+
+
+                </h:panelGroup>
+            </ui:define>
+            <ui:define name="popupModal">
+                <rich:popupPanel id="waitPanel" style="background-color: white; text-align:center">
+                    <h:outputText value="Please wait..." style="font-size:large" />
+                </rich:popupPanel>
+                <ui:include id="popupMarketingList"
+                            src="popupMarketingList.xhtml">                    
+                    <ui:param id="mParam" name="m" value="#{marketingEditController}"/>
+                </ui:include> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,352 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+<style>
+    @keyframes blink {
+        0% {opacity: 0}
+        49%{opacity: 0}
+        50% {opacity: 1}
+    }
+
+    blink{
+        animation: blink 1s infinite;
+        color: red;
+    }
+</style>
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+    <tr>
+        <td width="20%" valign="top">
+            <!-- Contact Record-->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h4 class="style2">#{msg.contactRecord}</h4></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <table width="100%" height="180" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                    <td valign="top" height="150">
+                        <table width="100%" style="padding: 2px 8px 1px;">
+                            <tr>
+                                <td class="subh02" colspan="2">Latest Updated : </td>
+                            </tr>
+
+                            <tr>
+                                <td><h:outputText value="#{msg.listcontactable}"/></td>
+                                <td align="right">
+                                <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.listFollowup}">
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="#{msg.listuncontactable}"/></td>
+                                <td align="right">
+                                <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.listClosedUncontactable+campaignFrontController.rpt.listUncontactable}">
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="#{msg.listunreachable}"/></td>
+                                <td align="right">
+                                <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.listClosedUnreachable+campaignFrontController.rpt.listUnreachable}">
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="#{msg.callattempt}"/></td>
+                                <td align="right">
+                                <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.callAttempt}">
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><h:outputText value="#{msg.yesSale}"/></td>
+                                <td align="right">
+                                    <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.productYesPendingSale}">
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="#{msg.noSale}"/></td>
+                                <td align="right">
+                                <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.productNoSale}">
+                                        <f:convertNumber pattern="#,##0" />
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><h:outputText value="Net Premium"/></td>
+                                <td align="right">
+                                    <h:outputText value="#{campaignFrontController.rpt eq null ? 0 : 0+campaignFrontController.rpt.totalPendingAmount}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+            <!-- Contact Record-->
+        </td>
+        <td width="30%" valign="top">
+            <!-- Follow Up Sale  -->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h4 class="style2">Follow Up Sale</h4></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <table width="100%" height="180" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                    <td valign="top" height="160">
+                        <table width="100%" style="padding: 2px 8px 1px;">
+                            <tr>
+                                <td>
+                                    <rich:dataTable id="followUpSaleList" style="width: 100%" styleClass="tableline01" rows="5"
+                                                    value="#{campaignFrontController.followUpSaleList}" var="list"
+                                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                    onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                                        <f:facet name="header">
+                                            <rich:columnGroup >
+                                                <rich:column style="text-align: left" styleClass="subh02"><h:outputText value="#{msg.customer}"/></rich:column>
+                                                <rich:column style="text-align: left" styleClass="subh02"><h:outputText value="Follow Up Date"/></rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+
+                                        <rich:column>
+                                            <h:commandLink title="#{list.customerName}" value="#{list.customerName}" action="#{saleApproachingController.toSaleApproaching}">
+                                                <f:param name="selectedId" value="#{list.id}"/>
+                                            </h:commandLink>
+                                        </rich:column>
+
+                                        <rich:column>
+                                            <h:panelGroup rendered="#{campaignFrontController.checkBlinkDate(list.followupsaleDate) eq false}">
+                                                <h:outputText value="#{list.followupsaleDate}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </h:panelGroup>
+
+                                           <h:panelGroup rendered="#{campaignFrontController.checkBlinkDate(list.followupsaleDate) eq true}">
+                                                <blink>
+                                                    <h:outputText value="#{list.followupsaleDate}">
+                                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText>
+                                                </blink>
+                                           </h:panelGroup>
+                                        </rich:column>
+
+                                        <f:facet name="footer">
+                                            <rich:dataScroller fastControls="hide" renderIfSinglePage="false" maxPages="3" />
+                                        </f:facet>
+                                    </rich:dataTable>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+            <!-- Follow Up Sale -->
+        </td>
+        <td width="25%" valign="top">
+            <!-- News&Update-->
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h4 class="style2">#{msg.news}</h4></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <table width="100%" height="180" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" height="155">
+                        <div class="scrollNews">
+                            <rich:dataTable id="newsTable" style="width: 100%" styleClass="tableline01"
+                                        value="#{campaignFrontController.newsList}" var="list">
+                            <rich:columnGroup>
+                                <rich:column style="height: 50px; vertical-align: top">
+                                    <h:graphicImage url="/upload/news/#{list.news.id}/#{list.news.picThumbnail}" width="50" height="50"
+                                                    rendered="#{list.news.picThumbnail ne null}"/>
+                                </rich:column>
+                                <rich:column>
+                                    <a4j:commandLink value="#{list.news.title}"
+                                                     oncomplete="#{rich:component('news')}.show()"
+                                                     render="newsTable,popupNews,newsPanel"
+                                                     actionListener="#{campaignFrontController.newsListener}"
+                                                     style="font-weight: bold;
+                                                        text-decoration: none;
+                                                        padding-top: 15px;
+                                                        padding-bottom: 15px;">
+                                        <f:param value="#{list.news.id}" name="newsId" />
+                                    </a4j:commandLink><br/>
+                                    <h:outputText value="#{list.news.shortDesc}"/>
+                                </rich:column>
+                                <rich:column>
+                                    <h:panelGroup rendered="#{list.viewStatus eq false}">
+                                    <img src="#{request.contextPath}/img/news.gif" alt="Unread" border="0" width="40" height="35"/>
+                                    </h:panelGroup>
+                                </rich:column>
+                                </rich:columnGroup>
+                            </rich:dataTable>
+                            </div>
+                     </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+                </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                    <!-- News&Update-->
+                </td>
+                <td width="25%" valign="top">
+                    <!-- Make Note-->
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                        <tr>
+                            <td width="10"><img src="../img/boxnote01.png" alt="" width="10" height="34"/></td>
+                            <td width="100%" valign="top" background="../img/boxnote07.png">
+                                <table width="100%" border="0" cellpadding="2" cellspacing="0">
+                                    <tr>
+                                        <td width="180"><h2><img src="../img/hnote.png" alt="" width="86" height="22"/></h2></td>
+                                    </tr>
+                                </table></td>
+                            <td width="10"><img src="../img/boxnote02.png" alt="" width="10" height="34"/></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td width="5" height="30" background="../img/box08.png"><img src="../img/sp.gif" alt="" width="5" height="5"/></td>
+                                        <td valign="top" bgcolor="#FFF9C7">
+                                            <table width="100%" border="0" cellpadding="6" cellspacing="0">
+                                                <tr>
+                                            <td width="100%" height="150" colspan="2" valign="top">
+                                                        <h:inputTextarea id="makeNote"
+                                                                         styleClass="note"
+                                                                         value="#{campaignFrontController.note}">
+                                                            <a4j:ajax event="blur" listener="#{campaignFrontController.saveMakeNoteListener}"/>                                                                         
+                                                        </h:inputTextarea>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td height="20" colspan="2" align="right">
+                                                        <a4j:commandLink limitRender="true"
+                                                                         actionListener="#{campaignFrontController.saveMakeNoteListener}"
+                                                                         oncomplete="#{rich:component('popupMakeNote')}.show('',{height:'100px', width:'200px'})">
+                                                            <img src="../img/b_note01.png" id="btnMakeNote" name="btnMakeNote" alt="" width="120" height="19" border="0"
+                                                                  onmouseout="changeImage('btnMakeNote', '#{request.contextPath}/img/b_note01.png')" 
+                                                                  onmouseover="changeImage('btnMakeNote', '#{request.contextPath}/img/b_note02.png')"/>                                                            
+                                                        </a4j:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </table></td>
+                                        <td width="5" background="../img/boxnote08.png"><img src="../img/sp.gif" alt="" width="5" height="5"/></td>
+                                    </tr>
+                                </table></td>
+                        </tr>
+                        <tr>
+                            <td><img src="../img/boxnote04.png" width="10" height="10"/></td>
+                            <td background="../img/boxnote05.png"><img src="../img/sp.gif" width="10" height="10"/></td>
+                            <td><img src="../img/boxnote03.png" width="10" height="10"/></td>
+                        </tr>
+                    </table>
+                    <!-- Make Note-->
+                </td>
+            </tr>
+        </table>
+        <rich:popupPanel id="popupMakeNote" style="padding: 0 0 0 0; border-style: none" shadowOpacity="0">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Make Note</h2></td>
+                    <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"><a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('popupMakeNote')}.hide()">#{msg.close}</a></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                    <td valign="top" align="center" bgcolor="#FFFFFF">
+                        <p>Saved.</p>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+        </rich:popupPanel>
+        
+        <rich:popupPanel id="popupSaleHistory" width="1100"  height="600" style="padding: 0 0 0 0; border-style: none " >
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Sale Approaching</h2></td>
+                    <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                        <a href="#" class="close_popup" style="cursor:pointer" 
+                           onclick="#{rich:component('popupSaleHistory')}.hide();"
+                           >#{msg.close}</a></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <h:panelGroup id="saleHistory">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png">
+                        <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                    <td valign="top" bgcolor="#FFFFFF" >
+                        <h:panelGroup id="detail">
+                            <ui:include src="/admin/popupContactRecord.xhtml"/>
+                        </h:panelGroup>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            </h:panelGroup>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+        </rich:popupPanel>
+</ui:composition>

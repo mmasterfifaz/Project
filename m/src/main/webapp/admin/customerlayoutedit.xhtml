@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+    <ui:composition template="../templates/adminmain.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2"><h:outputText value="#{customerLayoutEditController.customerLayout.id eq null ? 'Customer Layout' : customerLayoutEditController.customerLayout.name}" />: Add/Edit</ui:define>
+        <ui:define name="panel">
+        <h:inputHidden value="#{customerLayoutEditController.mode}"/>
+        <h:inputHidden value="#{customerLayoutEditController.customerLayout.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:outputText value="#{customerLayoutEditController.message}" style="color:red"/>&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">* Name:</td>
+                <td valign="top">
+                    <h:inputText id="name" value="#{customerLayoutEditController.customerLayout.name}" styleClass="textfield" size="50" 
+                                 required="true" requiredMessage="Name is required">
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:inputText>
+                    <rich:message for="name" style="color:red"/>
+                    <h:outputText value="#{customerLayoutEditController.messageDup}" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"> Description</td>
+                <td valign="top">
+                    <h:inputTextarea styleClass="textfield03" cols="30" rows="5" 
+                                     value="#{customerLayoutEditController.customerLayout.descripion}" />
+                </td>
+              </tr>
+              <tr>
+                  <td align="right" valign="top">&nbsp;</td>
+                  <td valign="top">
+                      <h:selectBooleanCheckbox id="taskdelegate" rendered="#{customerLayoutEditController.customerLayout.isDefault}"
+                                               disabled="true" value="#{customerLayoutEditController.customerLayout.isDefault}"/> 
+                      <h:outputText value="Default" rendered="#{customerLayoutEditController.customerLayout.isDefault}" />
+                </td>
+              </tr>
+             
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top">
+                    <h:commandButton image="../img/b_save.png" action="#{customerLayoutEditController.saveAction}" 
+                                     rendered="#{customerLayoutEditController.savePermitted}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{customerLayoutEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

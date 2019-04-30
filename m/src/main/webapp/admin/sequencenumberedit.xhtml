@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Sequence Number: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{sequenceNumberEditController.mode}"/>
+                <h:inputHidden value="#{sequenceNumberEditController.sequenceNo.id}"/>
+                <table width="50%" border="0" cellpadding="4" cellspacing="0" style="margin: auto;">
+                    <tr>
+                        <td align="right" valign="top" style="width: 120px;">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{sequenceNumberEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"><h:outputText value="*" style="color:red"/> Name:</td>
+                        <td><h:inputText id="name" value="#{sequenceNumberEditController.sequenceNo.name}" styleClass="textfield" size="30"
+                                         required="true" requiredMessage="Name is required">
+                            <f:validateRequired/>
+                            <rich:validator />
+                        </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{sequenceNumberEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top"><h:inputTextarea id="remark" cols="39" rows="5" value="#{sequenceNumberEditController.sequenceNo.description}"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Generate Type:</td>
+                        <td valign="top"><h:panelGroup id="productPlanRelation" >
+                            <h:selectOneMenu value="#{sequenceNumberEditController.selectGenerateType}"
+                                             valueChangeListener="#{sequenceNumberEditController.changeTypeListenerr}">
+                                <f:selectItem  itemValue="Internal"  itemLabel="Internal"/>
+                                <f:selectItem  itemValue="File Upload"  itemLabel="File Upload"/>
+                                <a4j:ajax event="change"
+                                          render="panel"/>
+                            </h:selectOneMenu>
+                        </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <h:panelGroup id ="panel">
+                                <h:panelGroup rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                    <table>
+                                        <tr>
+                                            <td align="right" valign="top"><h:outputText value="*" style="color:red" rendered="#{sequenceNumberEditController.typeSequenceRender}"/><h:outputText value="Abbr:" rendered="#{sequenceNumberEditController.typeSequenceRender}"/></td>
+
+                                            <td><h:inputText id="abbr" value="#{sequenceNumberEditController.sequenceNo.abbr}" styleClass="textfield" size="10" maxlength="10"
+                                                             required="true" requiredMessage="Abbr is required" rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                                <a4j:ajax event="keyup" render="sample" limitRender="true"
+                                                          listener="#{sequenceNumberEditController.createSample}"/>
+                                                <f:validateRequired/>
+                                                <rich:validator />
+                                            </h:inputText>
+                                                <rich:message for="abbr" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top"><h:outputText value="*" style="color:red" rendered="#{sequenceNumberEditController.typeSequenceRender}"/><h:outputText value="Running Length:" rendered="#{sequenceNumberEditController.typeSequenceRender}"/></td>
+                                            <td><h:inputText id="runningLength" value="#{sequenceNumberEditController.sequenceNo.runningLength}" styleClass="textfield"
+                                                             size="10" maxlength="10" onkeypress="return isNumberKey(event)"
+                                                             required="true" requiredMessage="Running Length is required" rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                                <a4j:ajax event="keyup" render="sample" limitRender="true"
+                                                          listener="#{sequenceNumberEditController.createSample}"/>
+                                                <f:validateDoubleRange minimum="4" maximum="20"/>
+                                                <rich:validator />
+                                            </h:inputText>
+                                                <rich:message for="runningLength" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top"><h:outputText value="*" style="color:red" rendered="#{sequenceNumberEditController.typeSequenceRender}"/><h:outputText value="Next Running No.:" rendered="#{sequenceNumberEditController.typeSequenceRender}"/></td>
+                                            <td><h:inputText id="nextRunno" value="#{sequenceNumberEditController.sequenceNo.nextRunno}" styleClass="textfield"
+                                                             size="10" maxlength="10" onkeypress="return isNumberKey(event)"
+                                                             required="true" requiredMessage="Next Running No. is required" rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                                <a4j:ajax event="keyup" render="sample" limitRender="true"
+                                                          listener="#{sequenceNumberEditController.createSample}"/>
+                                                <f:validateDoubleRange minimum="1"/>
+                                                <rich:validator />
+                                            </h:inputText>
+                                                <rich:message for="nextRunno" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top"><h:outputText value="Reset Running:" rendered="#{sequenceNumberEditController.typeSequenceRender}"/></td>
+                                            <td><h:selectOneMenu id="resetRunning" value="#{sequenceNumberEditController.sequenceNo.resetRunningType}" rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                                <f:selectItem itemValue="notReset" itemLabel="Not Reset"/>
+                                                <f:selectItem itemValue="newMonth" itemLabel="Reset when new month"/>
+                                                <f:selectItem itemValue="newYear" itemLabel="Reset when new year"/>
+                                            </h:selectOneMenu>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top"><h:outputText value="Year ERA:" rendered="#{sequenceNumberEditController.typeSequenceRender}"/></td>
+                                            <td><h:selectOneMenu id="yearEra" value="#{sequenceNumberEditController.sequenceNo.yearEra}" rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                                <f:selectItem itemValue="BE" itemLabel="B.E."/>
+                                                <f:selectItem itemValue="CE" itemLabel="C.E."/>
+                                                <a4j:ajax event="change" render="sample" limitRender="true"
+                                                          listener="#{sequenceNumberEditController.createSample}"/>
+                                            </h:selectOneMenu>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top"><h:outputText value="Format:" rendered="#{sequenceNumberEditController.typeSequenceRender}"/></td>
+                                            <td><h:inputText id="format" value="#{sequenceNumberEditController.sequenceNo.format}" styleClass="textfield" size="30" rendered="#{sequenceNumberEditController.typeSequenceRender}">
+                                                <a4j:ajax event="keyup" render="sample" limitRender="true"
+                                                          listener="#{sequenceNumberEditController.createSample}"/>
+                                                <rich:validator />
+                                            </h:inputText>
+                                                <h:outputText class="gray02" value=" Sample: " rendered="#{sequenceNumberEditController.typeSequenceRender}"/>
+                                                <h:outputText id="sample" class="blue04" value="#{sequenceNumberEditController.sample}" rendered="#{sequenceNumberEditController.typeSequenceRender}"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top">&nbsp;</td>
+                                            <td><h:outputText class="gray02" escape="false"
+                                                              value="x: abbr &lt;br /&gt;
+                                                yy: two digit year e.g. 05 &lt;br /&gt;
+                                                yyyy: four digit year e.g. 2005 &lt;br /&gt;
+                                                m: one digit month e.g. 1 &lt;br /&gt;
+                                                mm: two digit month e.g. 01 &lt;br /&gt;
+                                                mmm: three letter month name e.g. jan &lt;br /&gt;
+                                                d: one digit day e.g. 9 &lt;br /&gt;
+                                                dd: two digit day e.g. 09 " rendered="#{sequenceNumberEditController.typeSequenceRender}"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{sequenceNumberEditController.saveAction}"  rendered="#{sequenceNumberEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{sequenceNumberEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,518 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/mainmenu01-3.png"  width="100%"></td>
+                    <td><img src="#{request.contextPath}/img/mainmenu01-4.png" width="40"/></td>
+                </tr>
+                <tr>
+                    <td width ="100%" style="background-color: white">                  
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+                            <tr>
+                                <td height="40" colspan="2" class="ping01" style="padding-left: 1em;">Admin Menu</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:panelGrid columns="2" border="0">
+                                        <h:panelGroup rendered="#{sidemenuController.showMenuLeft}">   
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree2" class="tableMenuAdmin">
+                                                    <h:panelGroup rendered="#{sidemenuController.marketingSourcePermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Marketing Source</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/listsponsor.xhtml?faces-redirect=true"  value="Marketing List Source" immediate="true"  styleClass="black01" rendered="#{sidemenuController.marketingListSourcePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/marketing.xhtml?faces-redirect=true"  value="Marketing List Upload" immediate="true"  styleClass="black01" rendered="#{sidemenuController.marketingListUploadPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/productsponsor.xhtml?faces-redirect=true" value="Product Source" immediate="true" styleClass="black01" rendered="#{sidemenuController.productSourcePermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.productManagementPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Product Management </strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/productcategory.xhtml?faces-redirect=true" value="Product Category" immediate="true" styleClass="black01" rendered="#{sidemenuController.productCategoryPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/product.xhtml?faces-redirect=true" value="Product Information" immediate="true" styleClass="black01" rendered="#{sidemenuController.productInformationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/brand.xhtml?faces-redirect=true" value="Brand" immediate="true" styleClass="black01" rendered="#{sidemenuController.brandPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/model.xhtml?faces-redirect=true" value="Model" immediate="true" styleClass="black01" rendered="#{sidemenuController.modelPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/modeltype.xhtml?faces-redirect=true" value="Model Type" immediate="true" styleClass="black01" rendered="#{sidemenuController.modelTypePermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.campaignPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Campaign Management</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/campaign.xhtml?faces-redirect=true" value="Campaign" immediate="true" styleClass="black01" rendered="#{sidemenuController.campaignPermitted}"/></td>
+                                                        </tr>
+                                  
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/assignmentlistmonitor.xhtml?faces-redirect=true" value="Assignment List Monitoring" immediate="true" styleClass="black01" rendered="#{sidemenuController.assignmentListMonitoringPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/autoassignmentqueue.xhtml?faces-redirect=true" value="Auto Assignment Queue" immediate="true" styleClass="black01" rendered="#{sidemenuController.autoAssignmentQueuePermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.salesManagementPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Sales Management</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/contactrecord.xhtml?faces-redirect=true" value="Contact Record" immediate="true" styleClass="black01" rendered="#{sidemenuController.contactRecordPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/approchingrecord.xhtml?faces-redirect=true" value="Approaching Record" immediate="true" styleClass="black01" rendered="#{sidemenuController.approchingRecordPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/saleapprove.xhtml?faces-redirect=true" value="Sales Approval" immediate="true" styleClass="black01" rendered="#{sidemenuController.salesApprovalPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/sendDocument.xhtml?faces-redirect=true" value="Send Document" immediate="true" styleClass="black01" rendered="#{sidemenuController.sendDocumentPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/onlinepaymentlog.xhtml?faces-redirect=true" value="Online Payment Log" immediate="true" styleClass="black01" rendered="#{sidemenuController.onlinePaymentLogPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/exportsaleresult.xhtml?faces-redirect=true" value="Export Pending Payment" immediate="true" styleClass="black01" rendered="#{sidemenuController.exportSalesResultPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/importpayment.xhtml?faces-redirect=true" value="Import Payment" immediate="true" styleClass="black01" rendered="#{sidemenuController.importPaymentPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/exportpayment.xhtml?faces-redirect=true" value="Export Payment" immediate="true" styleClass="black01" rendered="#{sidemenuController.exportPaymentPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/exportyesfile.xhtml?faces-redirect=true" value="Export Yes File" immediate="true" styleClass="black01" rendered="#{sidemenuController.exportYesFilePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/exportnofile.xhtml?faces-redirect=true" value="Export No File" immediate="true" styleClass="black01" rendered="#{sidemenuController.exportNoFilePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/exportvoicefile.xhtml?faces-redirect=true" value="Export Voice File" immediate="true" styleClass="black01" rendered="#{sidemenuController.exportVoiceFilePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/rawdatalog.xhtml?faces-redirect=true" value="Raw Data File" immediate="true" styleClass="black01" rendered="#{sidemenuController.rawdataFilePermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.socialPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Social Configurations</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/socialcore.xhtml?faces-redirect=true" value="Social Media" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/socialcasetype.xhtml?faces-redirect=true" value="Case Type" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialCaseTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/socialcasetopic.xhtml?faces-redirect=true" value="Case Topic" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialCaseTopicPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/socialpriority.xhtml?faces-redirect=true" value="Priority" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialPriorityPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/socialaccount.xhtml?faces-redirect=true" value="Social Account" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialAccountPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/service.xhtml?faces-redirect=true" value="Social Service" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialServicePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/socialtransferdetail?faces-redirect=true"  value="Social Transfer" immediate="true"  styleClass="black01" rendered="#{sidemenuController.socialTransferPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/templatecategory.xhtml?faces-redirect=true" value="Template Category" immediate="true" styleClass="black01" rendered="#{sidemenuController.templateCategoryPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/messagetemplate.xhtml?faces-redirect=true" value="Message Template" immediate="true" styleClass="black01" rendered="#{sidemenuController.messageTemplatePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/inboxquota.xhtml?faces-redirect=true" value="Inbox Quota" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialInboxQuotaPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/emailaccount.xhtml?faces-redirect=true" value="Email Account" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialEmailAccountPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/emailsignature.xhtml?faces-redirect=true" value="Email Signature" immediate="true" styleClass="black01" rendered="#{sidemenuController.socialSignaturePermitted}"/></td>
+                                                        </tr>  
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/notreadyreason.xhtml?faces-redirect=true" value="Not Ready Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.notReadyReasonPermitted}"/></td>
+                                                        </tr>  
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/ignorereason.xhtml?faces-redirect=true" value="Ignore Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.ignoreReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/logoffreason.xhtml?faces-redirect=true" value="Logoff Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.logoffReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/social/transferreason.xhtml?faces-redirect=true" value="Transfer Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.transferReasonPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.informationManagementPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Information Management</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/knowledgebase.xhtml?faces-redirect=true" value="Knowledge Base" immediate="true" styleClass="black01" rendered="#{sidemenuController.knowledgeBasePermitted}" /></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/messagebroadcast.xhtml?faces-redirect=true" value="Message Broadcast" immediate="true" styleClass="black01" rendered="#{sidemenuController.msgBroadcastPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/news.xhtml?faces-redirect=true" value="News" immediate="true" styleClass="black01" rendered="#{sidemenuController.newsPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <!--tr>
+                                                      <td></td>
+                                                      <td><a href="#" class="black01">News</a></td>
+                                                    </tr-->
+                                                    <h:panelGroup rendered="#{sidemenuController.listExclusionPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong><h:commandLink action="/admin/opout.xhtml?faces-redirect=true" value="List Exclusion" immediate="true" styleClass="black01"/></strong></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                </table></td>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{sidemenuController.showMenuRight}">                                            
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree3" class="tableMenuAdmin">
+                                                    <h:panelGroup  rendered="#{sidemenuController.agentScriptPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong><h:commandLink action="/admin/agentscript.xhtml?faces-redirect=true" value="Agent Script" immediate="true" styleClass="black01"/></strong></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.holidayPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><h:commandLink action="/admin/holiday.xhtml?faces-redirect=true" immediate="true" styleClass="black01"><strong><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Holiday</strong></h:commandLink></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.masterDataPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Master Data</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/autoassignmentconfig.xhtml?faces-redirect=true" value="Auto Assignment Configuration" immediate="true" styleClass="black01" rendered="#{sidemenuController.autoAssignmentConfigPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/autoassignmentservice.xhtml?faces-redirect=true" value="Auto Assignment Service" immediate="true" styleClass="black01" rendered="#{sidemenuController.autoAssignmentServicePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/bank.xhtml?faces-redirect=true" value="Bank Issuer" immediate="true" styleClass="black01" rendered="#{sidemenuController.bankPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/campaignchannel.xhtml?faces-redirect=true" value="Campaign Channel" immediate="true" styleClass="black01" rendered="#{sidemenuController.campaignChannelPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/marketingauto.xhtml?faces-redirect=true" value="Marketing Auto" immediate="true" styleClass="black01" rendered="#{sidemenuController.marketingAutoPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/casetype.xhtml?faces-redirect=true" value="Case Type" immediate="true" styleClass="black01" rendered="#{sidemenuController.caseTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/casetopic.xhtml?faces-redirect=true" value="Case Topic" immediate="true" styleClass="black01" rendered="#{sidemenuController.caseTopicPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/casedetail.xhtml?faces-redirect=true" value="Case Detail" immediate="true" styleClass="black01" rendered="#{sidemenuController.caseDetailPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/caserequest.xhtml?faces-redirect=true" value="Reason of Request" immediate="true" styleClass="black01" rendered="#{sidemenuController.caseRequestPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/declarationform.xhtml?faces-redirect=true" value="Declaration Form" immediate="true" styleClass="black01" rendered="#{sidemenuController.declarationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/childregform.xhtml?faces-redirect=true" value="Child Registration Form" immediate="true" styleClass="black01" rendered="#{sidemenuController.childRegPermitted}"/></td>
+                                                        </tr>
+                                                         <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/childregtype.xhtml?faces-redirect=true" value="Child Registration Type" immediate="true" styleClass="black01" rendered="#{sidemenuController.childRegTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/managelistvalue.xhtml?faces-redirect=true" value="Manage List Value" immediate="true" styleClass="black01" rendered="#{sidemenuController.manageListValuePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/followup.xhtml?faces-redirect=true" value="To Follow up" immediate="true" styleClass="black01" rendered="#{sidemenuController.followupPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/nosalereason.xhtml?faces-redirect=true" value="No Sale Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.noSaleReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/activitytype.xhtml?faces-redirect=true" value="Activity Type" immediate="true" styleClass="black01" rendered="#{sidemenuController.activityTypePermitted}"/></td>
+                                                        </tr>
+                                                   
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/contactresult.xhtml?faces-redirect=true" value="Contact Result" immediate="true" styleClass="black01" rendered="#{sidemenuController.contactResultPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/objection.xhtml?faces-redirect=true" value="Objection Handling" immediate="true" styleClass="black01" rendered="#{sidemenuController.objectionPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/approvalrule.xhtml?faces-redirect=true" value="Approval Rule" immediate="true" styleClass="black01" rendered="#{sidemenuController.approvalRulePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/approvalreason.xhtml?faces-redirect=true" value="Approval Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.approvalReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/servicetype.xhtml?faces-redirect=true" value="Service Type" immediate="true" styleClass="black01" rendered="#{sidemenuController.serviceTypePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/businessunit.xhtml?faces-redirect=true" value="Business Unit" immediate="true" styleClass="black01" rendered="#{sidemenuController.businessUnitPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/location.xhtml?faces-redirect=true" value="Location" immediate="true" styleClass="black01" rendered="#{sidemenuController.locationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/questionnairecategory.xhtml?faces-redirect=true" value="Questionnaire Category" immediate="true" styleClass="black01" rendered="#{sidemenuController.questionaireCategoryPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/questionnaire.xhtml?faces-redirect=true" value="Questionnaire" immediate="true" styleClass="black01" rendered="#{sidemenuController.questionairePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/paymentmethod.xhtml?faces-redirect=true" value="Payment Method" immediate="true" styleClass="black01" rendered="#{sidemenuController.paymentMethodPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/deliverymethod.xhtml?faces-redirect=true" value="Delivery Method" immediate="true" styleClass="black01" rendered="#{sidemenuController.deliveryMethodPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/phonecategory.xhtml?faces-redirect=true" value="Address Category" immediate="true" styleClass="black01" rendered="#{sidemenuController.phoneCategoryPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/phonedirectory.xhtml?faces-redirect=true" value="Address Directory" immediate="true" styleClass="black01" rendered="#{sidemenuController.phoneDirectoryPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/document.xhtml?faces-redirect=true" value="Document" immediate="true" styleClass="black01" rendered="#{sidemenuController.documentPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/exportvoicefilepassword.xhtml?faces-redirect=true" value="Password for Voice File" immediate="true" styleClass="black01" rendered="#{sidemenuController.exportVoiceFilePasswordPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/notreadyreason.xhtml?faces-redirect=true" value="Not Ready Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.notReadyReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/logoffreason.xhtml?faces-redirect=true" value="Logoff Reason" immediate="true" styleClass="black01" rendered="#{sidemenuController.logoffReasonPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/cardexclusion.xhtml?faces-redirect=true" value="Card Exclusion" immediate="true" styleClass="black01" rendered="#{sidemenuController.cardExclusionPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/manageprovince.xhtml?faces-redirect=true" value="Manage Province" immediate="true" styleClass="black01" rendered="#{sidemenuController.manageProvincePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/contactresultplan.xhtml?faces-redirect=true" value="Contact Result Plan" immediate="true" styleClass="black01" rendered="#{sidemenuController.contactResultPlanPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/contactresultmapping.xhtml?faces-redirect=true" value="Contact Result Mapping" immediate="true" styleClass="black01" rendered="#{sidemenuController.contactResultMappingPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup  rendered="#{sidemenuController.workflowManagementPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Workflow Management</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/workflowrule.xhtml?faces-redirect=true" value="Workflow Rule" immediate="true" styleClass="black01" rendered="#{sidemenuController.workflowRulePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td><h:commandLink action="/admin/workflowcase.xhtml?faces-redirect=true" value="Case Workflow" immediate="true" styleClass="black01" rendered="#{sidemenuController.caseWorkflowPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+
+                                                    <h:panelGroup rendered="#{sidemenuController.userManagementPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">User Management</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/usergroup.xhtml?faces-redirect=true" value="User Group" immediate="true" styleClass="black01" rendered="#{sidemenuController.userGroupPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td><h:commandLink action="/admin/users.xhtml?faces-redirect=true" value="User" immediate="true" styleClass="black01" rendered="#{sidemenuController.userPermitted}"/></td>
+                                                        </tr>
+                                                        <ui:remove>
+                                                            <tr>
+                                                                <td width="27"></td>
+                                                                <td><h:commandLink action="/admin/auditlog.xhtml?faces-redirect=true" value="Audit Log" immediate="true" styleClass="black01" rendered="#{sidemenuController.auditLogPermitted}"/></td>
+                                                            </tr>
+                                                        </ui:remove>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td><h:commandLink action="/admin/sessionmonitor.xhtml?faces-redirect=true" value="Session Monitor" immediate="true" styleClass="black01" rendered="#{sidemenuController.sessionMonitorPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{sidemenuController.configurationPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/><strong class="black01">Configuration</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/flexfield.xhtml?faces-redirect=true" value="Flexfield Mapping" immediate="true" styleClass="black01" rendered="#{sidemenuController.flexFieldPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/customerlayout.xhtml?faces-redirect=true" value="Customer Layout" immediate="true" styleClass="black01" rendered="#{sidemenuController.customerLayoutPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/filetemplate.xhtml?faces-redirect=true" value="File Format" immediate="true" styleClass="black01" rendered="#{sidemenuController.fileFormatPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/registrationform.xhtml?faces-redirect=true" value="Registration Form" immediate="true" styleClass="black01" rendered="#{sidemenuController.registrationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/sequencenumber.xhtml?faces-redirect=true" value="Sequence Number" immediate="true" styleClass="black01" rendered="#{sidemenuController.sequenceNumberPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/sequencenofile.xhtml?faces-redirect=true" value="Sequence Number File" immediate="true" styleClass="black01" rendered="#{sidemenuController.sequenceNumberFilePermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/configuration.xhtml?faces-redirect=true" value="System Configuration" immediate="true" styleClass="black01" rendered="#{sidemenuController.systemConfigurationPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/customerhistorical.xhtml?faces-redirect=true" value="Customer Historical" immediate="true" styleClass="black01" rendered="#{sidemenuController.customerHistoricalPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/mediaplan.xhtml?faces-redirect=true" value="Media Plan" immediate="true" styleClass="black01" rendered="#{sidemenuController.mediaPlanPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/ctiadapter.xhtml?faces-redirect=true" value="CTI Adapter" immediate="true" styleClass="black01" rendered="#{sidemenuController.ctiAdapterPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="27"></td>
+                                                            <td width="225"><h:commandLink action="/admin/companylogo.xhtml?faces-redirect=true" value="Company Logo" immediate="true" styleClass="black01" rendered="#{sidemenuController.companyLogoPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                </table></td>
+                                        </h:panelGroup>                                             
+                                    </h:panelGrid>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td background="#{request.contextPath}/img/mainmenu_bg-3.png" width="40" valign="top" align="left">
+                        <table cellpadding="3"><tr><td>
+                                    <a href="#">
+                                        <img src="../img/adminmenu01.png" 
+                                             name="AdminMenuImage1" 
+                                             width="22" height="153" border="0" 
+                                             id="AdminMenuImage1"
+                                             onmouseout="changeImage('AdminMenuImage1', '#{request.contextPath}/img/adminmenu01.png')"
+                                             onmouseover="changeImage('AdminMenuImage1', '#{request.contextPath}/img/adminmenu02.png')"/>
+                                    </a>
+                                </td></tr></table>
+                    </td>
+                </tr>
+                <tr>
+                    <td background="#{request.contextPath}/img/mainmenu02-3.png"  width="100%" height="20"></td>
+                    <td><img src="#{request.contextPath}/img/mainmenu02-4.png" alt="" width="40" height="20" /></td>
+                </tr>
+            </table>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Payment Method : Add/Edit</ui:define>
+            <ui:define name="panel">
+                <script type="text/javascript">
+                    function checkCreditDebit(card){
+                        var c = document.getElementById('frm:creditcard');
+                        var d = document.getElementById('frm:debitcard');
+                        if(card === 'c'){
+                            d.checked = false;
+                        }else if(card === 'd'){
+                            c.checked = false;
+                        }
+                    }
+                </script>
+                <h:inputHidden value="#{paymentMethodEditController.mode}"/>
+                <h:inputHidden value="#{paymentMethodEditController.paymentMethod.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{paymentMethodEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Code:</td>
+                        <td><h:inputText id="code" value="#{paymentMethodEditController.paymentMethod.code}" styleClass="textfield" size="10" 
+                                         maxlength="10" required="true" requiredMessage="Code is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{paymentMethodEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Yes File Name Suffix Value:</td>
+                        <td><h:inputText id="yesfilevalue" value="#{paymentMethodEditController.paymentMethod.yesFileTitle}" styleClass="textfield" size="10" 
+                                         maxlength="10" >               
+                            </h:inputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Name:</td>
+                        <td valign="top">
+                            <h:inputText id="name" value="#{paymentMethodEditController.paymentMethod.name}" styleClass="textfield" size="50" 
+                                         required="true" requiredMessage="Name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Credit/Debit Card:</td>
+                        <td>
+                                <h:selectOneMenu id="creditDebit"  style="width: 120px;"
+                                                 value="#{paymentMethodEditController.paymentType}">
+                                                <f:selectItem
+                                                        itemValue="N/A"
+                                                        itemLabel="N/A"/>
+                                                <f:selectItem
+                                                        itemValue="credit"
+                                                        itemLabel="Credit Card"/>
+                                                <f:selectItem
+                                                        itemValue="debit"
+                                                        itemLabel="Debit Card"/>
+                                </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Account No:</td>
+                        <td>
+                                <h:selectOneMenu id="accountNo"  style="width: 120px;"
+                                                 value="#{paymentMethodEditController.paymentMethod.accountNo}">
+                                                <f:selectItem
+                                                        itemValue="0"
+                                                        itemLabel="Hide"/>
+                                                <f:selectItem
+                                                        itemValue="1"
+                                                        itemLabel="Option"/>
+                                                <f:selectItem
+                                                        itemValue="2"
+                                                        itemLabel="Require"/>
+                                </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Expected Date:</td>
+                        <td>
+                                <h:selectOneMenu id="expectedDate"  style="width: 120px;"
+                                                 value="#{paymentMethodEditController.paymentMethod.expectedDate}">
+                                                <f:selectItem
+                                                        itemValue="0"
+                                                        itemLabel="Hide"/>
+                                                <f:selectItem
+                                                        itemValue="1"
+                                                        itemLabel="Option"/>
+                                                <f:selectItem
+                                                        itemValue="2"
+                                                        itemLabel="Require"/>
+                                </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Remarks:</td>
+                        <td>
+                                <h:selectOneMenu id="remarks"  style="width: 120px;"
+                                                 value="#{paymentMethodEditController.paymentMethod.remarks}">
+                                                <f:selectItem
+                                                        itemValue="0"
+                                                        itemLabel="Hide"/>
+                                                <f:selectItem
+                                                        itemValue="1"
+                                                        itemLabel="Option"/>
+                                                <f:selectItem
+                                                        itemValue="2"
+                                                        itemLabel="Require"/>
+                                </h:selectOneMenu>
+
+                        
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:selectBooleanCheckbox id="online" value="#{paymentMethodEditController.paymentMethod.online}"/> Online
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{paymentMethodEditController.paymentMethod.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{paymentMethodEditController.saveAction}" rendered="#{paymentMethodEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{paymentMethodEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

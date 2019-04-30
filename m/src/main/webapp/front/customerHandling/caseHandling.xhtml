@@ -1,0 +1,733 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="23"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/customerHandling/customerDetail.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.caseManagement} / #{msg.customerHandling}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+    <ui:define name="detail_1">
+        <a4j:queue name="regQueue" ignoreDupResponses="true"/> 
+        #{customerCheckSessionController.customer}
+        <f:param id="contactCaseId" name="contactCaseId" value="#{caseHandlingController.contactCaseId}"/>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.caseHandling}</h2></td>
+                <td align="right" background="#{request.contextPath}/img/box11.png">
+                    <h:commandLink action="blank.xhtml" actionListener="#{caseHandlingReport.reportListener}" target="_blank">
+                        <f:param name="contact_case_id" value="#{caseHandlingController.contactCaseId}"/>
+                        <img alt="Printable Version" src="#{request.contextPath}/icon/printer.gif"/>
+                    </h:commandLink></td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="50%" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td class="gray03" align="right" width="40%">#{msg.caseIdSearch}</td>
+                                        <td class="gray02" width="58%">#{caseHandlingController.contactCase.code}</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="caseType"> <span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingCaseType}</h:outputLabel></td>
+                                        <td class="gray02"><h:selectOneMenu id="caseType" value="#{caseHandlingController.caseTypeId}"
+                                                             required="true"
+                                                             requiredMessage="#{msg.require}"
+                                                             styleClass="select08"
+                                                             valueChangeListener="#{caseHandlingController.caseTypeListener}"
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditCasetypePermitted eq false}">
+                                                <f:selectItems value="#{caseHandlingController.caseTypes}" />
+                                                <a4j:ajax event="change" render="caseTopic,caseDetail,caseReason,priority"  execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator /> 
+                                            </h:selectOneMenu>
+                                        &#160;<h:message for="caseType" styleClass="required"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="caseTopic"> <span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingCaseTopic}</h:outputLabel></td>
+                                        <td class="gray02">
+                                            <h:selectOneMenu id="caseTopic" value="#{caseHandlingController.caseTopicId}"
+                                                             required="true"
+                                                             styleClass="select08"
+                                                             requiredMessage="#{msg.require}"
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditCasetypePermitted eq false}">
+                                                <f:selectItems value="#{caseHandlingController.caseTopics}" />
+                                                <a4j:ajax event="change" queueId="regQueue" listener="#{caseHandlingController.caseTopicListener}"
+                                                             render="caseTopic,caseDetail,caseReason,priority"  execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+
+                                            &#160;<h:message for="caseTopic" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="caseDetail"> <span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingCaseDetail}</h:outputLabel></td>
+                                        <td class="gray02"><h:selectOneMenu id="caseDetail" value="#{caseHandlingController.caseDetailId}"
+                                                             required="true"
+                                                             styleClass="select08"
+                                                             requiredMessage="#{msg.require}"
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditCasetypePermitted eq false}">
+                                                <f:selectItems value="#{caseHandlingController.caseDetails}" />
+                                                <a4j:ajax event="change" queueId="regQueue" listener="#{caseHandlingController.caseDetailListener}"
+                                                         render="caseDetail,caseReason,priority" execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            &#160;<h:message for="caseDetail" styleClass="required"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="caseReason"> <span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingReasonOfRequest}</h:outputLabel></td>
+                                        <td class="gray02"><h:selectOneMenu id="caseReason"
+                                                                            required="true"
+                                                                            styleClass="select08"
+                                                                            requiredMessage="#{msg.require}"
+                                                                            value="#{caseHandlingController.reasonRequestId}"
+                                                                            disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditCasetypePermitted eq false}">
+                                                <f:selectItems value="#{caseHandlingController.caseRequests}" />
+                                            </h:selectOneMenu>
+                                             &#160;<h:message for="caseReason" styleClass="required"/>
+                                            </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="serviceTypeId"><span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingServicesType}</h:outputLabel></td>
+                                        <td class="gray02">
+                                            <h:selectOneMenu id="serviceTypeId"
+                                                             value="#{caseHandlingController.serviceTypeId}"
+                                                             required="true"
+                                                             styleClass="select08"
+                                                             requiredMessage="#{msg.require}"
+                                                             valueChangeListener="#{caseHandlingController.serviceTypeListener}"
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditServicetypePermitted eq false}">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItems value="#{caseHandlingController.serviceTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                <a4j:ajax event="change" queueId="regQueue" render="businessUnitId,locationId" execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            &#160;<h:message for="serviceTypeId" styleClass="required"/>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="businessUnitId"><span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingBusinessUnit}</h:outputLabel></td>
+                                        <td class="gray02">
+                                            <h:selectOneMenu id="businessUnitId"
+                                                             value="#{caseHandlingController.businessUnitId}"
+                                                             required="true"
+                                                             styleClass="select08"
+                                                             requiredMessage="#{msg.require}"
+                                                             valueChangeListener="#{caseHandlingController.businessUnitListener}"
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditBusinessUnitPermitted eq false}">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItems value="#{caseHandlingController.businessUnitList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                <a4j:ajax event="change" queueId="regQueue" render="businessUnitId,locationId" execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            &#160;<h:message for="businessUnitId" styleClass="required"/>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="locationId"><span class="required">#{msg.requireMarker}</span> #{msg.caseHandlingLocation}</h:outputLabel></td>
+                                        <td class="gray02" valign="top">
+                                             <h:selectOneMenu id="locationId"
+                                                             value="#{caseHandlingController.locationId}"
+                                                             required="true"
+                                                             styleClass="select08"
+                                                             requiredMessage="#{msg.require}"
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditLocationPermitted eq false}">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItems value="#{caseHandlingController.locationList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                <a4j:ajax event="change" queueId="regQueue" render="locationId" execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            &#160;<h:message for="locationId" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="contactPerson">  #{msg.caseHandlingContactPerson}</h:outputLabel></td>
+                                            <td class="gray02"><h:inputText styleClass="textfield" id="contactPerson" value="#{caseHandlingController.contactCase.contactPerson}" 
+                                                                            size="15" readonly="#{caseHandlingController.disableSave or  frontMenuController.caseEditContactpersonPermitted eq false}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="relationship">  #{msg.relatedInfoAccountSearch}</h:outputLabel></td>
+                                        <td class="gray02"><h:selectOneMenu id="relationship"
+                                                                            styleClass="select08"
+                                                                            value="#{caseHandlingController.relationshipId}"
+                                                                            disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditRelatedinfoPermitted eq false}">
+                                                <f:selectItems value="#{caseHandlingController.relationships}"/>
+                                            </h:selectOneMenu></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="contactDate"><span class="required">#{msg.requireMarker}</span>  #{msg.caseHandlingContactDate}</h:outputLabel></td>
+                                        <td class="gray02"><rich:calendar id="contactDate" value="#{caseHandlingController.contactCase.contactDate}"
+                                                           locale="#{msg.locale}"
+                                                           popup="true"
+                                                           datePattern="#{msg.dateTimePattern}"
+                                                           inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                                           readonly="#{caseHandlingController.disableSave or frontMenuController.caseEditContactdatePermitted eq false }"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="caseChannel"><span class="required">#{msg.requireMarker}</span>  #{msg.caseHandlingChannel}</h:outputLabel></td>
+                                        <td class="gray02"><h:selectOneMenu id="caseChannel"
+                                                                            styleClass="select08"
+                                                                            value="#{caseHandlingController.caseChannelId}" 
+                                                                            required="true" 
+                                                                            requiredMessage="#{msg.require}"
+                                                                            disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditChannelPermitted eq false }">
+                                                <f:selectItems value="#{caseHandlingController.channels}" />
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            &#160;<h:message for="caseChannel" styleClass="required"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="createBy" rendered="#{caseHandlingController.contactCase.id ne null}">#{msg.createBy}</h:outputLabel></td>
+                                            <td class="gray02" valign="top">
+                                                <h:outputText id="createBy" rendered="#{caseHandlingController.contactCase.id ne null}" value="#{caseHandlingController.contactCase.createBy}"></h:outputText>
+                                            </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="createDate" rendered="#{caseHandlingController.contactCase.id ne null}">#{msg.createDate}</h:outputLabel></td>
+                                            <td class="gray02" valign="top">
+                                                <h:outputText id="createDate" value="#{caseHandlingController.contactCase.createDate}" rendered="#{caseHandlingController.contactCase.id ne null}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="updateBy" rendered="#{caseHandlingController.contactCase.id ne null}">#{msg.updateBy}</h:outputLabel></td>
+                                            <td class="gray02" valign="top">
+                                            <h:outputText id="updateBy" value="#{caseHandlingController.contactCase.updateBy}" rendered="#{caseHandlingController.contactCase.id ne null}"></h:outputText>
+                                            </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="updateDate" rendered="#{caseHandlingController.contactCase.id ne null}">#{msg.updateDate}</h:outputLabel></td>
+                                            <td class="gray02" valign="top">
+                                            <h:outputText id="updateDate" value="#{caseHandlingController.contactCase.updateDate}" rendered="#{caseHandlingController.contactCase.id ne null}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </td>
+                                    </tr>
+                                    
+                                    
+                                    <h:panelGroup rendered="#{caseHandlingController.cancelWorkflowPermitted and caseHandlingController.contactCase.workflow}">
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top">
+                                            <h:selectBooleanCheckbox  id="cancelWF" value="#{caseHandlingController.cancelWorkflow}"/>
+                                        </td>
+                                            <td class="gray02" valign="bottom">
+                                                <h:outputText value="Cancel Workflow"/>
+                                            </td>
+                                    </tr>
+                                    </h:panelGroup>
+                                    
+                                    
+                                </table>
+                            </td>
+                            <td width="50%" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="caseDescription"><span class="required">#{msg.requireMarker}</span>  #{msg.caseHandlingDescription}</h:outputLabel></td>
+                                <td class="gray02"><h:inputTextarea rows="10" cols="50" id="caseDescription" 
+                                                                    value="#{caseHandlingController.contactCase.description}" 
+                                                                    required="true"
+                                                                    requiredMessage="#{msg.require}"
+                                                                    readonly="#{caseHandlingController.disableSave or frontMenuController.caseEditDescriptionPermitted eq false}">
+                                                  
+                                                </h:inputTextarea>
+                                                &#160;<h:message for="caseDescription" styleClass="required"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top"><h:outputLabel for="remark"> #{msg.caseHandlingRemark}</h:outputLabel></td>
+                                <td class="gray02"><h:inputTextarea rows="5" cols="50" id="remark" value="#{caseHandlingController.contactCase.remark}" readonly="#{caseHandlingController.disableSave or frontMenuController.caseEditRemarkPermitted eq false}"/></td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="gray03" align="right" valign="top">#{msg.caseHandlingAttachment}</td>
+                                        <td class="gray02">
+                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td>
+                                                        <a4j:commandButton image="/img/b_add.png"
+                                                                           oncomplete="#{rich:component('fileUpload')}.show();"
+                                                                           limitRender="true" execute="@this"
+                                                                           render="fileUpload"
+                                                                           rendered="#{(caseHandlingController.disableSave eq false) and frontMenuController.caseEditAttachmentPermitted}">
+                                                        </a4j:commandButton>
+                                                    </td>
+                                                </tr>
+                                                
+                                                <tr>
+                                                    <td valign="top">
+                                                <h:panelGroup id="attachPanel">
+                                                    <rich:dataTable value="#{caseHandlingController.attachFiles}" var="list">
+                                                        <rich:column>
+                                                            <a href="../../upload/customer/#{list.caseId.customerId.id}/case/#{list.caseId.id}/#{list.filename}" target="_blank">#{fn:substringAfter(list.filename, "_")}</a>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <a4j:commandButton image="/img/b_subtract02.png"
+                                                                               render="attachPanel"
+                                                                               actionListener="#{caseHandlingController.removeFile}"
+                                                                               execute="@this" limitRender="true"
+                                                                               onclick="if (!confirm('Do you want to delete this file?')) { return false; }"
+                                                                               rendered="#{(caseHandlingController.disableSave eq false) and frontMenuController.caseEditAttachmentPermitted}">
+                                                                <f:param name="attachId" value="#{list.id}"/>
+                                                            </a4j:commandButton>
+                                                        </rich:column>
+                                                    </rich:dataTable>
+                                                    <rich:dataTable value="#{caseHandlingController.attachFilesTemp}" var="list">
+                                                        <rich:column>
+                                                            <a href="../../upload/temp/#{list[2]}" target="_blank">#{list[0]}</a>
+                                                        </rich:column>
+                                                        <rich:column>
+                                                            <a4j:commandButton image="/img/b_subtract02.png"
+                                                                               render="attachPanel"
+                                                                               actionListener="#{caseHandlingController.removeFileTemp}"
+                                                                               execute="@this" limitRender="true"
+                                                                               rendered="#{(caseHandlingController.disableSave eq false) and frontMenuController.caseEditAttachmentPermitted}">
+                                                                <f:param name="rmFile" value="#{list[1]}"/>
+                                                            </a4j:commandButton>
+                                                        </rich:column>
+                                                    </rich:dataTable>
+                                                </h:panelGroup>
+                                            </td>
+                                        </tr>
+                                        
+                                        </table>
+                                        </td>
+                                    </tr>
+                                    
+                                    <tr>
+                                        <td class="gray03" align="right">#{msg.caseHandlingRelatedCase}</td>
+                                        <td class="gray02">
+                                            <h:panelGroup id="casePanel">
+                                                <h:inputHidden value="#{caseHandlingController.relatedCaseId}"/>
+                                                <h:inputText styleClass="textfield" readonly="true" value="#{caseHandlingController.relatedCaseName}" size="15"/>
+                                            </h:panelGroup>
+                                            <a4j:commandButton image="/resources/img/b_search.png"
+                                                               oncomplete="#{rich:component('selectCase')}.show();"
+                                                               style="margin: 10px 0px 0px 10px; vertical-align: bottom"
+                                                               render="popupSelectCase"
+                                                               execute="@this" limitRender="true"
+                                                               rendered="#{(caseHandlingController.disableSave eq false) and frontMenuController.caseEditRelatedcasePermitted}"/>
+                                            <a4j:commandButton image="/img/b_remove02.png"
+                                                               render="casePanel"
+                                                               style="margin: 10px 0px 0px 10px; vertical-align: bottom"
+                                                               actionListener="#{caseHandlingController.clearCaseListener}"
+                                                               execute="@this" limitRender="true"
+                                                               rendered="#{(caseHandlingController.disableSave eq false) and frontMenuController.caseEditRelatedcasePermitted}">
+                                            </a4j:commandButton>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" align="right"><h:outputLabel for="priority"><span class="required">#{msg.requireMarker}</span>  #{msg.caseHandlingPriority}</h:outputLabel></td>
+                                        <td class="gray02">
+                                            <h:selectOneMenu id="priority" value="#{caseHandlingController.contactCase.priority}" 
+                                                             disabled="#{caseHandlingController.disableSave or frontMenuController.caseEditPriorityPermitted eq false}">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="#{msg.lowValue}" itemLabel="#{msg.low}"/>
+                                                <f:selectItem itemValue="#{msg.mediumValue}" itemLabel="#{msg.medium}"/>
+                                                <f:selectItem itemValue="#{msg.highValue}" itemLabel="#{msg.high}"/>
+                                                <f:selectItem itemValue="#{msg.immediateValue}" itemLabel="#{msg.immediate}"/>
+                                                <a4j:ajax event="change" queueId="regQueue"
+                                                         listener="#{caseHandlingController.priorityListener}"
+                                                         render="priority"
+                                                         execute="@this"
+                                                         limitRender="true"/>
+                                            </h:selectOneMenu></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03"  align="right">
+                                            <h:outputLabel>#{msg.caseHandlingSla}</h:outputLabel>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03"  align="right">
+                                            <h:outputLabel for="slaAcceptCase">#{msg.caseHandlingAcceptCase}</h:outputLabel>
+                                        </td>
+                                        <td class="gray02">
+                                        <h:outputText id="slaAcceptCase" value="#{caseHandlingController.contactCase.slaAccept}">
+                                            <f:convertNumber pattern="##0.00"/>
+                                        </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03"  align="right">
+                                            <h:outputLabel for="slaCloseCase">#{msg.caseHandlingCloseCase}</h:outputLabel>
+                                        </td>
+                                        <td class="gray02">
+                                        <h:outputText id="slaCloseCase" value="#{caseHandlingController.contactCase.slaClose}">
+                                            <f:convertNumber pattern="##0.00"/>
+                                        </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03"  align="right">
+                                            <h:outputLabel for="slaDueDate">#{msg.caseHandlingDueDate}</h:outputLabel>
+                                        </td>
+                                        <td class="gray02">
+                                        <h:outputText id="slaDueDate" value="#{caseHandlingController.contactCase.slaCloseDate}">
+                                            <f:convertDateTime pattern="#{msg.dateTimePatternDay}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                                        </h:outputText>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td width="150" height="60" align="right" valign="middle" class="statusbg1"><span class="required">#{msg.requireMarker}</span>Status:</td>
+                                        <td width="270" valign="middle" class="statusbg2">
+                                            <h:selectOneMenu value="#{caseHandlingController.contactCase.status}" rendered="#{caseHandlingController.allowClosedCase}"
+                                                             disabled="#{not frontMenuController.caseEditStatusPermitted}">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="#{msg.pendingValue}" itemLabel="#{msg.pending}"/>
+                                                <f:selectItem itemValue="#{msg.closedValue}" itemLabel="#{msg.closed}"/>
+                                            </h:selectOneMenu>   
+                                            <h:selectOneMenu value="#{caseHandlingController.contactCase.status}" rendered="#{not caseHandlingController.allowClosedCase}"
+                                                             disabled="#{not frontMenuController.caseEditStatusPermitted}">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="#{msg.pendingValue}" itemLabel="#{msg.pending}"/>
+                                            </h:selectOneMenu>  
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+                        <h:commandButton image="/resources/img/b_save.png"
+                                         action="#{caseHandlingController.saveAction}"
+                                         rendered="#{(frontMenuController.caseEditPermitted and caseHandlingController.contactCase.status ne msg.closedValue) or caseHandlingController.bSaveButton}"
+                                         style="margin-top: 5px; margin-bottom: 5px"/>
+                        <h:commandButton image="/resources/img/b_back.png" 
+                                         action="#{caseHandlingController.back}"
+                                         immediate="true"
+                                         style="margin-top: 5px; margin-bottom: 5px"/>
+                        </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        <!-- Begin PurchaseOrder History -->
+        <h:panelGroup rendered="#{caseHandlingController.saleHistoryList.size() > 0}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Sale History</h2></td>
+                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"></td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top">
+                    <rich:dataTable id="saleHistoryData" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{caseHandlingController.saleHistoryList}" rows="#{global.maxrows}" var="poList">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="text-align: left;"></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Ref No."/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Product"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Plan"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Insure Person"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Purchased Date"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="TMR"/></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column>
+                            <h:selectBooleanCheckbox value="#{caseHandlingController.selectedPoIds[poList.poId]}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{poList.refNo}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{poList.productName}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{poList.planName}"/>
+                        </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{poList.insurePerson}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{poList.purchaseDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{poList.tmrName}"/>
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        </h:panelGroup>
+        <!-- End PurchaseOrder History -->
+        <!-- Workflow -->
+        <h:panelGroup rendered="#{caseHandlingController.contactCaseWorkflowLogList.size() > 0}">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Workflow</h2></td>
+                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"></td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top">
+                  <rich:dataTable id="workflowLogData" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{caseHandlingController.contactCaseWorkflowLogList}" rows="#{global.maxrows}" var="ruleList">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Assign To"/></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Receive User"/></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Due Date"/></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Acceptance Date"/></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Acceptance Status"/></rich:column>
+                            <rich:column style="width: 25%;text-align: left;"><h:outputText value="Remark"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value="#{ruleList.userName} #{ruleList.userSurname}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{ruleList.receiveUserName} #{ruleList.receiveUserSurname}" rendered="#{ruleList.receiveUserName ne null}"/>
+                        <h:outputText value="-" rendered="#{ruleList.receiveUserName eq null}"/>
+                    </rich:column>
+                    <rich:column >
+                            <h:outputText value="#{ruleList.dueDate}"  rendered="#{ruleList.dueDate ne null}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                        </h:outputText>
+                        <h:outputText value="-" rendered="#{ruleList.dueDate eq null}"/>
+                    </rich:column>
+                    <rich:column>
+                            <h:outputText value="#{ruleList.acceptDate}"  rendered="#{ruleList.acceptDate ne null}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                        </h:outputText>
+                        <h:outputText value="-" rendered="#{ruleList.acceptDate eq null}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{ruleList.acceptStatus}" rendered="#{ruleList.acceptStatus ne null}"/>
+                        <h:outputText value="-" rendered="#{ruleList.acceptStatus eq null}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{ruleList.remark}" rendered="#{ruleList.remark ne null}"/>
+                        <h:outputText value="-" rendered="#{ruleList.remark eq null}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        </h:panelGroup>
+        <!-- Workflow -->
+        
+        <!-- Activity -->
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.activityInformation}</h2></td>
+                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                     <h:commandButton image="/img/b_createactivity.png" alt="Create Activity" 
+                                     action="#{caseHandlingController.editActivity}"
+                                     rendered="#{frontMenuController.activityAddPermitted and caseHandlingController.contactCase.status ne msg.closedValue 
+                                                 and caseHandlingController.contactCaseWorkflowLogList.size() eq null}">
+                        <f:param name="from" value="#{caseHandlingController.from}"/>
+                        <f:param name="contactCaseId" value="#{caseHandlingController.contactCase.id}"/>
+                        <f:param name="selectId" value="#{caseHandlingController.contactCase.id}"/>
+                    </h:commandButton>
+                    
+                    <h:commandButton image="/img/b_createactivity.png" alt="Create Activity" 
+                                     action="#{caseHandlingController.editActivity}"
+                                     rendered="#{frontMenuController.activityAddPermitted and caseHandlingController.contactCase.status ne msg.closedValue and caseHandlingController.allowCreateActivity 
+                                                 and caseHandlingController.contactCaseWorkflowLogList.size() > 0}">
+                        <f:param name="from" value="#{caseHandlingController.from}"/>
+                        <f:param name="contactCaseId" value="#{caseHandlingController.contactCase.id}"/>
+                        <f:param name="workflowlogId" value="#{caseHandlingController.nextContactCaseWorkflowLog.id}"/>
+                        <f:param name="selectId" value="#{caseHandlingController.contactCase.id}"/>
+                    </h:commandButton>
+<!--                    <h:outputLink value="#{request.contextPath}/front/customerHandling/activityEdit.jsf">
+                        <f:param name="contactCaseId" value="#{caseHandlingController.contactCase.id}"/>
+                        <h:graphicImage library="img" name="b_createactivity.png" alt="Add" />
+                    </h:outputLink>-->
+        </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top">
+                    <rich:dataTable id="activityList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{caseHandlingController.activityList}" var="list">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.tableActivityDate}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.tableActivityType}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.tableActivityChannel}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.tableActivityCreateBy}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.tableActivityDesc}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="#{msg.tableActivityAssignTo}"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Acceptance Status"/></rich:column>
+                                <rich:column style="text-align: left;"><h:outputText value="Remark"/></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        <rich:column>
+                            <h:outputText value="#{list.activityDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:commandLink title="#{list.activityType}"
+                                           value="#{list.activityType}"
+                                           action="#{caseHandlingController.editActivity}">
+                                <f:param name="from" value="activity"/>
+                                <f:param name="activityId" value="#{list.id}"/>
+                                <f:param name="contactCaseId" value="#{list.contactCaseId}"/>
+                            </h:commandLink>
+                            <h:graphicImage library="icon" name="clip.png" title="Attach File" alt="Attach File" rendered="#{list.attachFile}" width="16" height="16"  style="padding: 0px; border: 0px;display: inline"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.channel}" />
+                        </rich:column>
+                        <ui:remove>
+                            <rich:column>
+                                <h:outputText value="#{list.dueDate}">
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                                </h:outputText>
+                            </rich:column>
+                        </ui:remove>
+                        <rich:column>
+                            <h:outputText value="#{list.createdBy}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.description}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.userReceiverName}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.receivedStatus}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.remark}"/>
+                        </rich:column>
+                        <f:facet name="footer">
+
+                        </f:facet>
+                    </rich:dataTable>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+        <!-- Activity -->
+
+    </ui:define>
+    <ui:define name="popupModal">
+        
+        <!-- Upload File -->
+        <h:form id="frmUpAttach">
+        <rich:popupPanel id="fileUpload" width="410" height="320" style="padding: 0 0 0 0; border-style: none" domElementAttachment="parent">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">File Upload</h2></td>
+                    <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"><a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('fileUpload')}.hide(); return false;">#{msg.close}</a></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                    <td valign="top" bgcolor="#FFFFFF">
+                        <rich:fileUpload id="fileUploadAtt" fileUploadListener="#{caseHandlingController.uploadListener}"
+                                         render="attachPanel"
+                                         limitRender="true"
+                                         execute="@this"
+                                     style="border: none;" immediateUpload="true"
+                                         onfilesubmit="#{rich:component('fileUpload')}.hide();">
+                        </rich:fileUpload>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+        </rich:popupPanel>
+        </h:form>
+        <!-- Upload File -->
+        
+        
+        <ui:include id="popupSelectCase"
+                    src="#{helperBean.postback ? '/front/customerHandling/popupSelectCase.xhtml' : '/share/empty.xhtml'}">
+            <ui:param name="p" value="#{caseHandlingController}"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="contactPerson"><span class="gray02">#{msg.caseHandlingContactPerson} </span><span class="blue04">#{caseHandlingController.contactCase.contactPerson}</span></ui:define>
+
+</ui:composition>

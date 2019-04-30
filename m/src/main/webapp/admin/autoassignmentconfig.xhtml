@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminmain.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Auto Assignment Configuration</ui:define>
+    <ui:define name="button">
+    </ui:define>
+    <ui:define name="panel">
+       <table width="100%" border="0" cellspacing="4" cellpadding="4">
+           <tr>
+                <td width="150" align="right" valign="top" class="gray03">&nbsp;</td><td></td>
+            </tr>
+            <tr>
+                <td width="300" align="right" valign="top" class="gray03">User Quota:&nbsp;</td>
+                <td>#{autoAssignmentConfigController.autoAssignmentConfig.userQuota}</td>
+            </tr>
+           <tr>
+                <td align="right" valign="top" class="gray03">Check Duplicate: </td>
+                <td>
+                    <h:outputText value="Yes" rendered="#{autoAssignmentConfigController.autoAssignmentConfig.checkDuplicate}"/>
+                    <h:outputText value="No" rendered="#{not autoAssignmentConfigController.autoAssignmentConfig.checkDuplicate}"/>
+               </td>
+            </tr>
+           <tr>
+                <td align="right" valign="top" class="gray03">Duplicate Period:</td>
+                <td>#{autoAssignmentConfigController.autoAssignmentConfig.duplicatePeriod} Min.</td>
+           </tr>
+           <tr>
+                <td width="150" align="right" valign="top" class="gray03">&nbsp;</td><td></td>
+            </tr>
+           <tr>
+                <td colspan="2" align="center"><h:commandButton image="../img/b_edit03.png" action="#{autoAssignmentConfigController.editAction}" rendered="#{autoAssignmentConfigController.editPermitted}"/></td>
+            </tr>
+           <tr>
+                <td width="150" align="right" valign="top" class="gray03">&nbsp;</td><td></td>
+            </tr>
+        </table>      
+               
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

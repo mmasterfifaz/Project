@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Select Product</ui:define>
+    <ui:param name="modalId" value="selectProduct"/>
+    <ui:param name="width" value="1000"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup>
+            <table border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td>Product Category : </td>
+                    <td rowspan="6" valign="top">
+                        <div class="scrollMotor">
+                            <table border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td>
+                                        <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                            <h:selectBooleanCheckbox id="selectProductCategoryAll" value="#{popupSelectProduct.checkProductCategoryAll}">
+                                                <a4j:ajax event="click" 
+                                                             render="selectProductCategoryAll,productCategoryList" 
+                                                             limitRender="true"
+                                                             listener="#{popupSelectProduct.checkProductCategoryAllListener}">
+                                                    <f:param name="checkProductCategoryAll" value="#{popupSelectProduct.checkProductCategoryAll}"/>
+                                                </a4j:ajax>
+                                            </h:selectBooleanCheckbox>
+                                            <h:outputText value="All"/>
+                                        </h:panelGrid>
+                                    </td>
+                                </tr> 
+                                <tr>
+                                    <td> 
+                                        <h:panelGroup id="productCategoryList">
+                                            <a4j:repeat value="#{popupSelectProduct.productCategoryList}" var="list">
+                                                <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                    <h:selectBooleanCheckbox value="#{popupSelectProduct.selectedIds[list.id]}"/>
+                                                    <h:outputText value="#{list.name}"/>
+                                                </h:panelGrid>
+                                            </a4j:repeat>
+                                        </h:panelGroup>
+                                    </td>
+                                        
+                                </tr>                       
+                            </table>
+                        </div>
+                            
+                    </td>                                                            
+                    <td>Product Plan Category : </td>
+                    <td rowspan="6" valign="top">
+                        <div class="scrollMotor">
+                            <table border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td><h:selectBooleanCheckbox id="selectProductPlanCategoryAll" value="#{popupSelectProduct.checkProductPlanCategoryAll}">
+                                            <a4j:ajax event="click" 
+                                                         render="selectProductPlanCategoryAll,productPlanCategoryList" 
+                                                         limitRender="true"
+                                                         listener="#{popupSelectProduct.checkProductPlanCategoryAllListener}">
+                                                <f:param name="checkProductPlanCategoryAll" value="#{popupSelectProduct.checkProductPlanCategoryAll}"/>
+                                            </a4j:ajax>
+                                        </h:selectBooleanCheckbox>
+                                        <h:outputText value="All"/></td>
+                                </tr> 
+                                <tr>
+                                    <td> 
+                                        <h:panelGroup id="productPlanCategoryList">
+                                            <a4j:repeat value="#{popupSelectProduct.productPlanCategoryList}" var="list">
+                                                <h:selectBooleanCheckbox value="#{popupSelectProduct.selectedIds1[list.id]}" label="#{list.name}" title="#{list.name}"/>
+                                                <h:outputText value="#{list.name}"/>
+                                            </a4j:repeat>
+                                        </h:panelGroup></td>
+                                            
+                                </tr>                       
+                            </table>
+                        </div>
+                    </td>
+                    <td align="right" valign="top">Model Type :</td>
+                    <td valign="top">
+                        <h:selectOneMenu id="modelTypeId" 
+                                         value="#{popupSelectProduct.modelTypeId}"
+                                         styleClass="select08"
+                                         valueChangeListener="#{popupSelectProduct.modelTypeChangeListener}">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItems value="#{popupSelectProduct.modelTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            <a4j:ajax event="change" 
+                                         render="brandId,modelId,modelYear" 
+                                         limitRender="true" 
+                                         execute="@this"/>
+                        </h:selectOneMenu>
+                    </td>
+                    <td rowspan="6" valign="bottom">
+                        <a4j:commandButton actionListener="#{popupSelectProduct.searchActionListener}" 
+                                           render="productList" 
+                                           limitRender="true" 
+                                           image="/img/b_search.png"/></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" valign="top">Brand :</td>
+                    <td valign="top">
+                        <h:selectOneMenu id="brandId" 
+                                         value="#{popupSelectProduct.brandId}"
+                                         styleClass="select08"
+                                         valueChangeListener="#{popupSelectProduct.brandChangeListener}">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItems value="#{popupSelectProduct.brandList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            <a4j:ajax event="change" 
+                                         render="modelId,modelYear" 
+                                         limitRender="true" 
+                                         execute="@this"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" valign="top">Model :</td>
+                    <td valign="top">
+                        <h:selectOneMenu id="modelId" 
+                                         value="#{popupSelectProduct.modelId}"
+                                         styleClass="select08">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItems value="#{popupSelectProduct.modelList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            <a4j:ajax event="change" 
+                                         render="modelYear" 
+                                         limitRender="true" 
+                                         execute="@this"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" valign="top">Year :</td>
+                    <td valign="top">
+                        <h:selectOneMenu id="modelYear" 
+                                         value="#{popupSelectProduct.modelYear}"
+                                         styleClass="select08">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItems value="#{popupSelectProduct.modelYearList}"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" valign="top">Sum Insured Min. :</td>
+                    <td valign="top">
+                        <h:selectOneMenu id="sumInsuredMin" 
+                                            value="#{popupSelectProduct.sumInsuredMin}">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItem itemLabel="1" itemValue="1"/>
+                            <f:selectItem itemLabel="50,001" itemValue="50001"/>
+                            <f:selectItem itemLabel="100,001" itemValue="100001"/>
+                            <f:selectItem itemLabel="150,001" itemValue="150001"/>
+                            <f:selectItem itemLabel="200,001" itemValue="200001"/>
+                            <f:selectItem itemLabel="250,001" itemValue="250001"/>
+                            <f:selectItem itemLabel="300,001" itemValue="300001"/>
+                            <f:selectItem itemLabel="350,001" itemValue="350001"/>
+                            <f:selectItem itemLabel="400,001" itemValue="400001"/>
+                            <f:selectItem itemLabel="450,001" itemValue="450001"/>
+                            <f:selectItem itemLabel="500,001" itemValue="500001"/>
+                            <f:selectItem itemLabel="550,001" itemValue="550001"/>
+                            <f:selectItem itemLabel="600,001" itemValue="600001"/>
+                            <f:selectItem itemLabel="650,001" itemValue="650001"/>
+                            <f:selectItem itemLabel="700,001" itemValue="700001"/>
+                            <f:selectItem itemLabel="750,001" itemValue="750001"/>
+                            <f:selectItem itemLabel="800,001" itemValue="800001"/>
+                            <f:selectItem itemLabel="850,001" itemValue="850001"/>
+                            <f:selectItem itemLabel="900,001" itemValue="900001"/>
+                            <f:selectItem itemLabel="950,001" itemValue="950001"/>
+                            <f:selectItem itemLabel="1,000,001" itemValue="1000001"/>
+                        </h:selectOneMenu>
+                        Max. :
+                        <h:selectOneMenu id="sumInsuredMax" 
+                                            value="#{popupSelectProduct.sumInsuredMax}">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItem itemLabel="50,000" itemValue="50000"/>
+                            <f:selectItem itemLabel="100,000" itemValue="100000"/>
+                            <f:selectItem itemLabel="150,000" itemValue="150000"/>
+                            <f:selectItem itemLabel="200,000" itemValue="200000"/>
+                            <f:selectItem itemLabel="250,000" itemValue="250000"/>
+                            <f:selectItem itemLabel="300,000" itemValue="300000"/>
+                            <f:selectItem itemLabel="350,000" itemValue="350000"/>
+                            <f:selectItem itemLabel="400,000" itemValue="400000"/>
+                            <f:selectItem itemLabel="450,000" itemValue="450000"/>
+                            <f:selectItem itemLabel="500,000" itemValue="500000"/>
+                            <f:selectItem itemLabel="550,000" itemValue="550000"/>
+                            <f:selectItem itemLabel="600,000" itemValue="600000"/>
+                            <f:selectItem itemLabel="650,000" itemValue="650000"/>
+                            <f:selectItem itemLabel="700,000" itemValue="700000"/>
+                            <f:selectItem itemLabel="750,000" itemValue="750000"/>
+                            <f:selectItem itemLabel="800,000" itemValue="800000"/>
+                            <f:selectItem itemLabel="850,000" itemValue="850000"/>
+                            <f:selectItem itemLabel="900,000" itemValue="900000"/>
+                            <f:selectItem itemLabel="950,000" itemValue="950000"/>
+                            <f:selectItem itemLabel="1,000,000" itemValue="1000000"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td align="right" valign="top">Claim Type :</td>
+                    <td valign="top">
+                        <h:selectOneMenu id="claimType" 
+                                            value="#{popupSelectProduct.claimType}">
+                            <f:selectItem itemLabel="All" itemValue=""/>
+                            <f:selectItem itemLabel="อู่ประกัน" itemValue="อู่ประกัน"/>
+                            <f:selectItem itemLabel="อู่ห้าง" itemValue="อู่ห้าง"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>
+            </table>
+        </h:panelGroup>
+        <div style="height: 350px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+        <rich:dataTable id="productList" 
+                        style="width: 100%" styleClass="tableline01" headerClass="subh01" 
+                        value="#{popupSelectProduct.dataList}" 
+                        rows="#{global.maxrows}" 
+                        var="list"
+                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                        onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+            <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column style="text-align: left;">บริษัทประกัน</rich:column>
+                    <rich:column style="text-align: left;">ประเภทประกัน</rich:column>
+                    <rich:column style="text-align: left;">ชนิด</rich:column>
+                    <rich:column style="text-align: left;">ยี่ห้อ</rich:column>
+                    <rich:column style="text-align: left;">รุ่น</rich:column>
+                    <rich:column style="text-align: left;">ปี</rich:column>
+                    <rich:column style="text-align: left;">ชื่อ</rich:column>
+                    <rich:column style="text-align: left;">Package</rich:column>
+                    <rich:column style="text-align: left;">ทุนประกัน</rich:column>
+                    <rich:column style="text-align: left;">เบี้ย</rich:column>
+                    <rich:column style="text-align: left;"></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+
+            <rich:column >
+                <h:outputText value="#{list.product.productCategory.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.productPlanCategory.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.product.modelType.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.product.model.brand.name}"/>
+            </rich:column>
+            <rich:column >
+                <h:outputText value="#{list.product.model.name}"/>
+            </rich:column>
+            <rich:column >
+                <h:outputText value="#{list.product.modelYear}"/>
+            </rich:column>
+            <rich:column >
+                <h:outputText value="#{list.product.name}"/>
+            </rich:column>
+            <rich:column >
+                <h:outputText value="#{list.name}"/>
+            </rich:column>
+            <rich:column >
+                <h:outputText value="#{list.motorLoss}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column >
+                <h:outputText value="#{list.netPremium}">
+                    <f:convertNumber pattern="#,##0.00"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column >
+                <a4j:commandButton image="/img/select.gif"
+                                   render="productInfo,noInstallment,panelInstallment"
+                                   limitRender="true"
+                                   onclick="#{rich:component('selectProduct')}.hide();"
+                                   actionListener="#{r.selectProductListener}">
+                    <f:param name="productPlanId" value="#{list.id}"/>
+                </a4j:commandButton>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" 
+                                   renderIfSinglePage="false" 
+                                   render="productList">
+                </rich:dataScroller>   
+            </f:facet>
+        </rich:dataTable>  
+        </div>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+<h:body >
+<ui:composition template="../templates/blank.xhtml">
+    <ui:define name="title2">Import Content</ui:define>
+    <ui:define name="panel"> 
+        <c:if test="#{userSession.roleKBDataEntry || userSession.roleKBApproval || userSession.roleKBManager}" >
+            <table width="600">
+                    <tr>
+                        <td>
+                         <h2 class="style1">Import Content</h2>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td>
+                            <rich:fileUpload id="fileUpload"
+                                             fileUploadListener="#{knowledgebaseController.fileUploadBean.listener}"
+                                             maxFilesQuantity="10" 
+                                             immediateUpload="true" 
+                                             acceptedTypes="xls,xlsx"
+                                             listHeight="65px">
+                                <a4j:ajax event="clear" render="fileUploadBean"/>
+                            </rich:fileUpload>
+                            
+                        </td> 
+                    </tr>
+                <c:if test="#{userSession.roleKBApproval || userSession.roleKBManager}" >
+                    <tr> 
+                        <td>
+                            <h:selectOneRadio value="#{knowledgebaseController.appvimport}">
+                                <f:selectItem itemLabel="Auto Approval" itemValue="True"/>
+                                <f:selectItem itemLabel="Waiting for Approval" itemValue="False"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                </c:if>
+                    <tr> 
+                        <td>Content Owner :  <h:selectOneMenu value="#{knowledgebaseController.contentown}" disabled="#{userSession.roleKBDataEntry}">
+                                <f:selectItems value="#{knowledgebaseController.usersList}" var="usersList" itemValue="#{usersList.id}" itemLabel="#{usersList.name} #{usersList.surname}" /> 
+                            </h:selectOneMenu> 
+
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td>
+                            <h:commandButton image="../img/b_import.png" 
+                                     action ="#{knowledgebaseController.importAction}" onclick="window.opener.location.reload(true);this.focus();"/>
+                             <a4j:commandButton image="../img/b_close03.png" onclick="window.opener.location.reload();window.close();"  />
+                        </td>
+                    </tr>
+                </table>
+            <br/>
+            <br/>
+            <table width="600">
+                    <tr>
+                        <td>
+                         <h2 class="style1">Import File Attachment</h2>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td>
+                            <rich:fileUpload id="attUpload"
+                                             fileUploadListener="#{knowledgebaseController.attUploadBean.listener}"
+                                             maxFilesQuantity="10" 
+                                             immediateUpload="true" 
+                                             acceptedTypes="zip"
+                                             listHeight="65px">
+                                <a4j:ajax event="clear" render="attUploadBean"/>
+                            </rich:fileUpload>
+                            
+                        </td> 
+                    </tr> 
+                    <tr> 
+                        <td>
+                            <h:commandButton image="../img/b_import.png" 
+                                     action ="#{knowledgebaseController.importAttAction}" onclick="window.opener.location.reload(true);this.focus();"/>
+                             <a4j:commandButton image="../img/b_close03.png" onclick="window.opener.location.reload();window.close();"  />
+                        </td>
+                    </tr>
+                </table>
+                </c:if>
+    </ui:define>
+</ui:composition>
+ </h:body>
+</html>

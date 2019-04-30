@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="popupTitle">Document</ui:define>
+    <ui:param name="modalId" value="document"/>
+    <ui:param name="width" value="1000"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGrid id="documentList" columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                        <h:outputText value="Title :"/>
+                        <h:inputText value="#{m.title}" styleClass="textfield">
+                            <a4j:ajax execute="@this" event="change" />
+                        </h:inputText>
+                            
+                            
+                        <h:outputText value="File Name :"/>
+                            <h:inputText value="#{m.fileName}" styleClass="textfield">
+                                    <a4j:ajax execute="@this" event="change" />
+                            </h:inputText>
+                        <h:outputText value="Modify Date :"/>
+                        <h:panelGroup><rich:calendar  id="dateFrom"
+                                           value="#{m.dateFrom}"
+                                           inputClass="textfield" inputSize="12" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="00:00">
+                            <a4j:ajax execute="@this" event="change" />
+                            </rich:calendar>
+                            To :<rich:calendar id="dateTo"
+                                           value="#{m.dateTo}"
+                                           inputClass="textfield" inputSize="12" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.datePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="23:59">
+                            <a4j:ajax execute="@this" event="change" />
+                            </rich:calendar>
+                        </h:panelGroup>
+                        
+                        <h:outputText value="Document Type :"/>
+                            <h:selectOneMenu id="documentId" styleClass="select08" value="#{m.documentUploadTypeId}"  >
+                                <f:selectItem itemLabel="Please Select" itemValue="0"/>
+                                <f:selectItems value="#{m.documentUploadTypeList}" />
+                                <a4j:ajax execute="@this" event="change" />
+                            </h:selectOneMenu>
+                        
+                    
+                        <h:outputText value="Assign To :"/>
+                            <h:selectOneMenu styleClass="select08" value="#{m.userGroupId}"  >
+                                <f:selectItem itemLabel="Please Select" itemValue="0"/>
+                                <f:selectItems value="#{m.userGroupList}" />
+                                <a4j:ajax execute="@this" event="change" />
+                            </h:selectOneMenu>
+                        
+                            
+                        <h:outputText value="Status :"/>
+                            <h:selectOneMenu value="#{m.status}">
+                                <f:selectItem itemLabel="Please Select" itemValue="please select"/>
+                                <f:selectItem itemLabel="Enable" itemValue="enable"/>
+                                <f:selectItem itemLabel="Disable" itemValue="disable"/>
+                                <a4j:ajax execute="@this" event="change" />
+                            </h:selectOneMenu>
+                        
+                        <h:outputText value=""/>
+                        <a4j:commandButton image="/img/b_search.png" 
+                                           actionListener="#{m.searchActionListener}" 
+                                           render="data"
+                                           limitRender="true" execute="@this"/>
+            </h:panelGrid>
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01" 
+                                value="#{m.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;width: 18%"><h:outputText value="Title"/></rich:column>
+                            <rich:column style="text-align: left;width: 20%"><h:outputText value="File Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%"><h:outputText value="Modify Date" /></rich:column>
+                            <rich:column style="text-align: left;width: 10%"><h:outputText value="Assign To"/></rich:column>
+                            <rich:column style="text-align: left;width: 20%"><h:outputText value="Document Type"/></rich:column>
+                            <rich:column style="text-align: left;width: 15%"><h:outputText value="Status"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value="#{list.title}"/>
+                        <h:commandLink title="View Detail" value="#{list.title}" action="#{productDocumentController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{fn:substringBefore(list.fileName, ':')}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.updateDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.userGroup.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.documentUploadType.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            
+    </ui:define>
+    
+</ui:composition>

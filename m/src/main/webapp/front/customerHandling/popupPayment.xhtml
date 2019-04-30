@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="popupTitle">Payment</ui:define>
+    <ui:param name="modalId" value="popupPayment"/>
+    <ui:param name="width" value="500"/>
+    <ui:param name="height" value="700"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup id="paymentPanel">
+            <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                <tr>
+                    <td align="right" width="40%"></td>
+                    <td width="60%"><h:outputText style="color: red" value="#{r.msg}"/></td>
+                </tr>
+                <tr>
+                    <td align="right" width="40%">Reference No. :</td>
+                    <td width="60%"><h:outputText value="#{r.purchaseOrder.refNo}"/></td>
+                </tr>
+                <tr>
+                    <td align="right" width="40%">Installment No. :</td>
+                    <td width="60%"><h:outputText value="#{r.poi.installmentNo}"/></td>
+                </tr>
+                <tr>
+                    <td align="right"><h:panelGroup id="dueDateLabel"><h:outputText value="Due Date :" rendered="#{not r.poi.paymentMethod.online}"/></h:panelGroup></td>
+                    <td><h:panelGroup id="dueDatePanel">
+                        <rich:calendar id="dueDate"
+                                       value="#{r.poi.dueDate}"
+                                       locale="#{msg.locale}"
+                                       popup="true" buttonClass="rfcalbtn"
+                                       datePattern="#{msg.dateTimePattern}"
+                                       inputClass="textfield" inputSize="15"
+                                       resetTimeOnDateSelect="false"
+                                       defaultTime="12:00"
+                                       rendered="#{not r.poi.paymentMethod.online}"
+                                       disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <rich:validator/>
+                        </rich:calendar>
+                        <rich:message for="dueDate" style="color:red"/>
+                        </h:panelGroup></td>
+                </tr>
+                <tr>
+                    <td align="right">Amount :</td>
+                    <td>
+                        <h:inputText id="installmentAmount" value="#{r.poi.installmentAmount}" 
+                                     styleClass="textfield"
+                                     required="true"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid' or r.purchaseOrder.noInstallment == 1 or r.poi.installmentNo == r.purchaseOrder.noInstallment}">
+                            <f:convertNumber maxFractionDigits="2"/>
+                            <rich:validator/>
+                        </h:inputText>
+                        &#160;<rich:message for="installmentAmount" style="color:red"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Payment Method :</td>
+                    <td>
+                         <h:selectOneMenu id="paymentMethodCode" 
+                                          value="#{r.poi.paymentMethod.id}"
+                                          required="true"
+                                          requiredMessage="#{msg.require}"
+                                          disabled="#{r.poi.paymentStatus eq 'paid'}"
+                                          valueChangeListener="#{r.checkOnlineListener}">
+                            <f:selectItem itemLabel="Select"/>
+                            <f:selectItems value="#{r.paymentMethodList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            <a4j:ajax event="change"
+                                         render="dueDateLabel,dueDatePanel,buttonPanel,bankTranfer,bankTransferLabel,paymentStatus,authId,cardNo,cardHolderName,cardType,cardIssuerCountry,cardIssuerName,cardExpiryMonth,cardExpiryYear" execute="@this"/>
+                        </h:selectOneMenu>
+                        &nbsp;<rich:message for="paymentMethodCode" style="color:red"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right"><h:panelGroup id="bankTransferLabel"><h:outputText value="Bank Transfer :" rendered="#{not r.poi.paymentMethod.online}"/></h:panelGroup></td>
+                    <td><h:panelGroup id="bankTranfer">
+                        <h:selectOneMenu value="#{r.poi.receiveFrom}"
+                                         rendered="#{not r.poi.paymentMethod.online}"
+                                         disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <f:selectItem itemLabel="Select"/>
+                            <f:selectItem itemLabel="อิออน" itemValue="AEON"/>
+                            <f:selectItem itemLabel="เอไอจี" itemValue="AIG"/>
+                            <f:selectItem itemLabel="กรุงศรีจีอี" itemValue="KRUNGSRI"/>
+                            <f:selectItem itemLabel="กรุงเทพ" itemValue="BBL"/>
+                            <f:selectItem itemLabel="บิ๊กซี" itemValue="BIGC"/>
+                            <f:selectItem itemLabel="เซ็นทรัล" itemValue="CENTRAL"/>
+                            <f:selectItem itemLabel="สแตนดาร์ดชาร์เตอร์" itemValue="STANDARDCHARTER"/>
+                            <f:selectItem itemLabel="ซีไอเอ็มบี" itemValue="CIMB"/>
+                            <f:selectItem itemLabel="ซิตี้แบงค์" itemValue="CITIBANK"/>
+                            <f:selectItem itemLabel="ออมสิน" itemValue="GSB"/>
+                            <f:selectItem itemLabel="โฮมโปร" itemValue="HOMEPRO"/>
+                            <f:selectItem itemLabel="เอชเอสบีซี" itemValue="HSBC"/>
+			    <f:selectItem itemLabel="เกียรตินาคิน" itemValue="KB"/>
+			    <f:selectItem itemLabel="กรุงไทย (เคทีซี" itemValue="KTC"/>
+			    <f:selectItem itemLabel="แลนด์แอนด์เฮ้าส์" itemValue="LH"/>
+			    <f:selectItem itemLabel="โรบินสัน" itemValue="ROBINSON"/>
+			    <f:selectItem itemLabel="ไทยพาณิชย์" itemValue="SCB"/>
+			    <f:selectItem itemLabel="เทสโก้" itemValue="TESCO"/>
+			    <f:selectItem itemLabel="กสิกรไทย (เคแบงค์)" itemValue="KBANK"/>
+			    <f:selectItem itemLabel="ทิสโก้" itemValue="TISCO"/>
+			    <f:selectItem itemLabel="ทหารไทย" itemValue="TMB"/>
+			    <f:selectItem itemLabel="ธนชาต" itemValue="THANACHART"/>
+			    <f:selectItem itemLabel="ยูโอบี" itemValue="UOB"/>
+                        </h:selectOneMenu>  
+                        </h:panelGroup>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right" valign="top">Card No. :</td>
+                    <td valign="top">
+                        <h:inputText id="cardno" 
+                                     maxlength="16" 
+                                     label="#{msg.cardNo}" 
+                                     value="#{r.poi.cardNo}" 
+                                     styleClass="textfield"
+                                     required="#{r.poi.paymentMethod.creditcard}"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <f:validateLength minimum="16" maximum="16"/>
+                            <f:validator validatorId="CreditCardValidator"/>
+                            <a4j:ajax event="keyup" listener="#{r.cardNoActionListener}" render="cardType,cardIssuerCountry,cardIssuerName" execute="@this"/>
+                            <rich:validator/>
+                        </h:inputText>
+                        <rich:message for="cardno" style="color:red"/>
+                    </td>
+                </tr>  
+                <tr>
+                    <td align="right">Card Holder Name :</td>
+                    <td>
+                        <h:inputText value="#{r.poi.cardHolderName}"
+                                     id="cardHolderName"
+                                     styleClass="textfield"
+                                     required="#{r.poi.paymentMethod.creditcard}"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <rich:validator/>
+                        </h:inputText>
+                        &nbsp;<rich:message for="cardHolderName" style="color:red"/>
+                    </td>
+                </tr>             
+                <tr>
+                    <td align="right" width="40%">Card Type :</td>
+                    <td>
+                        <h:selectOneMenu value="#{r.poi.cardType}"
+                                         id="cardType"
+                                         disabled="#{r.poi.paymentStatus eq 'paid'}"
+                                         required="#{r.poi.paymentMethod.online}"
+                                         requiredMessage="#{msg.require}">
+                            <f:selectItem itemLabel="Select"/>
+                            <f:selectItem itemLabel="VISA" itemValue="VISA"/>
+                            <f:selectItem itemLabel="MASTER" itemValue="MASTER"/>
+                            <rich:validator/>
+                        </h:selectOneMenu>  
+                        &nbsp;<rich:message for="cardType" style="color:red"/>
+                    </td>
+                </tr>
+                <ui:remove>
+                <tr>
+                    <td align="right">Card Issuer Country :</td>
+                    <td>
+                        <h:inputText id="cardIssuerCountry"
+                                     value="#{r.poi.cardIssuerCountry}" 
+                                     styleClass="textfield"
+                                     required="#{r.poi.paymentMethod.online}"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <rich:validator/>
+                        </h:inputText>
+                        &nbsp;<rich:message for="cardIssuerCountry" style="color:red"/>
+                    </td>
+                </tr>     
+                </ui:remove>
+                <tr>
+                    <td align="right">Card Issuer :</td>
+                    <td>
+                        <h:selectOneMenu id="cardIssuerName"
+                                         value="#{r.poi.cardIssuerName}"
+                                         required="#{r.poi.paymentMethod.online}"
+                                         requiredMessage="#{msg.require}"
+                                         disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <f:selectItem itemLabel="Select"/>
+                            <f:selectItem itemLabel="กรุงเทพ" itemValue="BBL"/>
+                            <f:selectItem itemLabel="กรุงไทย(เคทีซี)" itemValue="KTC"/>
+                            <f:selectItem itemLabel="กรุงศรีจีอี" itemValue="KRUNGSRI"/>
+                            <f:selectItem itemLabel="กสิกรไทย (เคแบงค์)" itemValue="KBANK"/>
+                            <f:selectItem itemLabel="เกียรตินาคิน" itemValue="KB"/>
+                            <f:selectItem itemLabel="ซิตี้แบงค์" itemValue="CITIBANK"/>
+                            <f:selectItem itemLabel="ซีไอเอ็มบี" itemValue="CIMB"/>
+                            <f:selectItem itemLabel="เซ็นทรัล" itemValue="CENTRAL"/>
+                            <f:selectItem itemLabel="ทหารไทย" itemValue="TMB"/>
+                            <f:selectItem itemLabel="ทิสโก้" itemValue="TISCO"/>
+                            <f:selectItem itemLabel="เทสโก้" itemValue="TESCO"/>
+                            <f:selectItem itemLabel="ไทยพาณิชย์" itemValue="SCB"/>
+                            <f:selectItem itemLabel="ธนชาต" itemValue="THANACHART"/>
+                            <f:selectItem itemLabel="บิ๊กซี" itemValue="BIGC"/>
+                            <f:selectItem itemLabel="ยูโอบี" itemValue="UOB"/>
+                            <f:selectItem itemLabel="โรบินสัน" itemValue="ROBINSON"/>
+                            <f:selectItem itemLabel="แลนด์แอนด์เฮ้าส์" itemValue="LH"/>
+                            <f:selectItem itemLabel="สแตนดาร์ดชาร์เตอร์" itemValue="STANDARDCHARTER"/>
+                            <f:selectItem itemLabel="ออมสิน" itemValue="GSB"/>
+                            <f:selectItem itemLabel="อิออน" itemValue="AEON"/>
+                            <f:selectItem itemLabel="เอชเอสบีซี" itemValue="HSBC"/>
+                            <f:selectItem itemLabel="เอไอจี" itemValue="AIG"/>
+                            <f:selectItem itemLabel="โฮมโปร" itemValue="HOMEPRO"/>
+                            <rich:validator/>
+                        </h:selectOneMenu>  
+                        &nbsp;<rich:message for="cardIssuerName" style="color:red"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Expiry Date (MM/YY) :</td>
+                    <td>
+                        <h:inputText value="#{r.poi.cardExpiryMonth}"
+                                     id="cardExpiryMonth"
+                                     size="2" 
+                                     maxlength="2" 
+                                     styleClass="textfield"
+                                     required="#{r.poi.paymentMethod.online}"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <rich:validator/>
+                        </h:inputText>
+                        &nbsp;<rich:message for="cardExpiryMonth" style="color:red"/> / 
+                        <h:inputText value="#{r.poi.cardExpiryYear}" 
+                                     id="cardExpiryYear"
+                                     size="2" 
+                                     maxlength="2" 
+                                     styleClass="textfield"
+                                     required="#{r.poi.paymentMethod.online}"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <rich:validator/>
+                        </h:inputText>
+                        &nbsp;<rich:message for="cardExpiryYear" style="color:red"/>
+                    </td>
+                </tr>
+                <ui:remove>
+                <tr>
+                    <td align="right">Trace No. :</td>
+                    <td><h:inputText value="#{r.poi.traceNo}" styleClass="textfield"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}"/></td>
+                </tr>
+                </ui:remove>                
+                <tr>
+                    <td align="right">Authentication ID :</td>
+                    <td><h:inputText id="authId" value="#{r.poi.authId}" styleClass="textfield"
+                                      disabled="#{r.poi.paymentMethod.online or r.poi.paymentStatus eq 'paid'}"/></td>
+                </tr>
+                <ui:remove>
+                <tr>
+                    <td align="right">Document No. :</td>
+                    <td><h:inputText id="documentNo" value="#{r.poi.refNo}" styleClass="textfield"
+                                     required="#{not r.poi.paymentMethod.online and r.paymentStatus eq 'paid'}"
+                                     requiredMessage="#{msg.require}"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}">
+                            <rich:validator/>
+                        </h:inputText>
+                        &#160;<rich:message for="documentNo" style="color:red"/>
+                    </td>
+                </tr>
+                </ui:remove>>
+                <tr>
+                    <td align="right">Remark :</td>
+                    <td>
+                        <h:inputText value="#{r.poi.remark}" 
+                                     styleClass="textfield"
+                                     disabled="#{r.poi.paymentStatus eq 'paid'}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Paid Date :</td>
+                    <td><h:panelGroup id="paidDatePanel">
+                        <rich:calendar id="paidDate" 
+                                       value="#{r.poi.paidDate}"
+                                       locale="#{msg.locale}"
+                                       popup="true" buttonClass="rfcalbtn"
+                                       datePattern="#{msg.dateTimePattern}"
+                                       inputClass="textfield" inputSize="15"
+                                       resetTimeOnDateSelect="false"
+                                       defaultTime="12:00"
+                                       required="#{r.paymentStatus eq 'paid'}"
+                                       requiredMessage="#{msg.require}"
+                                       disabled="#{r.paymentStatus eq 'notpaid' or r.poi.paymentStatus eq 'paid'}">
+                        </rich:calendar>
+                        &#160;<rich:message for="paidDate" style="color:red"/>
+                        </h:panelGroup>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="right">Status :</td>
+                    <td>
+                        <a4j:jsFunction name="renderAgain" 
+                                        render="paidDatePanel,refNo,paymentStatus">
+                        </a4j:jsFunction>
+                        <a4j:jsFunction name="clickAction" 
+                                        oncomplete="renderAgain();">
+                        </a4j:jsFunction>
+                        <h:selectOneMenu id="paymentStatus"
+                                         value="#{r.paymentStatus}" 
+                                         valueChangeListener="#{r.paymentStatusListener}"
+                                         onchange="clickAction()"
+                                         disabled="#{r.poi.paymentStatus eq 'paid' or not r.havePaid or r.poi.paymentMethod.online or fn:contains(userSession.userGroup.role, 'Agent')}">
+                            <f:selectItem itemLabel="Not Paid" itemValue="notpaid"/>
+                            <f:selectItem itemLabel="Paid" itemValue="paid"/>
+                        </h:selectOneMenu>
+                    </td>
+                </tr>            
+                <tr>
+                    <td align="right">&#160;</td>
+                    <td>&#160;</td>
+                </tr>            
+                <tr>
+                    <td align="right">Send SMS :</td>
+                    <td>
+                        <h:selectBooleanCheckbox value="#{r.poi.sendSms}">
+                            <a4j:ajax event="change" render="smsNo" limitRender="true" execute="@this"/>
+                        </h:selectBooleanCheckbox>
+                        <h:inputText value="#{r.poi.smsNo}" 
+                                     id="smsNo"
+                                     styleClass="textfield"
+                                     disabled="#{r.poi.paymentStatus eq 'paid' or not r.poi.sendSms}"/></td>
+                </tr>           
+                <tr>
+                    <td align="right"></td>
+                    <td></td>
+                </tr>              
+                <tr>
+                    <td align="right" width="40%"></td>
+                    <td>
+                        <h:panelGroup id="buttonPanel">
+                            <a4j:commandButton image="/img/b_payment.png" 
+                                               rendered="#{r.poi.paymentMethod.online and r.poi.paymentStatus ne 'paid' and r.havePaid and r.purchaseOrder.approvalStatus eq msg.approvalApprovedValue}"
+                                               render="noInstallment,paymentPanel,panelInstallment,savePaymentPanel"
+                                               actionListener="#{r.paymentOnlineActionListener}"
+                                               onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})"
+                                               oncomplete="#{rich:component('waitPopup')}.hide()"/>
+                            <a4j:commandButton image="/img/b_save.png"
+                                               render="paidDatePanel,noInstallment,panelInstallment,savePaymentPanel"
+                                               rendered="#{(r.poi.paymentStatus ne 'paid') and r.disableSaveButton}"
+                                               oncomplete="if (#{facesContext.maximumSeverity == null}) {#{rich:component('popupPayment')}.hide();}"
+                                               actionListener="#{r.savePaymentListener}">
+                            </a4j:commandButton>
+                        </h:panelGroup>
+                    </td>
+                </tr>
+            </table>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Campaign Management: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <rich:focus />
+                <h:inputHidden value="#{campaignEditController.mode}"/>
+                <h:inputHidden value="#{campaignEditController.campaign.id}"/>
+                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="250" class="gray03">&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td  align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/>Code:</td>
+                        <td>
+                            <h:inputText id="code" value="#{campaignEditController.campaign.code}" styleClass="textfield" size="10" 
+                                         required="true" maxlength="50" requiredMessage="#{msg.require}">
+                                <f:validateRequired/>                  
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{campaignEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/>Campaign Name:</td>
+                        <td>
+                            <h:inputText id="name" value="#{campaignEditController.campaign.name}" styleClass="textfield" size="50" 
+                                         required="true" maxlength="50" requiredMessage="#{msg.require}">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Description:</td>
+                        <td valign="top" class="blue04"><h:inputTextarea styleClass="textfield03" cols="30" rows="5" value="#{campaignEditController.campaign.description}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/>Effective Date From:</td>
+                        <td valign="top">
+                            <rich:calendar id="startDate" value="#{campaignEditController.campaign.startDate}" defaultTime="00:00" 
+                                           inputClass="textfield" inputSize="17" buttonClass="rfcalbtn"
+                                           datePattern="dd MMM yyyy HH:mm" locale="#{msg.locale}" 
+                                           required="true" requiredMessage="Start Date is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </rich:calendar>
+                            <rich:message for="startDate" style="color:red"/>
+                            To:
+                            <rich:calendar id="endDate" value="#{campaignEditController.campaign.endDate}" defaultTime="23:59" 
+                                           inputClass="textfield" inputSize="17" buttonClass="rfcalbtn"
+                                           datePattern="dd MMM yyyy HH:mm" locale="#{msg.locale}" 
+                                           required="true" requiredMessage="End Date is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </rich:calendar>
+                            <rich:message for="endDate" style="color:red"/>
+                            <h:outputText value="#{campaignEditController.message}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Max Call:</td>
+                        <td valign="top">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="50">
+                                        <h:selectOneMenu value="#{campaignEditController.campaign.maxCall}" >
+                                            <f:selectItems value="#{campaignEditController.maxCallList}"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                    <td class="gray03" align="left" width="90">If Match, Auto - Contact Result: </td>
+                                    <td align="left" width="150">
+                                        <h:selectOneMenu id="maxCallContact1" value="#{campaignEditController.maxCallContactResultId}" styleClass="select08" >
+                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                            <f:selectItems value="#{campaignEditController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                </tr>
+                            </table>                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">When DMC - Max Call:</td>
+                        <td valign="top">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td width="50">
+                                        <h:selectOneMenu value="#{campaignEditController.campaign.maxCall2}" >
+                                            <f:selectItem itemLabel="0" itemValue="0"/>
+                                            <f:selectItems value="#{campaignEditController.maxCallList}"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                    <td class="gray03" align="left" width="90">If Match, Auto - Contact Result: </td>
+                                    <td align="left" width="150">
+                                        <h:selectOneMenu id="maxCallContact2" value="#{campaignEditController.maxCall2ContactResultId}" styleClass="select08" >
+                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                            <f:selectItems value="#{campaignEditController.contactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                        </h:selectOneMenu>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Product Category Type :</td>
+                        <td valign="top">
+                            <h:panelGroup id="panelType">
+                                <h:selectOneMenu id="productCategoryType" 
+                                                 value="#{campaignEditController.productCategoryType}">
+                                    <f:selectItem itemLabel="All" itemValue=""/>
+                                    <f:selectItems value="#{campaignEditController.productCategoryTypeList}"/>
+                                    <a4j:ajax event="change" 
+                                              limitRender="true" 
+                                              execute="@this"
+                                              render="panelType,panelProduct">
+                                    </a4j:ajax>
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top">
+                            <h:selectBooleanCheckbox id="chkinb" value="#{campaignEditController.campaign.inbound}" >
+                                <a4j:ajax event="click" render="chkinb,marketingid" limitRender="true" 
+                                          listener="#{campaignEditController.clearMarketingInboundListener}"/>
+                            </h:selectBooleanCheckbox>
+                            Inbound </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Inbound Marketing:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="marketingid" value="#{campaignEditController.marketingInboundId}"
+                                             styleClass="select08"
+                                             required="#{campaignEditController.campaign.inbound}" requiredMessage="#{msg.require}"
+                                             immediate="true" disabled ="#{campaignEditController.campaign.inbound eq false}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{campaignEditController.marketingList}"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>                                               
+                            <rich:message for="marketingid" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Campaign Channel :</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="campaignChannelId" value="#{campaignEditController.campaignChannelId}" styleClass="select08" >
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{campaignEditController.campaignChannelList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>  
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Default Manager :</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="defaultManagerUserId" value="#{campaignEditController.defaultManagerUserId}" styleClass="select08" >
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{campaignEditController.defaultManagerUsersList}" var="list" itemLabel="#{list.loginName}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>  
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top"><table width="39%" border="0" cellspacing="0" cellpadding="4">
+                                <tr>
+                                    <td width="40%" class="blue04">Available Product</td>
+                                    <td width="10%"></td>
+                                    <td width="45%" class="blue04">Selected Product</td>
+                                </tr>
+                                <tr><td colspan="3">
+                                        <h:panelGroup id="panelProduct">
+                                            <rich:pickList  listWidth="350px" listHeight="150px"
+                                                            addText="" addAllText="" removeText="" removeAllText=""
+                                                            switchByDblClick="true" 
+                                                            value="#{campaignEditController.selectedProduct}" >
+                                                <f:selectItems value="#{campaignEditController.productList}"/>
+                                            </rich:pickList>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                            </table></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top">
+                            <h:selectBooleanCheckbox value="#{campaignEditController.campaign.status}"/>Enable</td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" width="33%"><h:commandButton action="#{campaignEditController.backAction}" image="../img/b_back.png" immediate="true"/></td>
+                        <td valign="top"  align="center" width="34%">
+                            <h:commandButton action="#{campaignEditController.saveAction}" image="../img/b_save.png" rendered="#{campaignEditController.savePermitted}"/>
+                        </td>
+                        <td align="right" valign="top" width="33%">&nbsp;</td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

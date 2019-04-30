@@ -1,0 +1,586 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing List: Segmentation</ui:define>
+            <ui:define name="panel">
+                <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="250" class="gray03">&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <a4j:region id="InfoRegion">
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/>Marketing List Code:</td>
+                        <td>
+                            <h:inputText id="code" styleClass="textfield" size="10" value="#{marketingSegmentationController.marketing.code}"
+                                         required="true" maxlength="50" requiredMessage="#{msg.require}">
+                                <f:validateRequired/> 
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{marketingSegmentationController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td  align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/>Marketing List Name:</td>
+                        <td>
+                            <h:inputText id="name"  styleClass="textfield" size="50" value="#{marketingSegmentationController.marketing.name}"
+                                         required="true" maxlength="50" requiredMessage="#{msg.require}">
+                                <f:validateRequired/> 
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/>Effective Date From:</td>
+                        <td align="left" valign="top" class="gray03">
+                            <rich:calendar id="startDate" defaultTime="00:00" inputClass="textfield" inputSize="17" buttonClass="rfcalbtn"
+                                           value="#{marketingSegmentationController.marketing.startDate}"
+                                           datePattern="dd MMM yyyy HH:mm" locale="#{msg.locale}" required="true" requiredMessage="Start Date is required">
+                            <rich:validator/>
+                            </rich:calendar>
+                            <rich:message for="startDate" style="color:red"/>
+                            To:
+                            <rich:calendar id="endDate"  defaultTime="23:59" inputClass="textfield" inputSize="17" buttonClass="rfcalbtn"
+                                           value="#{marketingSegmentationController.marketing.endDate}"
+                                           datePattern="dd MMM yyyy HH:mm" locale="#{msg.locale}" required="true" requiredMessage="End Date is required">
+                            <rich:validator/>
+                            </rich:calendar>
+                            <rich:message for="endDate" style="color:red"/>
+                            <h:outputText value="#{marketingSegmentationController.messageDate}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Description:</td>
+                        <td valign="top" class="blue04"><h:inputTextarea styleClass="textfield03" cols="60" rows="8" value="#{marketingSegmentationController.marketing.description}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="line01">&nbsp;</td>
+                        <td valign="top" class="line01"><h:selectBooleanCheckbox id="enable" value="#{marketingSegmentationController.marketing.status}"/> Enable </td>
+                    </tr>
+                    </a4j:region>
+                    <a4j:region id="simulateRegion">
+                    <tr>
+                        <td colspan="2">
+                            <h:panelGroup id="criteriaPanel">
+                                <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td height="20" align="right" valign="top" class="gray03">&nbsp;</td>
+                                    <td align="left" valign="top"></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    <!-- BEGIN FILTER GROUP -->
+                                        <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                            <td width="150" align="right" valign="top" class="blue04">Filter:</td>
+                                            <td valign="top">
+                                                <table cellpadding="4" cellspacing="0">
+                                                    <tr>
+                                                        <td valign="top" width="150" align="right">
+                                                            <h:outputText value="*" style="color:red"/> Marketing List Source:
+                                                        </td>
+                                                        <td>
+                                                           <h:selectOneMenu id="listSource" 
+                                                                          value="#{marketingSegmentationController.prospectlistSponsorId}" 
+                                                                          required="true" requiredMessage="Marketing List Source is required" >
+                                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                                <f:selectItems value="#{marketingSegmentationController.prospectlistSponsors}"/>
+                                                                <f:validateRequired/> 
+                                                                <rich:validator/>
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.changeMarketingCriteria}" 
+                                                                          render="marketings, advanceCriteria, simulatePanel, panelSave" limitRender="true" execute="@this"/>
+                                                            </h:selectOneMenu>
+                                                            <rich:message id="msgListSource" for="listSource" styleClass="required"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right"><h:outputText value="*" style="color:red"/> File Format:</td>
+                                                        <td>
+                                                           <h:selectOneMenu id="fileFormat" value="#{marketingSegmentationController.fileTemplateId}" 
+                                                                            required="true" requiredMessage="File Format is required" >
+                                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/> 
+                                                                <f:selectItems value="#{marketingSegmentationController.fileTemplates}"/>
+                                                                <f:validateRequired/>                  
+                                                                <rich:validator />
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.changeMarketingCriteria}" 
+                                                                          render="marketings, advanceCriteria, simulatePanel, panelSave" limitRender="true" execute="@this"/>
+                                                            </h:selectOneMenu>
+                                                            <rich:message id="msgFileFormat" for="fileFormat" style="color:red"/>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                    <!-- END FILTER GROUP -->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                    <!-- BEGIN CRITERIA GROUP -->
+                                        <table width="100%" border="0" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                            <td width="150" align="right" valign="top" class="blue04">Criteria:</td>
+                                            <td valign="top">
+                                                <table cellpadding="4" cellspacing="0">
+
+                                                    <!-- BEGIN CRITERIA SEARCH LIST -->
+                                                    <tr>
+                                                        <td valign="top" width="120" ><h:outputText value="*" style="color:red"/> Marketing List:</td>
+                                                        <td>
+                                                            <rich:pickList id="marketings" switchByDblClick="true"
+                                                                           listWidth="350px" listHeight="270px"
+                                                                           addText="" addAllText="" removeText="" removeAllText=""
+                                                                           value="#{marketingSegmentationController.selectedMarketingList}" >
+                                                                <f:selectItems value="#{marketingSegmentationController.marketingList}"/>
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}" 
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </rich:pickList>
+                                                            <h:outputText id="msgMarketing" value="#{marketingSegmentationController.messageMarketing}" style="color:red"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectContactResult}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Contact Result:</td>
+                                                        <td>
+                                                            <rich:pickList switchByDblClick="true" 
+                                                                           listWidth="350px" listHeight="270px"
+                                                                           addText="" addAllText="" removeText="" removeAllText=""
+                                                                           value="#{marketingSegmentationController.selectedContactResultList}" >
+                                                                <f:selectItems value="#{marketingSegmentationController.contactResultList}"/>
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </rich:pickList>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectGender}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Gender:</td>
+                                                        <td>
+                                                            <h:selectOneRadio  value="#{marketingSegmentationController.gender}">
+                                                                <f:selectItem itemLabel="Male" itemValue="#{msg.maleValue}"/>
+                                                                <f:selectItem itemLabel="Famale" itemValue="#{msg.femaleValue}"/>
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectOneRadio>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectAge}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Age:</td>
+                                                        <td>
+                                                            Between<span style="padding-left:5px"/>
+                                                            <h:inputText id="fromage" label="From Age" styleClass="textfield" size="2" maxlength="2" 
+                                                                            onkeypress="return isNumberKey(event)"
+                                                                            validatorMessage="#{msg.numberRequire}" value="#{marketingSegmentationController.fromAge}">
+                                                                <f:validateDoubleRange minimum="0" maximum="99"/>
+                                                                <rich:validator/>
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:inputText><rich:message for="fromage" style="color:red"/> and<span style="padding-left:5px"/>
+                                                            <h:inputText id="toage" label="To Age" styleClass="textfield" size="2" maxlength="2"
+                                                                            onkeypress="return isNumberKey(event)"
+                                                                            validatorMessage="#{msg.numberRequire}"  value="#{marketingSegmentationController.toAge}">
+                                                                <f:validateDoubleRange minimum="0" maximum="99"/>
+                                                                <rich:validator/>
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:inputText>
+                                                            <rich:message for="toage" style="color:red"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectHomePhone}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Home Phone:</td>
+                                                        <td>
+                                                            <h:selectOneMenu styleClass="select01"  id="homePhone" value="#{marketingSegmentationController.homePhonePrefix}">  
+                                                                <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                                <f:selectItem itemValue="02" itemLabel="กรุงเทพ" />
+                                                                <f:selectItem itemValue="upc" itemLabel="ต่างจังหวัด" />
+                                                                <f:selectItem itemValue="032" itemLabel="032" />
+                                                                <f:selectItem itemValue="034" itemLabel="034" />
+                                                                <f:selectItem itemValue="035" itemLabel="035" />
+                                                                <f:selectItem itemValue="037" itemLabel="037" />
+                                                                <f:selectItem itemValue="038" itemLabel="038" />
+                                                                <f:selectItem itemValue="039" itemLabel="039" />
+                                                                <f:selectItem itemValue="042" itemLabel="042" />
+                                                                <f:selectItem itemValue="043" itemLabel="043" />
+                                                                <f:selectItem itemValue="044" itemLabel="044" />
+                                                                <f:selectItem itemValue="053" itemLabel="053" />
+                                                                <f:selectItem itemValue="054" itemLabel="054" />
+                                                                <f:selectItem itemValue="055" itemLabel="055" />
+                                                                <f:selectItem itemValue="073" itemLabel="073" />
+                                                                <f:selectItem itemValue="074" itemLabel="074" />
+                                                                <f:selectItem itemValue="075" itemLabel="075" />
+                                                                <f:selectItem itemValue="076" itemLabel="076" />
+                                                                <f:selectItem itemValue="077" itemLabel="077" />
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectOneMenu><a href="../img/telephoneprefix.png" target="_blank"> View Telephone Prefix</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectOfficePhone}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Office Phone:</td>
+                                                        <td>
+                                                            <h:selectOneMenu styleClass="select01"  id="officePhone" value="#{marketingSegmentationController.officePhonePrefix}">  
+                                                                <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                                <f:selectItem itemValue="02" itemLabel="กรุงเทพ" />
+                                                                <f:selectItem itemValue="upc" itemLabel="ต่างจังหวัด" />
+                                                                <f:selectItem itemValue="032" itemLabel="032" />
+                                                                <f:selectItem itemValue="034" itemLabel="034" />
+                                                                <f:selectItem itemValue="035" itemLabel="035" />
+                                                                <f:selectItem itemValue="037" itemLabel="037" />
+                                                                <f:selectItem itemValue="038" itemLabel="038" />
+                                                                <f:selectItem itemValue="039" itemLabel="039" />
+                                                                <f:selectItem itemValue="042" itemLabel="042" />
+                                                                <f:selectItem itemValue="043" itemLabel="043" />
+                                                                <f:selectItem itemValue="044" itemLabel="044" />
+                                                                <f:selectItem itemValue="053" itemLabel="053" />
+                                                                <f:selectItem itemValue="054" itemLabel="054" />
+                                                                <f:selectItem itemValue="055" itemLabel="055" />
+                                                                <f:selectItem itemValue="073" itemLabel="073" />
+                                                                <f:selectItem itemValue="074" itemLabel="074" />
+                                                                <f:selectItem itemValue="075" itemLabel="075" />
+                                                                <f:selectItem itemValue="076" itemLabel="076" />
+                                                                <f:selectItem itemValue="077" itemLabel="077" />
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectOneMenu><a href="../img/telephoneprefix.png" target="_blank"> View Telephone Prefix</a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectMobilePhone}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Mobile Phone:</td>
+                                                        <td>
+                                                            <h:selectOneMenu styleClass="select01"  id="mobilePhone" value="#{marketingSegmentationController.mobilePhonePrefix}">  
+                                                                <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                                <f:selectItem itemValue="080" itemLabel="080" />
+                                                                <f:selectItem itemValue="081" itemLabel="081" />
+                                                                <f:selectItem itemValue="082" itemLabel="082" />
+                                                                <f:selectItem itemValue="083" itemLabel="083" />
+                                                                <f:selectItem itemValue="084" itemLabel="084" />
+                                                                <f:selectItem itemValue="085" itemLabel="085" />
+                                                                <f:selectItem itemValue="086" itemLabel="086" />
+                                                                <f:selectItem itemValue="087" itemLabel="087" />
+                                                                <f:selectItem itemValue="088" itemLabel="088" />
+                                                                <f:selectItem itemValue="089" itemLabel="089" />
+                                                                <f:selectItem itemValue="090" itemLabel="090" />
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectOneMenu>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top">
+                                                            <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectSaleResult}">
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectBooleanCheckbox> Sale Result:</td>
+                                                        <td>
+                                                            <table cellspacing="4">
+                                                                <tr>
+                                                                    <td>Period: </td>
+                                                                    <td><h:selectOneMenu id="saleResutlPeriod" value="#{marketingSegmentationController.marketing.periodYessale}" >                                                                             
+                                                                            <f:selectItem itemValue="0" itemLabel="Do Not Check"/>
+                                                                            <f:selectItem itemValue="30" itemLabel="1 months"/>
+                                                                            <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                                            <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                                            <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                                            <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                                            <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                                            <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                      execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                        </h:selectOneMenu>
+                                                                    </td>
+                                                                </tr>
+                                                                <tr><td colspan="2">
+                                                                        <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectYesSale}" >
+                                                                            <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                      execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                        </h:selectBooleanCheckbox> Yes Sale 
+                                                                </td></tr>
+                                                                <tr><td width="50">Product: </td>
+                                                                    <td align="left">
+                                                                        <h:selectOneMenu id="yesProduct" value="#{marketingSegmentationController.chkYesInProduct}" >
+                                                                            <f:selectItem itemValue="notspecific" itemLabel="Not Specific"/>
+                                                                            <f:selectItem itemValue="include" itemLabel="Include"/>
+                                                                            <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                      render="productPanel, simulatePanel, panelSave" limitRender="true" immediate="true" execute="@this" />
+                                                                        </h:selectOneMenu>                                                            
+                                                                    </td>
+                                                                </tr>                                                    
+                                                                <tr>
+                                                                    <td colspan="2">
+                                                                        <h:panelGroup id="productPanel" >
+                                                                            <rich:pickList id="productList" switchByDblClick="true"
+                                                                                       listWidth="350px" listHeight="150px"
+                                                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                                                       value="#{marketingSegmentationController.selectedProduct}" 
+                                                                                   rendered="#{marketingSegmentationController.chkYesInProduct eq 'include'}" 
+                                                                                   required="#{marketingSegmentationController.chkYesInProduct eq 'include'}" 
+                                                                                   requiredMessage="Selected Product is required">
+                                                                                <f:selectItems value="#{marketingSegmentationController.productList}"/>
+                                                                                <f:validateRequired/>                  
+                                                                                <rich:validator />
+                                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                            </rich:pickList>
+                                                                    </h:panelGroup>
+                                                                    <rich:message 
+                                                                                  id="msgProduct" for="productList" styleClass="required"/>
+                                                                </td></tr>
+                                                                <tr><td colspan="2">
+                                                                        <h:selectBooleanCheckbox value="#{marketingSegmentationController.selectNoSale}">
+                                                                            <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                      execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                        </h:selectBooleanCheckbox> No Sale </td></tr>
+                                                                <tr><td colspan="2">
+                                                                    <rich:pickList id="nosale" switchByDblClick="true" 
+                                                                                   listWidth="350px" listHeight="270px"
+                                                                                   addText="" addAllText="" removeText="" removeAllText=""
+                                                                                   value="#{marketingSegmentationController.selectedNoSaleResultList}" >
+                                                                        <f:selectItems value="#{marketingSegmentationController.noSaleResultList}"/>
+                                                                        <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                  execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                    </rich:pickList>
+                                                                </td></tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top"><h:outputText value="*" style="color:red"/> Opt-out Period: </td>
+                                                        <td>
+                                                            <h:selectOneMenu id="opoutperiod" value="#{marketingSegmentationController.marketing.periodBlacklist}" 
+                                                                             required="true" requiredMessage="Opt-out Period is required">
+                                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                                <f:selectItem itemValue="0" itemLabel="Do Not Check Opt Out"/>
+                                                                <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                                <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                                <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                                <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                                <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                                <f:selectItem itemValue="-1" itemLabel="Always Check Opt Out"/>
+                                                                <f:validateRequired/>                  
+                                                                <rich:validator />
+                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                            </h:selectOneMenu>
+                                                            &#160;<rich:message id="msgOpout" for="opoutperiod" styleClass="required"/>
+                                                        </td>
+                                                    </tr>
+                                                    <!-- END CRITERIA SEARCH LIST -->
+
+                                                    <!-- BEGIN CRITERIA ADVANCE SEARCH LIST -->  
+                                                    <tr>
+                                                        <td colspan="2" valign="top" align="left">
+                                                            <rich:togglePanel id="toggle1" activeItem="plus" switchType="client" cycledSwitching="plus,sub" 
+                                                                              style="width: 100%; border: 0; padding: 0; margin: 0">
+                                                                <rich:togglePanelItem name="plus">
+                                                                    <h:commandLink>
+                                                                        <rich:toggleControl targetPanel="toggle1" targetItem="sub"/> 
+                                                                        <img src="#{request.contextPath}/img/bplus.png" alt="" style="display: inline"/>  Advance Search   
+                                                                    </h:commandLink>
+                                                                </rich:togglePanelItem> 
+
+                                                                <rich:togglePanelItem name="sub">
+                                                                    <h:commandLink>
+                                                                        <rich:toggleControl targetPanel="toggle1" targetItem="plus"/> 
+                                                                        <img src="#{request.contextPath}/img/b_subtract.png" alt="" style="display: inline"/> Advance Search
+                                                                    </h:commandLink>
+                                                                    <h:panelGroup>
+                                                                        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                                                        <tr><td>
+                                                                            <rich:dataGrid style="width: 100%" columns="1" id="advanceCriteria" 
+                                                                                           value="#{marketingSegmentationController.selectedAdvanceCriteria}" var="advanceCriteriaList">
+                                                                                <rich:dataTable style="width: 100%" value="#{advanceCriteriaList}" var="advanceField">
+                                                                                    <rich:columnGroup>
+                                                                                        <rich:column style="width: 5%">
+                                                                                            <h:selectBooleanCheckbox value="#{advanceField.selected}">
+                                                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                                            </h:selectBooleanCheckbox>
+                                                                                        </rich:column>
+
+                                                                                        <rich:column style="text-align: left;width: 30%">
+                                                                                            <h:outputText value="#{advanceField.mappingName}"/>
+                                                                                        </rich:column>
+
+                                                                                        <rich:column style="text-align: left;width: 60%">                                     
+                                                                                            <h:panelGroup rendered="#{advanceField.type eq 'String'}">
+                                                                                                <h:inputText styleClass="textfield" size="20" maxlength="20" value="#{advanceField.keyword}">
+                                                                                                <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                          execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                                                </h:inputText>
+                                                                                            </h:panelGroup>     
+
+                                                                                            <h:panelGroup rendered="#{advanceField.type eq 'Number'}">
+                                                                                                 <h:selectOneMenu value="#{advanceField.criteria}" >                                                                            
+                                                                                                    <f:selectItem itemLabel="&#62;" itemValue="&#62;"/>
+                                                                                                    <f:selectItem itemLabel="&#62;&#61;" itemValue="&#62;&#61;"/>
+                                                                                                    <f:selectItem itemLabel="&#60;" itemValue="&#60;"/>
+                                                                                                    <f:selectItem itemLabel="&#60;&#61;" itemValue="&#60;&#61;"/>
+                                                                                                    <f:selectItem itemLabel="&#61;" itemValue="&#61;"/>
+                                                                                                    <f:selectItem itemLabel="&#60;&#62;" itemValue="&#60;&#62;"/>   
+                                                                                                    <f:selectItem itemLabel="between" itemValue="between"/>
+                                                                                                    <a4j:ajax event="change" render="toValNum, simulatePanel, panelSave" immediate="true" execute="@this" 
+                                                                                                              limitRender="true" listener="#{marketingSegmentationController.resetSimulateListener}"/>
+                                                                                                </h:selectOneMenu> <span style="padding-left:5px"/>
+                                                                                                <h:inputText styleClass="textfield" size="5" maxlength="10" 
+                                                                                                             onkeypress="return isNumberFloatKey(event)" validatorMessage="#{msg.numberRequire}" value="#{advanceField.fromValue}">
+                                                                                                    <rich:validator />
+                                                                                                    <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                              execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                                                </h:inputText>
+                                                                                                <h:panelGroup id="toValNum" >
+                                                                                                    <h:outputText value="(and)" rendered="#{advanceField.criteria eq 'between'}"/>
+                                                                                                    <span style="padding-left:5px"/>                                                                    
+                                                                                                    <h:inputText styleClass="textfield" size="5" maxlength="10" rendered="#{advanceField.criteria eq 'between'}"
+                                                                                                                 onkeypress="return isNumberFloatKey(event)" validatorMessage="#{msg.numberRequire}" value="#{advanceField.toValue}">
+                                                                                                        <rich:validator />
+                                                                                                        <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                                  execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                                                    </h:inputText>
+                                                                                                </h:panelGroup>
+                                                                                            </h:panelGroup>     
+
+                                                                                            <h:panelGroup rendered="#{advanceField.type eq 'Date'}">
+                                                                                                <h:selectOneMenu value="#{advanceField.criteria}" >
+                                                                                                    <f:selectItem itemLabel="on" itemValue="on"/>
+                                                                                                    <f:selectItem itemLabel="before" itemValue="before"/>
+                                                                                                    <f:selectItem itemLabel="after" itemValue="after"/>
+                                                                                                    <f:selectItem itemLabel="between" itemValue="between"/>
+                                                                                                    <f:selectItem itemLabel="not equal to" itemValue="notEqual"/>
+                                                                                                    <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                              execute="@this" limitRender="true" render="toValDate, simulatePanel, panelSave" />
+                                                                                                </h:selectOneMenu>
+                                                                                                <span style="padding-left:5px"/>
+                                                                                                <rich:calendar value="#{advanceField.fromValueDate}" 
+                                                                                                               inputClass="textfield" inputSize="8" buttonClass="rfcalbtn" 
+                                                                                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}" >
+                                                                                                    <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                              execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                                                </rich:calendar>
+                                                                                                <h:panelGroup id="toValDate" >
+                                                                                                    <h:outputText value="(and)" rendered="#{advanceField.criteria eq 'between'}"/>
+                                                                                                    <span style="padding-left:5px"/>
+                                                                                                    <rich:calendar value="#{advanceField.toValueDate}" rendered="#{advanceField.criteria eq 'between'}"
+                                                                                                                   inputClass="textfield" inputSize="8" buttonClass="rfcalbtn" 
+                                                                                                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}" >
+                                                                                                        <a4j:ajax event="change" listener="#{marketingSegmentationController.resetSimulateListener}"
+                                                                                                                  execute="@this" limitRender="true" render="simulatePanel, panelSave" />
+                                                                                                    </rich:calendar>
+                                                                                                </h:panelGroup>
+                                                                                            </h:panelGroup>
+
+                                                                                        </rich:column>
+                                                                                    </rich:columnGroup>
+                                                                                </rich:dataTable>
+                                                                            </rich:dataGrid>
+                                                                        </td></tr>
+                                                                        <tr>
+                                                                            <td class="gray03">&nbsp;</td>
+                                                                            <td>&nbsp;</td>
+                                                                        </tr>
+                                                                        </table>
+                                                                    </h:panelGroup>
+                                                                </rich:togglePanelItem> 
+                                                            </rich:togglePanel>      
+                                                        </td>
+                                                    </tr>
+                                                    <!-- END CRITERIA ADVANCE SEARCH LIST -->
+
+                                                </table>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                    <!-- END CRITERIA GROUP -->
+                                    </td>
+                                </tr>
+                                </table>
+                            </h:panelGroup>
+                        </td>
+                     </tr>
+                    
+                     <tr>
+                        <td width="200" align="right" valign="top">
+                            <a4j:commandButton  image="../img/b_simulate_list.png"
+                                                status="actionStatus" limitRender="true"
+                                                render="simulatePanel, panelSave, msgListSource, msgFileFormat, msgOpout, msgProduct"
+                                                actionListener="#{marketingSegmentationController.simulateAction}"/>
+                        </td>
+                        <td>
+                             <h:panelGroup id="simulatePanel">
+                                <table align="left" cellpadding="4" >
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">Simulate Total:</td>
+                                        <td><h:outputText class="blue04" value="#{marketingSegmentationController.simulateRecord} Records"/> </td>
+                                    </tr>
+                                </table>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    </a4j:region>
+                    <tr>
+                        <td height="20" align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td align="left" valign="top"></td>
+                    </tr>
+                    
+                    <tr>
+                        <td colspan="2">
+                        <h:panelGroup id="panelSave">
+                            <table cellpadding="8" cellspacing="0" border="0" width="100%">
+                            <tr>
+                                <td width="33%" align="left">
+                                    <h:commandButton action="#{marketingSegmentationController.backAction}" image="../img/b_back.png" immediate="true"/>
+                                </td>
+                                <td width="34%" align="center">
+                                    <h:commandButton action="#{marketingSegmentationController.saveAction}" image="../img/b_save.png" 
+                                             rendered="#{marketingSegmentationController.savePermitted and marketingSegmentationController.simulateRecord ne 0}"
+                                             onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'}); return true;}"/></td>
+                                <td width="33%"></td>
+                            </tr>
+                        </table>
+                        </h:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>            
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

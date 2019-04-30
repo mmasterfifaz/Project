@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Declaration Form</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{declarationFormController.editAction}" rendered="#{declarationFormController.addPermitted}"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{declarationFormController.list}" rows="#{global.maxrows}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="Form Name" /></rich:column>
+                            <rich:column style="width: 27%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="File Name"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;">&nbsp;</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{declarationFormController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{declarationFormController.editAction}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.description}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a href="#{request.contextPath}/upload/document/declaration/#{list.merge_file}" target="_blank">#{list.merge_file}</a>
+                    </rich:column>
+                   <rich:column style="text-align: left">
+                       <h:commandButton image="../img/b_manage_layout.png" action="#{declarationFormController.manageAction()}">
+                            <f:param name="ManageID" value="#{list.id}"/>
+                        </h:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

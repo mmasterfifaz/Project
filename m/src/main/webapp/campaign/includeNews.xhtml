@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+
+    <h:head>
+        <title>News</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link href="#{request.contextPath}/resources/css/maxelyz.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/css/scroll01.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    <h:body>
+        <h:form>
+            <table width="100%" id="tableline02">
+                <a4j:repeat value="#{newsController.newsList}" var="list">
+                    <tr>
+                        <td width="70" align="center" valign="top"><h:graphicImage url="/upload/news/#{list.id}/#{list.picThumbnail}" width="70" height="70"/></td>
+                        <td valign="top"><div id="h"><a href="#"><h:outputText value="#{list.title}"/></a></div></td>
+                    </tr>
+                </a4j:repeat>
+            </table>
+        </h:form>
+        <h:form>
+            <rich:popupPanel id="waitPanel" style="background-color: white; text-align:center">
+                <h:outputText value="Please wait..." style="font-size:large" />
+            </rich:popupPanel>
+        </h:form>
+    </h:body>
+</html>

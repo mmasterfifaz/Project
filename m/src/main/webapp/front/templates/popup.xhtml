@@ -1,0 +1,40 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        <f:loadBundle basename="com.maxelyz.core.resource.messages" var="msg"/>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet library="css" name="reset.css"/>
+        <h:outputStylesheet library="css" name="font.css"/>
+        <h:outputStylesheet library="css" name="mmax.css"/>
+        <h:outputStylesheet library="css" name="layout_iframe.css"/>
+        <div id="popup_wrapper">
+            <div id="popup_header">
+                <div id="popup_header_left">
+                    <div id="popup_header_right">
+                        <div id="popup_title">
+                            <h2><ui:insert name="popupTitle"></ui:insert></h2>
+                        </div>
+                        <div id="popup_close">
+                            <span id="close">#{msg.close}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="popup_detail">
+                <ui:insert name="popupDetail"></ui:insert>
+            </div>
+            <div id="popup_footer">
+                 <div id="popup_footer_left">
+                    <div id="popup_footer_right">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </h:body>
+</html>

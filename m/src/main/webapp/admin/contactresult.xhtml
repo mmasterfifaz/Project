@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Contact Result</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{contactResultController.editAction}"  rendered="#{contactResultController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{contactResultController.deleteAction}" rendered="#{contactResultController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr>
+                        <td width="150" align="right">Code :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{contactResultController.code}"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="150" align="right">Status ID :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{contactResultController.statusID}"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="150" align="right">Name :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{contactResultController.name}"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td width="150" align="right">Type :</td>
+                        <td align="left">
+                            <h:selectOneMenu id="contactstatus" value="#{contactResultController.contactStatus}">
+                                <f:selectItem itemLabel="All"/>
+                                <f:selectItem itemValue="#{msg.contactableValue}" itemLabel="#{msg.contactable}" />
+                                <f:selectItem itemValue="#{msg.uncontactableValue}" itemLabel="#{msg.uncontactable}" />
+                                <f:selectItem itemValue="#{msg.dmcValue}" itemLabel="#{msg.dmc}" />
+                                <f:selectItem itemValue="#{msg.inboundValue}" itemLabel="#{msg.inboundCS}" />
+                                <f:selectItem itemValue="#{msg.inboundTelesaleValue}" itemLabel="#{msg.inboundTelesale}" />
+                                <f:selectItem itemValue="#{msg.newContactValue}" itemLabel="#{msg.newContact}" />
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="right" valign="top">Group :</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="contactresultgroup" value="#{contactResultController.groupId}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{contactResultController.groupsList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td><a4j:commandButton actionListener="#{contactResultController.searchActionListener}" status="actionStatus" 
+                                               render="data" limitRender="true" image="/img/b_search.png"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{contactResultController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Code" /></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Status ID" /></rich:column>
+                            <rich:column style="width: 47%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Type"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{contactResultController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{contactResultController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.statusId}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.contactStatusLabel}" />
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

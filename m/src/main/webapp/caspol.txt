@@ -1,0 +1,5 @@
+
+C:\WINDOWS\Microsoft.NET\Framework\v2.0.50727\caspol.exe -m -ag Trusted_Zone -url http://192.168.50.75:8081/* FullTrust
+
+
+

@@ -1,0 +1,331 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">User Management</ui:define>
+            <ui:define name="title2">User Group: Add/Edit</ui:define>
+            <ui:define name="head">
+                <style>
+                    <!--
+                    div.scroll {
+                        height: 130px;
+                        overflow: auto;
+                        overflow-x:hidden;
+                        border: 0px solid #666;
+                        background-color: #fff;
+                        padding: 8px;
+                    }
+                    div.scroll2 {
+                        height: 200px;
+                        overflow: auto;
+                        overflow-x:hidden;
+                        border: 0px solid #666;
+                        background-color: #fff;
+                        padding: 8px;
+                    }
+                    
+                    -->
+                </style>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{userGroupEditController.mode}"/>
+                <h:inputHidden value="#{userGroupEditController.userGroup.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="300" align="right" valign="top">* User Group Name :</td>
+                        <td><h:inputText id="name" value="#{userGroupEditController.userGroup.name}" styleClass="textfield" size="30" required="true"
+                                         requiredMessage="Group name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{userGroupEditController.message}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Group Parent :</td>
+                        <td><h:selectOneMenu id="parentId"
+                                             value="#{userGroupEditController.parentId}">
+                                <f:selectItem itemLabel="None" itemValue="0"/>
+                                <f:selectItems value="#{userGroupEditController.parentList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top"><h:inputTextarea cols="40" rows="5"  value="#{userGroupEditController.userGroup.description}"></h:inputTextarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{userGroupEditController.userGroup.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Telephony Service ID:</td>
+                        <td valign="top"><h:inputText id="telephonyServiceId" value="#{userGroupEditController.userGroup.telephonyServiceId}" styleClass="textfield" size="10" maxlength="10" />
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td width="200" align="right" valign="top">Hide Telephone No. :</td>
+                        <td>
+                            <h:selectOneMenu id="hidePhoneNo" value="#{userGroupEditController.userGroup.hidePhoneNo}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItem itemValue="hideall" itemLabel="All Hide"/>
+                                <f:selectItem itemValue="hideleft" itemLabel="Left Hide"/>
+                                <f:selectItem itemValue="hideright" itemLabel="Right Hide"/>
+                                <f:selectItem itemValue="hidecenter" itemLabel="Center Hide"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Allow add new Customer Telephone :</td>
+                        <td>
+                            <h:selectBooleanCheckbox  value="#{userGroupEditController.userGroup.allowAddTelephone}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Allow Edit Customer Telephone :</td>
+                        <td>
+                            <h:selectBooleanCheckbox  value="#{userGroupEditController.userGroup.allowEditTelephone}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Concurrent License Group :</td>
+                        <td>
+                            <h:selectOneMenu id="licenseId" value="#{userGroupEditController.licenseGroup}" 
+                                             styleClass="select01" required="true" requiredMessage="Concurrent License Group is required">
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItem itemValue="1" itemLabel="1"/>
+                                <f:selectItem itemValue="2" itemLabel="2"/>
+                                <f:selectItem itemValue="3" itemLabel="3"/>
+                                <f:selectItem itemValue="4" itemLabel="4"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="licenseId" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">CTI Adapter :</td>
+                        <td>
+                            <h:selectOneMenu id="ctiId" value="#{userGroupEditController.ctiAdapterID}" styleClass="select01" >
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItems value="#{userGroupEditController.ctiAdapterList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                </table>
+                <rich:tabPanel switchType="client" id="tabs" activeItem="#{userGroupEditController.selectedTab}">
+                        <rich:tab id="role" name="Role" action="#{userGroupEditController.initialize()}"> 
+                            <f:facet name="header"><div class="tab-content"><h:outputText value= "Role"/></div></f:facet>
+                            <h:panelGroup>  
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                <tr>
+                                    <td class="line01" colspan="2"><h4>Operation:</h4></td>
+                                </tr>   
+                                <tr >
+                                    <td width="5%"></td>
+                                    <td valign="top"><h:selectManyCheckbox value="#{userGroupEditController.roleOperation}" layout="pageDirection">
+                                            <f:selectItem itemLabel="Campaign Manager" itemValue="CampaignManager"/>
+                                            <f:selectItem itemLabel="Campaign Supervisor" itemValue="Supervisor"/>
+                                            <f:selectItem itemLabel="Campaign Agent" itemValue="Agent"/>
+                                            <f:selectItem itemLabel="Customer Service" itemValue="CSCounter"/>
+                                            <f:selectItem itemLabel="Social Agent" itemValue="SOAgent"/>
+                                            <f:selectItem itemLabel="Social Supervisor" itemValue="SOSupervisor"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="line01" colspan="2"><h4>Sale Administration:</h4></td>
+                                </tr>
+                                 <tr>
+                                    <td width="5%"></td>
+                                    <td valign="top"><h:selectManyCheckbox value="#{userGroupEditController.roleSale}" layout="pageDirection">
+                                            <f:selectItem itemLabel="Underwriter" itemValue="Uw"/>
+                                            <f:selectItem itemLabel="Payment Collector" itemValue="Payment"/>
+                                            <f:selectItem itemLabel="Quality Assurer" itemValue="Qc"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+                               <tr>
+                                    <td class="line01" colspan="2"><h4>Knowledge Management:</h4></td>
+                                </tr>
+                                 <tr>
+                                    <td width="5%"></td>
+                                    <td valign="top"><h:selectManyCheckbox value="#{userGroupEditController.roleKnowledge}" layout="pageDirection">
+                                            <f:selectItem itemLabel="Content Master - overall controlling" itemValue="KBManager"/>
+                                            <f:selectItem itemLabel="Content Editor - approval" itemValue="KBApproval"/>
+                                            <f:selectItem itemLabel="Content Writer - data entry" itemValue="KBDataEntry"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+                            </table>
+                            </h:panelGroup> 
+                            <f:param name="id" value="#{userGroupEditController.userGroup.id}"/>  
+                            <f:param name="tab" value="role"/> 
+                        </rich:tab>
+                        <rich:tab id="permission" name="Permission" action="#{userGroupEditController.initialize()}">
+                            <f:facet name="header"><div class="tab-content"><h:outputText value= "Permission"/></div></f:facet>
+                            <h:panelGroup>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                    <tr>
+                                    <td width="5%"  align="right" valign="top"></td>
+                                    <td valign="top">
+                                        <ui:remove>
+                                            <h:selectManyCheckbox value="#{userGroupEditController.roleString}" layout="pageDirection">
+                                                <f:selectItems value="#{userGroupEditController.roleList}"/>
+                                            </h:selectManyCheckbox>
+                                        </ui:remove>
+                                        <h:panelGroup id="panelAcl">
+                                            <table border="0" cellpadding="3" cellspacing="1">
+                                            <a4j:repeat value="#{userGroupEditController.aclList}" var="list1">
+                                                <h:panelGroup rendered="#{!list1.parentCode.custom}">
+                                                <tr>
+                                                    <td valign="top">
+                                                        <h:outputText value="" style="margin-left: 20px" rendered="#{list1.parentCode ne null}"/>
+                                                        <h:outputText value="" style="margin-left: 20px" rendered="#{list1.parentCode ne null and list1.parentCode.parentCode ne null}"/>
+                                                        <h:selectBooleanCheckbox value="#{list1.selected}">           
+                                                            <a4j:ajax event="click" render="panelAcl"
+                                                                        listener="#{userGroupEditController.aclSelectedListener}"
+                                                                        execute="@this" limitRender="true"/>
+                                                            <f:param name="aclParent" value="#{list1.code}"/>
+                                                            <f:param name="aclStatus" value="#{list1.selected}"/>
+                                                        </h:selectBooleanCheckbox>
+                                                        <a4j:commandLink value="#{list1.name}" rendered="#{list1.custom eq true}"
+                                                                         oncomplete="#{rich:component('custom')}.show();"
+                                                                         render="popupCustom,custom,customPanel"
+                                                                         actionListener="#{userGroupEditController.customListener}"
+                                                                         execute="@this" limitRender="true">
+                                                                <f:param value="#{list1.code}" name="code" />
+                                                        </a4j:commandLink>
+                                                        
+                                                        <h:outputText value="#{list1.name}" rendered="#{list1.custom ne true}"/>
+
+                                                    </td>
+                                                    
+                                                </tr>
+                                                </h:panelGroup>
+                                            </a4j:repeat>
+                                        </table>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                </table>
+                            </h:panelGroup>
+                            <f:param name="id" value="#{userGroupEditController.userGroup.id}"/>  
+                            <f:param name="tab" value="permission"/> 
+                        </rich:tab>
+                        <rich:tab id="serviceType" name="Service Type" action="#{userGroupEditController.initialize()}"> 
+                            <f:facet name="header"><div class="tab-content"><h:outputText value= "Service Type"/></div></f:facet>
+                            <h:panelGroup>  
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                <tr>
+                                    <td  width="5%" valign="top"></td>
+                                    <td  valign="top"><br/>
+                                        <h:panelGroup id="panelServiceType">
+                                        <table border="0" cellpadding="3" cellspacing="1">
+                                            <a4j:repeat value="#{userGroupEditController.serviceTypeValueList}" var="list" rowKeyVar="rowNum">
+                                                <tr>
+                                                    <td valign="top">
+                                                        <h:selectBooleanCheckbox value="#{list.selected}">
+                                                            <a4j:ajax event="click" render="panelServiceType,panelBusinessUnit,panelLocation" 
+                                                                        listener="#{userGroupEditController.serviceTypeListener}"
+                                                                        execute="@this" limitRender="true"/>
+                                                            <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                                                            <f:param name="serviceTypeStatus" value="#{list.selected}"/>
+                                                        </h:selectBooleanCheckbox>
+                                                    </td>
+                                                    <td><b><h:outputText value="#{list.serviceType.name}"/></b>
+                                                        <h:panelGroup id="panelBusinessUnit">
+                                                        <table border="0" cellpadding="3" cellspacing="1">
+                                                            <a4j:repeat value="#{list.businessUnitValueList}" var="list1">
+                                                                <tr>
+                                                                    <td valign="top">
+                                                                        <h:selectBooleanCheckbox value="#{list1.selected}">
+                                                                            <a4j:ajax event="click" 
+                                                                                        render="panelServiceType,panelBusinessUnit,panelLocation" 
+                                                                                        listener="#{userGroupEditController.businessUnitListener}"
+                                                                                        execute="@this" limitRender="true"/>
+                                                                                <f:param name="businessUnitId" value="#{list1.businessUnit.id}"/>
+                                                                                <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                                                                                <f:param name="businessUnitStatus" value="#{list1.selected}"/>
+                                                                        </h:selectBooleanCheckbox>
+                                                                    </td>
+                                                                    <td><h:outputText value="#{list1.businessUnit.name}"/>
+                                                                        <h:panelGroup id="panelLocation">
+                                                                            <table border="0" cellpadding="3" cellspacing="1">
+
+                                                                                <a4j:repeat value="#{list1.locationValueList}" var="list2">
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <h:selectBooleanCheckbox value="#{list2.selected}">
+                                                                                                <a4j:ajax event="click" 
+                                                                                                            render="panelServiceType,panelBusinessUnit,panelLocation" 
+                                                                                                            listener="#{userGroupEditController.locationListener}"
+                                                                                                            execute="@this" limitRender="true"/>
+                                                                                                    <f:param name="locationId" value="#{list2.location.id}"/>
+                                                                                                    <f:param name="businessUnitId" value="#{list1.businessUnit.id}"/>
+                                                                                                    <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                                                                                                    <f:param name="locationStatus" value="#{list2.selected}"/>
+                                                                                            </h:selectBooleanCheckbox>                                                                            
+                                                                                        </td>
+                                                                                        <td><h:outputText value="#{list2.location.name}"/></td>
+                                                                                        <td></td>
+                                                                                    </tr>
+                                                                                </a4j:repeat>
+                                                                            </table>
+                                                                        </h:panelGroup>                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </a4j:repeat>
+                                                        </table>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </a4j:repeat>
+                                        </table>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                            </table>
+                            </h:panelGroup> 
+                            <f:param name="id" value="#{userGroupEditController.userGroup.id}"/>  
+                            <f:param name="tab" value="serviceType"/> 
+                        </rich:tab>
+                    </rich:tabPanel>
+                <table width="100%" height="60" border="0" cellspacing="0" cellpadding="8">
+                    <tr>
+                        <td width="33%"  align="left" valign="top">
+                            <h:commandButton image="../img/b_back.png" action="#{userGroupEditController.backAction}" immediate="true"/></td>
+                        <td width="33%" align="center" valign="top">
+                            <h:commandButton image="../img/b_save.png" action="#{userGroupEditController.saveAction}"  
+                                             rendered="#{userGroupEditController.savePermitted}" 
+                                             onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'})"/>
+                        </td>
+                        <td align="right" valign="top">&nbsp;</td>
+                    </tr>
+                </table>
+                
+                 <ui:include id="popupCustom"
+                            src="/admin/popupCustom.xhtml">
+                </ui:include>
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show();"
+                            onstop="#{rich:component('waitPopup')}.hide();" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

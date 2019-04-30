@@ -1,0 +1,192 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Case Workflow: Add/Edit</ui:define>
+            <ui:define name="head">
+                <style>
+                    <!--
+                    div.scroll {
+                        height: 350px;
+                        overflow: auto;
+                        border: 0px;
+                        background-color: #fff;
+                        padding: 0px;
+                    }
+                    -->
+                </style>
+                <script type="text/javascript" src="checking.js"/>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{workflowCaseEditController.mode}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="30%" align="right" valign="top">&nbsp;</td>
+                        <td width="70%" valign="top"><h:outputText value="#{workflowCaseEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Create Case By User Group:</td>
+                        <td align="left" ><h:selectOneMenu id="userGroup" value="#{workflowCaseEditController.userGroupId}"
+                                             required="true" requiredMessage="User Group is required"
+                                             valueChangeListener="#{workflowCaseEditController.userGroupListener}"
+                                             immediate="true" disabled="#{workflowCaseEditController.mode eq 'edit'}" >
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItems value="#{workflowCaseEditController.userGroupList}"/>
+                                <a4j:ajax event="change" render="userGroup, serviceType, businessUnit, location, caseRequest" execute="@this"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="userGroup" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Service Type</td>
+                        <td align="left" ><h:selectOneMenu id="serviceType" value="#{workflowCaseEditController.serviceTypeId}"
+                                             required="true" requiredMessage="Service Type is required"
+                                             valueChangeListener="#{workflowCaseEditController.serviceTypeListener}"
+                                             disabled="#{workflowCaseEditController.mode eq 'edit'}">
+                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                            <f:selectItems value="#{workflowCaseEditController.serviceTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <a4j:ajax event="change" render="serviceType, businessUnit, location, caseRequest" execute="@this"/>
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                         </h:selectOneMenu>
+                            <rich:message for="serviceType" style="color:red"/>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Business Unit</td>
+                        <td align="left" ><h:selectOneMenu id="businessUnit" value="#{workflowCaseEditController.businessUnitId}"
+                                             required="true" requiredMessage="Business Unit is required"
+                                             valueChangeListener="#{workflowCaseEditController.businessUnitListener}"
+                                             disabled="#{workflowCaseEditController.mode eq 'edit'}">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{workflowCaseEditController.businessUnitList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                <a4j:ajax event="change" render="businessUnit, location, caseRequest" execute="@this"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="businessUnit" style="color:red"/>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Location</td>
+                        <td align="left" ><h:selectOneMenu id="location" value="#{workflowCaseEditController.locationId}"
+                                             required="true" requiredMessage="Location is required"
+                                             valueChangeListener="#{workflowCaseEditController.caseRequestListener}"
+                                             disabled="#{workflowCaseEditController.mode eq 'edit'}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{workflowCaseEditController.locationList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                <a4j:ajax event="change" render="location, caseRequest" execute="@this"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="location" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr><td colspan="2" style="height: 10px;"></td></tr>
+                    <tr><td colspan="2">
+                        <table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0"><tr><td bgcolor="#FFFFFF">
+                            <div class="scroll">
+                            <rich:dataTable id="caseRequest" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{workflowCaseEditController.caseRequestList}" var="list" 
+                                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                            onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 5%;text-align: left;">
+                                        <h:panelGroup rendered="#{workflowCaseEditController.mode eq 'add'}">
+                                            <input type="checkbox" name="allbox" onclick="checkAll()" />
+                                        </h:panelGroup>
+                                    </rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Case Type"/></rich:column>
+                                    <rich:column style="width: 30%;text-align: left;"><h:outputText value="Case Topic"/></rich:column>
+                                    <rich:column style="width: 25%;text-align: left;"><h:outputText value="Case Detail"/></rich:column>
+                                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Reason of Request"/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column >
+                                <h:selectBooleanCheckbox id="userbox" value="#{workflowCaseEditController.selectedIds[list.id]}" rendered="#{workflowCaseEditController.mode eq 'add'}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.caseDetailId.caseTopicId.caseTypeId.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.caseDetailId.caseTopicId.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.caseDetailId.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.name}"/>
+                            </rich:column>
+                        </rich:dataTable>
+                        </div>
+                        </td></tr></table>
+                    </td></tr>
+                    <tr><td colspan="2" style="height: 10px;"></td></tr>
+                    
+                    <tr>
+                        <td width="200" align="right" valign="top" class="blue04">Case Priority</td>
+                        <td align="left" valign="top" class="blue04">Rule Name</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">Low:</td>
+                        <td align="left" ><h:selectOneMenu id="low" value="#{workflowCaseEditController.lowRuleId}">
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItems value="#{workflowCaseEditController.workflowRuleList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">Medium:</td>
+                        <td align="left" ><h:selectOneMenu id="medium" value="#{workflowCaseEditController.mediumRuleId}">
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItems value="#{workflowCaseEditController.workflowRuleList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">High:</td>
+                        <td align="left" ><h:selectOneMenu id="high" value="#{workflowCaseEditController.highRuleId}">
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItems value="#{workflowCaseEditController.workflowRuleList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03">Immediately:</td>
+                        <td align="left" ><h:selectOneMenu id="immediately" value="#{workflowCaseEditController.immediateRuleId}">
+                                <f:selectItem itemLabel="Please Select"/>
+                                <f:selectItems value="#{workflowCaseEditController.workflowRuleList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    
+                    <tr><td colspan="2" style="height: 10px;"></td></tr>
+                </table>
+                <table width="100%" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="left" valign="top" width="33%">
+                            <h:commandButton image="../img/b_back.png" action="#{workflowCaseEditController.backAction}" immediate="true"/></td>
+                        <td align="center" valign="top" width="34%">
+                            <h:commandButton image="../img/b_save.png" action="#{workflowCaseEditController.saveAction}"  
+                                             rendered="#{workflowCaseEditController.savePermitted and (workflowCaseEditController.mode eq 'add')}"
+                                             onclick="return checkSelectData(this.form)"/>
+                             <h:commandButton image="../img/b_save.png" action="#{workflowCaseEditController.saveAction}"  
+                                              rendered="#{workflowCaseEditController.savePermitted and (workflowCaseEditController.mode eq 'edit')}"/>
+
+                        </td>
+                        <td align="right" valign="top"  width="33%"></td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

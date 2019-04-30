@@ -1,0 +1,43 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Custom</ui:define>
+    <ui:param name="modalId" value="custom"/>
+    <ui:param name="width" value="500"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup id="customPanel">
+        <table border="0" cellpadding="3" cellspacing="1">
+            <tr>
+                <td valign="top"><h:outputText value="#{userGroupEditController.custom.name}"/></td>
+            </tr>
+            <tr>
+                <td valign="top">
+                    <table border="0" cellpadding="3" cellspacing="1">
+                        <a4j:repeat value="#{userGroupEditController.customList}" var="customList">
+                            <tr>
+                                <td valign="top"><h:selectBooleanCheckbox value="#{customList.selected}"/></td>
+                                <td valign="top"><h:outputText value="#{customList.name}"/></td>
+                            </tr>
+                        </a4j:repeat>
+                          <tr>
+                            <td align="right" valign="top">&nbsp;</td>
+                            <td valign="top">
+                                <a4j:commandButton image="../img/b_save.png" actionListener="#{userGroupEditController.saveCustomAction}" 
+                                                   oncomplete="#{rich:component('custom')}.hide();"/>
+                                <a href="#" style="cursor:pointer" onclick="#{rich:component('custom')}.hide(); return false;">
+                                    <img src="../img/b_back.png" botder="0" style="display: inline;"/></a>
+                              </td>
+                          </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

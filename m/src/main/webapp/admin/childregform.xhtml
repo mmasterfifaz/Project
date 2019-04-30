@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Child Registration Form</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{childRegFormController.editAction}" rendered="#{childRegFormController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{childRegFormController.deleteAction}" rendered="#{childRegFormController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{childRegFormController.list}" rows="#{global.maxrows}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;"></rich:column>
+                            <rich:column style="width: 9%;text-align: left;"><h:outputText value="Code" /></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Form Name" /></rich:column>
+                            <rich:column style="width: 27%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                            <rich:column style="width: 11%;text-align: left;"></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{childRegFormController.selectedIds[list.id]}" disabled="#{childRegFormController.isDelete(list.id)}"/>
+                    </rich:column>
+                    <rich:column>
+                        <ui:remove><h:outputText value="#{list.code}"/></ui:remove>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{childRegFormController.editAction}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <ui:remove>
+                            <h:commandLink title="View Detail" value="#{list.name}" action="#{childRegFormController.editAction}">
+                                <f:param name="selectedID" value="#{list.id}"/>
+                            </h:commandLink>
+                        </ui:remove>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.description}"/>
+                    </rich:column>
+                   <rich:column style="text-align: left">
+                       <h:commandButton image="../img/b_manage_layout.png" action="#{childRegFormController.manageAction()}">
+                            <f:param name="ManageID" value="#{list.id}"/>
+                        </h:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

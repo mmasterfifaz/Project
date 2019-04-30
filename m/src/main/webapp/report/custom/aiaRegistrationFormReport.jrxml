@@ -1,0 +1,949 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" language="groovy" pageWidth="1190" pageHeight="842" orientation="Landscape" columnWidth="1190" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="1100"/>
+	<property name="ireport.y" value="1246"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="to" class="java.util.Date"/>
+	<parameter name="refNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT top 1
+     initial+name+'  '+surname AS full_name,
+     *
+FROM
+     aia_po_fix
+where
+
+ref_no = $P{refNo}]]>
+	</queryString>
+	<field name="full_name" class="java.lang.String"/>
+	<field name="ref_no" class="java.lang.String"/>
+	<field name="ref_no2" class="java.lang.String"/>
+	<field name="sale_date" class="java.sql.Timestamp"/>
+	<field name="saledate_cnvrt" class="java.lang.String"/>
+	<field name="no" class="java.lang.Integer"/>
+	<field name="initial" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="idno" class="java.lang.String"/>
+	<field name="idcard_expiry_date" class="java.sql.Timestamp"/>
+	<field name="gender" class="java.lang.Integer"/>
+	<field name="dob" class="java.sql.Timestamp"/>
+	<field name="dob_cnvrt" class="java.lang.String"/>
+	<field name="age" class="java.lang.Integer"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="height" class="java.math.BigDecimal"/>
+	<field name="marital_status" class="java.lang.Integer"/>
+	<field name="race" class="java.lang.String"/>
+	<field name="nationality" class="java.lang.String"/>
+	<field name="religion" class="java.lang.String"/>
+	<field name="occupation" class="java.lang.String"/>
+	<field name="position" class="java.lang.String"/>
+	<field name="jobdescription" class="java.lang.String"/>
+	<field name="business_type" class="java.lang.String"/>
+	<field name="income" class="java.lang.String"/>
+	<field name="current_address_line1" class="java.lang.String"/>
+	<field name="current_address_line2" class="java.lang.String"/>
+	<field name="current_address_line3" class="java.lang.String"/>
+	<field name="current_address_line4" class="java.lang.String"/>
+	<field name="current_address_line5" class="java.lang.String"/>
+	<field name="current_address_line6" class="java.lang.String"/>
+	<field name="current_district_name" class="java.lang.String"/>
+	<field name="current_province_name" class="java.lang.String"/>
+	<field name="current_postal_code" class="java.lang.String"/>
+	<field name="current_telephone1" class="java.lang.String"/>
+	<field name="current_telephone2" class="java.lang.String"/>
+	<field name="home_address_line1" class="java.lang.String"/>
+	<field name="home_address_line2" class="java.lang.String"/>
+	<field name="home_address_line3" class="java.lang.String"/>
+	<field name="home_address_line4" class="java.lang.String"/>
+	<field name="home_address_line5" class="java.lang.String"/>
+	<field name="home_address_line6" class="java.lang.String"/>
+	<field name="home_district_name" class="java.lang.String"/>
+	<field name="home_province_name" class="java.lang.String"/>
+	<field name="home_postal_code" class="java.lang.String"/>
+	<field name="home_telephone1" class="java.lang.String"/>
+	<field name="home_telephone2" class="java.lang.String"/>
+	<field name="office_address_line1" class="java.lang.String"/>
+	<field name="office_address_line2" class="java.lang.String"/>
+	<field name="office_address_line3" class="java.lang.String"/>
+	<field name="office_address_line4" class="java.lang.String"/>
+	<field name="office_address_line5" class="java.lang.String"/>
+	<field name="office_address_line6" class="java.lang.String"/>
+	<field name="office_address_line7" class="java.lang.String"/>
+	<field name="office_district_name" class="java.lang.String"/>
+	<field name="office_province_name" class="java.lang.String"/>
+	<field name="office_postal_code" class="java.lang.String"/>
+	<field name="office_telephone" class="java.lang.String"/>
+	<field name="office_email" class="java.lang.String"/>
+	<field name="fx1" class="java.lang.String"/>
+	<field name="fx2" class="java.lang.String"/>
+	<field name="fx6" class="java.lang.String"/>
+	<field name="fx7" class="java.lang.String"/>
+	<field name="fx8" class="java.lang.String"/>
+	<field name="fx9" class="java.lang.String"/>
+	<field name="fx10" class="java.lang.String"/>
+	<field name="fx11" class="java.lang.String"/>
+	<field name="fx12" class="java.lang.String"/>
+	<field name="fx13" class="java.lang.String"/>
+	<field name="fx14" class="java.lang.String"/>
+	<field name="fx15" class="java.lang.String"/>
+	<field name="fx16" class="java.lang.String"/>
+	<field name="fx17" class="java.lang.String"/>
+	<field name="fx18" class="java.lang.String"/>
+	<field name="sum_insured" class="java.math.BigDecimal"/>
+	<field name="license_no" class="java.lang.String"/>
+	<field name="card_no" class="java.lang.String"/>
+	<field name="card_expiry_month" class="java.lang.Integer"/>
+	<field name="card_expiry_year" class="java.lang.Integer"/>
+	<field name="payment_mode_id" class="java.lang.String"/>
+	<field name="payment_mode" class="java.lang.Integer"/>
+	<field name="net_premium" class="java.math.BigDecimal"/>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="Expr1" class="java.lang.String"/>
+	<field name="agy_cd" class="java.lang.String"/>
+	<field name="agy_name" class="java.lang.String"/>
+	<field name="agt1_cd" class="java.lang.String"/>
+	<field name="agt1_name" class="java.lang.String"/>
+	<field name="pvc_flag" class="java.lang.String"/>
+	<field name="pln_div" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="842" splitType="Stretch">
+			<image>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="1190" height="842"/>
+				<imageExpression><![CDATA["aia_bg_01.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="854" y="290" width="308" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="649" y="332" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{gender} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="685" y="332" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{gender} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="756" y="329" width="54" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{race}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="843" y="329" width="52" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nationality}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="930" y="329" width="47" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{religion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1025" y="332" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{marital_status} == 1]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1059" y="332" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{marital_status} == 2]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1101" y="332" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{marital_status} == 3]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1142" y="332" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{marital_status} == 4]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="643" y="346" width="31" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="728" y="346" width="28" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d", new Locale ( "th", "TH" )).format($F{dob})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="788" y="346" width="82" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("MMMMM", new Locale ( "th", "TH" )).format($F{dob})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="906" y="346" width="61" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy", new Locale ( "th", "TH" )).format($F{dob})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="715" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 0, 1 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="729" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 1, 2 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="742" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 2, 3 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="755" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 3, 4 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="768" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 4, 5 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="781" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 5, 6 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="794" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 6, 7 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="807" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 7, 8 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="820" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 8, 9 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="833" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 9, 10 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="847" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 10, 11 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="860" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 11, 12 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="873" y="366" width="10" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{idno}.substring( 12, 13 )]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="746" y="393" width="45" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_address_line2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="861" y="393" width="116" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_address_line1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1007" y="393" width="35" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_address_line3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1089" y="393" width="95" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_address_line4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="663" y="410" width="89" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_address_line5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="810" y="411" width="90" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_address_line6}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="952" y="410" width="90" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_district_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1081" y="410" width="90" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_province_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="701" y="427" width="87" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_postal_code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="843" y="427" width="109" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_telephone1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1029" y="427" width="133" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{home_telephone2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="710" y="511" width="45" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_address_line2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="822" y="511" width="154" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_address_line1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1007" y="511" width="35" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_address_line3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1089" y="511" width="95" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_address_line4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="663" y="528" width="89" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_address_line5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="807" y="528" width="90" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_address_line6}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="952" y="528" width="90" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_district_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1079" y="528" width="90" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_province_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="697" y="545" width="84" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_postal_code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="843" y="545" width="109" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_telephone1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1029" y="545" width="133" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{current_telephone2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="678" y="591" width="113" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{occupation}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="829" y="591" width="130" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{position}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1025" y="591" width="137" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jobdescription}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="684" y="609" width="268" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{business_type}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1006" y="609" width="137" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{income}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1041" y="676" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{pln_div}.equals("1") || $F{pln_div}.equals("2")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="781" y="694" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{pln_div}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="746" y="713" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{payment_mode_id}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="971" y="713" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{payment_mode_id}.equals("4")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="757" y="567" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{fx1}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="938" y="567" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{fx1}.equals("3")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="723" y="726" width="113" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{sum_insured})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="966" y="726" width="113" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{net_premium})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="723" y="746" width="113" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[20]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1021" y="746" width="59" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[10]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="727" y="242" width="98" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no2}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1106" y="676" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{pln_div}.equals("3")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="889" y="695" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{pln_div}.equals("2")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="701" y="444" width="270" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1006" y="444" width="73" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line2}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1111" y="444" width="60" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line3}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="682" y="462" width="157" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line4}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="889" y="462" width="118" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line5}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1039" y="462" width="130" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line6}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="687" y="479" width="149" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_address_line7}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="889" y="479" width="117" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_district_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1045" y="479" width="126" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_province_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="695" y="496" width="73" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_postal_code}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="848" y="496" width="104" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_telephone}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1029" y="496" width="140" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{office_email}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="860" y="567" width="10" height="20">
+					<printWhenExpression><![CDATA[$F{fx1}.equals("2")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="699" y="672" width="307" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{agt1_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="1007" y="67" width="136" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Terrabit 10Pay20 Roll out 3]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="865" y="241" width="113" height="17"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[00308]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1016" y="241" width="143" height="17"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[996015]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="865" y="258" width="113" height="17"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="12" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Terrabit 10Pay20 (Roll out 3)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1049" y="257" width="122" height="17"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="10" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[สะสมทรัพย์ 20 ปี ชำระเบี้ยประกันภัย 10 ปี]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<summary>
+		<band height="842">
+			<image>
+				<reportElement x="0" y="0" width="1190" height="842"/>
+				<imageExpression><![CDATA["aia_bg_02.jpg"]]></imageExpression>
+			</image>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="100" y="102" width="134" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{sum_insured})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0;-#,##0" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="407" y="102" width="130" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0").format($F{net_premium})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="112" y="126" width="10" height="20">
+					<printWhenExpression><![CDATA[!$F{card_no}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="219" y="122" width="177" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[!$F{card_no}.equals("") ? ($F{card_no}.substring( 0, 4 ) + ' ' + $F{card_no}.substring( 4, 8 ) + ' ' + $F{card_no}.substring( 8, 12 ) + ' ' + $F{card_no}.substring( 12, 16 )) : ""]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="460" y="122" width="101" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_expiry_month} != 0 && $F{card_expiry_year} != 0) ? (new DecimalFormat("00").format($F{card_expiry_month}) + "/" + new DecimalFormat("00").format($F{card_expiry_year})) : ""]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="22" y="279" width="147" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx8}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="181" y="279" width="25" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx9}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="216" y="279" width="53" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx10}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="275" y="273" width="194" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="10" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx11}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="22" y="294" width="147" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx15}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="181" y="294" width="25" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx16}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="216" y="294" width="53" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx17}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="275" y="289" width="194" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="10" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fx18}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="497" y="341" width="10" height="20"/>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="499" y="385" width="10" height="20"/>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="497" y="428" width="10" height="20"/>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="481" y="648" width="10" height="20"/>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="162" y="644" width="35" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{weight}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="62" y="644" width="35" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{height}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="134" y="717" width="10" height="20"/>
+				<textElement>
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="484" y="279" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[((!$F{fx8}.equals("")) ? (!$F{fx15}.equals("") ? "50%" : "100%") : "")]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="484" y="294" width="80" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[((!$F{fx8}.equals("")) ? (!$F{fx15}.equals("") ? "50%" : "") : "")]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="931" y="471" width="51" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d", new Locale ( "th", "TH" )).format($F{sale_date})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1015" y="471" width="86" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("MMMMM", new Locale ( "th", "TH" )).format($F{sale_date})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="1128" y="471" width="50" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("yyyy HH:mm", new Locale ( "th", "TH" )).format($F{sale_date})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="934" y="606" width="198" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Cordia New" size="14" pdfFontName="D:\\Fonts\\CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

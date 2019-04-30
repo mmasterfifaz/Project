@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml"> 
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">FWD - TSR Performance Report</ui:define>
+            <ui:define name="panel">            
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">Campaign:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="campaign" value="#{fwdPerformanceReport.campaignId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{fwdPerformanceReport.campaignList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Marketing:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="marketing" value="#{fwdPerformanceReport.marketingId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{fwdPerformanceReport.marketingList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Period:</td>
+                        <td valign="top">
+                            <h:selectOneMenu value="#{fwdPerformanceReport.group}" styleClass="select08">
+                                <f:selectItem itemValue="1" itemLabel="Date - Daily" />
+                                <f:selectItem itemValue="2" itemLabel="Date - Monthly" />
+                                <a4j:ajax event="change" render="calendarPanel"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Date:</td>
+                        <td><h:panelGroup id="calendarPanel">
+                                <h:panelGroup rendered="#{fwdPerformanceReport.group eq 1}">
+                                <rich:calendar value="#{fwdPerformanceReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                       datePattern="#{msg.datePattern}" locale="#{msg.locale}" />
+                                </h:panelGroup>
+                                <ui:remove>
+                                <span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                                <rich:calendar value="#{fwdPerformanceReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}" />
+                                </ui:remove>
+                                <h:panelGroup rendered="#{fwdPerformanceReport.group eq 2}">
+                                    <style type="text/css">
+                                        .rfcalendar tr[id]{
+                                                display:none; 
+                                        }
+                                    </style>
+                                    <script>
+                                        Date.prototype.formattedDate = function (pattern) {
+                                            formattedDate = pattern.replace('yyyy', this.getFullYear().toString());
+                                            var mm = (this.getMonth() + 1).toString(); // getMonth() is zero-based
+                                            mm = mm.length > 1 ? mm : '0' + mm;
+                                            formattedDate = formattedDate.replace('mm', mm);
+                                            var dd = this.getDate().toString();
+                                            dd = dd.length > 1 ? dd : '0' + dd;
+                                            formattedDate = formattedDate.replace('dd', dd);
+                                            return formattedDate;
+                                        };
+                                    </script>
+                                    <rich:calendar styleClass="rfcalendar" popup="false" showWeekDaysBar="false" showFooter="false"
+                                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}" oncurrentdateselect="event.rf.component.__selectDate(event.rf.data); #{rich:element('selectDate')}.value=event.rf.data.formattedDate('yyyy-mm-dd')" />                                     
+                                </h:panelGroup>
+                                <h:inputHidden id="selectDate"/>
+                                <script>
+                                    #{rich:element("selectDate")}.value = new Date().formattedDate("yyyy-mm-dd");
+                                </script>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink action="blank.xhtml" actionListener="#{fwdPerformanceReport.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png" style="display: inline"/>
+                            </h:commandLink>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

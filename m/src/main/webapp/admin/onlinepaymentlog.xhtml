@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Online Payment Log</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <table width="100%">
+                    <tr>
+                        <td width="150" align="right">From Date:</td>
+                        <td align="left"><rich:calendar id="fromdate"
+                                        value="#{onlinePaymentLogController.fromDate}"
+                                        inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                        datePattern="#{msg.datePattern}"
+                                        locale="#{msg.locale}"/>
+                        to: 
+                        <rich:calendar id="toDate"
+                                        value="#{onlinePaymentLogController.toDate}"
+                                        inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                        datePattern="#{msg.datePattern}"
+                                        locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Post Param:</td>
+                        <td><h:inputText value="#{onlinePaymentLogController.postParam}" class="textfield"/></td>
+                    </tr>
+                     <tr>
+                        <td align="right">Return Param:</td>
+                        <td><h:inputText value="#{onlinePaymentLogController.returnParam}" class="textfield"/></td>
+                    </tr>
+                     <tr>
+                        <td align="right">User Name:</td>
+                        <td><h:inputText value="#{onlinePaymentLogController.createBy}" class="textfield"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td><a4j:commandButton actionListener="#{onlinePaymentLogController.searchActionListener}" render="table" limitRender="true" image="/img/b_search.png"/></td>
+                    </tr>
+                </table>
+                
+                
+            </ui:define>
+            <ui:define name="button">
+               
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="table" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{onlinePaymentLogController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="Post Date" /></rich:column>
+                            <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Name"/></rich:column>
+                            <rich:column style="width: 35%;text-align: left;"><h:outputText value="Post Param"/></rich:column>
+                            <rich:column style="width: 35%;text-align: left;"><h:outputText value="Return Param"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>             
+                        <h:outputText value="#{list.createDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>  
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.createBy}"/>
+                    </rich:column>
+                    <rich:column style="word-break: break-all;">
+                        <h:outputText value="#{list.postParam}" title="#{list.postParam}" />
+                    </rich:column>
+                    <rich:column style="word-break: break-all;">
+                        <h:outputText value="#{fn:substring(list.returnParam,0, 150)}" title="#{list.returnParam}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

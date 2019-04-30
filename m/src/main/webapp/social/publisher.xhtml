@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../social/socialtemplate.xhtml">
+            <ui:define name="title1">Publisher</ui:define>
+            <ui:define name="title2">Post Schedule</ui:define>
+            <ui:define name="detailSub1">
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <!-- ตารางแถวกลาง  -->
+                    <tr>
+                        <td width="80" valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree">
+                                <!-- product lists -->
+                                <tr><td width="80"><div class="scroll" style="width:80px"></div></td></tr>
+                                <!-- product lists -->
+                            </table>
+                            <p></p>
+                        </td>
+                        <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+                        <td width="80" valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree">
+                                <!-- product lists -->
+                                <tr><td width="80"><div class="scroll" style="width:80px"></div></td></tr>
+                                <!-- product lists -->
+                            </table>
+                            <p></p>
+                        </td>
+                    </tr>
+                </table>                
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

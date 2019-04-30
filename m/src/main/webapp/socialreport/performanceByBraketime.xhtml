@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Social Report</ui:define>
+            <ui:define name="title2">Report of Agent Performance by Brake Time</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainPanel1">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date From:</td>
+                        <td><rich:calendar value="#{performanceByBreaktimeReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{performanceByBreaktimeReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Grouping of User:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{performanceByBreaktimeReport.userOption}" valueChangeListener="#{performanceByBreaktimeReport.userOptionListener}">
+                                <f:selectItems value="#{performanceByBreaktimeReport.userOptionList}"/>
+                                <a4j:ajax event="click" render="mainPanel1" execute="@this"/>                                
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="4">
+                            <h:panelGroup id="serviceTypePanel" rendered="#{performanceByBreaktimeReport.userOption eq 1}">
+                             <tr>
+                                <td width="200" align="right" valign="top">Social Service Type: </td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="soSevice" value="#{performanceByBreaktimeReport.soServiceId}"  
+                                                      valueChangeListener="#{performanceByBreaktimeReport.userServiceListener}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{performanceByBreaktimeReport.soServiceList}"/>
+                                    <a4j:ajax event="change" render="soSevice,user" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            <h:panelGroup id="userGroupPanel" rendered="#{performanceByBreaktimeReport.userOption eq 0}">
+                            <tr>
+                                <td width="200" align="right" valign="top">User Group:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="usergroup" value="#{performanceByBreaktimeReport.userGroupId}" 
+                                                     valueChangeListener="#{performanceByBreaktimeReport.userGroupListener}" styleClass="select08" >
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{performanceByBreaktimeReport.usergroupList}"/>
+                                        <a4j:ajax event="change" render="usergroup, user" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User: </td>
+                        <td valign="top">
+                            <h:selectOneMenu id="user" value="#{performanceByBreaktimeReport.userId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{performanceByBreaktimeReport.usersList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Logout Reason: </td>
+                        <td valign="top">
+                            <h:selectOneMenu id="logoff" value="#{performanceByBreaktimeReport.logoffID}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{performanceByBreaktimeReport.logoffTypeList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Output Type:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{performanceByBreaktimeReport.outputFormat}">
+                                <f:selectItems value="#{performanceByBreaktimeReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink  action="blank.xhtml" actionListener="#{performanceByBreaktimeReport.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png"/>
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+                </h:panelGroup> 
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

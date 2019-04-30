@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:body>
+<ui:composition template="../templates/frontmain.xhtml">
+    <ui:define name="title1">To Do List</ui:define>
+    <ui:define name="title2">Incoming</ui:define>
+    <ui:define name="panel">
+        <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                        value="#{toDoListController.incomingValues}" rows="5" var="list">
+           <f:facet name="header">
+               <rich:columnGroup>
+                   <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                   <rich:column style="width: 20%;text-align: left;"><h:outputText value="Case ID" /></rich:column>
+                   <rich:column style="width: 10%;text-align: left;"><h:outputText value="Send Date"/></rich:column>
+                   <rich:column style="width: 10%;text-align: left;"><h:outputText value="Sender"/></rich:column>
+                   <rich:column style="width: 10%;text-align: left;"><h:outputText value="Customer"/></rich:column>
+                   <rich:column style="width: 12%;text-align: left;"><h:outputText value="Case Type"/></rich:column>
+                   <rich:column style="width: 15%;text-align: left;"><h:outputText value="Case Topic"/></rich:column>
+                   <rich:column style="width: 20%;text-align: left;"><h:outputText value="Case Detail"/></rich:column>
+               </rich:columnGroup>
+           </f:facet>
+
+            <rich:column>
+                <h:graphicImage  value="../icon/over-due-close.png" rendered="#{list.iconFlag == 'CC'}" />
+                <h:graphicImage value="../icon/over-due-accept.png" rendered="#{list.iconFlag == 'CA'}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.caseId}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.sendDate}">
+                    <f:convertDateTime pattern="#{vars.dateTimePattern}" />
+                </h:outputText>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.sender}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.customer}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.caseType}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.caseTopic}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.caseDetail}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="5"/>
+            </f:facet>
+        </rich:dataTable>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

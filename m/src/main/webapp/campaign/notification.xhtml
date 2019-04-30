@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <script>
+            var isSocketOpen = false;
+            function checkSocket(socketObj) {
+                if (socketObj === undefined) {
+                    alert('Socket is undefined');
+                    location.reload(true);
+                }
+                
+                var countHandleSocket = 0;
+                var handleSocket = setInterval(function() {                 
+                    if (isSocketOpen){
+                        clearInterval(handleSocket);
+                        window.parent.document.getElementById('telephonyframe').style.visibility = 'visible';
+                        //alert('Socket is opened');
+                    }else if (countHandleSocket >= 10){
+                        clearInterval(handleSocket);
+                        //alert('Socket is not open');
+                    }else{
+                        countHandleSocket++;
+                    }
+                }, 500);           
+            }
+            
+            function openSocket() {
+                isSocketOpen = true;
+            }
+            
+            function closeSocket() {
+                isSocketOpen = false;
+            }
+            
+            /*
+            function getAllProperties(obj) {
+                if (obj === undefined) {
+                   alert('obj is undefined');
+                } else {
+                    alert('obj is defined');
+                }
+                
+                var properties = '';
+                for (property in obj) {
+                  properties += '\n' + property;
+                }
+                alert('Properties of obj:' + properties);
+
+                properties2 = '';
+                for (property2 in obj.connection) {
+                  properties2 += '\n' + property2;
+                }
+                //alert('Properties of obj.connection:' + properties2);
+                alert(obj.connection.getUrl());
+            }
+            */
+        </script>
+    </h:head>
+    <h:body onload="checkSocket(PF('socketWidget'))">
+        <p:socket widgetVar="socketWidget" onMessage="handleNotification" channel="/notifications/#{userSession.users.id}"
+                  onOpen="openSocket(); console.log('Socket Open')" onClose="closeSocket(); console.log('Socket Close')" onReconnect="console.log('Socket Reconnect')" onError="console.log('Socket Error')"
+                  rendered="#{not (fn:containsIgnoreCase(request.getHeader('user-agent'), 'MSIE 7.') or fn:containsIgnoreCase(request.getHeader('user-agent'), 'MSIE 8.') or fn:containsIgnoreCase(request.getHeader('user-agent'), 'MSIE 9.'))}" />
+        <script type="text/javascript">
+            console.log(new Date().toString() + ', Client Socket Channel /notifications/' + #{userSession.users.id});
+            function handleNotification(message) {
+                console.log('Client start handle Notification, ' + message.text);
+                var count = 0;
+                var handleVar = setInterval(function() {
+                    if (typeof window.parent.document.getElementById('mainframe').contentWindow.popupNotification === 'function') {
+                        console.log(new Date().toString() + ', Call function popupNotification of mainframe');
+                        window.parent.document.getElementById('mainframe').contentWindow.popupNotification(JSON.parse(message.text));
+                        clearInterval(handleVar);
+                    }else if (count > 10){
+                        console.log(new Date().toString() + ', Maximum wait function popupNotification of mainframe');
+                        clearInterval(handleVar);
+                    }else{
+                        console.log(new Date().toString() + ', Wait for function popupNotification of mainframe, ' + count);
+                        count++;
+                    }
+                }, 500);
+            }
+        </script>
+    </h:body>
+</html>

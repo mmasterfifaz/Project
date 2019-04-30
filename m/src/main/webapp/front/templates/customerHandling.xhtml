@@ -1,0 +1,38 @@
+<ui:composition template="../templates/mainmenu.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="panel">
+    <div id="body_wrapper">
+        <div id="body_header">
+            <div id="body_header_left">
+                <div id="body_header_right">
+                    <div id="type">
+                        <h2><ui:insert name="type" /></h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="body">
+        <div id="body_left">
+            <div id="body_right">
+                <div id="content_customer_detail">
+                    <ui:insert name="body"></ui:insert>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer_left">
+            <div class="footer_right">
+            </div>
+        </div>
+    </div>
+    </ui:define>
+</ui:composition>

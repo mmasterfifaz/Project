@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="popupTitle">Product Plan</ui:define>
+    <ui:param name="modalId" value="productPlanList"/>
+    <ui:param name="width" value="1000"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup id="productPlanListPanel">
+            <div style="height: 450px;width: 970px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                <rich:dataTable id="dataList1" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{productPlanImportController.productPlanSuccess}" rows="10" var="pLog">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column><h:outputText value="Plan No"/></rich:column>
+                            <rich:column><h:outputText value="Plan Code"/></rich:column>
+                            <rich:column><h:outputText value="Plan Name"/></rich:column>
+                            <rich:column><h:outputText value="Sum Insured"/></rich:column>
+                            <rich:column><h:outputText value="Payment Mode"/></rich:column>
+                            <rich:column><h:outputText value="Master Plan"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value="#{pLog.no}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pLog.code}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pLog.name}" />
+                    </rich:column>
+                    <rich:column style="text-align: center" >
+                        <h:outputText value="#{pLog.sumInsured}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="text-align: center">
+                        <h:outputText rendered="#{pLog.paymentMode eq null}" value="-"/>
+                        <h:outputText rendered="#{pLog.paymentMode eq '1'}" value="Monthly"/>
+                        <h:outputText rendered="#{pLog.paymentMode eq '2'}" value="Quarterly"/>
+                        <h:outputText rendered="#{pLog.paymentMode eq '3'}" value="Half Year"/>
+                        <h:outputText rendered="#{pLog.paymentMode eq '4'}" value="Yearly"/>
+                    </rich:column>
+                    <rich:column style="text-align: center" >
+                        <h:outputText rendered="#{pLog.masterPlan}" value="True"/>
+                        <h:outputText rendered="#{not pLog.masterPlan}" value="False"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                    </f:facet>
+                </rich:dataTable>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

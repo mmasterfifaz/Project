@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">User Management</ui:define>
+            <ui:define name="title2">User Group</ui:define>
+            <ui:define name="search">
+                <table width="" border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="right">Name :</td>
+                        <td>
+                            <h:inputText styleClass="textfield" value="#{userGroupController.name}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Group Parent :</td>
+                        <td>
+                            <h:selectOneMenu id="userGroupId"
+                                             value="#{userGroupController.userGroupId}">
+                                <f:selectItem itemLabel="None" itemValue="0"/>
+                                <f:selectItems value="#{userGroupController.userGroupList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Role :</td>
+                        <td>
+                            <h:selectOneMenu value="#{userGroupController.role}">
+                                <f:selectItem itemLabel="All" itemValue=""/>
+                                <f:selectItem itemLabel="Campaign Manager" itemValue="CampaignManager"/>
+                                <f:selectItem itemLabel="Campaign Supervisor" itemValue="Supervisor"/>
+                                <f:selectItem itemLabel="Campaign Agent" itemValue="Agent"/>
+                                <f:selectItem itemLabel="Underwriting" itemValue="Uw"/>
+                                <f:selectItem itemLabel="Collection payment" itemValue="Payment"/>
+                                <f:selectItem itemLabel="QC" itemValue="Qc"/>
+                                <f:selectItem itemLabel="CS Counter" itemValue="CSCounter"/>
+                                <f:selectItem itemLabel="KB Manager" itemValue="KBManager"/>
+                                <f:selectItem itemLabel="KB Approval" itemValue="KBApproval"/>
+                                <f:selectItem itemLabel="KB DataEntry" itemValue="KBDataEntry"/>                             
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Status :</td>
+                        <td>
+                            <h:selectOneMenu value="#{userGroupController.status}">
+                                <f:selectItem itemLabel="All" itemValue=""/>
+                                <f:selectItem itemLabel="Enable" itemValue="enable"/>
+                                <f:selectItem itemLabel="Disable" itemValue="disable"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td>
+                            <a4j:commandButton image="/img/b_search.png" 
+                                               actionListener="#{userGroupController.searchActionListener}" 
+                                               render="dataList"
+                                               limitRender="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{userGroupController.editAction}"  rendered="#{userGroupController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{userGroupController.deleteAction}" rendered="#{userGroupController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{userGroupController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="User Group Name" /></rich:column>
+                            <rich:column style="width: 57%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;">&nbsp;</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{userGroupController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{userGroupController.editAction}"
+                                       actionListener="#{userGroupEditController.initialize}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.description}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a4j:commandButton image="../img/b_copy.png" action="#{userGroupController.copyAction}" rendered="#{userGroupController.addPermitted}"
+                                           onclick="if (!confirm('Do you want to copy this User Group?')) { return false; }">
+                            <f:param name="userGroupID" value="#{list.id}"/>
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

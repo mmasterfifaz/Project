@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Campaign Management: Summary</ui:define>
+            <ui:define name="head">
+                <style>
+                    <!--
+                    div.scroll {
+                        height: 130px;
+                        overflow: auto;
+                        overflow-x:hidden;
+                        border: 0px solid #666;
+                        background-color: #fff;
+                        padding: 8px;
+                    }
+                    div.scroll2 {
+                        height: 200px;
+                        overflow: auto;
+                        overflow-x:hidden;
+                        border: 0px solid #666;
+                        background-color: #fff;
+                        padding: 8px;
+                    }
+                   
+                    -->
+                </style>
+                <script type="text/javascript" src="campaignsummary.js"/>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{campaignSummaryController.campaign.id}"/>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td valign="top">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td bgcolor="#E8E7D5"><table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                            <tr>
+                                                <td width="100" class="gray03">Campaign Name:</td>
+                                                <td class="blue04" align="left"><h:outputText value="#{campaignSummaryController.campaign.name}"/></td>
+                                                <td width="60" class="gray03">Start Date:</td>
+                                                <td class="blue04">
+                                                    <h:outputText value="#{campaignSummaryController.campaign.startDate}">
+                                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText></td>
+                                                <td width="60" class="gray03">End Date:</td>
+                                                <td class="blue04">
+                                                    <h:outputText value="#{campaignSummaryController.campaign.endDate}">
+                                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText>
+                                                </td>
+                                                <td width="60" class="gray03">Description:</td>
+                                                <td class="blue04"><h:outputText value="#{campaignSummaryController.campaign.description}"/></td>
+                                                <td width="50" align="center">
+                                                    <h:commandButton image="../img/b_edit02.png" action="#{campaignSummaryController.editAction}" rendered="#{campaignSummaryController.editPermitted}">
+                                                        <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>
+                                                    </h:commandButton>
+                                                </td>
+                                            </tr>
+                                        </table></td>
+                                </tr>
+                            </table>
+
+                            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td colspan="3"><h4>Product in this campaign</h4></td>
+                                </tr>
+                                <tr><td colspan="3">
+                                        <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                        value="#{campaignSummaryController.campaign.productCollection}" rows="#{vars.maxPages}" var="productList">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="width: 30%;text-align: left;"><h:outputText value="Product Code" /></rich:column>
+                                                    <rich:column style="width: 30%;text-align: left;"><h:outputText value="Product Name"/></rich:column>
+                                                    <rich:column><h:outputText value="Description" escape="false"/></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:columnGroup>
+                                                <rich:column>
+                                                    <h:outputText value="#{productList.code}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{productList.name}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{productList.highlight}" escape="false"/>
+                                                </rich:column>
+                                            </rich:columnGroup>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                            </f:facet>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">&nbsp;</td>
+                                </tr>
+                            </table>
+                           
+                            <rich:tabPanel switchType="ajax" id="tabs" activeItem="#{campaignSummaryController.selectedTab}"
+                                           itemChangeListener="#{campaignSummaryController.initialize}" >
+                                <rich:tab id="assignment" name="assignment" rendered="#{campaignSummaryController.addAssPermitted}">
+                                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Assignment List"/></div></f:facet>
+                                    <h:panelGroup>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                            <tr>
+                                                <td width="9%">
+                                                    <h:commandButton image="../img/b_assign_list_to_agent.png" action="#{campaignSummaryController.assignAction}" 
+                                                                     
+                                                                     rendered="#{campaignSummaryController.addAssPermitted}">
+                                                        <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                                    </h:commandButton>
+                                                </td>
+                                                <td>
+                                                    <h:commandButton image="../img/b_assign_new_prospect.png"  action="#{campaignSummaryController.prospectAction}" 
+                                                                     rendered="#{campaignSummaryController.addAssPermitted and campaignSummaryController.addNewProspectPermitted}"
+                                                                     actionListener="#{campaignNewProspectController.initializeListener}" >
+                                                        <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                                    </h:commandButton>
+                                                </td>
+                                                <td width="90%" valign="top" align="left">
+                                                    <h:selectBooleanCheckbox id="showPooling" value="#{campaignSummaryController.enablePooling}" 
+                                                                             valueChangeListener="#{campaignSummaryController.showPoolingListener}">
+                                                        <a4j:ajax event="change" render="pooling, assignmentList"/>
+                                                        <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                                    </h:selectBooleanCheckbox>Show enable pooling only
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="scroll">
+                                            <h:panelGroup id="pooling">
+                                            <rich:dataTable id="assignmentList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                            value="#{campaignSummaryController.assignmentList}" var="assignmentList">
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column style="width: 10%;text-align: left"><h:outputText value="Assigned Date" /></rich:column>
+                                                        <rich:column style="width: 12%;text-align: left"><h:outputText value="Marketing List Code"/></rich:column>
+                                                        <rich:column style="width: 12%;text-align: left"><h:outputText value="Marketing List Source"/></rich:column>
+                                                        <rich:column style="width: 10%;text-align: left"><h:outputText value="Assignment Type"/></rich:column>
+                                                        <rich:column style="width: 15%;text-align: left"><h:outputText value="Criteria"/></rich:column>
+                                                        <rich:column style="width: 10%;text-align: left"><h:outputText value="Assigned Records" /></rich:column>
+                                                        <rich:column style="width: 8%;text-align: left"><h:outputText value="No of User"/></rich:column>
+                                                        <rich:column style="width: 10%;text-align: left"><h:outputText value="Assigned By"/></rich:column>
+                                                        <rich:column style="text-align: left"><h:outputText value="Assigned Mode"/></rich:column>
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:columnGroup>
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.assignDate}">
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.marketing.code}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.marketing.prospectlistSponsor.name}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:panelGroup rendered="#{campaignSummaryController.enablePooling}">
+                                                            <a4j:commandLink title="#{assignmentList.assignmentType}" value="#{campaignSummaryController.changeAssignmentType(assignmentList.assignmentType)}"
+                                                                            actionListener="#{popupPoolingController.poolingListener}"
+                                                                            oncomplete="#{rich:component('selectPooling')}.show()"
+                                                                            limitRender="true" render="poolingList">
+                                                                <f:param name="selectId" value="#{assignmentList.id}"/>
+                                                                <f:param name="id" value="#{campaignSummaryController.campaign.id}"/> 
+                                                            </a4j:commandLink>
+                                                        </h:panelGroup>
+                                                       
+                                                        <h:panelGroup rendered="#{not campaignSummaryController.enablePooling}">
+                                                            <h:outputText value="#{campaignSummaryController.changeAssignmentType(assignmentList.assignmentType)}" />
+                                                        </h:panelGroup>
+                                                    </rich:column>
+
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.criteria}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.noCustomer}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.noUser}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{assignmentList.createBy}" />
+                                                    </rich:column>
+                                                    <rich:column>
+                                                          <h:outputText value="#{assignmentList.assignmentMode}" />
+                                                    </rich:column>
+                                                </rich:columnGroup>
+                                                 
+                                            </rich:dataTable>
+                                            </h:panelGroup>
+                                        </div>
+                                    </h:panelGroup> 
+                                    <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                </rich:tab>
+                                <rich:tab id="unassignment" name="unassignment" rendered="#{campaignSummaryController.addUnAssPermitted}">
+                                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Un-assignment List" /></div></f:facet>
+                                     <h:panelGroup>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                            <tr>
+                                                <td>
+                                                    <h:commandButton image="../img/b_unassign.png" action="#{campaignSummaryController.unAssignAction}" actionListener="#{campaignUnAssignmentController.initializeListener}" rendered="#{campaignSummaryController.addUnAssPermitted}">
+                                                        <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                                        <f:param name="tab" value="unassignment"/> 
+                                                    </h:commandButton>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="scroll">
+                                            <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                            value="#{campaignSummaryController.unassignmentList}"  var="unassignmentList">
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column style="width: 15%;text-align: left"><h:outputText value="Unssigned Date" /></rich:column>
+                                                        <rich:column style="width: 45%;text-align: left"><h:outputText value=""/></rich:column>
+                                                        <rich:column style="width: 15%;text-align: left"><h:outputText value="Unassigned Records"/></rich:column>
+                                                        <rich:column style="width: 10%;text-align: left"><h:outputText value="No of Agent"/></rich:column>
+                                                        <rich:column style="width: 15%;text-align: left"><h:outputText value="Unassigned By"/></rich:column>
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:columnGroup>
+                                                    <rich:column>
+                                                        <h:outputText value="#{unassignmentList.createDate}">
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value=""/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{unassignmentList.noRecord}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{unassignmentList.noUser}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{unassignmentList.createBy}"/>
+                                                    </rich:column>
+                                                </rich:columnGroup>
+                                            </rich:dataTable>
+                                        </div>
+                                    </h:panelGroup> 
+                                    <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                </rich:tab>
+                                <rich:tab id="transfer" name="transfer" rendered="#{campaignSummaryController.addTransferPermitted}"> 
+                                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Transfer List" /></div></f:facet>
+                                    <h:panelGroup>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                            <tr>
+                                                <td>
+                                                    <h:commandButton image="../img/b_transfer.png" action="#{campaignSummaryController.transferAction}"   actionListener="#{campaignTransferController.initializeListener}" rendered="#{campaignSummaryController.addTransferPermitted}">
+                                                        <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                                                    </h:commandButton>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <div class="scroll">
+                                            <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                            value="#{campaignSummaryController.transferList}"  var="transferList">
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column style="width: 20%;text-align: left"><h:outputText value="Transfer Date" /></rich:column>
+                                                        <rich:column style="width: 20%;text-align: left"></rich:column>
+                                                        <rich:column style="width: 20%;text-align: left"><h:outputText value="Transfer Records"/></rich:column>
+                                                        <rich:column style="width: 20%;text-align: left"><h:outputText value="To Agent"/></rich:column>
+                                                        <rich:column style="width: 20%;text-align: left"><h:outputText value="Transfer By"/></rich:column>
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:columnGroup>
+                                                    <rich:column>
+                                                        <h:outputText value="#{transferList.transferDate}">
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{transferList.noCustomer}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{transferList.toUser.name}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{transferList.createBy}"/>
+                                                    </rich:column>
+                                                </rich:columnGroup>
+                                            </rich:dataTable>
+                                        </div>
+                                    </h:panelGroup> 
+                                    <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>
+                                </rich:tab>
+                                <f:param name="id" value="#{campaignSummaryController.campaign.id}"/>  
+                            </rich:tabPanel>
+                           
+                            <table width="100%" height="60" border="0" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td align="center" valign="bottom"><h:commandButton action="#{campaignSummaryController.backAction}" image="../img/b_back.png" immediate="true"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+             <ui:define name="popupModal">
+                 <rich:popupPanel id="selectPooling" shadowOpacity="0" width="500"  height="400" style="padding: 0 0 0 0; border-style: none " >
+                    
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Manage Pooling</h2></td>
+                                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                    <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('selectPooling')}.hide(); return false;">#{msg.close}</a></td>
+                                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="5" background="#{request.contextPath}/img/box08.png">
+                                    <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                <td valign="top" bgcolor="#FFFFFF" >
+                                   <ui:insert name="popupDetail">
+                                       <h:form>
+                                        <h:panelGroup id="poolingList">
+                                            <div class="scroll2">
+                                            <table width="100%">
+                                                <tr>
+                                                    <td valign="top">
+                                                        <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                        value="#{popupPoolingController.poolingList}" var="list"
+                                                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                        onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                                                            <f:facet name="header">
+                                                                <rich:columnGroup >
+                                                                    <rich:column style="width: 50%;text-align: center"><h:outputText value="User Name" /></rich:column>
+                                                                    <rich:column style="width: 50%;text-align: center"><h:outputText value="Cancle Pooling"/></rich:column>
+                                                                </rich:columnGroup>
+                                                            </f:facet>
+                                                            <rich:columnGroup>
+                                                                <rich:column style="text-align: left">
+                                                                    <h:outputText value="#{list.user.name}"/>
+                                                                </rich:column>
+                                                                <rich:column style="text-align: center">
+                                                                    <h:selectBooleanCheckbox  id="userbox" value="#{popupPoolingController.selectedIds[list.id]}"/>
+                                                                </rich:column>
+                                                            </rich:columnGroup>
+                                                        </rich:dataTable>
+                                                    </td>
+                                                </tr>
+                                              <tr>
+                                                  <td align="center">
+                                                      <a4j:commandButton  image="../img/b_ok.png" 
+                                                                        onclick="return checkCancle(this.form);"
+                                                                        actionListener="#{popupPoolingController.savePoolingAction}">
+                                                          <f:param name="id" value="#{campaignSummaryController.campaign.id}"/> 
+                                                          <a4j:ajax event="click" oncomplete="#{rich:component('selectPooling')}.hide()"/>
+                                                      </a4j:commandButton>
+                                                      <a href="#" style="cursor:pointer; display: inline-table" onclick="#{rich:component('selectPooling')}.hide(); return false;"><img src="../img/b_close.png" botder="0"/></a>
+                                                  </td>
+                                              </tr>
+                                            </table>
+                                            </div>
+                                        </h:panelGroup>
+                                           </h:form>
+                                    </ui:insert>
+                                </td>
+                                <td width="4" class="bg_right"></td>
+                            </tr>
+                        </table>
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                            </tr>
+                        </table>
+                    
+                </rich:popupPanel>
+             </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

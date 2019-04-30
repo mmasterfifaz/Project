@@ -1,0 +1,50 @@
+<ui:composition template="../templates/mainmenu.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="title1">#{msg.search}</ui:define>
+    <ui:define name="panel">
+        <div id="body_wrapper">
+            <div id="body_header">
+                <div id="body_header_left">
+                    <div id="body_header_right">
+                        <div id="type">
+                            <h2><ui:insert name="type" /></h2>
+                        </div>
+                        <div id="type_menu">
+                            <ul>
+                                <li><h:outputLink value="searchCustomer.jsf"><h:graphicImage library="img" name="tb_customersearch.png" styleClass="swap" alt="Search Customer" /></h:outputLink></li>
+                            <li><h:outputLink value="searchCase.jsf"><h:graphicImage library="img" name="tb_casesearch.png" styleClass="swap" alt="Search Case" /></h:outputLink></li>
+                                <li><h:outputLink value="searchAccount.jsf"><h:graphicImage library="img" name="tb_acc.png" styleClass="swap" alt="Search Account" /></h:outputLink></li>
+                            </ul>
+                        </div>
+                        <div id="search_wrapper">
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div id="body">
+                <div id="body_left">
+                    <div id="body_right">
+                        <div id="content_detail">
+                            <ui:insert name="body"></ui:insert>
+                        </div>
+                        <div id="content_footer">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer_left">
+                    <div class="footer_right">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

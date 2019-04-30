@@ -1,0 +1,974 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<h:body>
+    <ui:composition template="../templates/adminedit.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2">Campaign Management: Assignment List</ui:define>
+        <ui:define name="head">
+            <style>
+                <!--
+                div.scroll {
+                    height: 200px;
+                    overflow: auto;
+                    border: 0px solid #666;
+                    background-color: #fff;
+                    padding: 8px;
+                }
+                -->
+            </style>
+            <script type="text/javascript" src="campaignassignment.js"/>
+        </ui:define>
+        <ui:define name="panel">
+            <h:inputHidden value="#{campaignAssignmentController.campaign.id}"/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td bgcolor="#E8E7D5">
+                        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td width="100" class="gray03">Campaign Name:</td>
+                            <td class="blue04" align="left"><h:outputText value="#{campaignSummaryController.campaign.name}"/></td>
+                            <td width="60" class="gray03">Start Date:</td>
+                            <td class="blue04">
+                                <h:outputText value="#{campaignSummaryController.campaign.startDate}">
+                                    <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText></td>
+                            <td width="60" class="gray03">End Date:</td>
+                            <td class="blue04">
+                                <h:outputText value="#{campaignSummaryController.campaign.endDate}">
+                                    <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>
+                            </td>
+                            <td width="60" class="gray03">Description:</td>
+                            <td class="blue04"><h:outputText value="#{campaignSummaryController.campaign.description}"/></td>
+                            <td width="50" align="center">
+                            </td>
+                        </tr>
+                        </table>                        
+                    </td>
+                </tr>
+            </table>
+            <!--Step1 -->
+            <a4j:region id="step1region">
+                <h:panelGroup id="step1">
+                    <h:panelGroup rendered="#{campaignAssignmentController.step eq 1}" >
+                        <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="140" class="gray03">&nbsp;</td>
+                                <td><img src="../img/step01Assi.png" width="461" height="30"/></td>
+                            </tr>
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">Marketing List:</td>
+                                <td valign="top">
+                                 <h:selectOneMenu id="marketingList" value="#{campaignAssignmentController.marketingId}" required="true" requiredMessage="Marketing List is required">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{campaignAssignmentController.marketingList}"/>
+                                        <f:validateRequired/> 
+                                        <rich:validator />
+                                            <a4j:ajax event="change" render="listType, criteria, advanceCriteria, productList" execute="@this"
+                                                  listener="#{campaignAssignmentController.marketingRecord}"/>
+                                    </h:selectOneMenu>
+                                    <rich:message for="marketingList" style="color:red"/>
+                                </td>
+                            </tr>
+                            <a4j:region>
+                            <tr>
+                                <td align="right" valign="middle" class="gray03">List Type:</td>
+                                <td valign="top"  style="color: #0198ab; font-weight: bold ">
+                                    <h:selectOneRadio id="listType" value="#{campaignAssignmentController.listType}" 
+                                                      required="true" requiredMessage="List Type is required">
+                                        <f:selectItem itemDisabled="#{campaignAssignmentController.allRecord eq 0}" itemValue="allList" itemLabel="All List #{campaignAssignmentController.allRecord} Records" />
+                                        <f:selectItem itemDisabled="#{campaignAssignmentController.newRecord eq 0}" itemValue="newList" itemLabel="New List #{campaignAssignmentController.newRecord} Records" />
+                                        <f:selectItem itemDisabled="#{campaignAssignmentController.oldRecord eq 0}" itemValue="oldList" itemLabel="Old List #{campaignAssignmentController.oldRecord} Records" />
+                                        <f:ajax event="change" render="resetNew" immediate="true" execute="@this" />
+                                        <f:ajax event="change" render="contactResultPanel" immediate="true" execute="@this" />
+                                        <f:validateRequired/> 
+                                        <rich:validator />
+                                    </h:selectOneRadio>
+                                    <rich:message for="listType" style="color: red; font-weight: normal"/>
+                                </td>
+                            </tr>
+                                
+                            <!-- BEGIN CRITERIA CONTACT RESULT -->     
+                            <tr>
+                                <td colspan="2">
+                                    <h:panelGroup id="contactResultPanel" >
+                                    <h:panelGroup rendered="#{campaignAssignmentController.listType eq 'oldList' or campaignAssignmentController.listType eq 'allList' }">
+                                    <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                    <tr>
+                                        <td width="140" class="gray03"  align="right" valign="top" >
+                                            <h:outputText id="contactResultLabel" value="Contact Result Criteria: "/>
+                                        </td>
+                                        <td valign="top"  style="color: #0198ab; font-weight: bold ">
+                                            <table width="80%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                                <tr><td bgcolor="#FFFFFF">                                                        
+                                                    <div class="scroll">
+                                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tableline01">
+                                                        <tr>
+                                                            <td width="100" valign="top" align="left"><h:selectBooleanCheckbox value="#{campaignAssignmentController.contactStatusAssigned}" />Assigned</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" align="left"><h:selectBooleanCheckbox value="#{campaignAssignmentController.contactStatusViewed}" />Viewed</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" align="left">
+                                                                <h:selectBooleanCheckbox id="openallbox" value="#{campaignAssignmentController.contactStatusOpened}" 
+                                                                                         onclick="checkAllOpen()" />Opened
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" align="left">
+                                                                <rich:dataTable id="openTable" style="width: 100%" value="#{campaignAssignmentController.opensaleReasonList}" var="openList">
+                                                                    <rich:column style="width: 3%;text-align: left;">
+                                                                    </rich:column>
+                                                                    <rich:column style="width: 97%;text-align: left;">
+                                                                        <h:selectBooleanCheckbox id="openbox" value="#{campaignAssignmentController.selectedOpenIds[openList.id]}" />
+                                                                        <h:outputText value="#{openList.name}"/>
+                                                                    </rich:column>
+                                                                </rich:dataTable>
+                                                            </td>
+                                                        </tr>  
+                                                        <tr>
+                                                            <td valign="top" align="left">
+                                                                <h:selectBooleanCheckbox id="followupallbox" value="#{campaignAssignmentController.contactStatusFollowup}" 
+                                                                                         onclick="checkAllFollowup()" />Follow Up 
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td valign="top" align="left">
+                                                                <rich:dataTable id="followupTable" style="width: 100%"
+                                                                                value="#{campaignAssignmentController.followupsaleReasonList}" var="followupList">
+                                                                    <rich:column style="width: 3%;text-align: left;"> </rich:column>
+                                                                    <rich:column style="width: 97%;text-align: left;">
+                                                                        <h:selectBooleanCheckbox id="followupbox" value="#{campaignAssignmentController.selectedFollowupIds[followupList.id]}" />
+                                                                        <h:outputText value="#{followupList.name}"/>
+                                                                    </rich:column>
+                                                                </rich:dataTable>
+                                                            </td>
+                                                        </tr>  
+                                                    </table>
+                                                    </div>
+                                                </td></tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                    </table>                                        
+                                    </h:panelGroup>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>                            
+                            <!-- END CRITERIA CONTACT RESULT -->                                
+                                
+                            <!-- BEGIN CRITERIA SEARCH LIST -->
+                            <tr>
+                                <td align="right" valign="top" class="gray03">List Criteria:</td>
+                                <td>
+                                <rich:dataGrid style="width: 100%" columns="2" id="criteria" 
+                                                        value="#{campaignAssignmentController.selectedCriteria}" var="criteriaList">
+                                    <rich:dataTable style="width: 100%" value="#{criteriaList}" var="criteriaField">
+                                        <rich:columnGroup>
+                                            <rich:column style="width: 5%">
+                                                <h:selectBooleanCheckbox value="#{criteriaField.selected}"/>
+                                            </rich:column>
+                                            <rich:column style="text-align: left;width: 30%">
+                                                <h:outputText value="#{criteriaField.mappingName eq 'dob'?'Age':criteriaField.mappingName eq 'Current Address Line8'?'Sub-District':criteriaField.mappingName eq 'Current Province Name'?'Province':criteriaField.mappingName eq 'Current District Name'?'District':criteriaField.mappingName}"/>
+                                            </rich:column>
+                                            <rich:column style="text-align: left;width: 50%">
+
+                                                <h:panelGroup id="keyword" rendered="#{criteriaField.mappingField eq 'customer.name' or criteriaField.mappingField eq 'customer.surname'}">
+                                                    <h:inputText id="keywordText" styleClass="textfield" size="20" maxlength="20" value="#{criteriaField.keyword}"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="gender" rendered="#{criteriaField.mappingField eq 'customer.gender'}">
+                                                    <h:selectOneMenu styleClass="select01" value="#{criteriaField.keyword}">
+                                                        <f:selectItem itemLabel="Male" itemValue="M"/>
+                                                        <f:selectItem itemLabel="Female" itemValue="F"/>
+                                                    </h:selectOneMenu>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="age" rendered="#{criteriaField.mappingField eq 'customer.dob'}">
+                                                Between<span style="padding-left:5px"/>
+                                                <h:inputText id="fromage" label="From Age" styleClass="textfield" size="2" maxlength="2" 
+                                                                onkeypress="return isNumberKey(event)"
+                                                                    validatorMessage="#{msg.numberRequire}" value="#{criteriaField.fromValue}">
+                                                    <f:validateDoubleRange minimum="0" maximum="99"/>
+
+                                                <rich:validator />
+                                                </h:inputText><rich:message for="fromage" style="color:red"/> and<span style="padding-left:5px"/>
+                                                <h:inputText id="toage" label="To Age" styleClass="textfield" size="2" maxlength="2"
+                                                                onkeypress="return isNumberKey(event)"
+                                                                    validatorMessage="#{msg.numberRequire}"  value="#{criteriaField.toValue}">
+                                                    <f:validateDoubleRange minimum="0" maximum="99"/>
+                                                <rich:validator />
+                                                </h:inputText>
+                                                <rich:message for="toage" style="color:red"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="weight" rendered="#{criteriaField.mappingField eq 'customer.weight'}">
+                                                Between<span style="padding-left:5px"/>
+                                                <h:inputText id="fromweight" label="From Weight" styleClass="textfield" size="2" maxlength="2" 
+                                                                onkeypress="return isNumberKey(event)"
+                                                                    validatorMessage="#{msg.numberRequire}" value="#{criteriaField.fromValue}">
+                                                    <f:validateDoubleRange minimum="0" maximum="99"/>
+
+                                                    <rich:validator />
+                                                </h:inputText><rich:message for="fromweight" style="color:red"/> and<span style="padding-left:5px"/>
+                                                <h:inputText id="toweight" label="To Weight" styleClass="textfield" size="2" maxlength="2"
+                                                                onkeypress="return isNumberKey(event)"
+                                                                    validatorMessage="#{msg.numberRequire}"  value="#{criteriaField.toValue}">
+                                                    <f:validateDoubleRange minimum="0" maximum="99"/>
+
+                                                <rich:validator />
+                                                </h:inputText>
+                                                <rich:message for="toweight" style="color:red"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="height" rendered="#{criteriaField.mappingField eq 'customer.height'}">
+                                                Between<span style="padding-left:5px"/>
+                                                <h:inputText id="fromheight" label="From Height" styleClass="textfield" size="2" maxlength="2" 
+                                                                onkeypress="return isNumberKey(event)"
+                                                                    validatorMessage="#{msg.numberRequire}" value="#{criteriaField.fromValue}"> 
+                                                    <f:validateDoubleRange minimum="0" maximum="99"/>
+
+                                                    <rich:validator />
+                                                </h:inputText><rich:message for="fromheight" style="color:red"/> and<span style="padding-left:5px"/>
+                                                <h:inputText id="toheight" label="To Height" styleClass="textfield" size="2" maxlength="2"
+                                                                onkeypress="return isNumberKey(event)"
+                                                                    validatorMessage="#{msg.numberRequire}"  value="#{criteriaField.toValue}">
+                                                    <f:validateDoubleRange minimum="0" maximum="99"/>
+
+                                                    <rich:validator />
+                                                </h:inputText>
+                                                <rich:message for="toheight" style="color:red"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="homePhonePanel" rendered="#{criteriaField.mappingField eq 'customer.home_phone'}">
+                                                    <h:selectOneMenu styleClass="select01"  id="homePhone" value="#{criteriaField.keyword}">  
+                                                        <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                        <f:selectItem itemValue="02" itemLabel="กรุงเทพ" />
+                                                        <f:selectItem itemValue="upc" itemLabel="ต่างจังหวัด" />
+                                                        <f:selectItem itemValue="032" itemLabel="032" />
+                                                        <f:selectItem itemValue="034" itemLabel="034" />
+                                                        <f:selectItem itemValue="035" itemLabel="035" />
+                                                        <f:selectItem itemValue="036" itemLabel="036" />
+                                                        <f:selectItem itemValue="037" itemLabel="037" />
+                                                        <f:selectItem itemValue="038" itemLabel="038" />
+                                                        <f:selectItem itemValue="039" itemLabel="039" />
+                                                        <f:selectItem itemValue="042" itemLabel="042" />
+                                                        <f:selectItem itemValue="043" itemLabel="043" />
+                                                        <f:selectItem itemValue="044" itemLabel="044" />
+                                                        <f:selectItem itemValue="053" itemLabel="053" />
+                                                        <f:selectItem itemValue="054" itemLabel="054" />
+                                                        <f:selectItem itemValue="055" itemLabel="055" />
+                                                        <f:selectItem itemValue="056" itemLabel="056" />
+                                                        <f:selectItem itemValue="073" itemLabel="073" />
+                                                        <f:selectItem itemValue="074" itemLabel="074" />
+                                                        <f:selectItem itemValue="075" itemLabel="075" />
+                                                        <f:selectItem itemValue="076" itemLabel="076" />
+                                                        <f:selectItem itemValue="077" itemLabel="077" />
+                                                    </h:selectOneMenu><a href="../img/telephoneprefix.png" target="_blank"> View Telephone Prefix</a>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="officePhonePanel" rendered="#{criteriaField.mappingField eq 'customer.office_phone'}">
+                                                    <h:selectOneMenu styleClass="select01"  id="officePhone" value="#{criteriaField.keyword}">
+                                                        <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                        <f:selectItem itemValue="02" itemLabel="กรุงเทพ" />
+                                                        <f:selectItem itemValue="upc" itemLabel="ต่างจังหวัด" />
+                                                        <f:selectItem itemValue="032" itemLabel="032" />
+                                                        <f:selectItem itemValue="034" itemLabel="034" />
+                                                        <f:selectItem itemValue="035" itemLabel="035" />
+                                                        <f:selectItem itemValue="036" itemLabel="036" />
+                                                        <f:selectItem itemValue="037" itemLabel="037" />
+                                                        <f:selectItem itemValue="038" itemLabel="038" />
+                                                        <f:selectItem itemValue="039" itemLabel="039" />
+                                                        <f:selectItem itemValue="042" itemLabel="042" />
+                                                        <f:selectItem itemValue="043" itemLabel="043" />
+                                                        <f:selectItem itemValue="044" itemLabel="044" />
+                                                        <f:selectItem itemValue="045" itemLabel="045" />
+                                                        <f:selectItem itemValue="053" itemLabel="053" />
+                                                        <f:selectItem itemValue="054" itemLabel="054" />
+                                                        <f:selectItem itemValue="055" itemLabel="055" />
+                                                        <f:selectItem itemValue="056" itemLabel="056" />
+                                                        <f:selectItem itemValue="073" itemLabel="073" />
+                                                        <f:selectItem itemValue="074" itemLabel="074" />
+                                                        <f:selectItem itemValue="075" itemLabel="075" />
+                                                        <f:selectItem itemValue="076" itemLabel="076" />
+                                                        <f:selectItem itemValue="077" itemLabel="077" />
+                                                    </h:selectOneMenu><a href="../img/telephoneprefix.png" target="_blank"> View Telephone Prefix</a>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="mobilePhonePanel"  rendered="#{criteriaField.mappingField eq 'customer.mobile_phone'}">
+                                                    <h:selectOneMenu styleClass="select01"  id="mobilePhone" value="#{criteriaField.keyword}">  
+                                                        <f:selectItem itemValue="notspecific" itemLabel="Not Specific" />
+                                                        <f:selectItem itemValue="01" itemLabel="01" />
+                                                        <f:selectItem itemValue="06" itemLabel="06" />
+                                                        <f:selectItem itemValue="08" itemLabel="08" />
+                                                        <f:selectItem itemValue="09" itemLabel="09" />
+                                                    </h:selectOneMenu>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{criteriaField.mappingField eq 'customer.privilege'}">
+                                                    <h:inputText styleClass="textfield" size="20" maxlength="20" value="#{criteriaField.keyword}"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{criteriaField.mappingField eq 'customer.current_address_line8'}">
+                                                    <h:inputText styleClass="textfield" size="20" maxlength="20" value="#{criteriaField.keyword}"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{criteriaField.mappingField eq 'customer.current_province_name'}">
+                                                    <h:inputText styleClass="textfield" size="20" maxlength="20" value="#{criteriaField.keyword}"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup rendered="#{criteriaField.mappingField eq 'customer.current_district_name'}">
+                                                    <h:inputText  styleClass="textfield" size="20" maxlength="20" value="#{criteriaField.keyword}"/>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="pgCarBrand" rendered="#{criteriaField.mappingField eq 'customer.car_brand'}">
+                                                        <h:inputText id="carBrand" styleClass="textfield" size="15" maxlength="50" value="#{criteriaField.keyword}">
+                                                    </h:inputText>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="pgCarModel" rendered="#{criteriaField.mappingField eq 'customer.car_model'}">
+                                                        <h:inputText id="carModel" styleClass="textfield" size="15" maxlength="50" value="#{criteriaField.keyword}">
+                                                    </h:inputText>
+                                                </h:panelGroup>
+
+                                                <h:panelGroup id="pgCarYear" rendered="#{criteriaField.mappingField eq 'customer.car_year'}">
+                                                    From
+                                                    <h:selectOneMenu styleClass="select01" id="fromYear" value="#{criteriaField.fromValue}">  
+                                                        <f:selectItem itemValue="2013" itemLabel="2013" />
+                                                        <f:selectItem itemValue="2012" itemLabel="2012" />
+                                                        <f:selectItem itemValue="2011" itemLabel="2011" />
+                                                        <f:selectItem itemValue="2010" itemLabel="2010" />
+                                                        <f:selectItem itemValue="2009" itemLabel="2009" />
+                                                        <f:selectItem itemValue="2008" itemLabel="2008" />
+                                                        <f:selectItem itemValue="2007" itemLabel="2007" />
+                                                        <f:selectItem itemValue="2006" itemLabel="2006" />
+                                                        <f:selectItem itemValue="2005" itemLabel="2005" />
+                                                        <f:selectItem itemValue="2004" itemLabel="2004" />
+                                                        <f:selectItem itemValue="2003" itemLabel="2003" />
+                                                        <f:selectItem itemValue="2002" itemLabel="2002" />
+                                                        <f:selectItem itemValue="2001" itemLabel="2001" />
+                                                        <f:selectItem itemValue="2000" itemLabel="2000" />
+                                                        <f:selectItem itemValue="1999" itemLabel="1999" />
+                                                        <f:selectItem itemValue="1998" itemLabel="1998" />
+                                                        <f:selectItem itemValue="1997" itemLabel="1997" />
+                                                        <f:selectItem itemValue="1996" itemLabel="1996" />
+                                                        <f:selectItem itemValue="1995" itemLabel="1995" />
+                                                        <f:selectItem itemValue="1994" itemLabel="1994" />
+                                                        <f:selectItem itemValue="1993" itemLabel="1993" />
+                                                        <f:selectItem itemValue="1992" itemLabel="1992" />
+                                                        <f:selectItem itemValue="1991" itemLabel="1991" />
+                                                        <f:selectItem itemValue="1990" itemLabel="1990" />
+                                                    </h:selectOneMenu>
+                                                    To
+                                                    <h:selectOneMenu styleClass="select01" id="toYear" value="#{criteriaField.toValue}">  
+                                                        <f:selectItem itemValue="2013" itemLabel="2013" />
+                                                        <f:selectItem itemValue="2012" itemLabel="2012" />
+                                                        <f:selectItem itemValue="2011" itemLabel="2011" />
+                                                        <f:selectItem itemValue="2010" itemLabel="2010" />
+                                                        <f:selectItem itemValue="2009" itemLabel="2009" />
+                                                        <f:selectItem itemValue="2008" itemLabel="2008" />
+                                                        <f:selectItem itemValue="2007" itemLabel="2007" />
+                                                        <f:selectItem itemValue="2006" itemLabel="2006" />
+                                                        <f:selectItem itemValue="2005" itemLabel="2005" />
+                                                        <f:selectItem itemValue="2004" itemLabel="2004" />
+                                                        <f:selectItem itemValue="2003" itemLabel="2003" />
+                                                        <f:selectItem itemValue="2002" itemLabel="2002" />
+                                                        <f:selectItem itemValue="2001" itemLabel="2001" />
+                                                        <f:selectItem itemValue="2000" itemLabel="2000" />
+                                                        <f:selectItem itemValue="1999" itemLabel="1999" />
+                                                        <f:selectItem itemValue="1998" itemLabel="1998" />
+                                                        <f:selectItem itemValue="1997" itemLabel="1997" />
+                                                        <f:selectItem itemValue="1996" itemLabel="1996" />
+                                                        <f:selectItem itemValue="1995" itemLabel="1995" />
+                                                        <f:selectItem itemValue="1994" itemLabel="1994" />
+                                                        <f:selectItem itemValue="1993" itemLabel="1993" />
+                                                        <f:selectItem itemValue="1992" itemLabel="1992" />
+                                                        <f:selectItem itemValue="1991" itemLabel="1991" />
+                                                        <f:selectItem itemValue="1990" itemLabel="1990" />
+                                                    </h:selectOneMenu>
+                                                </h:panelGroup>
+
+                                            </rich:column>
+                                        </rich:columnGroup>
+                                    </rich:dataTable>
+                                </rich:dataGrid>
+                                </td>
+                            </tr>
+                            <!-- END CRITERIA SEARCH LIST -->
+                            
+                            <!-- BEGIN CRITERIA ADVANCE SEARCH LIST -->
+                            <tr>
+                                <td align="right" valign="top" class="gray03"></td>
+                                <td>
+                                    <rich:togglePanel id="toggle1" activeItem="plus" switchType="client" cycledSwitching="plus,sub" 
+                                                      style="width: 100%; border: 0; padding: 0; margin: 0">
+                                        <rich:togglePanelItem name="plus">
+                                            <h:commandLink>
+                                                <rich:toggleControl targetPanel="toggle1" targetItem="sub"/> 
+                                                <img src="#{request.contextPath}/img/bplus.png" alt="" style="display: inline"/>  Advance Search   
+                                            </h:commandLink>
+                                        </rich:togglePanelItem> 
+
+                                        <rich:togglePanelItem name="sub">
+                                            <h:commandLink>
+                                                <rich:toggleControl targetPanel="toggle1" targetItem="plus"/> 
+                                                <img src="#{request.contextPath}/img/b_subtract.png" alt="" style="display: inline"/> Advance Search
+                                            </h:commandLink>
+                                            <h:panelGroup>
+                                              <table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                                 <tr>
+                                                    <td bgcolor="#FFFFFF">
+                                                    <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                                    <tr><td>
+                                                        <rich:dataGrid style="width: 100%" columns="2" id="advanceCriteria" 
+                                                                       value="#{campaignAssignmentController.selectedAdvanceCriteria}" var="advanceCriteriaList">
+                                                            <rich:dataTable style="width: 100%" value="#{advanceCriteriaList}" var="advanceField">
+                                                                <rich:columnGroup>
+                                                                    <rich:column style="width: 5%">
+                                                                        <h:selectBooleanCheckbox value="#{advanceField.selected}"/>
+                                                                    </rich:column>
+
+                                                                    <rich:column style="text-align: left;width: 20%">
+                                                                        <h:outputText value="#{advanceField.mappingName}"/>
+                                                                    </rich:column>
+
+                                                                    <rich:column style="text-align: left;width: 60%">                                     
+                                                                        <h:panelGroup rendered="#{advanceField.type eq 'String'}">
+                                                                            <h:inputText styleClass="textfield" size="20" maxlength="20" value="#{advanceField.keyword}"/>
+                                                                        </h:panelGroup>     
+
+                                                                        <h:panelGroup rendered="#{advanceField.type eq 'Number'}">
+                                                                             <h:selectOneMenu value="#{advanceField.criteria}" >                                                                            
+                                                                                <f:selectItem itemLabel="&#62;" itemValue="&#62;"/>
+                                                                                <f:selectItem itemLabel="&#62;&#61;" itemValue="&#62;&#61;"/>
+                                                                                <f:selectItem itemLabel="&#60;" itemValue="&#60;"/>
+                                                                                <f:selectItem itemLabel="&#60;&#61;" itemValue="&#60;&#61;"/>
+                                                                                <f:selectItem itemLabel="&#61;" itemValue="&#61;"/>
+                                                                                <f:selectItem itemLabel="&#60;&#62;" itemValue="&#60;&#62;"/>   
+                                                                                <f:selectItem itemLabel="between" itemValue="between"/>
+                                                                                <f:ajax event="change" render="toValNum" immediate="true" execute="@this" />
+                                                                            </h:selectOneMenu> <span style="padding-left:5px"/>
+                                                                            <h:inputText styleClass="textfield" size="10" maxlength="10" 
+                                                                                         onkeypress="return isNumberFloatKey(event)" validatorMessage="#{msg.numberRequire}" value="#{advanceField.fromValue}">
+                                                                                <rich:validator />
+                                                                            </h:inputText>
+                                                                            <h:panelGroup id="toValNum" >
+                                                                                <h:outputText value="(and)" rendered="#{advanceField.criteria eq 'between'}"/>
+                                                                                <span style="padding-left:5px"/>                                                                    
+                                                                                <h:inputText styleClass="textfield" size="10" maxlength="10" rendered="#{advanceField.criteria eq 'between'}"
+                                                                                             onkeypress="return isNumberFloatKey(event)" validatorMessage="#{msg.numberRequire}" value="#{advanceField.toValue}">
+                                                                                    <rich:validator />
+                                                                                </h:inputText>
+                                                                            </h:panelGroup>
+                                                                        </h:panelGroup>     
+
+                                                                        <h:panelGroup rendered="#{advanceField.type eq 'Date'}">
+                                                                            <h:selectOneMenu value="#{advanceField.criteria}" >
+                                                                                <f:selectItem itemLabel="on" itemValue="on"/>
+                                                                                <f:selectItem itemLabel="before" itemValue="before"/>
+                                                                                <f:selectItem itemLabel="after" itemValue="after"/>
+                                                                                <f:selectItem itemLabel="between" itemValue="between"/>
+                                                                                <f:selectItem itemLabel="not equal to" itemValue="notEqual"/>
+                                                                                <f:ajax event="change" render="toValDate" immediate="true" execute="@this" />
+                                                                            </h:selectOneMenu>
+                                                                            <br/>
+                                                                            <span style="padding-left:5px"/>
+                                                                            <rich:calendar value="#{advanceField.fromValueDate}" 
+                                                                                           inputClass="textfield" inputSize="8" buttonClass="rfcalbtn" 
+                                                                                           datePattern="#{msg.datePattern}" locale="#{msg.locale}" >
+                                                                            </rich:calendar>
+                                                                            <h:panelGroup id="toValDate" >
+                                                                                <h:outputText value="(and)" rendered="#{advanceField.criteria eq 'between'}"/>
+                                                                                <span style="padding-left:5px"/>
+                                                                                <rich:calendar value="#{advanceField.toValueDate}" rendered="#{advanceField.criteria eq 'between'}"
+                                                                                               inputClass="textfield" inputSize="8" buttonClass="rfcalbtn" 
+                                                                                               datePattern="#{msg.datePattern}" locale="#{msg.locale}" >
+                                                                                </rich:calendar>
+                                                                            </h:panelGroup>
+                                                                        </h:panelGroup>
+
+                                                                    </rich:column>
+                                                            </rich:columnGroup>
+                                                    </rich:dataTable>
+                                                        </rich:dataGrid>
+                                                    </td></tr>
+                                                    <tr>
+                                                        <td class="gray03">&nbsp;</td>
+                                                        <td>&nbsp;</td>
+                                                    </tr>
+                                                    </table></td>
+                                                </tr>
+                                                </table>
+                                            </h:panelGroup>
+                                        </rich:togglePanelItem> 
+                                    </rich:togglePanel>                                        
+                                </td>
+                            </tr>
+                            <!-- END CRITERIA ADVANCE SEARCH LIST -->
+                            
+                            <tr>
+                                <td class="gray03"> &nbsp; </td>
+                                <td>
+                                    <a4j:commandButton  image="../img/b_search_criteria.png">
+                                        <a4j:ajax event="click" limitRender="true" render="criteriaRecord" execute="@region"
+                                                  listener="#{campaignAssignmentController.searchCriteriaListener}" />
+                                    </a4j:commandButton>
+                                    <strong> No.of Records from Criteria: 
+                                    <span style="color:red">
+                                        <h:outputText id="criteriaRecord" value="#{campaignAssignmentController.totalrecord}"/> Records 
+                                    </span></strong></td>
+                            </tr>
+                            </a4j:region>
+
+                            <tr> 
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td valign="top"><table width="39%" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td width="50%" class="blue04">Available Product</td>
+                                        <td width="10%">&nbsp;</td>
+                                        <td width="50%" class="blue04">Selected Product</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <rich:pickList id="productList" switchByDblClick="true" 
+                                                           listWidth="350px" listHeight="150px"
+                                                           addText="" addAllText="" removeText="" removeAllText=""
+                                                           value="#{campaignAssignmentController.selectedProduct}" 
+                                                           required="true" requiredMessage="Selected Product is required">
+                                                <f:selectItems value="#{campaignAssignmentController.productList}"/>
+                                            </rich:pickList>
+                                            <span style="padding-left:10px"/><h:message for="productList" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                </table></td>
+                            </tr>
+                            <tr> 
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td valign="top">
+                                    <h:panelGroup id="resetNew" >
+                                        <h:selectBooleanCheckbox value="#{campaignAssignmentController.resetNewList}" 
+                                                                 rendered="#{campaignAssignmentController.resetNewListPermitted and campaignAssignmentController.listType eq 'oldList' and campaignAssignmentController.managerRole}" /> 
+                                        <h:outputText value=" Reset to New List" rendered="#{campaignAssignmentController.resetNewListPermitted and campaignAssignmentController.listType eq 'oldList'}" />
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                            <tr> 
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td valign="top"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" align="center">
+                                    <h:commandButton  image="../img/b_back.png"
+                                                      action="#{campaignAssignmentController.backAction}"
+                                                      immediate="true">
+                                        <f:param name="tab" value="assignment"/> 
+                                        <f:param name="id" value="#{campaignAssignmentController.campaign.id}"/>
+                                    </h:commandButton>
+                                    <a4j:commandButton  image="../img/b_next.png" actionListener="#{campaignAssignmentController.step2Listener}">
+                                        <a4j:ajax event="click"  limitRender="true" render="step1, step2" />
+                                    </a4j:commandButton>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </h:panelGroup>
+                </h:panelGroup>
+            </a4j:region>
+
+            <!--Step2 -->
+            <a4j:region id="step2region">
+                <h:panelGroup id="step2">
+                    <h:panelGroup rendered="#{campaignAssignmentController.step eq 2}">
+                        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="120" class="gray03">&nbsp;</td>
+                                <td><img src="../img/step02Assi.png" width="461" height="30"/></td>
+                            </tr>
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td><strong>No.of Records from Criteria: <span style="color:red"><h:outputText id="noRecordStep2" value="#{campaignAssignmentController.totalrecord}"/> Records <!--<h:outputText id="errorStep2" value="-Cannot assign." rendered="#{campaignAssignmentController.norecord eq 0}"/>--></span></strong></td>
+                            </tr>
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <h:panelGroup rendered="#{campaignAssignmentController.managerPermitted}">
+                            <tr>
+                                <td width="135" align="right" valign="top" class="gray03">Assignment Mode:</td>
+                                <td valign="top">
+                                    <h:selectOneRadio id="assignmentMode" value="#{campaignAssignmentController.assignmentMode}" required="true" requiredMessage="#{msg.require}">
+                                        <f:selectItem itemValue="manager" itemLabel="Manager to supervisor" />
+                                        <f:selectItem itemValue="supervisor" itemLabel="Supervisor to agent" />
+                                        <a4j:ajax event="click" render="assignmentMode, assignmentTypePanel, datePooling, simulatePanel, selectingUser, userGroupList, userList, selectingUserStep3" 
+                                                  execute="@this" listener="#{campaignAssignmentController.assignmentModeChangeListener}"/>
+                                        <rich:validator />
+                                    </h:selectOneRadio>
+                                    <rich:message for="assignmentMode" style="color:red"/>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            <tr>
+                                <td width="135" align="right" valign="top" class="gray03">Assignment Type:</td>
+                                <td valign="top">                                    
+                                    <h:panelGroup id="assignmentTypePanel" >
+                                        <h:selectOneRadio id="assignmentType" value="#{campaignAssignmentController.assignmentType}" rendered="#{not campaignAssignmentController.managerRole}"
+                                                          required="true" requiredMessage="#{msg.require}">
+                                            <f:selectItem itemValue="average" itemLabel="Assigned (Average)" />
+                                            <f:selectItem itemValue="custom" itemLabel="Assigned (Custom)" />
+                                            <f:selectItem itemValue="pooling" itemLabel="Pooling" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>
+                                            <f:selectItem itemValue="poolingcustom" itemLabel="Pooling (Custom)" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>                                 
+                                            <f:selectItem itemValue="poolingdaily" itemLabel="Pooling (Daily)" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>
+                                            <a4j:ajax event="click" render="assignmentType, datePooling, algoPanel, simulatePanel, userPanel, selectingUser, userGroupList, userList, recordno, assignmentTypeStep3, nextStep3" 
+                                                      execute="@this" listener="#{campaignAssignmentController.assignementTypeListener}" />
+                                            <rich:validator />
+                                        </h:selectOneRadio>
+                                        <rich:message for="assignmentType" style="color:red"/>
+
+                                        <h:selectOneRadio id="assignmentTypeAdmin" value="#{campaignAssignmentController.assignmentType}" rendered="#{campaignAssignmentController.managerRole}"
+                                                          required="true" requiredMessage="#{msg.require}">
+                                            <f:selectItem itemValue="average" itemLabel="Assigned (Average)" />
+                                            <f:selectItem itemValue="custom" itemLabel="Assigned (Custom)" />
+                                            <f:selectItem itemValue="pooling" itemLabel="Pooling" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>
+                                            <f:selectItem itemValue="poolingcustom" itemLabel="Pooling (Custom)" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>                                 
+                                            <f:selectItem itemValue="poolingdaily" itemLabel="Pooling (Daily)" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>
+                                            <f:selectItem itemValue="autodialer" itemLabel="Auto-Dialer" itemDisabled="#{campaignAssignmentController.assignmentMode ne 'supervisor'}"/>
+                                            <a4j:ajax event="click" render="assignmentTypeAdmin, datePooling, algoPanel, simulatePanel, userPanel, selectingUser, userGroupList, userList, recordno, assignmentTypeStep3, nextStep3" 
+                                                      execute="@this" listener="#{campaignAssignmentController.assignementTypeListener}" />
+                                            <rich:validator />
+                                        </h:selectOneRadio>
+                                        <rich:message for="assignmentTypeAdmin" style="color:red"/>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                            <tr>
+                            <td colspan="2" align="left">
+                             <h:panelGroup id="datePooling">
+                                <h:panelGroup rendered="#{campaignAssignmentController.assignmentType eq 'pooling' or campaignAssignmentController.assignmentType eq 'poolingcustom' or campaignAssignmentController.assignmentType eq 'poolingdaily'}" >
+                                <table align="left">
+                                <tr>
+                                    <td width="135" align="right" valign="top" class="gray03">Pooling From Date :</td>
+                                    <td>                                            
+                                        <rich:calendar value="#{campaignAssignmentController.fromDate}" id="fromDate" 
+                                                       inputClass="textfield" inputSize="10" buttonClass="rfcalbtn" 
+                                                       datePattern="#{msg.datePattern}" locale="#{msg.locale}" 
+                                                       required="true" requiredMessage="#{msg.require}"/>
+                                        <rich:message for="fromDate" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="135" align="right" valign="top" class="gray03">Pooling To Date :</td>
+                                    <td><rich:calendar value="#{campaignAssignmentController.toDate}" id="toDate" 
+                                           inputClass="textfield" inputSize="10" buttonClass="rfcalbtn" 
+                                                       datePattern="#{msg.datePattern}" locale="#{msg.locale}" 
+                                                       required="true" requiredMessage="#{msg.require}"/>
+                                        <rich:message for="toDate" style="color:red"/>
+                                    </td>
+                                </tr>
+                                </table>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{campaignAssignmentController.assignmentType eq 'average' or campaignAssignmentController.assignmentType eq 'autodialer'}" >
+                                <table align="left">
+                                <tr>
+                                    <td width="135" align="right" valign="top" class="gray03">Assignment Record :</td>
+                                    <td>
+                                        <h:inputText id="recordavg" maxlength="6" size="7" disabled="#{campaignAssignmentController.assignmentType ne 'average' or campaignAssignmentController.assignmentType eq 'autodialer'}}"
+                                                    onkeypress="return isNumberKey(event)" value="#{campaignAssignmentController.norecord}"/> Records
+                                        <h:outputText style="color:red" value="#{campaignAssignmentController.message}"/>
+                                    </td>  
+                                </tr>
+                                </table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            </td>
+                            </tr>
+                            <tr>
+                            <td colspan="2" align="left">
+                            <h:panelGroup id="algoPanel">
+                                 <h:panelGroup rendered="#{campaignAssignmentController.assignmentType eq 'average' or campaignAssignmentController.assignmentType eq 'custom'}" >
+                                     <table align="left"><tr>
+                                        <td width="135" align="right" valign="top" class="gray03">Assignment Algorithms :</td>
+                                        <td valign="top">
+                                            <h:selectOneRadio id="assignmentAlgo" value="#{campaignAssignmentController.assignmentAlgo}" required="true" requiredMessage="#{msg.require}">
+                                                <f:selectItem itemValue="sequential" itemLabel="Sequential " />
+                                                <f:selectItem itemValue="distributed" itemLabel="Distributed (Slow performance)" />
+                                                <rich:validator />
+                                            </h:selectOneRadio>
+                                            <rich:message for="assignmentAlgo" style="color:red"/>
+                                        </td>
+                                    </tr></table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            </td></tr>
+                            
+                            
+                             <tr>
+                            <td colspan="2" align="left">
+                            <h:panelGroup id="userPanel">
+                                 <h:panelGroup rendered="#{campaignAssignmentController.assignmentType ne 'autodialer'}" >
+                                     <table align="left">
+                                         <tr>
+                                            <td width="135" align="right" valign="top" class="gray03">Selecting User:</td>
+                                            <td valign="top">
+                                                <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                                    <h:selectOneRadio id="selectingUser" value="#{campaignAssignmentController.selectingUser}" required="true" requiredMessage="#{msg.require}">
+                                                        <f:selectItem itemValue="all" itemLabel="All Users" />
+                                                        <f:selectItem itemValue="group" itemLabel="User Group"/>
+                                                        <a4j:ajax event="click" render="selectingUser, userGroupList, userList, selectingUserStep3" execute="@this"
+                                                                  listener="#{campaignAssignmentController.userSelectingChangeListener}" />
+
+                                                        <rich:validator />
+                                                    </h:selectOneRadio>
+
+                                                    <h:selectOneMenu id="userGroupList"
+                                                                     value="#{campaignAssignmentController.userGroupId}"
+                                                                     disabled="#{campaignAssignmentController.selectingUser ne 'group'}"
+                                                                     required="#{campaignAssignmentController.selectingUser eq 'group'}"
+                                                                     requiredMessage="#{msg.require}">
+                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                        <f:selectItems value="#{campaignAssignmentController.userGroupList}"/>
+                                                        <a4j:ajax event="change" render="userList" execute="@this" 
+                                                                  listener="#{campaignAssignmentController.userGroupChangeListener}"/>
+                                                    </h:selectOneMenu>
+                                                </h:panelGrid>
+                                                <rich:message for="selectingUser" style="color:red"/>
+                                                <rich:message for="userGroupList" style="color:red"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <td colspan="2" align="left">
+                                        <h:panelGroup id="simulatePanel">
+                                             <h:panelGroup rendered="#{campaignAssignmentController.assignmentType eq 'average' or campaignAssignmentController.assignmentType eq 'custom'}" >
+                                                 <table align="left"><tr>
+                                                    <td width="120" align="right" valign="top" class="gray03">&nbsp;</td>
+                                                    <td valign="top">
+                                                        <a4j:commandButton  image="../img/b_simulate_list.png"
+                                                                            rendered="#{campaignAssignmentController.totalrecord gt 0}"
+                                                                            limitRender="true"
+                                                                            render="simulatePanel, userList"
+                                                                            actionListener="#{campaignAssignmentController.simulateList}"/>
+                                                        <h:outputText style="color:red" value="#{campaignAssignmentController.messageSim}"/>
+                                                    </td>
+                                                </tr></table>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                        </td></tr>
+                                        <tr>
+                                            <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                            <td valign="top">&nbsp;</td>
+                                        </tr>
+                                        <tr>
+                                            <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                            <td valign="top"><table width="50%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                                <tr>
+                                                    <td bgcolor="#FFFFFF">
+                                                        <rich:dataTable id="userList" style="width: 100%;padding: 4em" styleClass="tableline01" headerClass="subh01"
+                                                                        value="#{campaignAssignmentController.selectedAssignmentUser}"  var="userList"
+                                                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                                            <f:facet name="header">
+                                                                <rich:columnGroup>
+                                                                    <rich:column style="width: 5%;"><input type="checkbox" name="allbox" onclick="checkAll()" checked="true"/></rich:column>
+                                                                    <rich:column style="width: 30%;text-align: left;"><h:outputText value="User Name"/></rich:column>
+                                                                    <rich:column><h:outputText value="Totals" title="Total Remain"/></rich:column>
+                                                                    <rich:column rendered="#{campaignAssignmentController.assignmentMode eq 'supervisor'}"><h:outputText value="New"/></rich:column>
+                                                                    <rich:column rendered="#{campaignAssignmentController.assignmentMode eq 'supervisor'}"><h:outputText value="Used"/></rich:column>
+                                                                    <rich:column><h:outputText value="Records"/></rich:column>
+                                                                    <rich:column><h:outputText value="Simulate" title="Simulate List"/></rich:column>
+                                                                </rich:columnGroup>
+                                                            </f:facet>
+                                                            <rich:column >
+                                                                <h:selectBooleanCheckbox id="userbox" value="#{userList.selected}">
+                                                                </h:selectBooleanCheckbox>
+                                                            </rich:column>
+                                                            <rich:column>
+                                                                <h:outputText value="#{userList.user.name} #{userList.user.surname}"/>
+                                                            </rich:column>
+                                                            <rich:column style="alignment-adjust: central">
+                                                                <h:outputText value="#{userList.totals eq null?0:userList.totals}"/>
+                                                            </rich:column>
+                                                            <rich:column style="alignment-adjust: central" rendered="#{campaignAssignmentController.assignmentMode eq 'supervisor'}">
+                                                                <h:outputText value="#{userList.new1}"/>
+                                                            </rich:column>
+                                                            <rich:column style="alignment-adjust: central" rendered="#{campaignAssignmentController.assignmentMode eq 'supervisor'}">
+                                                                <h:outputText value="#{userList.used}"/>
+                                                            </rich:column>
+                                                            <rich:column>
+                                                                <h:inputText id="recordno" maxlength="5" size="5" disabled="#{campaignAssignmentController.assignmentType eq 'average' or campaignAssignmentController.assignmentType eq 'pooling'}"
+                                                                             onkeypress="return isNumberKey(event)" value="#{userList.record}">
+                                                                </h:inputText>
+                                                            </rich:column>
+                                                            <rich:column style="text-align: center">
+                                                                <h:outputText value="#{userList.simulate eq null?0:userList.simulate}"/>
+                                                            </rich:column>
+                                                        </rich:dataTable>
+                                                    </td>
+                                                </tr>
+                                            </table></td>
+                                        </tr>
+                                     </table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            </td></tr>
+                            
+                            <tr>
+                                <td width="120"></td>
+                                <td align="left">                                    
+                                    <h:panelGroup id="nextStep3" >
+                                        <a4j:commandButton id="backbuttonstep2" image="../img/b_back.png"
+                                                           limitRender="true"
+                                                           render="step1, step2"
+                                                           actionListener="#{campaignAssignmentController.step1Listener}" immediate="true"/>
+
+                                        <a4j:commandButton  image="../img/b_proceed.png"
+                                                            rendered="#{campaignAssignmentController.totalrecord gt 0 and campaignAssignmentController.assignmentType ne 'autodialer'}"
+                                                            onclick="if (!checkSubmit()) return false;"
+                                                            limitRender="true"
+                                                            render="step2, step3"
+                                                            actionListener="#{campaignAssignmentController.step3Listener}"/>
+
+                                        <a4j:commandButton  image="../img/b_proceed.png"
+                                                            rendered="#{campaignAssignmentController.totalrecord gt 0 and campaignAssignmentController.assignmentType eq 'autodialer'}"
+                                                            onclick="if(!confirm('Confirm to assign?\n')) { return false; }"
+                                                            limitRender="true"
+                                                            render="step2, step3"
+                                                            actionListener="#{campaignAssignmentController.step3Listener}"/>
+                                    </h:panelGroup>                                    
+                                </td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </a4j:region>
+
+            <!--Step3-->
+            <a4j:region id="step3region">
+                <h:panelGroup id="step3">
+                    <h:panelGroup rendered="#{campaignAssignmentController.step eq 3}">
+                        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td width="160" class="gray03">&nbsp;</td>
+                                <td><img src="../img/step03Assi.png" width="461" height="30"/></td>
+                            </tr>
+                            <tr>
+                                <td class="gray03">&nbsp;</td>
+                                <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">No.of Records from Criteria: </td>
+                                <td valign="top"><h:outputText id="noRecordStep3" value="#{campaignAssignmentController.totalrecord}"/> Records </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">Selecting User:</td>
+                                <td valign="top"><h:outputText id="selectingUserStep3" value="#{campaignAssignmentController.selectingUser}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">Assignment Mode:</td>
+                                <td valign="top"><h:outputText id="assignmentModeStep3" value="#{campaignAssignmentController.assignmentMode}"/></td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">Assignment Type:</td>
+                                <td valign="top">
+                                    <h:panelGroup id="assignmentTypeStep3" >
+                                        <h:outputText value="Assigned (Average)" rendered="#{campaignAssignmentController.assignmentType eq 'average'}" />
+                                        <h:outputText value="Assigned (Custom)" rendered="#{campaignAssignmentController.assignmentType eq 'custom'}" />
+                                        <h:outputText value="Pooling" rendered="#{campaignAssignmentController.assignmentType eq 'pooling'}" />
+                                        <h:outputText value="Pooling (Custom)" rendered="#{campaignAssignmentController.assignmentType eq 'poolingcustom'}" />
+                                        <h:outputText value="Pooling (Daily)" rendered="#{campaignAssignmentController.assignmentType eq 'poolingdaily'}" />
+                                        <h:outputText value="Auto-Dialer" rendered="#{campaignAssignmentController.assignmentType eq 'autodialer'}" />
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td valign="top">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td valign="top">
+                                    <h:panelGroup id="usersAssigned" rendered="#{campaignAssignmentController.assignmentType ne 'autodialer'}" >
+                                    <table width="50%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                        <tr>
+                                            <td bgcolor="#FFFFFF">
+                                                <rich:dataTable style="width: 100%;padding: 4em" styleClass="tableline01" 
+                                                                headerClass="subh01" value="#{campaignAssignmentController.usersAssignedList}" var="list" >
+                                                    <f:facet name="header">
+                                                        <rich:columnGroup>
+                                                            <rich:column style="width: 90%"><h:outputText value="TMR Name" /></rich:column>
+                                                            <rich:column><h:outputText value="Records"/></rich:column>
+                                                        </rich:columnGroup>
+                                                    </f:facet>
+                                                    <rich:column>
+                                                        <h:outputText value="#{list.user.name} #{list.user.surname}"/>
+                                                    </rich:column>
+                                                    <rich:column>
+                                                        <h:outputText value="#{list.record}"/>
+                                                    </rich:column>
+                                                </rich:dataTable>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </h:panelGroup>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td valign="top">&nbsp;</td>
+                            </tr>
+                            <tr>
+                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                <td align="left" valign="top"><table width="50%" border="0" cellspacing="0" cellpadding="5">
+                                        <tr>
+                                            <td align="center">
+                                                <h:commandButton  image="../img/b_ok.png"
+                                                                  action="#{campaignAssignmentController.backAction}" actionListener="#{campaignSummaryController.initialize()}"
+                                                                  immediate="true">
+                                                    <f:param name="tab" value="assignment"/> 
+                                                    <f:param name="id" value="#{campaignAssignmentController.campaign.id}"/>
+                                                </h:commandButton>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </a4j:region>
+        </ui:define>
+
+        <ui:define name="popupModal">
+            <ui:include src="/share/waitpopup.xhtml"/>           
+            <a4j:status id="actionStatus" 
+                        onstart="#{rich:component('waitPopup')}.show();"
+                        onstop="#{rich:component('waitPopup')}.hide();" />
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>

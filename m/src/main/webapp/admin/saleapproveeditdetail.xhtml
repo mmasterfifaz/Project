@@ -1,0 +1,999 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+                xmlns:rich="http://richfaces.org/rich" xmlns:aj4="http://java.sun.com/jsf/html">
+
+    <style type="text/css">
+        <!--
+        .rich-tabhdr-side-cell { 
+            border:none;
+        }
+        .rich-tab-inactive {
+            cursor: pointer;
+            background-image : url(#{request.contextPath}/img/tb_01.png);
+            border:none;
+            height: 22px;
+            color: #000000;
+        }
+        .rich-tab-active {
+            background-image : url(#{request.contextPath}/img/tb_02.png);
+            border:none;
+            height: 22px;
+            color: #FFFFFF;
+        }
+        .rich-tabpanel-content {
+            border-width: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+        .rich-tab-bottom-line {
+            border-color: #75b8d1;
+            border-width: 2px;;
+        }
+        .tooltip {
+            background-color:window;
+            border:1px inset windowframe;
+            font-family: Arial, Helvetica, sans-serif, Tahoma;
+            font-size: 12px;
+        }        
+        -->
+    </style>
+    <script src="../includes/checking.js" type="text/javascript"/>
+    <script type="text/javascript">
+        function openLink2c2p(url){
+             window.open(url, '2c2p');
+        }
+    </script>
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td width="50%">
+                <table border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="right">Customer Name :</td>
+                        <td align="left">#{saleApproveEditController.po.assignmentDetail.customerName}</td>
+                    </tr>
+                    <tr>
+                        <td align="right">TMR :</td>
+                        <td align="left">#{saleApproveEditController.po.createBy}</td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h:outputText value="Reference No :" rendered="#{not saleApproveEditController.enableReferenceNo}"/></td>
+                        <td align="left"><h:outputText value="#{saleApproveEditController.po.refNo}" rendered="#{not saleApproveEditController.enableReferenceNo}"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">
+                            <h:outputText value="Family Registration :" rendered="#{saleApproveEditController.familyProduct}"/>
+                        </td> 
+                        <td align="left">
+                            <h:outputText value="#{saleApproveEditController.getFamilyProductType()}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <rich:dataTable id="familyList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{saleApproveEditController.podForFamily}" var="listFamily"
+                                            rendered="#{saleApproveEditController.familyProduct}">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column styleClass="subh01">Reference No.</rich:column>
+                                        <rich:column styleClass="subh01">Insure Person</rich:column>
+                                        <rich:column styleClass="subh01">Sale Result</rich:column>
+                                        <rich:column styleClass="subh01">Purchase Date</rich:column>
+                                        <rich:column styleClass="subh01">Status</rich:column>
+                                        <rich:column styleClass="subh01">Premium</rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column>
+                                    <h:outputText value="#{listFamily.purchaseOrder.refNo}"/>
+                                </rich:column>
+                                <rich:column>
+                                    #{listFamily.purchaseOrder.insurePerson}<br/>
+                                    <h:outputText value="(#{saleApproveEditController.getRelationMainInsured(listFamily)})" rendered="#{listFamily.product.familyProduct}" style="color: orange"/>
+                                </rich:column> 
+                                <rich:column>
+                                    <h:outputText value="Yes" rendered="#{listFamily.purchaseOrder.saleResult.toString() eq 'Y'}"/>        
+                                    <h:outputText value="No" rendered="#{listFamily.purchaseOrder.saleResult.toString() eq 'N'}"/>
+                                    <h:outputText value="Follow Up" rendered="#{listFamily.purchaseOrder.saleResult.toString() eq 'F'}"/>
+                                </rich:column>
+                                <rich:column>
+                                    <h:outputText value="#{listFamily.purchaseOrder.purchaseDate}">
+                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </rich:column>
+                                <rich:column>
+                                    <h:outputText value=" UW: #{saleApproveEditController.getApprovalStatus(listFamily.purchaseOrder.approvalStatus)}" /><br/>
+                                    <h:outputText value="PAY: #{saleApproveEditController.getApprovalStatus(listFamily.purchaseOrder.paymentStatus)}" /><br/>
+                                    <h:outputText value=" QC: #{saleApproveEditController.getApprovalStatus(listFamily.purchaseOrder.qcStatus)}" />
+                                </rich:column>
+                                <rich:column style="text-align: right">
+                                    <h:outputText value="#{listFamily.purchaseOrder.netPremium}">
+                                        <f:convertNumber pattern="#,##0.00"/>
+                                    </h:outputText>
+                                </rich:column>
+                            </rich:dataTable>
+                            <ui:remove>
+                            <h:panelGroup rendered="#{saleApproveEditController.familyProduct and saleApproveEditController.po.mainPoId ne null}">
+                                <table border="0" cellpadding="0" cellspacing="0">
+                                    <tr>
+                                        <td align="left">
+                                            <a4j:repeat value="#{saleApproveEditController.podForFamily}" var="list1" rowKeyVar="idx1">
+                                                <a4j:repeat value="#{list1.purchaseOrderRegisterCollection}" var="list2" rowKeyVar="idx2" rendered="#{idx1 eq 0}">
+                                                    <h:outputText value="#{list2.name}" rendered="#{idx2 eq 0}"/>
+                                                    <h:outputText value=" " rendered="#{idx2 eq 0}"/>
+                                                    <h:outputText value="#{list2.surname}" rendered="#{idx2 eq 0}"/>
+                                                    <h:outputText value=" " rendered="#{idx2 eq 0}"/>
+                                                </a4j:repeat>
+                                            </a4j:repeat>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </h:panelGroup>
+                            </ui:remove>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"><h:outputText value="Total Premium :" rendered="#{saleApproveEditController.familyProduct}"/></td>
+                        <td align="left">
+                            <h:outputText value="#{saleApproveEditController.totalPremium}" rendered="#{saleApproveEditController.familyProduct}">
+                                <f:convertNumber pattern="#,##0.00"/>
+                            </h:outputText>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+            <td width="50%" valign="top"> Contact History
+                <div stype="height: 200px;width: 200px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                    <rich:dataTable id="data" style="width:100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{saleApproveEditController.list}" var="list" rows="#{global.maxrows}" 
+                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                    onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column style="width:90px" styleClass="subh01">Contact Date</rich:column>
+                                <rich:column styleClass="subh01">Contact To</rich:column>
+                                <rich:column styleClass="subh01">Contact Result</rich:column>
+                                <rich:column styleClass="subh01">Remark</rich:column>
+                                <rich:column styleClass="subh01">Talk Time</rich:column>
+                                <rich:column styleClass="subh01">Track ID</rich:column>
+                                <rich:column styleClass="subh01"></rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+                        <rich:column>
+                            <h:outputText value="#{list.contactDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>                                        
+                        </rich:column>
+                        <rich:column>
+                            #{list.contactTo}
+                        </rich:column>
+                        <rich:column>
+                            #{list.contactResult}
+                        </rich:column>  
+                        <rich:column>
+                            #{(list.remark ne null and list.remark.length() gt 15)?list.remark.substring(0,15):list.remark}
+                            <rich:tooltip styleClass="tooltip" mode="client" title="Remark" horizontalOffset="-1" verticalOffset="0" layout="block">
+                                <b>Remark:</b>
+                                <pre style="width:420px;height:220px;overflow-wrap:break-word;overflow-style:panner;overflow-y: scroll;">
+                                    #{list.remark eq null ? "no remark":list.remark}
+                                </pre>
+                            </rich:tooltip>                            
+                        </rich:column>  
+
+                        <rich:column>
+                            #{list.strTalkTime}
+                        </rich:column>
+                        <rich:column>
+                            <h:panelGroup id="trackId" rendered="#{list.trackId != null}">
+                                <h:panelGroup rendered="#{saleApproveEditController.fromPage ne 'front'}">
+                                    <a href="#" onclick="#{rich:component('waitPopup')}.show('', {height: '80px', width: '150px'}); GetAspectStreamingUrlDirect('#{list.contactHistoryId}', '#{list.trackId}', '#{list.voiceSource}');
+                                            return false;">#{list.trackId}</a>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{saleApproveEditController.fromPage eq 'front'}">
+                                    <a href="#" onclick="#{rich:component('waitPopup')}.show('', {height: '80px', width: '150px'});
+                                            GetAspectStreamingUrlDirect('#{list.contactHistoryId}', '#{list.trackId}', '#{list.voiceSource}');
+                                            return false;">#{list.trackId}</a>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </rich:column>
+                        <rich:column>
+                            <h:panelGroup id="trackIdDownload" rendered="#{list.trackId != null}">
+                                <h:panelGroup rendered="#{saleApproveEditController.fromPage ne 'front'}">
+                                    <a href="#" onclick="#{rich:component('waitPopup')}.show('', {height: '80px', width: '150px'});
+                                            GetMP3DownloadUrlDirect('#{list.contactHistoryId}', '#{list.trackId}', '#{list.voiceSource}');
+                                            return false;">
+                                        Download
+                                    </a>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <rich:tabPanel switchType="ajax" id="tabs" itemChangeListener="#{saleApproveEditController.tabApprovalListener}" immediate="true">
+        <rich:tab id="registrationForm" title="Registration Form" immediate="true"> 
+            <f:facet name="header"><div class="tab-content"><h:outputText value= "Registration Form"/></div></f:facet>
+            <a4j:region id="regionRegistrationForm">
+                <h:panelGroup>
+                    <iframe width="100%" height="700" src="#{request.contextPath}/front/customerHandling/registrationforsaleapproval.jsf?mainPage=saleapproval&amp;poId=#{saleApproveEditController.po.id}&amp;ckSpouse=#{saleApproveEditController.ckSpouse}&amp;mainPoId=#{saleApproveEditController.mainPoId}"/>
+                </h:panelGroup> 
+            </a4j:region>
+        </rich:tab>
+        <ui:remove>
+            <rich:tab id="payment" title="Payment" immediate="true"> 
+                <a4j:region id="paymentRegion">
+                    <h:panelGroup>
+                        <iframe width="100%" height="700" src="#{request.contextPath}/front/customerHandling/paymentforsaleapproval.jsf?mainPage=saleapproval&amp;purchaseOrderId=#{saleApproveEditController.po.id}"/>
+                    </h:panelGroup> 
+                </a4j:region>
+            </rich:tab>    
+        </ui:remove>
+        
+        <rich:tab id="qcQaForm" title="QC Form" rendered="#{saleApproveEditController.showQcStatus and saleApproveEditController.product.registrationForm.qcQaForm ne null}"> 
+            <f:facet name="header"><div class="tab-content"><h:outputText value= "QC Form"/></div></f:facet>
+            <a4j:region id="regionQcQaForm">.
+                <h:panelGroup>
+                    <iframe width="100%" height="700" src="#{request.contextPath}/front/customerHandling/qcsaleapproval.jsf?mainPage=saleapproval&amp;poId=#{saleApproveEditController.po.id}&amp;ckSpouse=#{saleApproveEditController.ckSpouse}&amp;mainPoId=#{saleApproveEditController.mainPoId}"/>
+                </h:panelGroup> 
+            </a4j:region>
+        </rich:tab>
+
+        <rich:tab id="approval" title="Approval">
+            <f:facet name="header"><div class="tab-content"><h:outputText value= "Approval"/></div></f:facet>
+            <h:panelGroup id="listLog">
+                <rich:dataTable id="dataTalbleListLog" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{saleApproveEditController.purchaseOrderApprovalLogList}" var="list" 
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column styleClass="subh01">Date/Time</rich:column>
+                            <rich:column styleClass="subh01">Activity</rich:column>
+                            <rich:column styleClass="subh01">Reason</rich:column>
+                            <rich:column styleClass="subh01">Updated By</rich:column>
+                            <rich:column styleClass="subh01">Delegate To</rich:column>
+                            <rich:column styleClass="subh01">Message</rich:column>
+                            <rich:column styleClass="subh01">Exclusion</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column style="vertical-align: top">
+                        <h:outputText value="#{list.createDate}" >
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column >
+                    <rich:column style="vertical-align: top">
+                        #{list.approvalStatus}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.approvalReason.name}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        <h:outputText value="Underwriting / " rendered="#{list.createByRole eq 'Uw'}"/>
+                        <h:outputText value="Collection payment / " rendered="#{list.createByRole eq 'Payment'}"/>
+                        <h:outputText value="Qc  /" rendered="#{list.createByRole eq 'Qc'}"/>
+                        <h:outputText value="Sale Agent / " rendered="#{list.createByRole eq 'Agent'}"/>
+                        <h:outputText value="#{list.createBy}"/>
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.toRole}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{(list.message ne null and list.message.length() gt 15)?list.message.substring(0,15):list.message}
+                        <rich:tooltip styleClass="tooltip" mode="client" title="Remark" horizontalOffset="-1" verticalOffset="0" layout="block">
+                            <b>Message: </b>
+                            <pre style="width:420px;height:220px;overflow-wrap:break-word;overflow-style:panner;overflow-y: scroll;">
+                                #{list.message eq null ? "no message" : list.message}
+                            </pre>
+                        </rich:tooltip>                            
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        <h:panelGroup rendered="#{not empty list.approvalExclusionCollection}">
+                            <a4j:repeat value="#{list.approvalExclusionCollection}" var="list1" rowKeyVar="idx">
+                                <h:outputText value="#{list1.name}"/><h:outputText value=", " rendered="#{list.approvalExclusionCollection.size()-1 > idx}"/>
+                            </a4j:repeat>
+                        </h:panelGroup>
+                        <h:outputText value=" #{list.otherExclusionCode}:#{list.otherExclusionName}"/>
+                    </rich:column>
+                </rich:dataTable>
+            </h:panelGroup>
+
+
+            <rich:tabPanel switchType="ajax" id="subTabs" itemChangeListener="#{saleApproveEditController.changeModeListener}" immediate="true">
+
+                <rich:tab id="uwTab" 
+                          name="uw"
+                          title="Underwriting"
+                          render="uwPanel"
+                          rendered="#{saleApproveEditController.showUwStatus}">
+                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Underwriting"/></div></f:facet>
+                    <f:param name="mode" value="uw"/>
+                    <a4j:region id="uwRegion">
+                        <h:panelGroup id="uwPanel">
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" width="150"><b>Underwriting</b></td>
+                                    <td></td>                            
+                                </tr>
+                                <tr>
+                                    <td align="right">Activity : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="uwStatus" 
+                                                         value="#{saleApproveEditController.uwStatus}"
+                                                         required="true" 
+                                                         requiredMessage="#{msg.require}"
+                                                         valueChangeListener="#{saleApproveEditController.uwStatusChange}"
+                                                         disabled="#{not saleApproveEditController.uwEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.statusList}"/>
+                                            <a4j:ajax event="change" render="uwReasonId, uwDelegate, uwDelegateLabel, uwMessage, msgUwSaveRemark" execute="@this" limitRender="true"/>
+                                            <rich:validator />
+                                        </h:selectOneMenu> 
+                                        <rich:message for="uwStatus" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Reason : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="uwReasonId"
+                                                         required="#{(saleApproveEditController.uwStatus eq 'rejected') or (saleApproveEditController.uwStatus eq 'approved') or (saleApproveEditController.uwStatus eq 'request') or (saleApproveEditController.uwStatus eq 'reconfirm')}" 
+                                                         requiredMessage="#{msg.require}"
+                                                         value="#{saleApproveEditController.uwReasonId}"
+                                                         disabled="#{not saleApproveEditController.uwEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.approvalReasonUwList}" 
+                                                           var="list" 
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <f:validateRequired/> 
+                                            <rich:validator />
+                                        </h:selectOneMenu>
+                                        <rich:message for="uwReasonId" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <h:panelGroup id="uwDelegateLabel">
+                                            <h:outputText value="Delegate To : " rendered="#{saleApproveEditController.uwEnableDelegate}"/>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td align="left">
+                                        <h:panelGroup id="uwDelegate">
+                                            <h:panelGroup rendered="#{saleApproveEditController.uwEnableDelegate}">
+                                                <h:selectOneMenu id="uwDelegateSelect"
+                                                                 value="#{saleApproveEditController.uwDelegate}"
+                                                                 disabled="#{not saleApproveEditController.uwEnable}"
+                                                                 required="#{saleApproveEditController.uwEnableDelegate}"
+                                                                 requiredMessage="#{msg.require}">
+                                                    <f:selectItem itemLabel="Please Select"/>
+                                                    <f:selectItem itemLabel="Agent" itemValue="Agent"/>
+                                                    <f:selectItem itemLabel="Supervisor" itemValue="Supervisor"/>
+                                                    <f:selectItem itemLabel="Payment Collector" itemValue="Payment"/>
+                                                    <f:selectItem itemLabel="Quality Assurer" itemValue="Qc"/>
+                                                    <rich:validator />                                  
+                                                </h:selectOneMenu>
+                                                <rich:message for="uwDelegateSelect" style="color:red"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Exclusion : </td>
+                                    <td align="left">
+                                        <rich:pickList switchByDblClick="true" listWidth="350px" listHeight="250px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{saleApproveEditController.selectedApprovalExclusionList}" >
+                                            <f:selectItems value="#{saleApproveEditController.approvalExclusionList}"/>
+                                        </rich:pickList>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td align="right" valign="top">Other Exclusion Code : </td>
+                                    <td align="left">
+                                        <h:inputText id="othercode"
+                                                     value="#{saleApproveEditController.otherExclusionCode}"
+                                                     style="textfield"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Other Exclusion Name : </td>
+                                    <td align="left">
+                                        <h:inputText id="othername"
+                                                     value="#{saleApproveEditController.otherExclusionName}"
+                                                     style="textfield"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message 1 : </td>
+                                    <td align="left">
+                                        <h:inputTextarea id="uwMessage"
+                                                         value="#{saleApproveEditController.uwMessage}"
+                                                         cols="50" rows="5"
+                                                         disabled="#{not saleApproveEditController.uwEnable}"
+                                                         required="#{saleApproveEditController.uwStatus ne msg.approvalApprovedValue}"
+                                                         requiredMessage="#{msg.require}"/>
+                                        <rich:message for="uwMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message 2 : </td>
+                                    <td align="left">
+                                        <h:inputTextarea id="uwMessage2"
+                                                         value="#{saleApproveEditController.uwMessage2}"
+                                                         cols="50" rows="5"
+                                                         disabled="#{not saleApproveEditController.uwEnable}"
+                                                         required="#{saleApproveEditController.uwStatus ne msg.approvalApprovedValue}"
+                                                         requiredMessage="#{msg.require}"/>
+                                        <rich:message for="uwMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <a4j:commandButton image="/img/b_save.png" 
+                                                           actionListener="#{saleApproveEditController.saveUwActionListener}"
+                                                           render="listLog,uwPanel,qcPanel,pmPanel"
+                                                           rendered="#{not saleApproveEditController.disableUwSaveBtn and saleApproveEditController.uwEnable}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left"><h:outputText id="msgUwSaveRemark" value="#{saleApproveEditController.msgUwSaveRemark}" style="color: blue" /></td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </a4j:region>
+                </rich:tab>
+
+                <rich:tab id="qcTab" 
+                          name="qc"
+                          title="Quality Assurance"
+                          render="qcPanel"
+                          rendered="#{saleApproveEditController.showQcStatus}"> 
+                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Quality Assurance"/></div></f:facet>
+                    <f:param name="mode" value="qc"/>
+                    <a4j:region id="qcRegion">
+                        <h:panelGroup id="qcPanel">
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" width="150"><b>Quality Assurance</b></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Activity : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="qcStatus" 
+                                                         value="#{saleApproveEditController.qcStatus}"
+                                                         required="true" 
+                                                         requiredMessage="#{msg.require}"
+                                                         valueChangeListener="#{saleApproveEditController.qcStatusChange}"
+                                                         disabled="#{not saleApproveEditController.qcEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.statusList}"/>
+                                            <a4j:ajax event="change" render="qcReasonId, qcDelegate, qcDelegateLabel, qcMessage, msgQcSaveRemark" execute="@this" limitRender="true"/>
+                                            <rich:validator />
+                                        </h:selectOneMenu> 
+                                        <rich:message for="qcStatus" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Reason : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="qcReasonId"
+                                                         required="#{(saleApproveEditController.qcStatus eq 'rejected') or (saleApproveEditController.qcStatus eq 'approved') or (saleApproveEditController.qcStatus eq 'request') or (saleApproveEditController.qcStatus eq 'reconfirm')}" 
+                                                         requiredMessage="#{msg.require}"
+                                                         value="#{saleApproveEditController.qcReasonId}"
+                                                         disabled="#{not saleApproveEditController.qcEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.approvalReasonQcList}" 
+                                                           var="list" 
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <f:validateRequired/> 
+                                            <rich:validator />
+                                        </h:selectOneMenu>
+                                        <rich:message for="qcReasonId" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <h:panelGroup id="qcDelegateLabel">
+                                            <h:outputText value="Delegate To : " rendered="#{saleApproveEditController.qcEnableDelegate}"/>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td align="left">
+                                        <h:panelGroup id="qcDelegate">
+                                            <h:panelGroup rendered="#{saleApproveEditController.qcEnableDelegate}">
+                                                <h:selectOneMenu id="qcDelegateSelect" 
+                                                                 value="#{saleApproveEditController.qcDelegate}"
+                                                                 disabled="#{not saleApproveEditController.qcEnable}"
+                                                                 required="#{saleApproveEditController.qcEnableDelegate}"
+                                                                 requiredMessage="#{msg.require}">
+                                                    <f:selectItem itemLabel="Please Select"/>
+                                                    <f:selectItem itemLabel="Agent" itemValue="Agent"/>
+                                                    <f:selectItem itemLabel="Supervisor" itemValue="Supervisor"/>
+                                                    <f:selectItem itemLabel="Underwriter" itemValue="Uw"/>
+                                                    <f:selectItem itemLabel="Payment Collector" itemValue="Payment"/>
+                                                    <rich:validator />                                 
+                                                </h:selectOneMenu>
+                                                <rich:message for="qcDelegateSelect" style="color:red"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message : </td>
+                                    <td align="left" valign="top">
+                                        <h:inputTextarea id="qcMessage"
+                                                         value="#{saleApproveEditController.qcMessage}"
+                                                         cols="50" rows="5"
+                                                         disabled="#{not saleApproveEditController.qcEnable}"
+                                                         required="#{saleApproveEditController.qcStatus ne msg.approvalApprovedValue}"
+                                                         requiredMessage="#{msg.require}"/>
+                                        <rich:message for="qcMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <a4j:commandButton image="/img/b_save.png" 
+                                                           actionListener="#{saleApproveEditController.saveQcActionListener}"
+                                                           render="listLog,uwPanel,qcPanel,pmPanel"
+                                                           rendered="#{not saleApproveEditController.disableQcSaveBtn and saleApproveEditController.qcEnable}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left"><h:outputText id="msgQcSaveRemark" value="#{saleApproveEditController.msgQcSaveRemark}" style="color: blue" /></td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </a4j:region>
+                </rich:tab>
+                <rich:tab id="pmTab" 
+                          name="payment"
+                          title="Payment"
+                          render="pmPanel"
+                          rendered="#{saleApproveEditController.showPaymentStatus}">
+                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Payment"/></div></f:facet>
+                    <f:param name="mode" value="payment"/>
+                    <a4j:region id="pmRegion">
+                        <h:panelGroup id="pmPanel">
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" width="250"><b>Payment</b></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Activity : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="paymentStatus" 
+                                                         value="#{saleApproveEditController.paymentStatus}"
+                                                         required="true" 
+                                                         requiredMessage="#{msg.require}"
+                                                         valueChangeListener="#{saleApproveEditController.paymentStatusChange}"
+                                                         disabled="#{not saleApproveEditController.paymentEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.statusList}"/>
+                                            <a4j:ajax event="change" render="paymentReasonId, paymentDelegate, paymentDelegateLabel, paymentMessage, msgPaymentSaveRemark" execute="@this" limitRender="true"/>
+                                            <rich:validator />
+                                        </h:selectOneMenu> 
+                                        <rich:message for="paymentStatus" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Reason : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="paymentReasonId"
+                                                         required="#{(saleApproveEditController.paymentStatus eq 'rejected') or (saleApproveEditController.paymentStatus eq 'approved') or (saleApproveEditController.paymentStatus eq 'request') or (saleApproveEditController.paymentStatus eq 'reconfirm')}" 
+                                                         requiredMessage="#{msg.require}"
+                                                         value="#{saleApproveEditController.paymentReasonId}"
+                                                         disabled="#{not saleApproveEditController.paymentEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.approvalReasonPaymentList}" 
+                                                           var="list" 
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <f:validateRequired/>    
+                                            <rich:validator />
+                                        </h:selectOneMenu>
+                                        <rich:message for="paymentReasonId" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">
+                                        <h:panelGroup id="paymentDelegateLabel">
+                                            <h:outputText value="Delegate To : " rendered="#{saleApproveEditController.paymentEnableDelegate}"/>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td align="left">
+                                        <h:panelGroup id="paymentDelegate">
+                                            <h:panelGroup rendered="#{saleApproveEditController.paymentEnableDelegate}">
+                                                <h:selectOneMenu id="paymentDelegateSelect" value="#{saleApproveEditController.paymentDelegate}"
+                                                                 disabled="#{not saleApproveEditController.paymentEnable}"
+                                                                 required="#{saleApproveEditController.paymentEnableDelegate}"
+                                                                 requiredMessage="#{msg.require}">
+                                                    <f:selectItem itemLabel="Please Select"/>
+                                                    <f:selectItem itemLabel="Agent" itemValue="Agent"/>
+                                                    <f:selectItem itemLabel="Supervisor" itemValue="Supervisor"/>
+                                                    <f:selectItem itemLabel="Underwriter" itemValue="Uw"/>
+                                                    <f:selectItem itemLabel="Quality Assurer" itemValue="Qc"/>
+                                                    <rich:validator />                               
+                                                </h:selectOneMenu>
+                                                <rich:message for="paymentDelegateSelect" style="color:red"/>
+                                            </h:panelGroup>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message : </td>
+                                    <td align="left">
+                                        <h:inputTextarea id="paymentMessage"
+                                                         value="#{saleApproveEditController.paymentMessage}"
+                                                         cols="50" rows="5"
+                                                         disabled="#{not saleApproveEditController.paymentEnable}"
+                                                         required="#{saleApproveEditController.paymentStatus ne msg.approvalApprovedValue}"
+                                                         requiredMessage="#{msg.require}"/>
+                                        <rich:message for="paymentMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <a4j:commandButton image="/img/b_save.png" 
+                                                           actionListener="#{saleApproveEditController.savePaymentActionListener}"
+                                                           render="listLog,uwPanel,qcPanel,pmPanel"
+                                                           rendered="#{not saleApproveEditController.disablePaymentSaveBtn and saleApproveEditController.paymentEnable}"/>
+                                        <span style="width:40px;"></span>
+                                        <a4j:commandButton image="/img/btn_refresh.png"
+                                                           actionListener="#{saleApproveEditController.tabPaymentRerender}"
+                                                           onbegin="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'});"
+                                                           oncomplete="#{rich:component('waitPopup')}.hide();"
+                                                           immediate="true"
+                                                           render="tabs,paymentdate,paymentRefno1"
+                                                           rendered="#{saleApproveEditController.product.fx1 eq 'CMI' or saleApproveEditController.product.fx1 eq 'VMI' and (saleApproveEditController.paymentMethod.code eq 'CCA' or saleApproveEditController.paymentMethod.code eq 'CSH')}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left"><h:outputText id="msgPaymentSaveRemark" value="#{saleApproveEditController.msgPaymentSaveRemark}" style="color: blue" /></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><h:outputText value="Smart broker approval:"/> </td>
+                                    <td align="left"><h:outputText id="smartbrokerapproval" value="Successful" rendered="#{saleApproveEditController.po.preapprovalStatus eq 'approved'}"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><h:outputText value="Payment gateway result:" rendered="#{saleApproveEditController.paymentMethod.code eq 'CCA' or saleApproveEditController.paymentMethod.code eq 'CSH'}"/></td>
+                                    <td align="left"><h:outputText id="paymentgatewayresult" value="Successful" rendered="#{(saleApproveEditController.po.paymentGatewayResult eq 'Success' and saleApproveEditController.paymentMethod.code eq 'CCA') or (saleApproveEditController.po.paymentGatewayResult eq 'Success' and saleApproveEditController.paymentMethod.code eq 'CSH')}"/></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><h:outputText value="Send SMS:" rendered="#{saleApproveEditController.paymentMethod.code eq 'CSH'}"/></td>
+                                    <td align="left"><h:panelGroup id="sentsms"><h:outputText value="Successful" rendered="#{saleApproveEditController.renderSendSMS and saleApproveEditController.paymentMethod.code eq 'CSH'}"/></h:panelGroup></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><h:outputText value="Smart broker payment update status:"/></td>
+                                    <!-- and saleApproveEditController.po.paymentSubmitDate ne null and saleApproveEditController.po.paymentSubmitDate ne ''-->
+                                    <td align="left"><h:panelGroup id="smartbrokerpaymentupdatestatus"><h:outputText value="Successful" rendered="#{saleApproveEditController.renderUpdatetoSmartBroker}"/></h:panelGroup></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><h:outputText value="payment reference no1:" rendered="#{saleApproveEditController.paymentMethod.code ne 'CCA' and saleApproveEditController.paymentMethod.code ne 'CSH' and saleApproveEditController.po.preapprovalStatus eq 'approved' and saleApproveEditController.renderUpdatetoSmartBroker eq false}"/></td>
+                                    <td align="left">
+                                        <h:panelGroup id="paymentRefno1"><h:inputText value="#{saleApproveEditController.po.paymentReferenceNo1}"  rendered="#{saleApproveEditController.paymentMethod.code ne 'CCA' and saleApproveEditController.paymentMethod.code ne 'CSH' and saleApproveEditController.po.preapprovalStatus eq 'approved' and saleApproveEditController.renderUpdatetoSmartBroker eq false}">
+                                                    <a4j:ajax event="change" execute="@this" immediate="true"></a4j:ajax>
+                                    </h:inputText></h:panelGroup></td>
+                                </tr>
+                                <tr>
+                                    <td align="right"><h:outputText value="payment date:" rendered="#{saleApproveEditController.paymentMethod.code ne 'CCA' and saleApproveEditController.paymentMethod.code ne 'CSH' and saleApproveEditController.po.preapprovalStatus eq 'approved' and saleApproveEditController.renderUpdatetoSmartBroker eq false}"/></td>
+                                    <td align="left">
+                                        <h:panelGroup  id="paymentdate">
+                                            <rich:calendar value="#{saleApproveEditController.po.paymentGatewaySubmitDate}"
+                                                           inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                           rendered="#{saleApproveEditController.paymentMethod.code ne 'CCA' and saleApproveEditController.paymentMethod.code ne 'CSH' and saleApproveEditController.po.preapprovalStatus eq 'approved' and saleApproveEditController.renderUpdatetoSmartBroker eq false}"
+                                                           datePattern="#{msg.datePattern}" locale="#{msg.locale}"
+                                                           >
+                                                <a4j:ajax event="change" execute="@this" immediate="true"></a4j:ajax>
+                                            </rich:calendar>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <h:panelGroup id="panelOnlinePayment">
+                                            <a4j:commandButton
+                                                    rendered="#{(saleApproveEditController.po.preapprovalStatus eq 'approved' and saleApproveEditController.paymentMethod.creditcard eq true and saleApproveEditController.paymentMethod.online eq true) and saleApproveEditController.po.paymentGatewayResult ne 'Success' and saleApproveEditController.paymentMethod.code eq 'CCA'}"
+                                                    actionListener="#{saleApproveEditController.prepareParameterPayment2C2P}"
+                                                    onclick="this.disabled=true;"
+                                                    disabled="#{saleApproveEditController.po.paymentGatewaySubmitDate ne null and saleApproveEditController.po.paymentGatewaySubmitDate ne ''
+                                                    and (saleApproveEditController.po.paymentGatewayResult eq null
+                                                    or saleApproveEditController.po.paymentGatewayResult eq '')
+                                                    }"
+                                                    image="/img/b_online_payment.png"
+                                                    oncomplete="openLink2c2p('http://172.18.21.19:8099/php/2c2p/v2/creditcardform.php?#{saleApproveEditController.parammeter}');" immediate="true"
+                                            >
+                                                <!--oncomplete="openLink2c2p('http://172.18.10.14:8099/php/2c2p/v2/creditcardform.php?#{saleApproveEditController.parammeter}');" immediate="true"  production-->
+                                            </a4j:commandButton>
+                                            <a4j:commandButton
+                                                    rendered="#{(saleApproveEditController.po.preapprovalStatus eq 'approved' and saleApproveEditController.paymentMethod.creditcard eq false) and saleApproveEditController.po.paymentGatewayResult ne 'Success' and saleApproveEditController.paymentMethod.code eq 'CSH'}"
+                                                    actionListener="#{saleApproveEditController.prepareParameterPayment2C2P}"
+                                                    onclick="this.disabled=true"
+                                                    disabled="#{saleApproveEditController.po.paymentGatewaySubmitDate ne null and saleApproveEditController.po.paymentGatewaySubmitDate ne ''
+                                                    and (saleApproveEditController.po.paymentGatewayResult eq null
+                                                    or saleApproveEditController.po.paymentGatewayResult eq '')
+                                                    }"
+                                                    image="/img/b_online_payment.png"
+                                                    oncomplete="openLink2c2p('http://172.18.21.19:8099/php/2c2p/v2/payment_cash.php?#{saleApproveEditController.parammeter}');" immediate="true"
+                                            >
+                                                <!-- oncomplete="openLink2c2p('http://172.18.10.14:8080:8099/php/2c2p/v2/payment_cash.php?#{saleApproveEditController.parammeter}');" immediate="true" production-->
+                                            </a4j:commandButton>
+
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <a4j:commandButton
+                                                                actionListener="#{saleApproveEditController.sendSMS}"
+                                                                onbegin="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'});" onclick="this.disabled=true"
+                                                                oncomplete="#{rich:component('waitPopup')}.hide();"
+                                                                image="/img/b_send_sms.png"
+                                                                immediate="true"
+                                                                rendered="#{saleApproveEditController.po.paymentGatewayResult eq 'Success' and saleApproveEditController.renderUpdatetoSmartBroker eq false and saleApproveEditController.renderSendSMS eq false and (saleApproveEditController.paymentMethod.code eq 'CSH')}"
+                                                                render="sentsms,panelOnlinePayment,meassagesendsms">
+                                                        </a4j:commandButton>
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText  id="meassagesendsms" style="white-space: nowrap;color: red"
+                                                                       value="#{saleApproveEditController.meassageSendSMS}"
+                                                        />
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                            <table>
+                                                <tr>
+                                                    <td> <a4j:commandButton
+                                                            actionListener="#{saleApproveEditController.updatePaymentToSmartBroker}"
+                                                            immediate="true"
+                                                            rendered="#{
+                                                               (saleApproveEditController.renderUpdatetoSmartBroker eq false and saleApproveEditController.renderSendSMS eq true and saleApproveEditController.paymentMethod.code eq 'CSH')
+                                                            or (saleApproveEditController.paymentMethod.code ne 'CCA' and saleApproveEditController.paymentMethod.code ne 'CSH' and saleApproveEditController.po.preapprovalStatus eq 'approved') and saleApproveEditController.renderUpdatetoSmartBroker eq false
+                                                            or (saleApproveEditController.renderUpdatetoSmartBroker eq false and saleApproveEditController.renderSendSMS eq false and saleApproveEditController.paymentMethod.code eq 'CCA' and saleApproveEditController.po.paymentGatewayResult eq 'Success')}"
+                                                            onbegin="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'});"
+                                                            oncomplete="#{rich:component('waitPopup')}.hide();"
+                                                            image="/img/b_submit_payment.png"
+                                                            render="smartbrokerpaymentupdatestatus,panelOnlinePayment,meassageupdatetosmartbroker"
+                                                    />
+                                                    </td>
+                                                    <td>
+                                                        <h:outputText id="meassageupdatetosmartbroker" style="white-space: nowrap;color: red"
+                                                                      value="#{saleApproveEditController.messageFromSmartBroker}" />
+                                                     </td>
+                                                </tr>
+                                            </table>
+
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </a4j:region>
+                </rich:tab>
+
+                <rich:tab id="agentTab"
+                          name="agent"
+                          title="Agent" 
+                          rendered="#{saleApproveEditController.showAgentStatus}">
+                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Agent"/></div></f:facet>
+                    <f:param name="mode" value="tmr"/>
+                    <a4j:region id="agentRegion">
+                        <h:panelGroup id="agentPanel">
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" width="150"><b>Agent</b></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Reason : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="agentReasonId"
+                                                         value="#{saleApproveEditController.agentReasonId}" >
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.approvalReasonAgentList}" 
+                                                           var="list" 
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <rich:validator />
+                                        </h:selectOneMenu>
+                                        <rich:message for="agentReasonId" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Delegate To : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="agentDelegate" 
+                                                         value="#{saleApproveEditController.agentDelegate}"
+                                                         required="true" 
+                                                         requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItem itemLabel="Supervisor" itemValue="Supervisor"/>
+                                            <f:selectItem itemLabel="Underwriter" itemValue="Uw"/>
+                                            <f:selectItem itemLabel="Payment Collector" itemValue="Payment"/>
+                                            <f:selectItem itemLabel="Quality Assurer" itemValue="Qc"/>
+                                            <rich:validator />                             
+                                        </h:selectOneMenu>
+                                        <rich:message for="agentDelegate" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message : </td>
+                                    <td align="left">
+                                        <h:inputTextarea id="agentMessage"
+                                                         value="#{saleApproveEditController.agentMessage}"
+                                                         requiredMessage="#{msg.require}"
+                                                         cols="50" rows="5"/>
+                                        <rich:message for="agentMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <a4j:commandButton image="/img/b_save.png" 
+                                                           actionListener="#{saleApproveEditController.saveAgentActionListener}"
+                                                           render="listLog,agentPanel"
+                                                           rendered="true"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </a4j:region>
+                </rich:tab>
+
+                <rich:tab id="supTab" 
+                          name="sup"
+                          title="Supervisor"
+                          render="supPanel"
+                          rendered="#{saleApproveEditController.showSupStatus}">
+                    <f:facet name="header"><div class="tab-content"><h:outputText value= "Supervisor"/></div></f:facet>
+                    <f:param name="mode" value="sup"/>
+                    <a4j:region id="supRegion">
+                        <h:panelGroup id="supPanel">
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" width="150"><b>Supervisor</b></td>
+                                    <td></td>
+                                </tr>
+                                <ui:remove>
+                                    <tr>
+                                        <td align="right">Activity : </td>
+                                        <td align="left">
+                                            <h:selectOneMenu id="supStatus" 
+                                                             value="#{saleApproveEditController.supStatus}"
+                                                             required="true" 
+                                                             requiredMessage="#{msg.require}"
+                                                             valueChangeListener="#{saleApproveEditController.supStatusChange}"
+                                                             disabled="#{not saleApproveEditController.supEnable}">
+                                                <f:selectItem itemLabel="Please Select"/>
+                                                <f:selectItems value="#{saleApproveEditController.statusList}"/>
+                                                <a4j:ajax event="change" render="supReasonId" execute="true" limitRender="true"/>
+                                                <rich:validator/>
+                                            </h:selectOneMenu> 
+                                            <rich:message for="supStatus" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                </ui:remove>
+                                <tr>
+                                    <td align="right">Reason : </td>
+                                    <td align="left">
+                                        <h:selectOneMenu id="supReasonId"
+                                                         value="#{saleApproveEditController.supReasonId}"
+                                                         required="#{(saleApproveEditController.paymentStatus eq 'rejected') or (saleApproveEditController.paymentStatus eq 'approved') or (saleApproveEditController.paymentStatus eq 'request') or (saleApproveEditController.paymentStatus eq 'reconfirm')}"  
+                                                         requiredMessage="#{msg.require}"
+                                                         disabled="#{not saleApproveEditController.supEnable}">
+                                            <f:selectItem itemLabel="Please Select"/>
+                                            <f:selectItems value="#{saleApproveEditController.approvalReasonSupList}" 
+                                                           var="list" 
+                                                           itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                            <rich:validator/>
+                                            <f:validateRequired/> 
+                                        </h:selectOneMenu>
+                                        <rich:message for="supReasonId" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Delegate To : </td>
+                                    <td align="left">
+                                        <h:outputText value="Underwriter" rendered="#{saleApproveEditController.supDelegate eq 'Uw'}"/>
+                                        <h:outputText value="Payment Collector" rendered="#{saleApproveEditController.supDelegate eq 'Payment'}"/>
+                                        <h:outputText value="Quality Assurer" rendered="#{saleApproveEditController.supDelegate eq 'Qc'}"/>
+                                        <h:inputHidden value="#{saleApproveEditController.supDelegate}"/>
+                                        <ui:remove>
+                                            <h:selectOneMenu id="supDelegate" 
+                                                             value="#{saleApproveEditController.supDelegate}"
+                                                             required="true" 
+                                                             requiredMessage="#{msg.require}"
+                                                             disabled="#{not saleApproveEditController.supEnable}">
+                                                <f:selectItem itemLabel="Please Select"/>
+                                                <f:selectItem itemLabel="Underwriter" itemValue="Uw"/>
+                                                <f:selectItem itemLabel="Payment Collector" itemValue="Payment"/>
+                                                <f:selectItem itemLabel="Quality Assurer" itemValue="Qc"/>
+                                                <rich:validator/>                                  
+                                            </h:selectOneMenu>
+                                            <rich:message for="supDelegate" style="color:red"/>
+                                        </ui:remove>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message : </td>
+                                    <td align="left">
+                                        <h:inputTextarea id="supMessage"
+                                                         value="#{saleApproveEditController.supMessage}"
+                                                         requiredMessage="#{msg.require}"
+                                                         cols="50" rows="5"/>
+                                        <rich:message for="supMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <a4j:commandButton image="/img/b_save.png" 
+                                                           actionListener="#{saleApproveEditController.saveSupActionListener}"
+                                                           render="listLog,supPanel"
+                                                           rendered="#{saleApproveEditController.supEnable}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </a4j:region>
+                </rich:tab>
+                <rich:tab id="confirmTab"
+                          name="confirm"
+                          title="Confirmation" 
+                          actionListener="#{saleApproveEditController.changeModeListener}"
+                          render="confirmPanel"
+                          immediate="true"
+                          rendered="#{saleApproveEditController.showConfirmStatus}">
+                    <f:param name="mode" value="confirm"/>
+                    <a4j:region id="confirmRegion">
+                        <h:panelGroup id="confirmPanel">
+                            <table border="0" cellpadding="3" cellspacing="0">
+                                <tr>
+                                    <td align="right" width="150"><b>Confirmation</b></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Confirm Call : </td>
+                                    <td align="left">
+                                        <h:selectBooleanCheckbox  value="#{saleApproveEditController.po.confirmFlag}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message : </td>
+                                    <td align="left">
+                                        <h:inputTextarea id="confirmMessage"
+                                                         value="#{saleApproveEditController.confirmMessage}"
+                                                         requiredMessage="#{msg.require}"
+                                                         cols="50" rows="5"/>
+                                        <rich:message for="supMessage" style="color: red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right"></td>
+                                    <td align="left">
+                                        <a4j:commandButton image="/img/b_save.png" 
+                                                           actionListener="#{saleApproveEditController.saveConfirmActionListener}"
+                                                           render="listLog,confirmPanel"
+                                                           rendered="#{saleApproveEditController.confirmEnable}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </a4j:region>
+                </rich:tab>
+            </rich:tabPanel>                
+        </rich:tab>                    
+    </rich:tabPanel>
+    <ui:include src="/share/waitpopup.xhtml"/>
+</ui:composition>

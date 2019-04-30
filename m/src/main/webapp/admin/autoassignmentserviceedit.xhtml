@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Auto Assignment Service: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{autoAssignmentServiceEditController.mode}"/>
+        <h:inputHidden value="#{autoAssignmentServiceEditController.autoAssignmentService.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+            <tr>
+                <td align="right" valign="top" width="200">&nbsp;</td>
+                <td valign="top"><h:outputText value="#{autoAssignmentServiceEditController.message}" style="color:red"/>&nbsp;</td>
+            </tr>
+            <tr>
+                <td width="200" align="right" valign="top" class="gray03">* Name:</td>
+                <td><h:inputText id="name" value="#{autoAssignmentServiceEditController.autoAssignmentService.name}" styleClass="textfield"
+                                 size="50" required="true" requiredMessage="Name is required" >
+                        <f:validateRequired/>                  
+                        <rich:validator />    
+                    </h:inputText>
+                    <rich:message for="name" style="color:red"/>
+                    <h:outputText value="#{autoAssignmentServiceEditController.messageDup}" style="color:red"/>
+                </td>
+            </tr>
+            <tr>
+                <td width="200" align="right" valign="top" class="gray03">Keyword:</td>
+                <td>
+                    <h:inputText id="keyword" value="#{autoAssignmentServiceEditController.autoAssignmentService.keyword}" styleClass="textfield" size="50" />
+                </td>
+            </tr>
+            <tr>
+            <td width="200" align="right" valign="top" class="gray03">Priority:</td>
+                <td>
+                    <h:selectOneRadio id="priorty" value="#{autoAssignmentServiceEditController.autoAssignmentService.priority}">
+                        <f:selectItem itemValue="1" itemLabel="Lowest" />
+                        <f:selectItem itemValue="2" itemLabel="Low" />
+                        <f:selectItem itemValue="3" itemLabel="Medium" />
+                        <f:selectItem itemValue="4" itemLabel="High" />
+                        <f:selectItem itemValue="5" itemLabel="Highest" />
+                    </h:selectOneRadio>
+                </td>
+            </tr>       
+            <tr>
+                <td align="right" valign="top" class="gray03">* User:</td>
+                <td valign="top">  
+                   <h:panelGroup>
+                       <rich:pickList id="agentsList" required="true" requiredMessage="User is required" 
+                                      listHeight="250px" listWidth="250px"
+                                      addText="" addAllText="" removeText="" removeAllText=""
+                                      switchByDblClick="true"
+                                      value="#{autoAssignmentServiceEditController.selectedAgent}">
+                           <f:selectItems value="#{autoAssignmentServiceEditController.agentList}"/>
+                           <f:validateRequired/>                  
+                           <rich:validator />  
+                        </rich:pickList>
+                       <rich:message for="agentsList" style="color:red"/>
+                   </h:panelGroup>
+                </td>
+            </tr>
+            <tr>
+                <td width="200" align="right" valign="top"></td>
+                <td>
+                    <h:selectBooleanCheckbox id="enable" value="#{autoAssignmentServiceEditController.autoAssignmentService.status}"/> Enable
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">&nbsp;</td><td valign="top"></td>
+            </tr>
+            <tr>
+                <td align="center" valign="top" colspan="2"><hr/></td>
+            </tr>
+        </table>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+             <tr>
+                <td align="right" valign="top" class="gray03" width="200">* Campaign Name: </td>
+                <td valign="top" colspan="2">
+                    <h:selectOneMenu id="campaignSelect" value="#{autoAssignmentServiceEditController.campaignId}" 
+                                     required="true" requiredMessage="Campaign is required" >
+                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                        <f:selectItems value="#{autoAssignmentServiceEditController.campaignList}"/>
+                        <f:validateRequired/>                  
+                        <rich:validator />  
+                    </h:selectOneMenu>
+                    <rich:message for="campaignSelect" style="color:red"/>
+                </td>
+              </tr>
+             <tr>
+                <td align="right" valign="top" class="gray03">* List Name: </td>
+                <td valign="top" align="left" width="200">
+                    <h:selectOneRadio id="autoCreate" layout="pageDirection" value="#{autoAssignmentServiceEditController.autoAssignmentService.autoCreate}">
+                        <f:selectItem itemValue="false" itemLabel="Predefined Marketing List" />
+                        <f:selectItem itemValue="true" itemLabel="Auto Create" />
+                        <a4j:ajax event="click" render="marketingSelect, autoCreatePanel" execute="@this" />
+                    </h:selectOneRadio>
+                </td>
+                <td valign="top" align="left"> 
+                    <h:selectOneMenu id="marketingSelect" value="#{autoAssignmentServiceEditController.marketingId}"
+                                     required="true" requiredMessage="Marketing is required"
+                                     disabled="#{autoAssignmentServiceEditController.autoAssignmentService.autoCreate}">
+                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                        <f:selectItems value="#{autoAssignmentServiceEditController.marketingList}"/>
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:selectOneMenu>
+                    <rich:message for="marketingSelect" style="color:red"/>
+                </td>
+              </tr>
+             <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top" colspan="2">
+                    <h:panelGroup id="autoCreatePanel">
+                        <h:panelGroup rendered="#{autoAssignmentServiceEditController.autoAssignmentService.autoCreate}">
+                          <table width="80%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                             <tr>
+                                <td bgcolor="#FFFFFF">
+                                    <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                    <tr>
+                                        <td class="gray03" width="5%"></td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" width="25%">
+                                            <h:selectOneRadio id="autocreateType" layout="pageDirection" 
+                                                              value="#{autoAssignmentServiceEditController.autoAssignmentService.autoCreateType}">
+                                                <f:selectItem itemValue="day" itemLabel="Every Day" />
+                                                <f:selectItem itemValue="month" itemLabel="Every Month" />
+                                            </h:selectOneRadio>
+                                        </td>
+                                        <td><font style="font-style: italic;color: red">Format:
+                                            <br/>Day: AYYYYMMDD&nbsp;&nbsp;&nbsp;&nbsp;Ex.A201505D01
+                                            <br/>Month: AYYYYMM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ex.A201505
+                                            </font>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" width="25%">* List Name Prefix: </td>
+                                        <td>
+                                            <h:inputText id="prefix" value="#{autoAssignmentServiceEditController.autoAssignmentService.autoMarketingPrefix}" 
+                                                         styleClass="textfield" size="10" required="true" requiredMessage="Prefix is required">
+                                                <f:validateRequired/>                  
+                                                <rich:validator />
+                                            </h:inputText>
+                                            <rich:message for="prefix" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" width="25%">* Effective Period (Day): </td>
+                                        <td>
+                                            <h:inputText id="effectivePeriod" value="#{autoAssignmentServiceEditController.autoAssignmentService.autoEffectivePeriod}" styleClass="textfield"
+                                                         size="10" maxlength="10" onkeypress="return isNumberKey(event);" validatorMessage="#{msg.numberRequire}" 
+                                                         required="true" requiredMessage="Effective Period is required" >
+                                                <f:validateDoubleRange minimum="1" maximum="90"/>
+                                                <f:validateRequired/>                  
+                                                <rich:validator />
+                                            </h:inputText>
+                                            <rich:message for="effectivePeriod" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" width="25%">* Marketing List Source: </td>
+                                        <td>
+                                            <h:selectOneMenu id="sponsorListSelect" value="#{autoAssignmentServiceEditController.sponsorId}" 
+                                                             required="true" requiredMessage="Marketing List Source is required">
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItems value="#{autoAssignmentServiceEditController.prospectSponsorList}"/>
+                                                <f:validateRequired/>                  
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            <rich:message for="sponsorListSelect" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="gray03" width="25%"></td>
+                                        <td></td>
+                                    </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </td>
+              </tr>
+            <tr>
+                <td align="center" valign="top" colspan="3"></td>
+              </tr>
+              <tr>
+                <td align="center" valign="top" colspan="3"><h:commandButton image="../img/b_save.png" action="#{autoAssignmentServiceEditController.saveAction}" rendered="#{autoAssignmentServiceEditController.savePermitted}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{autoAssignmentServiceEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

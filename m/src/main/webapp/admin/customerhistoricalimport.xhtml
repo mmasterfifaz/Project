@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:a4j="http://richfaces.org/a4j"
+    xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Customer Historical: Import</ui:define>
+            <ui:define name="head">
+                <style>
+                    <!--
+                    div.scroll {
+                        height: 500px;
+                        width: 1000px;
+                        overflow: auto;
+                        border: 0px solid #666;
+                        background-color: #fff;
+                        padding: 8px;
+                    } 
+                    -->
+                </style>
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{customerHistoricalImportController.customerHistoricalGroup.id}"/>
+                <!--Step1 -->
+                <a4j:region id="step1region">
+                    <h:panelGroup id="step1">
+                        <h:panelGroup rendered="#{customerHistoricalImportController.step eq 1}" >
+                            <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td width="200" class="gray03">&nbsp;</td>
+                                    <td><img src="../img/step01importFile.png" width="461" height="30"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">Data Group Name:</td>
+                                    <td valign="top">
+                                        <h:outputText value="#{customerHistoricalImportController.customerHistoricalGroup.name}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">* Filename:</td>
+                                    <td align="left">
+                                        <rich:fileUpload id="fileUpload" fileUploadListener="#{customerHistoricalImportController.listener}"
+                                                         ontyperejected="alert('Only xlsx and xls files are accepted');" 
+                                                         acceptedTypes="xlsx,xls"
+                                                         maxFilesQuantity="1" immediateUpload="true" 
+                                                         listHeight="63px">
+                                            <a4j:ajax event="clear" render="fileUpload,sheet,refCol,column" limitRender="true" 
+                                                      listener="#{customerHistoricalImportController.clearSheet}" execute="@this"/>
+                                            <a4j:ajax event="uploadcomplete" render="sheet" limitRender="true"/>
+                                        </rich:fileUpload>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">&nbsp;</td>
+                                    <td valign="top"><h:selectBooleanCheckbox id="enable"  value="#{customerHistoricalImportController.checkboxFirstRow}"> 
+                                                        <a4j:ajax event="click" listener="#{customerHistoricalImportController.changeSheet}"
+                                                                  limitRender="true" render="refCol,column" execute="@this"/>
+                                                     </h:selectBooleanCheckbox>First row has column name
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">* Sheet Name:</td>
+                                    <td valign="top">
+                                        <h:selectOneMenu id="sheet" value="#{customerHistoricalImportController.sheetId}" 
+                                                         required="true" requiredMessage="#{msg.require}">
+                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                            <f:selectItems value="#{customerHistoricalImportController.sheetList}"/>
+                                            <a4j:ajax event="change" listener="#{customerHistoricalImportController.changeSheet}" 
+                                                      render="refCol,column" limitRender="true" execute="@this"/>
+                                            <rich:validator/>
+                                        </h:selectOneMenu>  
+                                        <rich:message for="sheet" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">* Customer Reference No.:</td>
+                                    <td valign="top">
+                                        <h:selectOneMenu id="refCol" value="#{customerHistoricalImportController.columnId}" 
+                                                         required="true" requiredMessage="#{msg.require}">
+                                          <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                          <f:selectItems value="#{customerHistoricalImportController.columnList}"/>
+                                            <rich:validator/>
+                                        </h:selectOneMenu>
+                                        <rich:message for="refCol" style="color:red"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                    <td valign="top"><table width="39%" border="0" cellspacing="0" cellpadding="4">
+                                            <tr>
+                                                <td width="250px" class="blue04">Available Column</td>
+                                                <td>&nbsp;</td>
+                                                <td width="250px" class="blue04">Selected Highlight Column</td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3">
+                                                    <rich:pickList id="column"  switchByDblClick="true"
+                                                                   listWidth="250px" listHeight="250px"
+                                                                   addText="" addAllText="" removeText="" removeAllText=""
+                                                                   value="#{customerHistoricalImportController.selectedColumn}" 
+                                                                   required="true" requiredMessage="Selected Column is required">
+                                                        <f:selectItems value="#{customerHistoricalImportController.columnList}"/>
+                                                        <rich:validator/>
+                                                    </rich:pickList>
+                                                    <span style="padding-left:10px"/><rich:message for="column" style="color:red"/>
+                                                </td>
+                                            </tr>
+                                        </table></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <h:commandButton  image="../img/b_back.png"
+                                                          action="#{customerHistoricalImportController.backAction}"
+                                                          immediate="true">
+                                            <f:param name="id" value="#{customerHistoricalImportController.customerHistoricalGroup.id}"/>
+                                        </h:commandButton>
+                                        <a4j:commandButton  image="../img/b_next.png">
+                                            <a4j:ajax event="click"  limitRender="true" render="step1, step2, dataList" 
+                                                      listener="#{customerHistoricalImportController.step2Listener}" status="actionStatus"/>
+                                        </a4j:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </a4j:region>
+
+                
+                <!--Step2 -->
+                <a4j:region id="step2region">
+                    <h:panelGroup id="step2">
+                        <h:panelGroup rendered="#{customerHistoricalImportController.step eq 2}">
+                            <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td width="200" class="gray03">&nbsp;</td>
+                                    <td><img src="../img/step02importFile.png" width="461" height="30"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                  <tr>
+                                      <td valign="top" colspan="2"><div class="scroll"><table width="100%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                                            <tr>
+                                                <td bgcolor="#FFFFFF">
+                                                    <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                                    value="#{customerHistoricalImportController.dataList}" var="dataList">
+                                                         <f:facet name="header">
+                                                            <rich:columnGroup>
+                                                                <rich:column>
+                                                                    <pre><h:outputText value="#{customerHistoricalImportController.stringHeader}" /></pre>
+                                                                </rich:column>
+                                                            </rich:columnGroup>
+                                                        </f:facet>
+                                                        <rich:column>
+                                                            <pre><h:outputText value="#{dataList}" /></pre>
+                                                        </rich:column>
+                                                    </rich:dataTable>
+                                                </td>
+                                            </tr>
+                                        </table></div></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+
+                                <tr>
+                                    <td width="120"></td>
+                                    <td align="left">
+
+                                        <a4j:commandButton id="backbuttonstep2" image="../img/b_back.png"
+                                                           limitRender="true"
+                                                           render="step1, step2"
+                                                           actionListener="#{customerHistoricalImportController.step1Listener}" immediate="true"/>
+
+                                        <a4j:commandButton  image="../img/b_confirm.png"
+                                                            limitRender="true"
+                                                            render="step2, step3"
+                                                            status="actionStatus"
+                                                            actionListener="#{customerHistoricalImportController.step3Listener}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </a4j:region>
+                
+                <!--Step3-->
+                <a4j:region id="step3region">
+                    <h:panelGroup id="step3">
+                        <h:panelGroup rendered="#{customerHistoricalImportController.step eq 3}">
+                            <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td width="200" class="gray03">&nbsp;</td>
+                                    <td><img src="../img/step03importFile.png" width="461" height="30"/></td>
+                                </tr>
+                                <tr>
+                                    <td class="gray03">&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td class="blue04" align="left">Result</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <table  width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                            <tr>
+                                                <td align="right" valign="top" class="gray03">Total Records: </td>
+                                                <td width="500" valign="top"><h:outputText id="total" value="#{customerHistoricalImportController.total}"/> </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top" class="gray03">Import Success:</td>
+                                                <td valign="top"><h:outputText id="success" value="#{customerHistoricalImportController.success}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top" class="gray03">Customer Reference not match:</td>
+                                                <td valign="top"><h:outputText id="notMatch" value="#{customerHistoricalImportController.notMatch}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                                <td valign="top">&nbsp;</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                    <td valign="top">&nbsp;</td>
+                                </tr>
+                             
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                    <td valign="top">&nbsp;</td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top" class="gray03">&nbsp;</td>
+                                    <td align="left" valign="top"><table width="50%" border="0" cellspacing="0" cellpadding="5">
+                                            <tr>
+                                                <td align="center">
+                                                    <h:commandButton  image="../img/b_ok.png"
+                                                                      action="#{customerHistoricalImportController.backAction}"
+                                                                      immediate="true">
+                                                    </h:commandButton>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+                </a4j:region>
+
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

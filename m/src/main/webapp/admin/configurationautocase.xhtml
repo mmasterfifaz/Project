@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administrator</ui:define>
+            <ui:define name="title2">Configuration: Auto Generate Case</ui:define>
+
+            <ui:define name="panel">
+                 <style>
+                        .colStyle1 { width: 30%; text-align: right; vertical-align: top; }
+                        .colStyle2 { width: 70%;}
+                 </style>  
+                 <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td class="line01"><h4>Case Type Information</h4></td>
+                    </tr>
+                     <tr>
+                         <td>
+                             <h:panelGrid id="table" columns="2" width="80%" cellpadding="4" columnClasses="colStyle1, colStyle2">
+                                 <h:outputText value="* Case Type:"/>
+                                 <h:panelGroup>
+                                    <h:selectOneMenu id="caseType"
+                                                     value="#{configurationAutoCaseController.caseTypeId}"
+                                                     immediate="true"
+                                                     required="true"
+                                                     requiredMessage="#{msg.require}"
+                                                     valueChangeListener="#{configurationAutoCaseController.caseTypeListener}">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{configurationAutoCaseController.caseTypes}"/>
+                                        <a4j:ajax event="change" render="caseTopic, caseDetail, caseRequest"  execute="@this"/>
+                                        <rich:validator/>
+                                    </h:selectOneMenu>
+                                    <rich:message for="caseType" style="color:red"/>
+                                 </h:panelGroup>
+
+                                 <h:outputText value="* Case Topic:"/>
+                                 <h:panelGroup>
+                                      <h:selectOneMenu id="caseTopic"
+                                                         value="#{configurationAutoCaseController.caseTopicId}"
+                                                         immediate="true"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}"
+                                                         valueChangeListener="#{configurationAutoCaseController.caseTopicListener}">
+                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                            <f:selectItems value="#{configurationAutoCaseController.caseTopics}"/>
+                                            <a4j:ajax event="change" render="caseDetail, caseRequest"  execute="@this"/>
+                                            <rich:validator/>
+                                        </h:selectOneMenu>
+                                        <rich:message for="caseTopic" style="color:red"/>
+
+                                 </h:panelGroup>
+
+                                 <h:outputText value="* Case Detail:"/>
+                                 <h:panelGroup>
+                                     <h:selectOneMenu  id="caseDetail"
+                                                          value="#{configurationAutoCaseController.caseDetailId}"
+                                                          immediate="true"
+                                                          required="true"
+                                                          requiredMessage="#{msg.require}"
+                                                          valueChangeListener="#{configurationAutoCaseController.caseDetailListener}">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{configurationAutoCaseController.caseDetails}"/>
+                                        <a4j:ajax event="change" render="caseRequest"  execute="@this"/>
+                                        <rich:validator/>
+                                    </h:selectOneMenu>
+                                    <rich:message for="caseDetail" style="color:red"/>
+                                 </h:panelGroup>
+
+
+                                 <h:outputText value="* Reason of Request:"/> 
+                                 <h:panelGroup>
+                                     <h:selectOneMenu  id="caseRequest"
+                                                          value="#{configurationAutoCaseController.caseRequestId}"
+                                                          immediate="true"
+                                                          required="true"
+                                                          requiredMessage="#{msg.require}">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{configurationAutoCaseController.caseRequests}"/>
+                                        <rich:validator/>
+                                    </h:selectOneMenu>
+                                    <rich:message for="caseRequest" style="color:red"/>
+                                 </h:panelGroup>
+
+                             </h:panelGrid>
+                             
+                         </td> 
+                     </tr>
+                     <tr>
+                        <td class="line01"><h4>Service Type Information</h4></td>
+                    </tr>
+                     <tr>
+                         <td>
+                             <h:panelGrid id="table2" columns="2" width="80%" cellpadding="4" columnClasses="colStyle1, colStyle2">
+                                 <h:outputText value="* Service Type:"/>
+                                 <h:panelGroup>
+                                      <h:selectOneMenu id="serviceType"
+                                                         value="#{configurationAutoCaseController.serviceTypeId}"
+                                                         immediate="true"
+                                                         required="true"
+                                                         requiredMessage="#{msg.require}"
+                                                         valueChangeListener="#{configurationAutoCaseController.serviceTypeListener}">
+                                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                            <f:selectItems value="#{configurationAutoCaseController.serviceTypes}"/>
+                                            <a4j:ajax event="change" render="businessUnit, location"  execute="@this"/>
+                                            <rich:validator/>
+                                        </h:selectOneMenu>
+                                        <rich:message for="businessUnit" style="color:red"/>
+
+                                 </h:panelGroup>
+
+                                 <h:outputText value="* Business Unit:"/>
+                                 <h:panelGroup>
+                                     <h:selectOneMenu  id="businessUnit"
+                                                          value="#{configurationAutoCaseController.businessUnitId}"
+                                                          immediate="true"
+                                                          required="true"
+                                                          requiredMessage="#{msg.require}"
+                                                          valueChangeListener="#{configurationAutoCaseController.businessUnitListener}">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{configurationAutoCaseController.businessUnits}"/>
+                                        <a4j:ajax event="change" render="location"  execute="@this"/>
+                                        <rich:validator/>
+                                    </h:selectOneMenu>
+                                    <rich:message for="businessUnit" style="color:red"/>
+                                 </h:panelGroup>
+
+
+                                 <h:outputText value="* Location:"/> 
+                                 <h:panelGroup>
+                                     <h:selectOneMenu  id="location"
+                                                          value="#{configurationAutoCaseController.locationId}"
+                                                          immediate="true"
+                                                          required="true"
+                                                          requiredMessage="#{msg.require}">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{configurationAutoCaseController.locations}"/>
+                                        <rich:validator/>
+                                    </h:selectOneMenu>
+                                    <rich:message for="location" style="color:red"/>
+                                 </h:panelGroup>
+
+
+                             </h:panelGrid>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td align="center"> 
+                             <h:commandButton image="../img/b_save.png" action="#{configurationAutoCaseController.saveAction}" rendered="#{configurationAutoCaseController.savePermitted}"/>
+                             <h:commandButton image="../img/b_back.png" action="#{configurationAutoCaseController.backAction}" immediate="true"/>
+                         </td>        
+                     </tr>
+                 </table>
+                
+                
+                
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

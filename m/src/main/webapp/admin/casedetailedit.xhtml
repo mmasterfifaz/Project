@@ -1,0 +1,197 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Case Detail: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{caseDetailEditController.mode}"/>
+                <h:inputHidden value="#{caseDetailEditController.caseDetail.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{caseDetailEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Case Type:</td>
+                        <td>
+                            <h:selectOneMenu id="caseType" value="#{caseDetailEditController.caseTypeId}"
+                                             immediate="true"
+                                             valueChangeListener="#{caseDetailEditController.caseTypeListener}" 
+                                             required="true" requiredMessage="Case Type is required">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{caseDetailEditController.caseTypes}"/>
+                                <a4j:ajax event="change" render="caseTopic"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="caseType" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Case Topic:</td>
+                        <td><h:selectOneMenu  id="caseTopic"
+                                              value="#{caseDetailEditController.caseTopicId}"
+                                              required="true"
+                                              requiredMessage="Case Topic is required">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{caseDetailEditController.caseTopics}"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="caseTopic" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Code:</td>
+                        <td><h:inputText id="code" value="#{caseDetailEditController.caseDetail.code}" styleClass="textfield" size="10" required="true" maxlength="10"
+                                         requiredMessage="Code is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{caseDetailEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Name:</td>
+                        <td valign="top"><h:inputText id="name" value="#{caseDetailEditController.caseDetail.name}" styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* SLA Close Case (Hours):</td>
+                        <td valign="top"><h:panelGrid columns="3">
+                                <h:outputText value="Low Priority:"/>
+                                <h:inputText id="slacloselow" value="#{caseDetailEditController.caseDetail.slaClosecaseLow}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                 <f:validateRequired/>                  
+                                 <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slacloselow" style="color:red"/>
+
+                                <h:outputText value="Medium Priority:"/>
+                                <h:inputText id="slaclosemedium" value="#{caseDetailEditController.caseDetail.slaClosecaseMedium}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slaclosemedium" style="color:red"/>
+
+                                <h:outputText value="High Priority:"/>
+                                <h:inputText id="slaclosehigh" value="#{caseDetailEditController.caseDetail.slaClosecaseHigh}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slaclosehigh" style="color:red"/>
+
+                                <h:outputText value="Immediate Priority:"/>
+                                <h:inputText id="slacloseimmediate" value="#{caseDetailEditController.caseDetail.slaClosecaseImmediate}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slacloseimmediate" style="color:red"/>
+                            </h:panelGrid>
+                        </td>
+                    </tr>
+                  <tr>
+                        <td align="right" valign="top">* SLA Accept Case (Hours):</td>
+                        <td valign="top"><h:panelGrid columns="3">
+                                <h:outputText value="Low Priority:"/>
+                                <h:inputText id="slaacceptlow" value="#{caseDetailEditController.caseDetail.slaAcceptcaseLow}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slaacceptlow" style="color:red"/>
+
+                                <h:outputText value="Medium Priority:"/>
+                                <h:inputText id="slaacceptemedium" value="#{caseDetailEditController.caseDetail.slaAcceptcaseMedium}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slaacceptemedium" style="color:red"/>
+
+                                <h:outputText value="High Priority:"/>
+                                <h:inputText id="slaaccepthigh" value="#{caseDetailEditController.caseDetail.slaAcceptcaseHigh}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slaaccepthigh" style="color:red"/>
+
+                                <h:outputText value="Immediate Priority:"/>
+                                <h:inputText id="slaacceptimmediate" value="#{caseDetailEditController.caseDetail.slaAcceptcaseImmediate}" styleClass="textfield" size="5" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber minIntegerDigits="1" maxFractionDigits="2"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="slaacceptimmediate" style="color:red"/>
+                            </h:panelGrid>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Default Priority:</td>
+                        <td valign="top"><h:selectOneMenu id="defaultprioirty" value="#{caseDetailEditController.caseDetail.defaultPriority}" required="true" requiredMessage="#{msg.require}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItem itemLabel="#{msg.low}" itemValue="#{msg.lowValue}"/>
+                                <f:selectItem itemLabel="#{msg.medium}" itemValue="#{msg.mediumValue}"/>
+                                <f:selectItem itemLabel="#{msg.high}" itemValue="#{msg.highValue}"/>
+                                <f:selectItem itemLabel="#{msg.immediate}" itemValue="#{msg.immediateValue}"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="defaultprioirty" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><hr /></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Default Task Delegate User:</td>
+                        <td valign="top"><h:selectOneMenu id="toUser" value="#{caseDetailEditController.toUserId}" valueChangeListener="#{caseDetailEditController.toUserListener}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{caseDetailEditController.usersList}"/>
+                                <a4j:ajax event="change" render="toUserEmail, toUserTelephone"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Email:</td>
+                        <td valign="top"><h:inputText id="toUserEmail" styleClass="textfield" value="#{caseDetailEditController.caseDetail.toUserEmail}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Telephone:</td>
+                        <td valign="top"><h:inputText id="toUserTelephone" styleClass="textfield" value="#{caseDetailEditController.caseDetail.toUserTelephone}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{caseDetailEditController.caseDetail.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <a4j:commandButton image="../img/b_save.png" action="#{caseDetailEditController.saveAction}" rendered="#{caseDetailEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{caseDetailEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

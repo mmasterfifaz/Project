@@ -1,0 +1,36 @@
+<ui:composition template="../templates/customerHandling.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="javascript"><script src="#{request.contextPath}/resources/js/front/customerHandling/customerEdit.js" type="text/javascript"/></ui:define>
+    <ui:define name="title2">#{msg.createCustomer}</ui:define>
+    <ui:define name="body">
+        <div id="customer_info">
+            <div class="customer_info_header line01">
+                <h4>#{msg.customerInformation}</h4>
+            </div>
+            <div class="customer_info_left">
+                <dl>
+                    <dd>
+                        #{msg.name}
+                    </dd>
+                    <dt>
+                        <rich:inplaceInput id="name" defaultLabel="#{msg.clickEnterDetail}" required="true" requiredMessage="#{msg.name}"
+                                           value="#{customerEditController.customer.name}">
+
+                        </rich:inplaceInput>
+                        <h:message for="name" style="color:red"/>
+                    </dt>
+                </dl>
+            </div>
+         </div>
+        <div id="command">
+            <h:commandButton image="#{request.contextPath}/resources/img/b_save.png" action="#{customerEditController.saveAction}"/>
+            <h:commandButton image="#{request.contextPath}/resources/img/b_back.png" action="#{customerEditController.testAction}"/>
+        </div>
+        <div id="naviage_hide">#{msg.customerHandling} / #{msg.createCustomer}</div>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="/templates/blank.xhtml">
+    <ui:define name="title2">OOPS! 500:Internal Server Error</ui:define>
+    <ui:define name="javascript">
+        <style>
+            .hidden { visibility: hidden; }
+            .unhidden { visibility: visible; }
+         </style>
+         <script type="text/javascript">
+            function unhide(divID) {
+                var item = document.getElementById(divID);
+                if (item) {
+                    item.className=(item.className=='hidden')?'unhidden':'hidden';
+                }
+            }
+        </script>
+    </ui:define>
+    <ui:define name="panel">
+        <p><h1>OOPS! <span style="color:red">Internal Server Error</span></h1></p>
+        <div>The server encountered an internal error or misconfiguration and was unable to complete your request.</div>
+        <div align="center" style="border:1px dotted; border-color: grey; background-color: lightgray">
+            <p>Message: <span style="color:orangered">#{error500.message}</span></p>
+        </div>
+        
+        <p><a href="javascript:unhide('trace')">More Detail</a> or <a href="#{request.contextPath}/login/main.jsf">Back to main page</a></p>
+        <div id="trace" class="hidden">
+            <h:inputTextarea cols="150" rows="30" value="#{error500.stackTrace}"/>
+        </div>  
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

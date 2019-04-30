@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Select Case</ui:define>
+    <ui:param name="modalId" value="selectCase"/>
+    <ui:param name="width" value="900"/>
+    <ui:define name="popupDetail">
+        <h:form id="fSelectCase">
+        <h:panelGrid columns="4">
+            <h:outputText value="#{msg.caseID}"/>
+            <h:inputText styleClass="textfield" value="#{popupSelectCase.caseId}"/>
+            <h:outputText value="#{msg.contactDateSearch}"/>
+            <h:panelGroup>
+                <rich:calendar value="#{popupSelectCase.contactDateFrom}"
+                               locale="#{msg.locale}"
+                               popup="true"
+                               inputClass="textfield" buttonClass="rfcalbtn"
+                               datePattern="#{msg.datePattern}" inputSize="10"/>
+                <h:outputText value="#{msg.to}"/>
+                <rich:calendar value="#{popupSelectCase.contactDateTo}"
+                               locale="#{msg.locale}"
+                               popup="true"
+                               inputClass="textfield" buttonClass="rfcalbtn"
+                               datePattern="#{msg.datePattern}" inputSize="10"/>
+            </h:panelGroup>
+            <h:outputText value=""/>
+            <a4j:commandButton image="../../resources/img/bb_search.png"
+                               render="caseList"
+                               limitRender="true"
+                               actionListener="#{popupSelectCase.searchRelatedCaseAction}">
+                <f:param name="customerId" value="#{p.customerInfoValue.id}"/>
+            </a4j:commandButton>
+        </h:panelGrid>
+        
+        <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td bgcolor="#E0DED2" width="50%" style="padding-left: 4px"><h4>Case Information</h4></td>
+                    <td bgcolor="#E0DED2" width="50%" style="padding-left: 4px"><h4>Related Activity </h4></td>
+                </tr>
+            </table>
+            <rich:dataTable id="caseList" 
+                            value="#{popupSelectCase.searchCasePopupValues}"
+                            styleClass="tableline01 tb_contact_case_detail" 
+                            var="list"
+                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                            onrowmouseout="this.style.backgroundColor='#F8F8F8'"
+                            style="width: 100%" headerClass="subh01"
+                            rows="5">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column style="width: 8%;text-align: left;"><h:outputText value="#{msg.channelTitle}" /></rich:column>
+                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="#{msg.caseTypeTitle}" /></rich:column>
+                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="#{msg.contactDateTitle}" /></rich:column>
+                        <rich:column style="width: 7%;text-align: left;"><h:outputText value="#{msg.statusTitle}"/></rich:column>
+                        <rich:column style="width: 15%;text-align: left;"><h:outputText value=""/>#{msg.referenceNo}</rich:column>
+                        <rich:column style="width: 15%;text-align: left;"><h:outputText value="#{msg.activityTypeTitle}" /></rich:column>
+                        <rich:column style="width: 25%;text-align: left;"><h:outputText value="#{msg.activityDetailTitle}" /></rich:column>
+                         <!--   <rich:column style="width: 10%;text-align: left;"><h:outputText value="#{msg.channelTitle}"/></rich:column>-->
+                    </rich:columnGroup>
+                </f:facet>
+                <rich:column style="vertical-align: top">
+                    <h:graphicImage library="icon" name="callcenter.png" style="display: inline"/>
+                    <h:graphicImage library="icon" name="outbound.png" style="display: inline" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Outbound'}" />
+                    <h:graphicImage library="icon" name="inbound.png" style="display: inline" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Inbound'}" />
+                    <h:graphicImage library="img" name="channel_phone.png" style="display: inline" title="#{list.channelType}" alt="#{list.channel}" rendered="#{list.channel == 'Phone Call'}" />
+                    <h:graphicImage library="img" name="channel_fax.png" style="display: inline" title="#{list.channelType}" alt="#{list.channel}" rendered="#{list.channel == 'Fax'}" />
+                    <h:graphicImage library="img" name="channel_mail.png" style="display: inline" title="#{list.channelType}" alt="#{list.channel}" rendered="#{list.channel == 'Email'}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.caseType}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.contactDate}" >
+                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.status}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+<!--                    <h:panelGroup rendered="#{frontMenuController.caseViewPermitted and list.viewLocation}">-->
+                    <a4j:commandLink title="View Detail"
+                                     value="#{list.code}"
+                                     render="casePanel"
+                                     limitRender="true" immediate="true"
+                                     onclick="#{rich:component('selectCase')}.hide();"
+                                     actionListener="#{p.selectCaseListener}">
+                        <f:param name="relatedCaseId" value="#{list.id}"/>
+                        <f:param name="relatedCaseName" value="#{list.code}"/>
+                    </a4j:commandLink>
+<!--                    </h:panelGroup>-->
+<!--                    <h:panelGroup rendered="#{not frontMenuController.caseViewPermitted or not list.viewLocation}">
+                        <h:outputText value="#{list.code}"/>
+                    </h:panelGroup>-->
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.activityTypeName}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="-" rendered="#{list.activityDescription == ''}" />
+                    <h:outputText value="#{list.activityDescription}" />
+                </rich:column>
+                <!--                <rich:column>
+                                    <h:outputText value="#{list.activityStatus}" />
+                                </rich:column>-->
+<!--                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.channelName}" />
+                </rich:column>-->
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" id="sc2"
+                                   for="caseList"
+                                   maxPages="#{global.maxpages}" />
+                </f:facet>
+            </rich:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

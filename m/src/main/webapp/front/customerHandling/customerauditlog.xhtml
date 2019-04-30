@@ -1,0 +1,137 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="23"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/customerHandling/customerDetail.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.auditLog}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+    <ui:define name="detail_1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.auditLog}</h2></td>
+                            <td valign="bottom" height="48"></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#e4e4d6">
+                        <tr>
+                            <td width="50%" align="center" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px">
+                <tr>
+                    <td height="12"></td>
+                </tr>
+                <tr>
+                    <td align="left"><h4>Information</h4></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td align="right">From Date: </td>
+                    <td align="left"><rich:calendar value="#{customerAuditLogController.auditDateFrom}"
+                                                                    locale="#{msg.locale}"
+                                                                    popup="true"
+                                                                    inputClass="textfield" buttonClass="rfcalbtn"
+                                                                    datePattern="#{msg.datePattern}" inputSize="10"/>
+                                    To: 
+                                    <rich:calendar value="#{customerAuditLogController.auditDateTo}"
+                                                   locale="#{msg.locale}"
+                                                   popup="true"
+                                                   inputClass="textfield" buttonClass="rfcalbtn"
+                                                   datePattern="#{msg.datePattern}" inputSize="10"/>
+                            </td>
+                            <td align="right">User Name: </td>
+                            <td align="left"><h:inputText styleClass="textfield01" value="#{customerAuditLogController.userName}"/></td>
+        </tr>
+        <tr>
+            <td align="right">Category: </td>
+            <td align="left"> 
+                <h:selectOneMenu value="#{customerAuditLogController.category}" styleClass="select01">
+                <f:selectItem itemLabel="#{msg.all}"/>
+                <f:selectItem itemValue="access" itemLabel="Access"/>
+                <f:selectItem itemValue="audit" itemLabel="Audit"/>
+            </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right" colspan="2">
+                <a4j:commandButton image="/resources/img/bb_search.png" style="margin-top: 5px; margin-bottom: 5px" 
+                                   action="#{customerAuditLogController.searchAudit}" render="data"/></td>
+        </tr>
+        </table></td>
+        <td width="10" valign="top" style="border-left: 1px dotted #cbcbc3;"></td>
+        <td width="50%" align="center" valign="top"></td>
+        </tr>
+        </table>      
+        
+            <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01" 
+                            value="#{customerAuditLogController.list}" rows="#{global.maxrows}" var="list">
+                <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="Date" /></rich:column>
+                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="User Name"/></rich:column>
+                    <rich:column style="width: 10%;text-align: left;"><h:outputText value="Category"/></rich:column>
+                    <rich:column style="width: 20%;text-align: left;"><h:outputText value="Message"/></rich:column>
+                    <rich:column style="width: 25%;text-align: left;"><h:outputText value="URL"/></rich:column>
+                    <rich:column style="width: 15%;text-align: left;"><h:outputText value="IP"/></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+
+            <rich:column>
+                <h:outputText value="#{list.createDate}">
+                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.createBy}">
+                </h:outputText>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.category}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.message}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.url}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.remoteAddr}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+            </f:facet>
+        </rich:dataTable>
+            </td>
+            <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+        </tr>
+        </table>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+            <td background="#{request.contextPath}/img/box07.png"></td>
+            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+        </tr>
+    </table>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,116 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">#{msg.auditLog}</ui:define>
+            <ui:define name="panel"> 
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#e4e4d6">
+                        <tr>
+                            <td width="50%" align="center" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px">
+                <tr>
+                    <td height="12"></td>
+                </tr>
+                <tr>
+                    <td align="left"><h4>Information</h4></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td align="right">From Date: </td>
+                    <td align="left"><rich:calendar value="#{auditLogController.auditDateFrom}"
+                                                                    locale="#{msg.locale}"
+                                                                    popup="true"
+                                                                    inputClass="textfield"  buttonClass="rfcalbtn"
+                                                                    datePattern="#{msg.datePattern}" inputSize="10"/>
+                                    To: 
+                                    <rich:calendar value="#{auditLogController.auditDateTo}"
+                                                   locale="#{msg.locale}"
+                                                   popup="true"
+                                                   inputClass="textfield"  buttonClass="rfcalbtn"
+                                                   datePattern="#{msg.datePattern}" inputSize="10"/>
+                            </td>
+                            <td align="right">User Name: </td>
+                            <td align="left"><h:inputText styleClass="textfield01" value="#{auditLogController.userName}"/></td>
+        </tr>
+        <tr>
+            <td align="right">Category: </td>
+            <td align="left"> 
+                <h:selectOneMenu value="#{auditLogController.category}" styleClass="select01">
+                <f:selectItem itemLabel="#{msg.all}"/>
+                <f:selectItem itemValue="access" itemLabel="Access"/>
+                <f:selectItem itemValue="audit" itemLabel="Audit"/>
+            </h:selectOneMenu></td>
+            <td align="right">Customer Name: </td>
+            <td align="left"><h:inputText styleClass="textfield01" value="#{auditLogController.customerName}"/></td>
+        </tr>
+        <tr>
+            <td align="right" colspan="2">
+                <a4j:commandButton image="/resources/img/bb_search.png" style="margin-top: 5px; margin-bottom: 5px" 
+                                 action="#{auditLogController.searchAudit}"
+                                 render="data"/></td>
+        </tr>
+        </table></td>
+        <td width="10" valign="top" style="border-left: 1px dotted #cbcbc3;"></td>
+        <td width="50%" align="center" valign="top"></td>
+        </tr>
+        </table>      
+        
+            <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                            value="#{auditLogController.list}" rows="#{global.maxrows}" var="list">
+                <f:facet name="header">
+                <rich:columnGroup>
+                    <rich:column style="text-align: left;"><h:outputText value="Date" /></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="User Name"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="Category"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="Message"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="Customer Name"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="URL"/></rich:column>
+                    <rich:column style="text-align: left;"><h:outputText value="IP"/></rich:column>
+                </rich:columnGroup>
+            </f:facet>
+
+            <rich:column>
+                <h:outputText value="#{list.createDate}">
+                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                </h:outputText>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.createBy}">
+                </h:outputText>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.category}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.message}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.customerName}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.url}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.remoteAddr}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+            </f:facet>
+        </rich:dataTable>
+        
+                </td>
+        </tr>
+        </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

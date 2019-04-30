@@ -1,0 +1,81 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Select Email</ui:define>
+    <ui:param name="modalId" value="selectAddress"/>
+    <ui:param name="width" value="700"/>
+    <ui:param name="height" value="800"/>
+    <ui:define name="popupDetail">
+        <h:form id="f2">
+            <table>
+                <tr>
+                    <td>Category:</td>
+                    <td><h:selectOneMenu id="phoneCat" value="#{popupSelectAddress.phoneCategoryId}">
+                            <f:selectItem itemLabel="All" itemValue="0"/>
+                            <f:selectItems value="#{popupSelectAddress.phoneCategoryList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                        </h:selectOneMenu></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Keyword:</td>
+                    <td><h:inputText id="txtSearch" styleClass="textfield" value="#{popupSelectAddress.keyword}"/></td>
+                    <td><a4j:commandButton image="/resources/img/bb_search.png" render="userList" limitRender="true" 
+                           actionListener="#{popupSelectAddress.popupSearchAction}" style="vertical-align: baseline"/></td>
+                </tr>
+            </table>
+            <div class="scrollEmail">
+            <rich:dataTable id="userList" style="width: 97%" styleClass="tableline01" headerClass="subh01" 
+                            value="#{popupSelectAddress.emailList}" var="list"
+                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                            onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column style="text-align: left;width: 5%;">
+                            <input type="checkbox" name="allbox" onclick="checkAllEmail(this);" />
+                        </rich:column>
+                        <rich:column style="text-align: left;"><h:outputText value="Name" /></rich:column>
+                        <rich:column style="text-align: left;"><h:outputText value="Surname"/></rich:column>
+                        <rich:column style="text-align: left;"><h:outputText value="Email"/></rich:column>
+                        <rich:column style="text-align: left;"><h:outputText value="Category"/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column >
+                    <input type="checkbox" id="chk" name="chk" value="#{list.email}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.name}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.surname}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.email}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.phoneDirectoryCategory.name}"/>
+                </rich:column>
+            </rich:dataTable>
+            </div>
+            <a4j:jsFunction name="setSelectedEmails" render="pTo,pCc,pBcc">
+                <a4j:param name="param1" assignTo="#{m.selectedEmailString}"/>
+            </a4j:jsFunction>
+            <table width="100%" style="text-align: center" ><tr><td>
+            <a4j:commandButton image="/img/b_add02.png" limitRender="true" execute="@this"
+                               onclick="getSelectedEmail();"
+                               render="pTo,pCc,pBcc"
+                               actionListener="#{m.selectUserActionListener}"
+                               style="padding-left: 5px; padding-right: 5px"
+                               oncomplete="#{rich:component('selectAddress')}.hide(); return false;"/>
+            <a4j:commandButton image="/img/b_close.png" limitRender="true" execute="@this"
+                               onclick="#{rich:component('selectAddress')}.hide(); return false;"/>
+            </td></tr></table>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminmain.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Auto Assignment Service</ui:define>
+    <ui:define name="button">
+        <h:commandButton image="../img/b_add.png" action="#{autoAssignmentServiceController.editAction}" rendered="#{autoAssignmentServiceController.addPermitted}"/>
+        <h:commandButton image="../img/b_delete.png" action="#{autoAssignmentServiceController.deleteAction}" rendered="#{autoAssignmentServiceController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+    </ui:define>
+    <ui:define name="panel">
+        <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                        value="#{autoAssignmentServiceController.autoAssignmentServices}" rows="#{global.maxrows}" var="list"
+                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                        onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+           <f:facet name="header">
+               <rich:columnGroup>
+                   <rich:column style="text-align: left;width: 3%;">&nbsp;</rich:column>
+                   <rich:column style="text-align: left;width: 20%;"><h:outputText value="Service Name" /></rich:column>
+                   <rich:column style="text-align: left;width: 10%;"><h:outputText value="Priority"/></rich:column>
+                   <rich:column style="text-align: left;width: 25%;"><h:outputText value="Campaign Name"/></rich:column>
+                   <rich:column style="text-align: left;width: 32%;"><h:outputText value="Marketing List"/></rich:column>
+                   <rich:column style="text-align: left;width: 10%;"><h:outputText value="Status"/></rich:column>
+               </rich:columnGroup>
+           </f:facet>
+
+            <rich:column >
+             <h:selectBooleanCheckbox value="#{autoAssignmentServiceController.selectedIds[list.id]}"/>
+            </rich:column>
+            <rich:column>
+                <h:commandLink title="View Detail" value="#{list.name}" action="#{autoAssignmentServiceController.editAction}">
+                    <f:param name="id" value="#{list.id}"/>
+                 </h:commandLink>
+             </rich:column>
+            <rich:column>
+                <h:outputText rendered="#{list.priority eq 1}" value="Lowest"/>
+                <h:outputText rendered="#{list.priority eq 2}" value="Low"/>
+                <h:outputText rendered="#{list.priority eq 3}" value="Medium"/>
+                <h:outputText rendered="#{list.priority eq 4}" value="High"/>
+                <h:outputText rendered="#{list.priority eq 5}" value="Highest"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText value="#{list.campaign.name}"/>
+            </rich:column>
+            <rich:column>
+                <h:outputText rendered="#{not list.autoCreate}" value="Predefined: #{list.predefinedMarketing.name}"/>
+                <h:outputText rendered="#{list.autoCreate and list.autoMarketingName ne null}" value="Auto Create: #{list.autoMarketingName}"/>
+                <h:outputText rendered="#{list.autoCreate and list.autoMarketingName eq null}" value="Auto Create: -"/>
+            </rich:column>
+             <rich:column>
+                 <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+            </f:facet>
+        </rich:dataTable>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

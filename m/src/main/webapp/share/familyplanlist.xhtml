@@ -1,0 +1,284 @@
+<ui:composition template="../templates/popupeditblank.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:param name="modalId" value="myScriptPopup"/>
+
+    <ui:define name="search1">
+        <h2><h:outputText value="Family Plan List"/></h2>
+    </ui:define>
+
+    <ui:define name="leftcontent"></ui:define>
+    <ui:define name="content">
+
+        <h:panelGroup id="familyPlanField">
+            <table width="99%" border="0" cellpadding="0" cellspacing="0" bgcolor="#dedfe0" style="margin: auto;">
+                <tr>
+                    <td bgcolor="#FFFFFF"><br/>
+                        <table  border="0" align="center" cellpadding="4" cellspacing="0" style="margin: auto; ">
+                            <tr>
+                                <td>
+                                    <h:outputText value="Number of Insure" style="color: #009999; font-weight: bold; text-align: right;"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 215px" value="#{familyPlanListController.insurePersonID}">
+                                        <f:selectItems value="#{familyPlanListController.numberOfInsure}" actionListener="#{familyPlanListController.numberChangeListener}"/>
+                                        <a4j:ajax event="change" render="familyPlanField"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Plan" style="color: #009999; font-weight: bold;"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu id="test1" style="width: 215px" value="#{familyPlanListController.productPlanId}" >
+                                        <f:selectItem  itemLabel="Please Select Product Plan"/>
+                                        <f:selectItems value="#{familyPlanListController.productPlanList}"  
+                                                       var="list"
+                                                       itemLabel="#{list.name}"
+                                                       itemValue="#{list.id}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <h:outputText value=" #{familyPlanListController.messageDup}" style="color: red "/>
+                                </td>
+                            </tr>
+
+                            <!--Insure Person-->
+                            <tr>
+                                <td>
+                                    <h:outputText value="Insure Person 1" style="color: #009999; font-weight: bold; text-align: right;" rendered="#{familyPlanListController.insurePersonID >= 2}"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 105px;" value="#{familyPlanListController.gender1}" rendered="#{familyPlanListController.insurePersonID >= 2}">
+                                        <f:selectItem itemValue="Male" itemLabel="Male"/>
+                                        <f:selectItem itemValue="Female" itemLabel="Female"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <span></span>
+                                    <h:selectOneMenu style="width: 105px;" value="#{familyPlanListController.age1}" rendered="#{familyPlanListController.insurePersonID >= 2}">
+                                        <f:selectItems value="#{familyPlanListController.ageInsure}" var="listAge"
+                                                       itemLabel="#{listAge}"
+                                                       itemValue="#{listAge}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:outputText value="Insure Person 2" style="color: #009999; font-weight: bold; text-align: right;" rendered="#{familyPlanListController.insurePersonID >= 2}"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.gender2}" rendered="#{familyPlanListController.insurePersonID >= 2}">
+                                        <f:selectItem itemValue="Male" itemLabel="Male"/>
+                                        <f:selectItem itemValue="Female" itemLabel="Female"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <span></span>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.age2}" rendered="#{familyPlanListController.insurePersonID >= 2}">
+                                        <f:selectItems value="#{familyPlanListController.ageInsure}" var="listAge"
+                                                       itemLabel="#{listAge}"
+                                                       itemValue="#{listAge}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <h:outputText value="Insure Person 3" style="color: #009999; font-weight: bold; text-align: right;" rendered="#{familyPlanListController.insurePersonID >= 3}"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.gender3}" rendered="#{familyPlanListController.insurePersonID >= 3}">
+                                        <f:selectItem itemValue="Male" itemLabel="Male"/>
+                                        <f:selectItem itemValue="Female" itemLabel="Female"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <span></span>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.age3}" rendered="#{familyPlanListController.insurePersonID >= 3}">
+                                        <f:selectItems value="#{familyPlanListController.ageInsure}" var="listAge"
+                                                       itemLabel="#{listAge}"
+                                                       itemValue="#{listAge}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <h:outputText value="Insure Person 4" style="color: #009999; font-weight: bold; text-align: right;" rendered="#{familyPlanListController.insurePersonID >= 4}"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.gender4}" rendered="#{familyPlanListController.insurePersonID >= 4}">
+                                        <f:selectItem itemValue="Male" itemLabel="Male"/>
+                                        <f:selectItem itemValue="Female" itemLabel="Female"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <span></span>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.age4}" rendered="#{familyPlanListController.insurePersonID >= 4}">
+                                        <f:selectItems value="#{familyPlanListController.ageInsure}" var="listAge"
+                                                       itemLabel="#{listAge}"
+                                                       itemValue="#{listAge}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <h:outputText value="Insure Person 5" style="color: #009999; font-weight: bold; text-align: right;" rendered="#{familyPlanListController.insurePersonID >= 5}"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.gender5}" rendered="#{familyPlanListController.insurePersonID >= 5}">
+                                        <f:selectItem itemValue="Male" itemLabel="Male"/>
+                                        <f:selectItem itemValue="Female" itemLabel="Female"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <span></span>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.age5}" rendered="#{familyPlanListController.insurePersonID >= 5}">
+                                        <f:selectItems value="#{familyPlanListController.ageInsure}" var="listAge"
+                                                       itemLabel="#{listAge}"
+                                                       itemValue="#{listAge}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <h:outputText value="Insure Person 6" style="color: #009999; font-weight: bold; text-align: right;" rendered="#{familyPlanListController.insurePersonID >= 6}"/>
+                                </td>
+                                <td>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.gender6}" rendered="#{familyPlanListController.insurePersonID >= 6}">
+                                        <f:selectItem itemValue="Male" itemLabel="Male"/>
+                                        <f:selectItem itemValue="Female" itemLabel="Female"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                    <span></span>
+                                    <h:selectOneMenu style="width: 105px" value="#{familyPlanListController.age6}" rendered="#{familyPlanListController.insurePersonID >= 6}">
+                                        <f:selectItems value="#{familyPlanListController.ageInsure}" var="listAge"
+                                                       itemLabel="#{listAge}"
+                                                       itemValue="#{listAge}"/>
+                                        <a4j:ajax execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td>
+                                    <a4j:commandButton image="/img/b_calcuate02.png" 
+                                                       actionListener="#{familyPlanListController.calculate}" 
+                                                       render="calculate,familyPlanField,message"
+                                                       limitRender="true"
+                                                       execute="@this"/>
+
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </h:panelGroup>
+        <!--Insure Person Table-->
+        <h:panelGroup id="calculate">
+            <h:panelGroup rendered="#{familyPlanListController.showTableAgeInsurePerson}">
+                <table width="80%" cellpadding="0" cellspacing="0" bgcolor="#dedfe0" style="margin: auto;" >
+                    <tr>
+                        <td bgcolor="#FFFFFF" style="padding-left: 160px;">
+                            <h:panelGroup id="message">
+                                <h:outputText value=" #{familyPlanListController.message}" style="color: red "/>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#FFFFFF">
+                            <br/>
+                            <table width="75%" border="1" align="center" cellpadding="1" cellspacing="0" style="border-color: #e0e0e0;">
+                                <tr style="text-align: center">
+                                    <td style="width: 25%;" height="30px">
+                                        <h:outputText value="Insure Person" style="color: #009999; font-weight: bold;"/>
+                                    </td>
+                                    <td style="width: 25%;" height="30px">
+                                        <h:outputText value="Premium" style="color: #009999; font-weight: bold"/>
+                                    </td>
+                                    <td style="width: 25%" height="30px">
+                                        <h:outputText value="Premium(Discount)" style="color: #009999; font-weight: bold"/>
+                                    </td>
+                                    <td style="width: 25%" height="30px">
+                                        <h:outputText value="Discount" style="color: #009999; font-weight: bold"/>
+                                    </td>
+                                </tr>
+                                <h:panelGroup rendered="#{familyPlanListController.insurePersonID >= 2}">
+                                    <tr>
+                                        <td height="30px" style="padding-left: 15px;">1.#{familyPlanListController.gender1}(#{familyPlanListController.age1})</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumMain1 ne 0? familyPlanListController.netPremiumMain1:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumChild1 ne 0? familyPlanListController.netPremiumChild1:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.total1 ne 0? familyPlanListController.total1:'-'}</td>
+                                    </tr>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{familyPlanListController.insurePersonID >= 2}">
+                                    <tr>
+                                        <td height="30px" style="padding-left: 15px;">2.#{familyPlanListController.gender2}(#{familyPlanListController.age2})</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumMain2 ne 0? familyPlanListController.netPremiumMain2:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumChild2 ne 0? familyPlanListController.netPremiumChild2:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.total2 ne 0? familyPlanListController.total2:'-'}</td>
+                                    </tr>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{familyPlanListController.insurePersonID >= 3}">
+                                    <tr>
+                                        <td height="30px" style="padding-left: 15px;">3.#{familyPlanListController.gender3}(#{familyPlanListController.age3})</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumMain3 ne 0? familyPlanListController.netPremiumMain3:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumChild3 ne 0? familyPlanListController.netPremiumChild3:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.total3 ne 0? familyPlanListController.total3:'-'}</td>
+                                    </tr>
+
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{familyPlanListController.insurePersonID >= 4}">
+                                    <tr>
+                                        <td height="30px" style="padding-left: 15px;">4.#{familyPlanListController.gender4}(#{familyPlanListController.age4})</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumMain4 ne 0? familyPlanListController.netPremiumMain4:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumChild4 ne 0? familyPlanListController.netPremiumChild4:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.total4 ne 0? familyPlanListController.total4:'-'}</td>
+                                    </tr>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{familyPlanListController.insurePersonID >= 5}">
+                                    <tr>
+                                        <td height="30px" style="padding-left: 15px;">5.#{familyPlanListController.gender5}(#{familyPlanListController.age5})</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumMain5 ne 0? familyPlanListController.netPremiumMain5:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumChild5 ne 0? familyPlanListController.netPremiumChild5:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.total5 ne 0? familyPlanListController.total5:'-'}</td>
+                                    </tr>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{familyPlanListController.insurePersonID >= 6}">
+                                    <tr>
+                                        <td height="30px" style="padding-left: 15px;">6.#{familyPlanListController.gender6}(#{familyPlanListController.age6})</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumMain6 ne 0? familyPlanListController.netPremiumMain6:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.netPremiumChild6 ne 0? familyPlanListController.netPremiumChild6:'-'}</td>
+                                        <td height="30px" style="text-align: center">#{familyPlanListController.total6 ne 0? familyPlanListController.total6:'-'}</td>
+                                    </tr>
+                                </h:panelGroup>
+                                <h:panelGroup>
+                                    <tr style="text-align: center">
+                                        <td height="30px">
+                                            <h:outputText value="Total" style="color: #009999; font-weight: bold"/>
+                                        </td>
+                                        <td height="30px">#{familyPlanListController.totalPremium ne 0? familyPlanListController.totalPremium:'-'}</td>
+                                        <td height="30px">#{familyPlanListController.totalPremiumDiscount ne 0? familyPlanListController.totalPremiumDiscount:'-'}</td>
+                                        <td height="30px">#{familyPlanListController.totalDiscount ne 0? familyPlanListController.totalDiscount:'-'}</td>
+                                    </tr>
+                                </h:panelGroup>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr><td></td></tr>
+                </table>
+            </h:panelGroup>
+        </h:panelGroup>
+
+
+    </ui:define>
+</ui:composition>

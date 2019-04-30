@@ -1,0 +1,63 @@
+<ui:composition template="../templates/mainmenu.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="title1">#{msg.campaign}</ui:define>
+    <ui:define name="panel">
+        <div id="body_wrapper">
+            <div id="body_header">
+                <div id="body_header_left">
+                    <div id="body_header_right">
+                        <div id="type">
+                            <h2><ui:insert name="type" /></h2>
+                        </div>
+                        <div id="type_menu">
+                            <ul>
+                                <li><h:outputLink value="campaignAssignment.jsf"><h:graphicImage library="img" name="tb_assign.png" styleClass="swap" alt="Assignment List" /></h:outputLink></li>
+                                <li><h:outputLink value="opened.jsf"><h:graphicImage library="img" name="tb_open.png" styleClass="swap" alt="Opened" /></h:outputLink></li>
+                                <li><h:outputLink value="toFollowup.jsf"><h:graphicImage library="img" name="tb_tofollow.png" styleClass="swap" alt="To Follow Up" /></h:outputLink></li>
+                                <li><h:outputLink value="closed.jsf"><h:graphicImage library="img" name="tb_upclosed.png" styleClass="swap" alt="Closed" /></h:outputLink></li>
+                            </ul>
+                        </div>
+                        <div id="search_wrapper">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="body_assign">
+                <div id="body_assign_left">
+                    <div id="body_assign_right">
+                        <div id="content_assign_detail">
+                            <ui:insert name="body"></ui:insert>
+                        </div>
+                        <div id="content_footer">
+                            <ui:insert name="icon"></ui:insert>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer">
+                <div class="footer_left">
+                    <div class="footer_right">
+
+                    </div>
+                </div>
+            </div>
+            <div id="mark_wrapper">
+                <div id="contact_record">
+                    <ui:include src="../includes/contactRecord.xhtml"/>
+                </div>
+                <div id="news">
+                    <ui:include src="../includes/news.xhtml"/>
+                </div>
+                <div id="note">
+                    <ui:include src="../includes/note.xhtml"/>
+                </div>
+            </div>
+        </div>
+
+    </ui:define>
+</ui:composition>

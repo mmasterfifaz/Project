@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing List Upload</ui:define>
+            <ui:define name="panel">
+                <table width="" border="0" cellpadding="5" cellspacing="0">
+                    <tr>
+                        <td align="left" class="gray03">Marketing Code:</td>
+                        <td>
+                            <h:outputText styleClass="textfield" value="#{marketingHistoryController.marketing.code}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="left" class="gray03">Marketing Name:</td>
+                        <td>
+                            <h:outputText styleClass="textfield" value="#{marketingHistoryController.marketing.name}"/>
+                        </td>
+                    </tr>
+                </table>
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{marketingHistoryController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 10%;text-align: left;">Import Date</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Total Records</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Duplicate (Within)</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Duplicate (Yes Sale)</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Duplicate (Customer)</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Invalid Telephone</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Opt-out</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Black List</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">Invalid Format</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">DNC</rich:column>
+                            <rich:column style="width: 5%;text-align: left;">MIB</rich:column>
+                            <rich:column style="width: 10%;text-align: left;">Total Loaded</rich:column>
+                            <rich:column style="width: 10%;text-align: center;"></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>               
+                    <rich:column>
+                        <h:outputText value="#{list[2]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[3]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[4]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[5]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[6]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[9]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[7]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[8]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[12]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[10]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[11]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list[13]}"/>
+                    </rich:column>
+                    <rich:column style="text-align:center;">
+                        <a4j:commandButton  image="../img/b_view_result.png"
+                                            oncomplete="#{rich:component('marketingList')}.show()"
+                                            render="popupMarketingList,mParam,dataList,marketingListPanel"
+                                            actionListener="#{marketingHistoryController.getTotalRecordsList}">
+                            <!--<f:param name="id" value="" />-->
+                            <f:attribute name="marketingid" value="#{list[0]}" />
+                            <f:attribute name="sessionid" value="#{list[1]}" />
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                <table cellpadding="8" cellspacing="0" border="0" width="100%"> 
+                    <tr>
+                        <td valign="top" align="center" width="60%">
+                            <h:commandButton image="../img/b_back.png" action="#{marketingHistoryController.backAction}" immediate="true" />                                         
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="popupModal">
+                <rich:popupPanel id="waitPanel" style="background-color: white; text-align:center">
+                    <h:outputText value="Please wait..." style="font-size:large" />
+                </rich:popupPanel>
+                <ui:include id="popupMarketingList"
+                            src="popupMarketingList.xhtml">                    
+                    <ui:param id="mParam" name="m" value="#{marketingHistoryController}"/>
+                </ui:include> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

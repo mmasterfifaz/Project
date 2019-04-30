@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Location</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="Business Unit"/>
+                    <h:selectOneMenu id="businessUnit" value="#{locationController.businessUnitId}"
+                                             immediate="true"
+                                             styleClass="select08"
+                                             valueChangeListener="#{locationController.businessListener}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{locationController.businessUnitList}"/>
+                                <a4j:ajax event="change" render="businessUnit, data" execute="@this"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{locationController.editAction}" rendered="#{locationController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{locationController.deleteAction}" rendered="#{locationController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{locationController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="width: 47%;text-align: left;"><h:outputText value="Business Unit" /></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{locationController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{locationController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.businessUnit.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

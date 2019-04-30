@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../social/dashboardtemplate.xhtml">
+            <ui:define name="title1">Dashboard</ui:define>
+            <ui:define name="title2">Agent Performance</ui:define>
+            <ui:define name="detailSub1">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">                
+                    <tr>
+                        <td valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#eeeee5" id="bartool01">
+                                <tr>
+                                    <td valign="top" class="line01">
+                                        <table width="100%">
+                                            <tr><td width="150" align="right">Select Date:</td>
+                                                <td align="left"><rich:calendar id="fromdate"
+                                                                                value="#{composePerformanceController.fromDate}"
+                                                                                inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                                                                datePattern="#{msg.datePattern}"
+                                                                                locale="#{msg.locale}"/>
+                                                    to <span style="width: 5px"/> <rich:calendar id="todate"
+                                                                                                 value="#{composePerformanceController.toDate}"
+                                                                                                 inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                                                                                 datePattern="#{msg.datePattern}"
+                                                                                                 locale="#{msg.locale}"/>
+
+                                                </td>
+                                            </tr>
+                                            <tr><td></td>
+                                                <td><a4j:commandButton actionListener="#{composePerformanceController.searchActionListener}" render="panelDashboard,data" limitRender="true" execute="@form" image="/img/b_search.png"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr><td><b><font size="3" color="ff6600">Agent Performance (Compose)</font></b></td></tr>
+                            </table>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr><td width="5"></td></tr>
+                                <tr>
+                                    <td>
+                                        <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" value="#{composePerformanceController.dataList}" rows="30" var="list"
+                                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                        onrowmouseout="this.style.backgroundColor='#ffffff'">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column styleClass="subh01" style="width: 20%; text-align:center;vertical-align:top">Name</rich:column>
+                                                    <rich:column styleClass="subh01" style="width: 16%; text-align:center;vertical-align:top">Total Message</rich:column>
+                                                    <rich:column styleClass="subh01" style="width: 16%; color:#ff6600;text-align:center;vertical-align:top">Open</rich:column>
+                                                    <rich:column styleClass="subh01" style="width: 16%; color:#ff6600;text-align:center;vertical-align:top">Wait for Approve</rich:column>
+                                                    <rich:column styleClass="subh01" style="width: 16%; color:#ff6600;text-align:center;vertical-align:top">Ignore</rich:column>
+                                                    <rich:column styleClass="subh01" style="width: 16%; color:#ff6600;text-align:center;vertical-align:top">Sent</rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column>
+                                                #{list[0]}
+                                            </rich:column>
+                                            <rich:column style="text-align:center;">
+                                                #{list[1]}
+                                            </rich:column>
+                                            <rich:column style="text-align:center;">
+                                                #{list[2]}
+                                            </rich:column>
+                                            <rich:column style="text-align:center;">
+                                                #{list[3]}
+                                            </rich:column>
+                                            <rich:column style="text-align:center;">
+                                                #{list[4]}
+                                            </rich:column>
+                                            <rich:column style="text-align:center;">
+                                                #{list[5]}
+                                            </rich:column>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                            </f:facet>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                                <tr><td width="5"></td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

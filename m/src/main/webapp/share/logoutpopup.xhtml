@@ -1,0 +1,50 @@
+<ui:composition template="../templates/popupmodal2.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:param name="modalId" value="logoutPopup"/>
+    <ui:define name="searchcontent">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td width="260"><h2><img src="#{request.contextPath}/img/icon_my_script.png" width="32" height="32" hspace="5" align="absmiddle" style="display: inline;"/>Log out</h2></td>
+                <td width="60" align="right"><a4j:commandLink styleClass="close" value="Close X" onclick="#{rich:component('logoutPopup')}.hide()" rendered="#{showClose eq '1'}" immediate="true"/></td>
+            </tr>
+        </table>
+    </ui:define>
+
+<ui:define name="content">
+    <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+        <tr>
+            <td width="260" align="right" valign="top"></td>
+            <td valign="top" ><h:outputText id="message" value="#{loginController.message}" style="color:red"/>
+
+            </td>
+        </tr>
+
+        <tr>
+            <td  align="right" valign="top">Logout Reason : </td>
+            <td><h:selectOneMenu id="logofftype" value="#{loginController.logoffTypeName}" styleClass="select08" required="true" requiredMessage="Required">
+                    <f:selectItem itemLabel="Please Select"/>
+                    <f:selectItems value="#{loginController.logoffType}" var="obj" itemLabel="#{obj.name}" itemValue="#{obj.name}"/>
+                    <f:validateRequired/>                  
+                    <rich:validator/>
+                </h:selectOneMenu>
+                <rich:message for="logofftype" style="color:red"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="right" valign="top"></td>
+            <td valign="top"><a4j:commandButton image="/img/b_ok.png" 
+                                                actionListener="#{loginController.logoutActionListener}"
+                                                oncomplete="if(#{loginController.logoutStatus eq true}){ logoutAction(); }" 
+                                                render="message"/>
+        </td>
+        </tr>
+    </table>
+    <ui:include src="/share/waitpopup.xhtml"/>
+</ui:define>
+</ui:composition>
+

@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminmain.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Update Report Statistic</ui:define>
+    <ui:define name="button">
+         </ui:define>
+    <ui:define name="panel">
+        Sale Performance
+        <h:panelGrid columns="6">
+            From Sale:<rich:calendar value="#{rptUpdateController.fromSaleDate}" inputClass="textfield" buttonClass="rfcalbtn"/> to <rich:calendar value="#{rptUpdateController.toSaleDate}" inputClass="textfield" buttonClass="rfcalbtn"/>
+            <br/>
+            <a4j:commandButton value="Batch Update Old" actionListener="#{rptUpdateController.updateSaleRptActionListener}" render="result"/>
+            <a4j:commandButton value="Batch Update New" actionListener="#{rptUpdateController.updateSaleRptNewActionListener}" render="result"/>
+
+            <a4j:commandButton value="Clear Text" actionListener="#{rptUpdateController.clearResultActionListener}"/>
+            <br/>
+            Result:<h:outputText id="result"  value="#{rptUpdateController.updateResult}"/>
+        </h:panelGrid>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

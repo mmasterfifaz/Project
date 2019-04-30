@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <f:loadBundle basename="com.maxelyz.core.resource.messages" var="msg"/>
+    <h:head>
+        <link rel="shortcut icon" href="#{request.contextPath}/icon/favicon.ico"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Maxar [<ui:insert name="title2"/>]</title>
+        <meta http-equiv="Expires" CONTENT="0"/>
+        <meta http-equiv="Cache-Control" CONTENT="no-cache"/>
+        <meta http-equiv="Pragma" CONTENT="no-cache"/>
+        
+        <link href="#{request.contextPath}/resources/css/maxelyz.css" rel="stylesheet" type="text/css" />
+        <link href="#{request.contextPath}/css/scroll01.css" rel="stylesheet" type="text/css" />
+        <ui:insert name="javascript"></ui:insert>
+        <style>
+            <!--
+
+            .uinp {
+                font-family: Tahoma, Geneva, sans-serif;
+                background-color:transparent;
+                font-size: 10px;
+                font-style: normal;
+                font-weight: normal;
+                border-bottom-width: 1px;
+                border-bottom-style: dashed;
+                border-bottom-color: #F90;
+                margin: 0px;
+                padding: 0px;
+                font-size: 12px;
+                border-top-style: none;
+                border-right-style: none;
+                border-left-style: none;
+                color: #F90;
+            }
+            .textred {
+                font-family: Tahoma, Geneva, sans-serif;
+                font-size: 10px;
+                color: #F00;
+            }
+            -->
+        </style>
+    </h:head>
+    <h:body style="background-color: #FFFFFF;margin: 0px">
+        <h:form id="frm">
+            <table width="100%" border="0" cellpadding="10" cellspacing="10">
+                <tr>
+                    <td align="left">
+                        <img src="#{request.contextPath}/resources/img/logo_pic.png" width="169" height="65"/>
+                        <ui:insert name="panel"/>            
+                    </td>
+                </tr>
+            </table>
+            
+        </h:form>
+    </h:body>
+</html>

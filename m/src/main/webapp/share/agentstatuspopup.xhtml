@@ -1,0 +1,73 @@
+<ui:composition template="../templates/popupmodal2.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:param name="modalId" value="agentStatusPopup"/>
+    <ui:define name="searchcontent">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td width="260"><h2><img src="#{request.contextPath}/img/icon_my_script.png" width="32" height="32" hspace="5" align="absmiddle" style="display: inline;"/>Agent Status</h2></td>
+                <td width="60" align="right"><a4j:commandLink styleClass="close" value="Close X" onclick="#{rich:component('agentStatusPopup')}.hide()" rendered="#{showClose eq '1'}" immediate="true"/></td>
+            </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup id="notreadyPopup">
+        <table width="80%" border="0" align="center" cellpadding="10" cellspacing="10">
+            <tr>
+                <td width="150" align="right" valign="top"></td>
+                <td valign="top" ><h:outputText id="message" value="#{agentStatusPopupController.message}" style="color:red"/>
+                   
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="middle" class="gray03" >Agent Status:</td>
+                <td valign="bottom" align="left" >
+                    <h:selectOneRadio value="#{agentStatusPopupController.agentStatus}">
+                        <f:selectItem itemValue="Ready" itemLabel="Ready"/>
+                        <f:selectItem itemValue="Not Ready" itemLabel="Not Ready"/>
+                        <f:ajax event="click" render="notReadyPanel"/>
+                    </h:selectOneRadio>
+                </td>
+            </tr>
+            <tr><td align="right" valign="bottom"></td>
+                <td><h:panelGroup id="notReadyPanel">
+                        <h:panelGroup rendered="#{agentStatusPopupController.agentStatus eq 'Not Ready'}">
+                        <table>
+                            <tr>
+                                <td  align="right" valign="top" class="gray03">* Not Ready Reason:</td>
+                                <td>
+                                    <h:selectOneMenu id="notReady" value="#{agentStatusPopupController.notreadyReason}" style="width: 300px;">
+                                        <f:selectItem itemLabel="Please Select"/>
+                                        <f:selectItems value="#{agentStatusPopupController.notReadyList}" var="obj" itemLabel="#{obj.name}" itemValue="#{obj.name}"/>
+                                         <f:ajax event="change" render="notReady"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td  align="right" valign="top"></td>
+                                <td>
+                                    <h:outputText id="msgNotready" value="#{agentStatusPopupController.messageReason}" style="color:red"/>
+                                </td>
+                            </tr>
+                        </table>
+                        </h:panelGroup>
+                    </h:panelGroup>
+            </td></tr>
+            
+            <tr>
+                <td align="center" valign="middle" colspan="2">
+                    <a4j:commandButton image="/img/b_ok.png" actionListener="#{agentStatusPopupController.saveAction}" 
+                                        limitRender="true" render="msgNotready, message, agentstatus"
+                                        oncomplete="if (#{agentStatusPopupController.agentStatus eq 'Ready' or agentStatusPopupController.notreadyReason ne ''}) {#{rich:component('agentStatusPopup')}.hide();}"/>
+            </td>
+            </tr>
+        </table>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+

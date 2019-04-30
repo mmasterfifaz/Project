@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Email Signature: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{emailSignatureEditController.mode}"/>
+                <h:inputHidden value="#{emailSignatureEditController.soEmailSignature.id}"/>
+                
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{emailSignatureEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Email Account Name:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="accountEmail" value="#{emailSignatureEditController.accountId}"
+                                             required="true" requiredMessage="Email Account Name is required">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{emailSignatureEditController.accountList}"/>
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="accountEmail" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Signature Name:</td>
+                        <td valign="top">
+                            <h:inputText id="name" value="#{emailSignatureEditController.soEmailSignature.name}" styleClass="textfield" size="50" 
+                                         required="true" requiredMessage="Signature Name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{emailSignatureEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Seq No.:</td>
+                        <td valign="top">
+                            <h:inputText id="seqNo" value="#{emailSignatureEditController.soEmailSignature.seqId}" styleClass="textfield" 
+                                         maxlength="5" size="10" onkeypress="return isNumberKey(event);" 
+                                         required="true" requiredMessage="Seq No. is required" 
+                                         validatorMessage="Seq Range is 1 to 999">
+                                <f:validateDoubleRange minimum="1" maximum="999"/>                
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="seqNo" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Signature:</td>
+                        <td valign="top">
+                            <rich:editor id="description" skin="kama" width="100%" height="400" toolbar="full" 
+                                         value="#{emailSignatureEditController.soEmailSignature.signature}">
+                                <f:param name="theme_advanced_toolbar_location" value="top"/>
+                                <f:param name="theme_advanced_toolbar_align" value="left"/>
+                            </rich:editor>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{emailSignatureEditController.soEmailSignature.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandButton image="../img/b_save.png" action="#{emailSignatureEditController.saveAction}" rendered="#{emailSignatureEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{emailSignatureEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

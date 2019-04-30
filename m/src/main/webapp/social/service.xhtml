@@ -1,0 +1,84 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Social Configurations</ui:define>
+            <ui:define name="title2">Service</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{socialServiceController.editAction}" >
+                </h:commandButton>
+                
+                <h:commandButton image="../img/b_delete.png"/>
+            
+            </ui:define>
+            <ui:define name="search">
+                <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                    <tr>
+                        <td width="150" align="right">Priority :</td>
+                        <td align="left">
+                            <h:selectOneMenu value="#{socialServiceController.priority}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Keyword :</td>
+                        <td align="left"><h:inputText styleClass="textfield" value="#{socialServiceController.keyword}"/></td>
+                    </tr>
+                    
+                    <tr>
+                        <td></td>
+                        <td>
+                            <a4j:commandButton actionListener="#{socialServiceController.searchActionListener}" render="dataList" limitRender="true" image="/img/b_search.png">
+                                <f:param name="selectedMsgID" value="paramStr1"/>
+                            </a4j:commandButton>
+                        </td>
+                        <td>
+                        </td>
+                    </tr>
+
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" 
+                                    value="#{socialServiceController.soServiceList}" rows="#{global.maxrows}" var="list"
+                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                    onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                        <f:facet name="header">
+                            <rich:columnGroup>
+                                <rich:column styleClass="subh01">&nbsp;</rich:column>
+                                <rich:column styleClass="subh01">Name</rich:column>
+                                <rich:column styleClass="subh01">Routing Type</rich:column>
+                                <rich:column styleClass="subh01">Status</rich:column>
+                            </rich:columnGroup>
+                        </f:facet>
+
+                        
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{socialServiceController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink value="#{list.name}" action="#{socialServiceController.editAction}">
+                            <f:param name="soServiceId" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.routingType}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                        <f:facet name="footer">
+                            <rich:dataScroller fastControls="hide" maxPages="${global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

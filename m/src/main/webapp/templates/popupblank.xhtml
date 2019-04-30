@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:a4j="http://richfaces.org/a4j">
+    <f:loadBundle basename="com.maxelyz.core.resource.messages" var="msg"/>
+    <h:head>
+        <link rel="shortcut icon" href="#{request.contextPath}/icon/favicon.ico"/>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <title>Maxar [<ui:insert name="title2"/>]</title>
+        <meta http-equiv="Expires" CONTENT="0"/>
+        <meta http-equiv="Cache-Control" CONTENT="no-cache"/>
+        <meta http-equiv="Pragma" CONTENT="no-cache"/>
+       
+         <style>
+            .rich-tglctrl:link { text-decoration: none; }
+            .rich-tglctrl:hover { text-decoration: none; }
+            .rich-picklist-list{
+                border-style: solid;
+                border-color: #cccccc;
+                border-width: 1px;
+            }
+            .rich-dtascroller-table {
+                border-style: none;
+                background-color: #ffffff;
+                color: #000000;
+            }
+            .rich-datascr-button {
+                border-style: none;
+                background-color: #ffffff;
+            }
+            .rich-datascr-act {
+                border-top-color: #ffffff;
+                background-color: #ffffff;
+                font-weight: bold;
+                color: #000000;
+            }
+            .rich-datascr-inact {
+                border-style: none;
+                color: #cccccc;
+            }
+            
+            .scroll {
+                width: 480px;
+                height: 550px;
+                overflow-x: auto;
+                overflow-y: auto;
+
+                border: 0px solid #666;
+                background-color: #fff;
+                padding: 0px;
+            }
+            .scrollleft {
+                width: 480px;
+                height: 550px;
+                overflow-x: auto;
+                overflow-y: auto;
+
+                border: 0px solid #666;
+                background-color: #fff;
+                padding: 0px;
+            }
+            .bgSelectboxDial{
+                height:16px; 
+                font-size: 8pt; 
+                padding: 0px; 
+                border:0px;
+                width:110px;
+                margin-left: 30px;
+            }
+            .reasonWhite{
+                color: #FFFFFF;
+            }
+        </style>
+        <script type="text/javascript" src="#{request.contextPath}/includes/disableenter.js"/>
+        
+        <script type="text/javascript">
+                window.history.forward(1);
+        </script>
+        <script type="text/javascript" src="#{request.contextPath}/includes/checking.js"/>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet library="css" name="maxelyz.css"/>
+        <h:outputStylesheet library="css" name="scroll01.css"/>
+        
+        <h:form id="frm">
+            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td><img src="#{request.contextPath}/img/box12.png" width="5" height="48"/></td>
+                    <td width="100%" background="#{request.contextPath}/img/box16.png" bgcolor="#FFFFFF">
+                <ui:insert name="search1"/>
+                </td>
+                <td><img src="#{request.contextPath}/img/box13.png" width="5" height="48"/></td>
+                </tr>
+                <tr>
+                    <td bgcolor="#FFFFFF"></td>
+                    <td bgcolor="#FFFFFF" valign="top">
+                        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                            <!-- ตารางแถวกลาง  -->
+                            <tr>
+                                <td width="240" valign="top"><div class="scrollleft" style="width:240px">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree">
+                                        <!-- product lists -->
+                                        <tr><td width="240"><ui:insert name='leftcontent'/></td></tr>
+                            <!-- product lists -->
+                        </table></div>
+                        <p></p>
+                    </td>
+                    <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="20" height="480"/></td>
+                    <td width="100%" valign="top"><ui:insert name='content'/></td></tr>
+            </table>
+            </td>
+            <td bgcolor="#FFFFFF"></td>
+            </tr>
+            <tr>
+                <td><img src="#{request.contextPath}/img/box15.png" width="5" height="5"/></td>
+                <td bgcolor="#FFFFFF"><img src="#{request.contextPath}/img/sp.gif" width="5" height="5"/></td>
+                <td><img src="#{request.contextPath}/img/box14.png" width="5" height="5"/></td>
+            </tr>
+            </table>
+        </h:form>
+    </h:body>
+</html>

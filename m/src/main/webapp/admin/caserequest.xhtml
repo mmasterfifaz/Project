@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Reason of Request</ui:define>
+            <ui:define name="search">
+                <style type="text/css">
+                    .colStyle1 { width: 10%; text-align: right; }
+                    .colStyle2 { width: 90%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="Case Type"/>
+                    <h:selectOneMenu id="caseType" value="#{caseRequestController.caseTypeId}"
+                                     immediate="true"
+                                     styleClass="select08"
+                                     valueChangeListener="#{caseRequestController.caseTypeListener}">
+                        <f:selectItem itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{caseRequestController.caseTypeList}"/>
+                        <a4j:ajax event="change" render="caseType, caseTopic, caseDetail, data" execute="@this"/>
+                    </h:selectOneMenu>
+                    <h:outputText value="Case Topic"/>
+                    <h:selectOneMenu id="caseTopic" value="#{caseRequestController.caseTopicId}"
+                                     styleClass="select08"
+                                     valueChangeListener="#{caseRequestController.caseTopicListener}"
+                                     immediate="true" >
+                        <f:selectItem itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{caseRequestController.caseTopicList}"/>
+                        <a4j:ajax event="change" render="caseTopic, caseDetail, data" execute="@this"/>
+                    </h:selectOneMenu>
+                    <h:outputText value="Case Detail"/>
+                    <h:selectOneMenu id="caseDetail" value="#{caseRequestController.caseDetailId}"
+                                     styleClass="select08"
+                                     valueChangeListener="#{caseRequestController.caseDetailListener}"
+                                     immediate="true" >
+                        <f:selectItem itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{caseRequestController.caseDetailList}"/>
+                        <a4j:ajax event="change" render="caseDetail, data" execute="@this"/>
+                    </h:selectOneMenu>
+                </h:panelGrid>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{caseRequestController.editAction}" rendered="#{caseRequestController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{caseRequestController.deleteAction}" rendered="#{caseRequestController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" headerClass="subh01" styleClass="tableline01" value="#{caseRequestController.list}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Case Type"/></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Case Topic"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Case Detail"/></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Code" /></rich:column>
+                            <rich:column style="width: 17%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{caseRequestController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseDetailId.caseTopicId.caseTypeId.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseDetailId.caseTopicId.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.caseDetailId.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{caseRequestController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

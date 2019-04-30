@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="utf-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xmlns:context="http://www.springframework.org/schema/context"
+xmlns:jee="http://www.springframework.org/schema/jee"
+xmlns:lang="http://www.springframework.org/schema/lang"
+xmlns:util="http://www.springframework.org/schema/util"
+xmlns:p="http://www.springframework.org/schema/p"
+xmlns:tx="http://www.springframework.org/schema/tx"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+                    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd 
+                    http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.0.xsd 
+                    http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.0.xsd 
+                    http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd 
+                    http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+                    http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+                    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd" 
+xmlns:aop="http://www.springframework.org/schema/aop">
+
+<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="jdbc:jtds:sqlserver://172.18.21.20:1433/maxar_bcib" />
+        <property name="username" value="sa" />
+        <property name="password" value="Terr@b!tP@ssw0rd"/>
+    </bean>
+    <bean id="dataSourceReport" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="jdbc:jtds:sqlserver://172.18.21.20:1433/maxar_bcib" />
+        <property name="username" value="sa" />
+        <property name="password" value="Terr@b!tP@ssw0rd"/>
+    </bean>-->
+    
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="jdbc:jtds:sqlserver://172.18.21.20:1433/maxar_bcib_prd_20190422" />
+        <property name="username" value="sa" />
+        <property name="password" value="Terr@b!tP@ssw0rd"/>
+    </bean>
+    <bean id="dataSourceReport" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="jdbc:jtds:sqlserver://172.18.21.20:1433/maxar_bcib_prd_20190422" />
+        <property name="username" value="sa" />
+        <property name="password" value="Terr@b!tP@ssw0rd"/>
+    </bean>
+    
+<!--    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="jdbc:jtds:sqlserver://localhost:1433/maxar_bcib" />
+        <property name="username" value="sa" />
+        <property name="password" value="Passw0rd"/>
+    </bean>
+    <bean id="dataSourceReport" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />
+        <property name="url" value="jdbc:jtds:sqlserver://localhost:1433/maxar_bcib" />
+        <property name="username" value="sa" />
+        <property name="password" value="Passw0rd"/>
+    </bean>-->
+    
+    <!--<bean id="dataSourceExternal" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">-->
+        <!--<property name="driverClassName" value="net.sourceforge.jtds.jdbc.Driver" />-->
+        <!--<property name="url" value="jdbc:jtds:sqlserver://192.168.51.104:1433/mtl_external2" />-->
+        <!--<property name="username" value="sa" />-->
+        <!--<property name="password" value="Passw0rd"/>-->
+    <!--</bean>-->
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+
+        <property name="dataSource" ref="dataSource" />
+        <property name="loadTimeWeaver">
+      <!--For Tomcat-->
+            <bean class="org.springframework.instrument.classloading.InstrumentationLoadTimeWeaver"/>
+      <!--For Resin-->
+      <!--bean class="org.springframework.instrument.classloading.ReflectiveLoadTimeWeaver"/-->
+        </property>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="showSql" value="false" />
+                <property name="generateDdl" value="false" />
+                <property name="databasePlatform" value="org.hibernate.dialect.SQLServerDialect" />
+            </bean>
+        </property>
+        <property name="jpaDialect">
+            <bean class="com.maxelyz.utils.HibernateExtendedJpaDialect" />
+        </property>
+    </bean>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+ 
+    <bean class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean" id="sessionFactory">
+        <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property>
+    </bean>
+    <bean class="org.springframework.orm.hibernate3.HibernateTemplate" id="hibernateTemplate">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory"/>
+        </property>
+    </bean>
+ <context:annotation-config />
+  <!--context:component-scan base-package="com.maxelyz.core.model.dao"/>
+    <context:component-scan base-package="com.maxelyz.core.controller.admin"/-->
+  <!--
+        Instruct Spring to perform declarative transaction management
+        automatically on annotated classes.
+    -->
+    <tx:annotation-driven transaction-manager="transactionManager"/>
+
+    <context:component-scan base-package="com.maxelyz.core.controller"/>
+    <bean id="accountDAO" class="com.maxelyz.core.model.dao.AccountDAO" />
+    <bean id="aclDAO" class="com.maxelyz.core.model.dao.AclDAO" />
+    <bean id="activityDAO" class="com.maxelyz.core.model.dao.ActivityDAO" />
+    <bean id="activityTypeDAO" class="com.maxelyz.core.model.dao.ActivityTypeDAO" />
+    <bean id="agentScriptDAO" class="com.maxelyz.core.model.dao.AgentScriptDAO" />
+    <bean id="assignmentDAO" class="com.maxelyz.core.model.dao.AssignmentDAO" />
+    <bean id="assignmentDetailDAO" class="com.maxelyz.core.model.dao.AssignmentDetailDAO" />
+    <bean id="assignmentProductDAO" class="com.maxelyz.core.model.dao.AssignmentProductDAO" />
+    <bean id="callsuccessReasonDAO" class="com.maxelyz.core.model.dao.CallsuccessReasonDAO" />
+    <bean id="campaignDAO" class="com.maxelyz.core.model.dao.CampaignDAO" />
+    <bean id="caseDetailDAO" class="com.maxelyz.core.model.dao.CaseDetailDAO" />
+    <bean id="caseRequestDAO" class="com.maxelyz.core.model.dao.CaseRequestDAO" />
+    <bean id="caseTopicDAO" class="com.maxelyz.core.model.dao.CaseTopicDAO" />
+    <bean id="caseTypeDAO" class="com.maxelyz.core.model.dao.CaseTypeDAO" />
+    <bean id="configurationDAO" class="com.maxelyz.core.model.dao.ConfigurationDAO" />
+    <bean id="contactHistoryDAO" class="com.maxelyz.core.model.dao.ContactHistoryDAO" />
+    <bean id="customerDAO" class="com.maxelyz.core.model.dao.CustomerDAO" />
+    <bean id="customerFieldDAO" class="com.maxelyz.core.model.dao.CustomerFieldDAO" />
+    <bean id="customerTypeDAO" class="com.maxelyz.core.model.dao.CustomerTypeDAO" />
+    <bean id="districtDAO" class="com.maxelyz.core.model.dao.DistrictDAO" />
+    <bean id="dmccontactReasonDAO" class="com.maxelyz.core.model.dao.DmccontactReasonDAO" />
+    <bean id="declarationFieldDAO" class="com.maxelyz.core.model.dao.DeclarationFieldDAO" />
+    <bean id="declarationFormDAO" class="com.maxelyz.core.model.dao.DeclarationFormDAO" />
+    <bean id="declarationFormManageDAO" class="com.maxelyz.core.model.dao.DeclarationFormManageDAO" />
+    <bean id="childRegTypeDAO" class="com.maxelyz.core.model.dao.ChildRegTypeDAO"/>
+    <bean id="manageListValueDAO" class="com.maxelyz.core.model.dao.ManageListValueDAO" />
+    <bean id="listDetailDAO" class="com.maxelyz.core.model.dao.ListDetailDAO" />
+    <bean id="productDeclarationMappingDAO" class="com.maxelyz.core.model.dao.ProductDeclarationMappingDAO" />
+    <bean id="fileTemplateDAO" class="com.maxelyz.core.model.dao.FileTemplateDAO" />
+    <bean id="fileTemplateMappingDAO" class="com.maxelyz.core.model.dao.FileTemplateMappingDAO" />
+    <bean id="followupsaleReasonDAO" class="com.maxelyz.core.model.dao.FollowupsaleReasonDAO" />
+    <bean id="holidayDAO" class="com.maxelyz.core.model.dao.HolidayDAO" />
+    <bean id="idcardTypeDAO" class="com.maxelyz.core.model.dao.IdcardTypeDAO" />
+    <bean id="knowledgebaseDAO" class="com.maxelyz.core.model.dao.KnowledgebaseDAO" />
+    <bean id="marketingCustomerDAO" class="com.maxelyz.core.model.dao.MarketingCustomerDAO" />
+    <bean id="marketingDAO" class="com.maxelyz.core.model.dao.MarketingDAO" />
+    <bean id="messageBroadcastDAO" class="com.maxelyz.core.model.dao.MessageBroadcastDAO" />
+    <bean id="newsDAO" class="com.maxelyz.core.model.dao.NewsDAO" />
+    <bean id="nosaleReasonDAO" class="com.maxelyz.core.model.dao.NosaleReasonDAO" />
+    <bean id="objectionDAO" class="com.maxelyz.core.model.dao.ObjectionDAO" />
+    <bean id="productCategoryDAO" class="com.maxelyz.core.model.dao.ProductCategoryDAO" />
+    <bean id="productDAO" class="com.maxelyz.core.model.dao.ProductDAO" />
+    <bean id="productPlanDAO" class="com.maxelyz.core.model.dao.ProductPlanDAO" />
+    <bean id="productPlanDetailDAO" class="com.maxelyz.core.model.dao.ProductPlanDetailDAO" />
+    <bean id="productSponsorDAO" class="com.maxelyz.core.model.dao.ProductSponsorDAO" />
+    <bean id="productDocumentDAO" class="com.maxelyz.core.model.dao.ProductDocumentDAO"/>
+    <bean id="prospectlistSponsorDAO" class="com.maxelyz.core.model.dao.ProspectlistSponsorDAO" />
+    <bean id="provinceDAO" class="com.maxelyz.core.model.dao.ProvinceDAO" />
+    <bean id="purchaseHistoryDAO" class="com.maxelyz.core.model.dao.PurchaseHistoryDAO" />
+    <bean id="purchaseHistoryTypeDAO" class="com.maxelyz.core.model.dao.PurchaseHistoryTypeDAO" />
+    <bean id="purchaseOrderDAO" class="com.maxelyz.core.model.dao.PurchaseOrderDAO" />
+    <bean id="purchaseOrderDetailDAO" class="com.maxelyz.core.model.dao.PurchaseOrderDetailDAO" />
+    <bean id="purchaseOrderRegisterDAO" class="com.maxelyz.core.model.dao.PurchaseOrderRegisterDAO" />
+    <bean id="registrationFormDAO" class="com.maxelyz.core.model.dao.RegistrationFormDAO" />
+    <bean id="registrationFieldDAO" class="com.maxelyz.core.model.dao.RegistrationFieldDAO" />
+    <bean id="registrationQuestionnaireDAO" class="com.maxelyz.core.model.dao.RegistrationQuestionnaireDAO" />
+    <bean id="userGroupAclDAO" class="com.maxelyz.core.model.dao.UserGroupAclDAO" />
+    <bean id="userGroupDAO" class="com.maxelyz.core.model.dao.UserGroupDAO" />
+    <bean id="usersDAO" class="com.maxelyz.core.model.dao.UsersDAO" />
+    <bean id="documentDAO" class="com.maxelyz.core.model.dao.DocumentDAO" />
+    <bean id="documentUploadTypeDAO" class="com.maxelyz.core.model.dao.DocumentUploadTypeDAO" />
+    <bean id="documentFolderDAO" class="com.maxelyz.core.model.dao.DocumentFolderDAO" />
+    <bean id="todoListDAO" class="com.maxelyz.core.model.dao.front.todolist.TodoListDAO" />
+    <bean id="campaignFrontDAO" class="com.maxelyz.core.model.dao.front.campaign.CampaignDAO" />
+    <bean id="searchCaseDAO" class="com.maxelyz.core.model.dao.front.search.SearchCaseDAO" />
+    <bean id="searchCustomerDAO" class="com.maxelyz.core.model.dao.front.search.SearchCustomerDAO" />
+    <bean id="searchAccountDAO" class="com.maxelyz.core.model.dao.front.search.SearchAccountDAO" />
+    <bean id="unassignmentDAO" class="com.maxelyz.core.model.dao.UnassignmentDAO" />
+    <bean id="unassignmentDetailDAO" class="com.maxelyz.core.model.dao.UnassignmentDetailDAO" />
+    <bean id="customerHandlingDAO" class="com.maxelyz.core.model.dao.front.customerHandling.CustomerHandlingDAO" />
+    <bean id="channelDAO" class="com.maxelyz.core.model.dao.ChannelDAO" />
+    <bean id="relationshipDAO" class="com.maxelyz.core.model.dao.RelationshipDAO" />
+    <bean id="contactCaseDAO" class="com.maxelyz.core.model.dao.ContactCaseDAO" />
+    <bean id="saleHistoryDAO" class="com.maxelyz.core.model.dao.front.customerHandling.SaleHistoryDAO" />
+    <bean id="usersScriptDAO" class="com.maxelyz.core.model.dao.UsersScriptDAO" />
+    <bean id="caseAttachmentDAO" class="com.maxelyz.core.model.dao.CaseAttachmentDAO" />
+    <bean id="rptContactChannelDAO" class="com.maxelyz.core.model.dao.RptContactChannelDAO" />
+    <bean id="questionnaireDAO" class="com.maxelyz.core.model.dao.QuestionnaireDAO" />
+    <bean id="contactResultDAO" class="com.maxelyz.core.model.dao.ContactResultDAO" />
+    <bean id="contactResultGroupDAO" class="com.maxelyz.core.model.dao.ContactResultGroupDAO" />
+    <bean id="occupationCategoryDAO" class="com.maxelyz.core.model.dao.OccupationCategoryDAO" />
+    <bean id="occupationDAO" class="com.maxelyz.core.model.dao.OccupationDAO" />
+    <bean id="rptSalePerformanceDAO" class="com.maxelyz.core.model.dao.RptSalePerformanceDAO" />
+    <bean id="contactSummaryDAO" class="com.maxelyz.core.model.dao.front.customerHandling.ContactSummaryDAO" />
+    <bean id="serviceTypeDAO" class="com.maxelyz.core.model.dao.ServiceTypeDAO" />
+    <bean id="locationDAO" class="com.maxelyz.core.model.dao.LocationDAO" />
+    <bean id="reminderDAO" class="com.maxelyz.core.model.dao.ReminderDAO" />
+    <bean id="opOutDAO" class="com.maxelyz.core.model.dao.OpOutDAO" />
+    <bean id="auditLogDAO" class="com.maxelyz.core.model.dao.AuditLogDAO" />
+    <bean id="businessUnitDAO" class="com.maxelyz.core.model.dao.BusinessUnitDAO" />
+    <bean id="assignmentTransferDAO" class="com.maxelyz.core.model.dao.AssignmentTransferDAO" />
+    <bean id="assignmentTransferDetailDAO" class="com.maxelyz.core.model.dao.AssignmentTransferDetailDAO" />
+    <bean id="brandDAO" class="com.maxelyz.core.model.dao.BrandDAO" />
+    <bean id="modelDAO" class="com.maxelyz.core.model.dao.ModelDAO" />
+    <bean id="modelTypeDAO" class="com.maxelyz.core.model.dao.ModelTypeDAO" />
+    <bean id="productPlanCategoryDAO" class="com.maxelyz.core.model.dao.ProductPlanCategoryDAO" />
+    <bean id="fxMappingDAO" class="com.maxelyz.core.model.dao.FxMappingDAO" />
+    <bean id="layoutPageDAO" class="com.maxelyz.core.model.dao.LayoutPageDAO" />
+    <bean id="purchaseOrderSendDocumentDAO" class="com.maxelyz.core.model.dao.PurchaseOrderSendDocumentDAO" />
+    <bean id="documentTypeDAO" class="com.maxelyz.core.model.dao.DocumentTypeDAO" />
+    <bean id="qaCategoryDAO" class="com.maxelyz.core.model.dao.QaCategoryDAO"/>
+    <bean id="qaQuestionDAO" class="com.maxelyz.core.model.dao.QaQuestionDAO"/> 
+    <bean id="qaChoiceDAO" class="com.maxelyz.core.model.dao.QaChoiceDAO"/>  
+    <bean id="qaFormDAO" class="com.maxelyz.core.model.dao.QaFormDAO"/>  
+    <bean id="qaSelectedCategoryDAO" class="com.maxelyz.core.model.dao.QaSelectedCategoryDAO"/>
+    <bean id="customerHistoricalDAO" class="com.maxelyz.core.model.dao.CustomerHistoricalDAO"/>
+    <bean id="customerHistoricalGroupDAO" class="com.maxelyz.core.model.dao.CustomerHistoricalGroupDAO"/>
+    <bean id="customerHistoricalColumnDAO" class="com.maxelyz.core.model.dao.CustomerHistoricalColumnDAO"/>
+    <bean id="approvalRuleDAO" class="com.maxelyz.core.model.dao.ApprovalRuleDAO"/>
+    <bean id="qaTransDAO" class="com.maxelyz.core.model.dao.QaTransDAO"/>
+    <bean id="qaTransDetailDAO" class="com.maxelyz.core.model.dao.QaTransDetailDAO"/>
+    <bean id="paymentMethodDAO" class="com.maxelyz.core.model.dao.PaymentMethodDAO"/>
+    <bean id="settlementDAO" class="com.maxelyz.core.model.dao.SettlementDAO"/>
+    <bean id="settlementDetailDAO" class="com.maxelyz.core.model.dao.SettlementDetailDAO"/>
+    <bean id="cardIssuerDAO" class="com.maxelyz.core.model.dao.CardIssuerDAO"/>
+    <bean id="onlinePaymentLogDAO" class="com.maxelyz.core.model.dao.OnlinePaymentLogDAO"/>
+    <bean id="motorProtectionClassDAO" class="com.maxelyz.core.model.dao.MotorProtectionClassDAO"/>
+    <bean id="tagFieldDAO" class="com.maxelyz.core.model.dao.TagFieldDAO"/>
+    <bean id="approvalReasonDAO" class="com.maxelyz.core.model.dao.ApprovalReasonDAO"/>
+    <bean id="approvalExclusionDAO" class="com.maxelyz.core.model.dao.ApprovalExclusionDAO"/>
+    <bean id="deliveryMethodDAO" class="com.maxelyz.core.model.dao.DeliveryMethodDAO"/>
+    <bean id="usersTimeAttendanceDAO" class="com.maxelyz.core.model.dao.UsersTimeAttendanceDAOImpl"/>
+    <bean id="subdistrictDAO" class="com.maxelyz.core.model.dao.SubdistrictDAO"/>
+    <bean id="workflowRuleDAO" class="com.maxelyz.core.model.dao.WorkflowRuleDAO"/>
+    <bean id="workflowCaseDAO" class="com.maxelyz.core.model.dao.WorkflowCaseDAO"/>
+    <bean id="contactCaseWorkflowLogDAO" class="com.maxelyz.core.model.dao.ContactCaseWorkflowLogDAO"/>
+    <bean id="customerAuditLogDAO" class="com.maxelyz.core.model.dao.CustomerAuditLogDAO"/>
+    <bean id="configurationAutocaseDAO" class="com.maxelyz.core.model.dao.ConfigurationAutocaseDAO"/>
+    <bean id="notificationDAO" class="com.maxelyz.core.model.dao.NotificationDAO"/>
+    <bean id="phoneDirectoryCategoryDAO" class="com.maxelyz.core.model.dao.PhoneDirectoryCategoryDAO"/> 
+    <bean id="phoneDirectoryDAO" class="com.maxelyz.core.model.dao.PhoneDirectoryDAO"/> 
+    <bean id="phoneDirectoryTelephoneDAO" class="com.maxelyz.core.model.dao.PhoneDirectoryTelephoneDAO"/> 
+    <bean id="contactTransferDAO" class="com.maxelyz.core.model.dao.ContactTransferDAO"/> 
+    <bean id="sequenceNoDAO" class="com.maxelyz.core.model.dao.SequenceNoDAO"/> 
+    <bean id="bankDAO" class="com.maxelyz.core.model.dao.BankDAO"/> 
+    <bean id="productWorkflowDAO" class="com.maxelyz.core.model.dao.ProductWorkflowDAO"/> 
+    <bean id="yesLogDAO" class="com.maxelyz.core.model.dao.YesLogDAO"/> 
+    <bean id="sclUsersDAO" class="com.maxelyz.social.model.dao.SclUsersDAO"/> 
+    <bean id="sclMessageDAO" class="com.maxelyz.social.model.dao.SclMessageDAO"/> 
+    <bean id="sclMessageAssignmentDAO" class="com.maxelyz.social.model.dao.SclMessageAssignmentDAO"/>
+    <bean id="sclContactStatsDAO" class="com.maxelyz.social.model.dao.SclContactStatsDAO"/>
+    <bean id="soMessageDAO" class="com.maxelyz.social.model.dao.SoMessageDAO"/>
+    <bean id="soEmailMessageDAO" class="com.maxelyz.social.model.dao.SoEmailMessageDAO"/>
+    <bean id="soCaseTypeDAO" class="com.maxelyz.social.model.dao.SoCaseTypeDAO"/>
+    <bean id="soPriorityDAO" class="com.maxelyz.social.model.dao.SoPriorityDAO"/>
+    <bean id="soChannelDAO" class="com.maxelyz.social.model.dao.SoChannelDAO"/>
+    <bean id="soAccountDAO" class="com.maxelyz.social.model.dao.SoAccountDAO"/>
+    <bean id="soAccountUserDAO" class="com.maxelyz.social.model.dao.SoAccountUserDAO"/>
+    <bean id="messageTemplateDAO" class="com.maxelyz.core.model.dao.MessageTemplateDAO"/>
+    <bean id="messageTemplateCategoryDAO" class="com.maxelyz.core.model.dao.MessageTemplateCategoryDAO"/>
+    <bean id="soMessageHistoryDAO" class="com.maxelyz.social.model.dao.SoMessageHistoryDAO"/>
+    <bean id="soRptPostDAO" class="com.maxelyz.social.model.dao.SoRptPostDAO"/>
+    <bean id="soServiceDAO" class="com.maxelyz.social.model.dao.SoServiceDAO"/>
+    <bean id="soActivityLogDAO" class="com.maxelyz.social.model.dao.SoActivityLogDAO"/>
+    <bean id="soIgnoreReasonDAO" class="com.maxelyz.social.model.dao.SoIgnoreReasonDAO"/>
+    <bean id="soEmailAccountDAO" class="com.maxelyz.social.model.dao.SoEmailAccountDAO"/>
+    <bean id="soEmailSignatureDAO" class="com.maxelyz.social.model.dao.SoEmailSignatureDAO"/>
+    <bean id="soUserSignatureDAO" class="com.maxelyz.social.model.dao.SoUserSignatureDAO"/>
+    <bean id="soMsgUserAssigntimeDAO" class="com.maxelyz.social.model.dao.SoMsgUserAssigntimeDAO"/>
+    <bean id="searchMessageDAO" class="com.maxelyz.core.model.dao.front.search.SearchMessageDAO"/>
+    <bean id="soWorkflowInstanceDAO" class="com.maxelyz.social.model.dao.SoWorkflowInstanceDAO"/>
+    <bean id="soUserNotReadyLogDAO" class="com.maxelyz.social.model.dao.SoUserNotReadyLogDAO"/>
+    <bean id="soUserNotReadyReasonDAO" class="com.maxelyz.social.model.dao.SoUserNotReadyReasonDAO"/>
+    <bean id="logoffTypeDAO" class="com.maxelyz.social.model.dao.LogoffTypeDAO"/>
+    <bean id="soMsgCasetypeMapDAO" class="com.maxelyz.social.model.dao.SoMsgCasetypeMapDAO"/>
+    <bean id="soActivityTypeDAO" class="com.maxelyz.social.model.dao.SoActivityTypeDAO"/>
+    <bean id="soTransferReasonDAO" class="com.maxelyz.social.model.dao.SoTransferReasonDAO"/>
+    <bean id="soMsgUserWorkingtimeDAO" class="com.maxelyz.social.model.dao.SoMsgUserWorkingtimeDAO"/>
+    <bean id="reportLogDAO" class="com.maxelyz.core.model.dao.ReportLogDAO"/>
+    <bean id="autoAssignmentDAO" class="com.maxelyz.core.model.dao.AutoAssignmentDAO"/>
+    <bean id="autoAssignmentConfigDAO" class="com.maxelyz.core.model.dao.AutoAssignmentConfigDAO"/>
+    <bean id="autoAssignmentListDAO" class="com.maxelyz.core.model.dao.AutoAssignmentListDAO"/>
+    <bean id="mediaPlanDAO" class="com.maxelyz.core.model.dao.MediaPlanDAO"/>
+    <bean id="contactResultPlanDAO" class="com.maxelyz.core.model.dao.ContactResultPlanDAO"/>
+    <bean id="usersStatusDAO" class="com.maxelyz.core.model.dao.UsersStatusDAO"/>
+    <bean id="usersStatusHistoryDAO" class="com.maxelyz.core.model.dao.UsersStatusHistoryDAO"/>
+    <bean id="flexFieldMappingDetailDAO" class="com.maxelyz.core.model.dao.FlexFieldMappingDetailDAO"/>
+    <bean id="customerLayoutDAO" class="com.maxelyz.core.model.dao.CustomerLayoutDAO"/>
+    <bean id="registrationTxDAO" class="com.maxelyz.core.model.ndao.RegistrationTxDAO"/>
+    <bean id="voiceFilePasswordDAO" class="com.maxelyz.core.model.dao.VoiceFilePasswordDAO"/>
+    <bean id="cardExclusionDAO" class="com.maxelyz.core.model.dao.CardExclusionDAO"/>
+    <bean id="ctiAdapterDAO" class="com.maxelyz.core.model.dao.CtiAdapterDAO"/>
+    <bean id="campaignChannelDAO" class="com.maxelyz.core.model.dao.CampaignChannelDAO"/>
+    <bean id="marketingAutoDAO" class="com.maxelyz.core.model.dao.MarketingAutoDAO"/>
+    <bean id="ctiAdapterExportFileDAO" class="com.maxelyz.core.model.dao.CtiAdapterExportFileDAO"/>
+    <bean id="notificationMessageDAO" class="com.maxelyz.core.model.dao.NotificationMessageDAO"/>
+    <bean id="sequenceNoFileDAO" class="com.maxelyz.core.model.dao.SequenceNoFileDAO" />
+    <bean id="sequenceNoFileDetailDAO" class="com.maxelyz.core.model.dao.SequenceNoFileDetailDAO" />
+    <bean id="childRegFormDAO" class="com.maxelyz.core.model.dao.ChildRegFormDAO"/>
+    <bean id="childRegFieldDAO" class="com.maxelyz.core.model.dao.ChildRegFieldDAO"/>
+    <bean id="productChildRegTypeDAO" class="com.maxelyz.core.model.dao.ProductChildRegTypeDAO"/>
+    <bean id="contactResultMappingDAO" class="com.maxelyz.core.model.dao.ContactResultMappingDAO"/>
+    
+    <bean name="userService" class="com.maxelyz.core.service.UserServiceImpl">
+        <property name="usersDAO" ref="usersDAO"/>
+        <property name="usersTimeAttendanceDAO" ref="usersTimeAttendanceDAO"/>
+    </bean>
+    <bean name="securityService" class="com.maxelyz.core.service.SecurityServiceImpl" >
+        <property name="usersDAO" ref="usersDAO"/>
+        <property name="auditLogDAO" ref="auditLogDAO"/>
+    </bean>
+    <bean name="campaignService" class="com.maxelyz.core.service.CampaignServiceImpl">
+        <property name="campaignFrontDAO" ref="campaignFrontDAO"/>
+        <property name="campaignDAO" ref="campaignDAO"/>
+        <property name="assignmentDAO" ref="assignmentDAO"/>       
+        <property name="assignmentDetailDAO" ref="assignmentDetailDAO"/>   
+        <property name="marketingCustomerDAO" ref="marketingCustomerDAO"/>
+        <property name="marketingDAO" ref="marketingDAO"/>
+    </bean>
+    <bean name="questionnaireService" class="com.maxelyz.core.service.QuestionnaireServiceImpl">
+        <property name="qaCategoryDAO" ref="qaCategoryDAO"/>
+        <property name="qaQuestionDAO" ref="qaQuestionDAO"/>
+        <property name="qaChoiceDAO" ref="qaChoiceDAO"/>       
+        <property name="qaFormDAO" ref="qaFormDAO"/>
+        <property name="qaSelectedCategoryDAO" ref="qaSelectedCategoryDAO"/>
+    </bean>
+     <bean name="customerService" class="com.maxelyz.core.service.CustomerServiceImpl">
+        <property name="customerDAO" ref="customerDAO"/>
+        <property name="customerHistoricalDAO" ref="customerHistoricalDAO"/>
+        <property name="customerHistoricalGroupDAO" ref="customerHistoricalGroupDAO"/>       
+        <property name="customerHistoricalColumnDAO" ref="customerHistoricalColumnDAO"/>
+    </bean>
+
+    <bean name="orderService" class="com.maxelyz.core.service.OrderServiceImpl">  
+    <property name="onlinePaymentLogDAO" ref="onlinePaymentLogDAO"/>
+    </bean>
+    
+    <bean name="nextSequenceService" class="com.maxelyz.core.service.NextSequenceServiceImpl">  
+        <property name="sequenceNoDAO" ref="sequenceNoDAO"/>
+        <property name="sequenceNoFileDetailDAO" ref="sequenceNoFileDetailDAO"/>
+    </bean>
+    
+    <bean name="registrationMasterDataService" class="com.maxelyz.core.service.mng.RegistrationMasterDataServiceImp">  
+    </bean>
+    
+    <bean name="mxService" class="com.maxelyz.core.service.nimp.MxBusinessServiceFacade">  
+    </bean>
+    
+    <bean name="telephonyService" class="com.maxelyz.core.service.TelephonyServiceImpl">  
+    </bean>
+    
+    <context:component-scan base-package="com.maxelyz.utils" />
+
+    <!--bean id="campaignController" class="com.maxelyz.core.controller.admin.CampaignController" >
+        <property name="campaignDAO" ref="campaignDAO"/>
+    </bean-->
+    <!--
+        <bean id="saleReportJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <property name="targetObject" ref="rptSalePerformanceDAO" />
+            <property name="targetMethod" value="updateSalePerformanceReport" />
+        </bean>
+    -->
+
+    <bean name="saleReportJob" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.maxelyz.core.job.RptUpdateJob" />
+        <property name="jobDataAsMap">
+            <map>
+                <entry key="rptSalePerformanceDAO" value-ref="rptSalePerformanceDAO" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="saleReportTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="saleReportJob" />
+        <!--property name="cronExpression" value=" 0 30 10,12,14,16,18,20 * * ? " /-->
+        <property name="cronExpression" value=" 0 0/30 * 1/1 * ? * " /> <!--every 10 minute-->
+        <!--property name="cronExpression" value=" 0 0 0/1 1/1 * ? * " /--> <!--every 1 hour-->
+        <!--property name="cronExpression" value=" 0 0 11,15,19 * * ? " /-->
+    </bean>
+    <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <list>
+                <ref bean="saleReportTrigger" />
+            </list>
+        </property>
+    </bean>
+    
+</beans>

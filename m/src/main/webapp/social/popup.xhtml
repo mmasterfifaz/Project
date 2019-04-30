@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                 xmlns:ui="http://java.sun.com/jsf/facelets"
+                 xmlns:h="http://java.sun.com/jsf/html"
+                 xmlns:f="http://java.sun.com/jsf/core"
+                 xmlns:rich="http://richfaces.org/rich"
+                 xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        <ui:insert name="popupHead"/>
+        <style>
+            <!--
+            div.scrollFaq {
+                height: 400px;
+                overflow: auto;
+                border: 0px solid #666;
+                background-color: #fff;
+                padding: 8px;
+            }
+            -->
+        </style>
+    </h:head>
+    <h:body>
+        <rich:popupPanel id="#{modalId}" autosized="true" shadowOpacity="0" width="#{width}" style="padding: 0 0 0 0; border-style: none" >
+        <h:panelGroup>
+            
+        <h:form>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/bo005.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/bo007.png" width="10"></td>
+                        <td valign="middle" background="#{request.contextPath}/img/bo007.png">
+                            <h2 style="color:white"><ui:insert name="popupTitle"/></h2>
+                        </td>
+                        <td valign="middle" align="right" background="#{request.contextPath}/img/bo007.png"><a href="#" class="close_popup" style="cursor:pointer" onclick="modalId = '#{modalId}';#{rich:component(modalId)}.hide(); return false;">#{msg.close}</a></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/bo006.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" bgcolor="#FFFFFF"><ui:insert name="popupDetail"/></td>
+                        <td width="4" ></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+            
+    </h:form>
+        </h:panelGroup>
+    </rich:popupPanel>
+    </h:body>
+</ui:composition>

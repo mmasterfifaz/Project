@@ -1,0 +1,207 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Contact Record</ui:define>
+            <ui:define name="button"></ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr><td width="150" align="right">Contact Date :</td>
+                        <td align="left"><rich:calendar id="fromsaledate"
+                                                        value="#{contactRecordController.fromDate}"
+                                                        inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                        datePattern="#{msg.datePattern}"
+                                                        locale="#{msg.locale}" />
+                            to <span style="width: 5px"/> <rich:calendar id="tosaledate"
+                                                                         value="#{contactRecordController.toDate}"
+                                                                         inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                                         datePattern="#{msg.datePattern}"
+                                                                         locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Group :</td>
+                        <td>
+                            <h:selectOneMenu id="userGroupId"
+                                             value="#{contactRecordController.userGroupId}"
+                                             valueChangeListener="#{contactRecordController.userGroupChangeListener}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{contactRecordController.userGroupList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                <a4j:ajax event="change" render="userId" limitRender="true"/>
+                            </h:selectOneMenu>
+                            TMR :
+                            <h:selectOneMenu id="userId"
+                                             value="#{contactRecordController.userId}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{contactRecordController.userList}" var="list" itemLabel="#{list.name}&#160;&#160;#{list.surname}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Contact Channel :</td>
+                        <td><h:selectOneMenu id="caseChannel" styleClass="select08" value="#{contactRecordController.channelId}"  >
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{contactRecordController.channelList}" />
+                            </h:selectOneMenu></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Contact Result :</td>
+                        <td><h:panelGroup id="panelContactStatus">
+                                <a4j:region>
+                                    <h:selectOneRadio value="#{contactRecordController.contactStatus}">
+                                        <f:selectItems value="#{contactRecordController.contactStatusList}"
+                                                       var="list"  itemValue="#{list[1]}" itemLabel="#{list[0]}"/>
+                                        <a4j:ajax event="click" status="actionStatus" execute="@this"
+                                                  listener="#{contactRecordController.contactStatusListener}"
+                                                  render="contactResultShow"
+                                                />
+                                    </h:selectOneRadio>
+                                </a4j:region>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Contact Reason :</td>
+                        <td><h:panelGroup id="panelContactResult">
+                                <a4j:region>
+                                    <h:selectOneMenu id="contactResultShow" style="width:200px"
+                                                     value="#{contactRecordController.contactResultId}"
+                                                     disabled="#{contactRecordController.contactStatus eq 'all'}">
+                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                        <f:selectItems value="#{contactRecordController.mainContactResultList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                    </h:selectOneMenu>
+                                </a4j:region>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Customer Name :</td>
+                        <td><h:inputText class="textfield" value="#{contactRecordController.textSearch}"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right">Contact to :</td>
+                        <td><h:inputText class="textfield" value="#{contactRecordController.contactToSearch}"/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a4j:commandButton actionListener="#{contactRecordController.searchActionListener}" render="data,totalRec" 
+                                               limitRender="true" image="/img/b_search.png"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{contactRecordController.list}" var="list" rows="#{global.maxrows}"                                
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;">Contact ID</rich:column>
+                            <rich:column style="text-align: left;">Channel</rich:column>
+                            <rich:column style="text-align: left;">Contact To</rich:column>
+                            <rich:column style="text-align: left;">Contact Date</rich:column>
+                            <rich:column style="text-align: left;">Customer Name</rich:column>
+                            <rich:column style="text-align: left;">Case Record</rich:column>
+                            <rich:column style="text-align: left;">Sale Record</rich:column>
+                            <rich:column style="text-align: left;">Contact Result</rich:column>
+                            <rich:column style="text-align: left;">Remark</rich:column>
+                            <rich:column style="text-align: left;">Created By</rich:column>
+                            <rich:column style="text-align: left;">Talk Time</rich:column>
+                            <rich:column style="text-align: left;">Track ID</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        #{list.contactHistoryId}
+                    </rich:column>
+                    <rich:column>
+                    <h:graphicImage library="icon" name="callcenter.png" style="display: inline;" />
+                    <h:graphicImage library="icon" name="outbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Outbound'}" style="display: inline;" />
+                    <h:graphicImage library="icon" name="inbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Inbound'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_phone.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Phone Call'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_fax.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Fax'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_mail.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Email'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_document.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Document'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_postalmail.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Postal Mail'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_system.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'System'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_walkin.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Walk-in'}" style="display: inline;" />
+                    </rich:column>
+                    <rich:column>
+                        #{list.contactTo}
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.contactDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column  rendered="#{list.cntCase eq 0 and list.cntSale eq 0}">
+                       #{list.customerName}
+                    </rich:column>
+                    <rich:column rendered="#{list.cntCase ne 0 or list.cntSale ne 0}">
+                        <h:commandLink value="#{list.customerName}" action="#{contactRecordController.editAction}">
+                            <f:param name="contactHistoryId" value="#{list.contactHistoryId}"/>
+                            <f:param name="fromDate" value="#{contactRecordController.strFromDate}"/>
+                            <f:param name="toDate" value="#{contactRecordController.strToDate}"/>
+                            <f:param name="userGroupId" value="#{contactRecordController.userGroupId}"/>
+                            <f:param name="userId" value="#{contactRecordController.userId}"/>
+                            <f:param name="textSearch" value="#{contactRecordController.textSearch}"/>
+                            <f:param name="contactToSearch" value="#{contactRecordController.contactToSearch}"/>
+                            <f:param name="customerId" value="#{list.customerId}"/>
+                            <f:param name="mainPage" value="history"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        #{list.cntCase}
+                    </rich:column>
+                    <rich:column>
+                        #{list.cntSale}
+                    </rich:column>
+                    <rich:column>
+                        #{list.contactResult}
+                    </rich:column>
+                    <rich:column>
+                        #{list.remark}
+                    </rich:column>
+                    <rich:column>
+                        #{list.createBy}
+                    </rich:column>
+                    <rich:column>
+                        #{list.strTalkTime}
+                    </rich:column>
+                    <rich:column>
+                        <h:panelGroup id="trackId" rendered="#{list.trackId != null and list.trackId ne ''}">
+                            
+                            <a href="#" onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'}); GetAspectStreamingUrlDirect('#{list.contactHistoryId}','#{list.trackId}','#{list.voiceSource}'); return false;">
+                                <h:graphicImage library="icon" name="voice1.png" title="Listen #{list.trackId}" alt="#{list.trackId}" rendered="#{list.trackId != null and list.trackId ne ''}" style="display: inline;" />
+                            </a>
+                            <a href="#" onclick="#{rich:component('waitPopup')}.show('',{height:'80px', width:'150px'}); GetMP3DownloadUrlDirect('#{list.contactHistoryId}','#{list.trackId}','#{list.voiceSource}'); return false;">
+                                Download
+                            </a>
+                        </h:panelGroup>
+                        
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" id="sc2" for="data" maxPages="#{global.maxpages}" renderIfSinglePage="false"  />
+                    </f:facet>
+                </rich:dataTable>
+                <table>
+                   <tr>
+                    <td><h:graphicImage library="icon" name="outbound.png"/></td><td><h:outputText value="Outbound"/></td>
+                    <td><h:graphicImage library="icon" name="inbound.png"/></td><td><h:outputText value="Inbound"/></td>
+                    <td width="100%" align="right">
+                        <h:outputText class="gray03" value="Total Records: "/>
+                        <h:outputText id="totalRec" style="color: orange;font-weight: bold" value="#{contactRecordController.list.size()}"/>
+                    </td>
+                   </tr>
+                </table>
+                <ui:include src="/share/waitpopup.xhtml"/>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

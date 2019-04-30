@@ -1,0 +1,76 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/socialmain.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+
+    <ui:define name="javascript"></ui:define>
+    <ui:define name="detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2><ui:insert name="title2">Title2</ui:insert></h2></td>
+                            <td valign="bottom" height="48">
+                                <h:panelGroup id="subMenuSocial">
+                                <table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                        <td><a href="#{request.contextPath}/social/sclassignment.jsf?pagetype=AS" onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_assign#{userSession.subPage eq 'AS' ? '02' : '01'}.png')" onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_assign02.png')"><img src="#{request.contextPath}/img/tb_assign#{userSession.subPage eq 'AS'  ? '02' : '01'}.png" id="sub01" name="sub01" border="0"/></a></td>
+                                        <td><a href="#{request.contextPath}/social/sclassignment.jsf?pagetype=OP" onmouseout="changeImage('sub02', '#{request.contextPath}/img/tb_open#{userSession.subPage eq 'OP' ? '02' : '01'}.png')" onmouseover="changeImage('sub02', '#{request.contextPath}/img/tb_open02.png')"><img src="#{request.contextPath}/img/tb_open#{userSession.subPage eq 'OP' ? '02' : '01'}.png" id="sub02" name="sub02" border="0"/></a></td>
+                                        <td><a href="#{request.contextPath}/social/sclassignment.jsf?pagetype=FL" onmouseout="changeImage('sub03', '#{request.contextPath}/img/tb_tofollow#{userSession.subPage eq 'FL' ? '02' : '01'}.png')" onmouseover="changeImage('sub03', '#{request.contextPath}/img/tb_tofollow02.png')"><img src="#{request.contextPath}/img/tb_tofollow#{userSession.subPage eq 'FL' ? '02' : '01'}.png" id="sub03" name="sub03" border="0"/></a></td>
+                                        <td><a href="#{request.contextPath}/social/sclassignment.jsf?pagetype=CL" onmouseout="changeImage('sub04', '#{request.contextPath}/img/tb_upclosed#{userSession.subPage eq 'CL' ? '02' : '01'}.png')" onmouseover="changeImage('sub04', '#{request.contextPath}/img/tb_upclosed02.png')"><img src="#{request.contextPath}/img/tb_upclosed#{userSession.subPage eq 'CL' ? '02' : '01'}.png" id="sub04" name="sub04" border="0"/></a></td>
+                                        <td><a href="#{request.contextPath}/social/sclassignment.jsf?pagetype=WF" onmouseout="changeImage('sub06', '#{request.contextPath}/img/tab_waitapprove#{userSession.subPage eq 'WF' ? '02' : '01'}.png')" onmouseover="changeImage('sub06', '#{request.contextPath}/img/tab_waitapprove02.png')"><img src="#{request.contextPath}/img/tab_waitapprove#{userSession.subPage eq 'WF' ? '02' : '01'}.png" id="sub06" name="sub06" border="0"/></a></td>
+                                        <td><a href="#{request.contextPath}/social/sclassignment.jsf?pagetype=ST" onmouseout="changeImage('sub07', '#{request.contextPath}/img/tab_sent#{userSession.subPage eq 'ST' ? '02' : '01'}.png')" onmouseover="changeImage('sub07', '#{request.contextPath}/img/tab_sent02.png')"><img src="#{request.contextPath}/img/tab_sent#{userSession.subPage eq 'ST' ? '02' : '01'}.png" id="sub07" name="sub07" border="0"/></a></td>
+                                    </tr>
+                                </table>
+                                </h:panelGroup>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+            <tr>
+                <td width="10" style="background: url(#{request.contextPath}/img/box08.png) repeat-y"></td>
+                <td width="100%"><ui:insert name="detailSub1">Content here</ui:insert>
+                
+        
+                    <rich:togglePanel id="tg1" activeItem="plus1" switchType="client" cycledSwitching="sub1,plus1" style="width: 100%; border: 0; padding: 0; margin: 0">
+                        <rich:togglePanelItem name="plus1">
+                            <h:commandLink>
+                                <rich:toggleControl targetPanel="tg1" targetItem="sub1"/> 
+                                <img src="#{request.contextPath}/img/bplus.png" alt=""/>
+                            </h:commandLink>
+                        </rich:togglePanelItem> 
+                        <rich:togglePanelItem name="sub1">
+                            <h:commandLink>
+                                <rich:toggleControl targetPanel="tg1" targetItem="plus1"/> 
+                                <img src="#{request.contextPath}/img/b_subtract.png" alt=""/>
+                            </h:commandLink>
+                            <ui:remove>
+                            <!-- Contact Record, News&Update, Make Note-->
+                            <ui:include id="campaign"
+                                        src="../campaign/includeCampaign.xhtml">
+                            </ui:include>
+                            <!-- Contact Record, News&Update, Make Note-->
+                            </ui:remove>
+                        </rich:togglePanelItem> 
+                    </rich:togglePanel>
+                </td>
+                <td width="10" style="background: url(#{request.contextPath}/img/box06.png) repeat-y;background-position:right" ></td>
+            </tr>
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+
+</ui:composition>

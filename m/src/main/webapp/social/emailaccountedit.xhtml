@@ -1,0 +1,297 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Email Account: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{emailAccountEditController.mode}"/>
+                <h:inputHidden value="#{emailAccountEditController.soAccount.id}"/>
+                
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{emailAccountEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" colspan="2">
+                             <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                 <tr>
+                                     <td align="right" style="width: 15%">* Email Account Name: </td>
+                                     <td style="width: 35%">
+                                         <h:inputText id="accountName" value="#{emailAccountEditController.soAccount.name}" 
+                                                      styleClass="textfield" size="30" 
+                                                      required="true" requiredMessage="Email Account Name is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="accountName"/>
+                                        </h:inputText><rich:message for="accountName" style="color:red"/>
+                                     </td>
+                                     <td align="right" style="width: 15%">* Full Name: </td>
+                                     <td style="width: 35%">
+                                         <h:inputText id="fullname" value="#{emailAccountEditController.soEmailAccount.fullname}" 
+                                                      styleClass="textfield" size="30" 
+                                                      required="true" requiredMessage="Full Name is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                        </h:inputText><rich:message for="fullname" style="color:red"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right">Description: </td>
+                                     <td>
+                                         <h:inputText id="description" value="#{emailAccountEditController.soAccount.description}"
+                                                      styleClass="textfield" size="30" >
+                                        </h:inputText>
+                                     </td>
+                                     <td align="right">Email Alias: </td>
+                                     <td>
+                                         <h:inputText id="emailAlias" value="#{emailAccountEditController.soEmailAccount.emailAlias}"
+                                                      styleClass="textfield" size="30">
+                                         </h:inputText>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right">* Connection Timeout: </td>
+                                     <td>
+                                         <h:inputText id="timeout" value="#{emailAccountEditController.soEmailAccount.connectionTimeout}"
+                                                      styleClass="textfield" size="30" onkeypress="return isNumberKey(event);"
+                                                      required="true" requiredMessage="Connection Timeout is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="timeout"/>
+                                        </h:inputText><rich:message for="timeout" style="color:red"/>
+                                     </td>
+                                     <td align="right">* Email Address: </td>
+                                     <td>
+                                         <h:inputText id="emailAdd" value="#{emailAccountEditController.soEmailAccount.emailAddress}"
+                                                      styleClass="textfield" size="30"
+                                                      required="true" requiredMessage="Email Address is required">
+                                             <f:validateRequired/>
+                                             <rich:validator />
+                                             <f:ajax event="blur" render="emailAdd"/>
+                                         </h:inputText><rich:message for="emailAdd" style="color:red"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right"></td>
+                                     <td><h:selectBooleanCheckbox value="#{emailAccountEditController.soAccount.status}"/> Enable</td>
+                                     <td align="right">* Username: </td>
+                                     <td>
+                                         <h:inputText id="username" value="#{emailAccountEditController.soEmailAccount.username}"
+                                                      styleClass="textfield" size="30"
+                                                      required="true" requiredMessage="User Name is required">
+                                             <f:validateRequired/>
+                                             <rich:validator />
+                                             <f:ajax event="blur" render="username"/>
+                                         </h:inputText><rich:message for="username" style="color:red"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right"></td>
+                                     <td><h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.autoResponse}"/> Auto Response</td>
+                                     <td align="right">* Password: </td>
+                                     <td>
+                                         <h:inputText id="accPassword" value="#{emailAccountEditController.soEmailAccount.password}"
+                                                      styleClass="textfield" size="30"
+                                                      required="true" requiredMessage="Password is required">
+                                             <f:validateRequired/>
+                                             <rich:validator />
+                                             <f:ajax event="blur" render="accPassword"/>
+                                         </h:inputText><rich:message for="accPassword" style="color:red"/>
+                                     </td>
+                                 </tr>
+                             </table>
+                        </td>
+                    </tr>
+                    <tr style="background-color: #F8F8F8">
+                        <td align="left" valign="top" colspan="2"><br/>
+                            <h:panelGroup id="incmail">
+                             <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                 <tr><td class="blue04">Incoming Mail Server</td><td colspan="3"></td></tr>
+                                 <tr>
+                                     <td align="right"  style="width: 15%">* Mail Type: </td>
+                                     <td style="width: 35%">
+                                         <h:selectOneRadio id="incMailType" value="#{emailAccountEditController.soEmailAccount.incProtocal}"
+                                                            required="true" requiredMessage="Mail Type is required">
+                                            <f:selectItem itemValue="pop3s" itemLabel="POP3 With SSL" />
+                                            <f:selectItem itemValue="imaps" itemLabel="IMAP With SSL" />
+                                            <f:selectItem itemValue="pop3" itemLabel="POP3" />
+                                            <f:selectItem itemValue="imap" itemLabel="IMAP" />
+                                            <rich:validator />
+                                            <f:ajax event="click" render="incMailType"/>
+                                        </h:selectOneRadio>
+                                        <rich:message for="incMailType" style="color: red;"/>
+                                     </td>
+                                     <td align="right" style="width: 15%"></td>
+                                     <td style="width: 35%">
+                                         <h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.incAuthEnable}"> 
+                                             <f:ajax event="click" render="incAuth" />
+                                         </h:selectBooleanCheckbox> Authentication Enable
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right">* Server: </td>
+                                     <td>
+                                         <h:inputText id="incServer" value="#{emailAccountEditController.soEmailAccount.incServerName}"
+                                                      styleClass="textfield" size="30" 
+                                                      required="true" requiredMessage="Server is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="incServer"/>
+                                        </h:inputText><rich:message for="incServer" style="color:red"/>
+                                     </td>
+                                     <td align="right">* Authentication: </td>
+                                     <td>
+                                         <h:selectOneMenu styleClass="select01" id="incAuth" disabled="#{not emailAccountEditController.soEmailAccount.incAuthEnable}"
+                                                          value="#{emailAccountEditController.soEmailAccount.incAuthType}" style="width: 150px"
+                                                          required="true" requiredMessage="Authentication is required">
+                                            <f:selectItem itemValue="password" itemLabel="Password" />
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="incAuth"/>
+                                        </h:selectOneMenu><rich:message for="incAuth" style="color:red"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right">* Port: </td>
+                                     <td>
+                                         <h:inputText id="incPort" value="#{emailAccountEditController.soEmailAccount.incPort}"
+                                                      styleClass="textfield" size="30" onkeypress="return isNumberKey(event);"
+                                                      required="true" requiredMessage="Port is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="incPort"/>
+                                        </h:inputText><rich:message for="incPort" style="color:red"/>
+                                     </td>
+                                     <td align="right"></td>
+                                     <td><h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.incRemove}"/> Remove Copy from Server</td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right"></td>
+                                     <td><h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.incTlsEnable}"/> TLS</td>
+                                     <td align="right"></td>
+                                     <td>
+                                         <a4j:commandButton image="../img/b_authenticate.png"
+                                                            execute="@this" limitRender="true"
+                                                            render="msgIncError, msgIncSuccess"
+                                                            actionListener="#{emailAccountEditController.auhtIncMailAction}"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right"></td>
+                                     <td></td>
+                                     <td align="right"></td>
+                                     <td>
+                                         <h:outputText id="msgIncError" value="#{emailAccountEditController.messageIncError}" style="color:red"/>
+                                         <h:outputText id="msgIncSuccess" value="#{emailAccountEditController.messageIncSuccess}" style="color:green"/>
+                                     </td>
+                                 </tr>
+                             </table>
+                            </h:panelGroup>
+                        <br/></td>
+                    </tr>
+                    <tr>
+                        <td align="left" valign="top" colspan="2"><br/>
+                            <h:panelGroup id="outmail">
+                             <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                 <tr><td class="blue04">Outgoing Mail Server</td><td colspan="3"></td></tr>
+                                 <tr>
+                                     <td align="right"  style="width: 15%">* Mail Type: </td>
+                                     <td style="width: 35%">
+                                         <h:selectOneRadio id="outMailType" value="#{emailAccountEditController.soEmailAccount.outProtocal}"
+                                                           required="true" requiredMessage="Mail Type is required">
+                                            <f:selectItem itemValue="smtp" itemLabel="SMTP" />
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="outMailType"/>
+                                        </h:selectOneRadio><rich:message for="outMailType" style="color:red"/>
+                                     </td>
+                                     <td align="right" style="width: 15%"></td>
+                                     <td style="width: 35%">
+                                         <h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.outAuthEnable}">
+                                             <f:ajax event="click" render="outAuth" />
+                                         </h:selectBooleanCheckbox> Authentication Enable
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right">* Server: </td>
+                                     <td>
+                                         <h:inputText id="outServer" value="#{emailAccountEditController.soEmailAccount.outServerName}"
+                                                      styleClass="textfield" size="30" 
+                                                      required="true" requiredMessage="Server is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="outServer"/>
+                                        </h:inputText><rich:message for="outServer" style="color:red"/>
+                                     </td>
+                                     <td align="right">* Authentication: </td>
+                                     <td>
+                                         <h:selectOneMenu styleClass="select01" id="outAuth" disabled="#{not emailAccountEditController.soEmailAccount.outAuthEnable}"
+                                                          value="#{emailAccountEditController.soEmailAccount.outAuthType}" style="width: 150px"
+                                                          required="true" requiredMessage="Authentication is required">
+                                            <f:selectItem itemValue="password" itemLabel="Password" />
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="outAuth"/>
+                                        </h:selectOneMenu><rich:message for="outAuth" style="color:red"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right">* Port: </td>
+                                     <td>
+                                         <h:inputText id="outPort" value="#{emailAccountEditController.soEmailAccount.outPort}" 
+                                                      styleClass="textfield" size="30" onkeypress="return isNumberKey(event);"
+                                                      required="true" requiredMessage="Port is required">
+                                            <f:validateRequired/>                  
+                                            <rich:validator />
+                                            <f:ajax event="blur" render="outPort"/>
+                                        </h:inputText><rich:message for="outPort" style="color:red"/>
+                                     </td>
+                                     <td align="right"></td>
+                                     <td><a4j:commandButton image="../img/b_authenticate.png"
+                                                            execute="@this" limitRender="true"
+                                                            render="msgOutError, msgOutSuccess"
+                                                            actionListener="#{emailAccountEditController.auhtOutMailAction}"/></td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right"></td>
+                                     <td><h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.outSslEnable}"/> SSL</td>
+                                     <td align="right"></td>
+                                     <td>
+                                         <h:outputText id="msgOutError" value="#{emailAccountEditController.messageOutError}" style="color:red"/>
+                                         <h:outputText id="msgOutSuccess" value="#{emailAccountEditController.messageOutSuccess}" style="color:green"/>
+                                     </td>
+                                 </tr>
+                                 <tr>
+                                     <td align="right"></td>
+                                     <td><h:selectBooleanCheckbox value="#{emailAccountEditController.soEmailAccount.outTlsEnable}"/> TLS</td>
+                                     <td align="right"></td>
+                                     <td></td>
+                                 </tr>
+                             </table>
+                            </h:panelGroup>
+                        <br/></td>
+                    </tr>
+                    <tr>
+                        <td align="center" valign="top" colspan="2"><br/>
+                            <h:commandButton image="../img/b_save.png" action="#{emailAccountEditController.saveAction}" rendered="#{emailAccountEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{emailAccountEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show();"
+                            onstop="#{rich:component('waitPopup')}.hide();" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

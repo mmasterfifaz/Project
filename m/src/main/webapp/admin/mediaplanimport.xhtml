@@ -1,0 +1,487 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Media Plan: Import</ui:define>
+            <ui:define name="title3">
+                <b>
+                    <a4j:commandLink value="Show Import History"
+                                     title="Show Import History" 
+                                     oncomplete="#{rich:component('importHistory')}.show()"
+                                     actionListener="#{mediaPlanImportController.importHistoryListener}"
+                                     render="importHistoryList" >
+                    </a4j:commandLink>
+                </b>
+            </ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="panelGroupMediaPlanImport">
+                    <a4j:region id="regionStep1">
+                        <h:panelGroup id="panelGroupStep1">
+                            <h:panelGroup rendered="#{mediaPlanImportController.step eq 1}" >
+                                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                    <tr>
+                                        <td width="400" align="right" valign="top">&nbsp;</td>
+                                        <td>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top"><h:outputText value="#{mediaPlanImportController.message}" style="color:red"/>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <h:panelGroup id="datasource">
+                                                <table border="0" width="100%" cellpadding="2" cellspacing="0">
+                                                    <tr>
+                                                        <td align="right" valign="top" class="gray03">
+                                                            <h:outputText value="* Filename:" />
+                                                        </td>
+                                                        <td align="left">
+                                                            <h:panelGroup id ="uploadPanel">
+                                                                <rich:fileUpload id="fileUpload" fileUploadListener="#{mediaPlanImportController.uploadCompleteListener}"
+                                                                                 ontyperejected="alert('Only csv files are accepted');" 
+                                                                                 acceptedTypes="csv" 
+                                                                                 maxFilesQuantity="1"
+                                                                                 immediateUpload="true"
+                                                                                 listHeight="63px">
+                                                                    <a4j:ajax event="clear" render="fileUpload" limitRender="true" execute="@this" listener="#{mediaPlanImportController.clearFileUpload}"/>
+                                                                </rich:fileUpload>
+                                                            </h:panelGroup>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                </table>                            
+                                <table cellpadding="8" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td valign="top" align="left" width="45%">
+                                            <h:commandButton image="../img/b_back.png" action="#{mediaPlanImportController.backAction}" immediate="true"
+                                                             actionListener="#{mediaPlanImportController.clearFileUpload}"/>                                         
+                                        </td>
+                                        <td align="right" width="45%">
+                                            <a4j:commandButton image="../img/b_next.png" 
+                                                               actionListener="#{mediaPlanImportController.nextStep1ToStep2}" 
+                                                               render="panelGroupMediaPlanImport"
+                                                               onclick="#{rich:component('waitPanel')}.show('', {height: '80px', width: '150px'})"
+                                                               oncomplete="#{rich:component('waitPanel')}.hide()"
+                                                               rendered="#{mediaPlanImportController.savePermitted}"/>
+                                        </td>
+                                    </tr>
+                                </table> 
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </a4j:region>
+
+                    <a4j:region id="regionStep2">
+                        <h:panelGroup id="panelGroupStep2">
+                            <h:panelGroup rendered="#{mediaPlanImportController.step eq 2}" >
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td align="right" valign="top">&nbsp;</td>
+                                        <td valign="top" align="center" ><br/>
+                                            <h:outputText value="#{mediaPlanImportController.message}" style="color:red"/>&nbsp;</td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" align="center" colspan="2">
+                                            <br/><br/>
+                                            <table cellpadding="3" cellspacing="0" border="0"> 
+                                                <tr><td valign="top" align="right" width="150"></td><td valign="top" width="50"></td></tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03">Number of Records : </td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{mediaPlanImportController.mediaPlanImportLog.totalRecord}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <ui:remove>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">Duplicate (Within) :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalDupWithin ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getDupWihtinList}">
+                                                                <h:outputText value="#{marketingEditController.totalDupWithin}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalDupWithin eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">Duplicate (Yes Sale) :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalDupYes ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getDupYesList}">
+                                                                <h:outputText value="#{marketingEditController.totalDupYes}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalDupYes eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">Duplicate (Customer) :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalDupCustomer ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,mParam,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getDupCustomerList}">
+                                                                <h:outputText value="#{marketingEditController.totalDupCustomer}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalDupCustomer eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">Op-Out :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalOpOut ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getOpOutList}">
+                                                                <h:outputText value="#{marketingEditController.totalOpOut}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalOpOut eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">Black List :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalBlacklist ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getBlackList}">
+                                                                <h:outputText value="#{marketingEditController.totalBlacklist}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalBlacklist eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" class="gray03">Invalid Telephone No. :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalWrongPhoneNo ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getWrongPhoneNoList}">
+                                                                <h:outputText value="#{marketingEditController.totalWrongPhoneNo}">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalWrongPhoneNo eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                </ui:remove>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03"> Success:</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{mediaPlanImportController.mediaPlanImportLog.successRecord ne 0}"
+                                                                          oncomplete="#{rich:component('mediaPlanList')}.show()"
+                                                                          render="popupMediaPlanList,mParam,dataList,mediaPlanListPanel"
+                                                                          actionListener="#{mediaPlanImportController.getLoadedList}">
+                                                            <h:outputText value="#{mediaPlanImportController.mediaPlanImportLog.successRecord}" style="color: #0099FF">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                            <f:param name="mode" value="success" />
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="#{mediaPlanImportController.mediaPlanImportLog.successRecord}" rendered="#{mediaPlanImportController.mediaPlanImportLog.successRecord eq 0}" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right" class="gray03"> Fail:</td>
+                                                    <td valign="top" align="right">
+                                                        <a4j:commandLink  rendered="#{mediaPlanImportController.mediaPlanImportLog.rejectRecord ne 0}"
+                                                                          oncomplete="#{rich:component('mediaPlanList')}.show()"
+                                                                          render="popupMediaPlanList,mParam,dataList,mediaPlanListPanel"
+                                                                          actionListener="#{mediaPlanImportController.getLoadedList}">
+                                                            <h:outputText value="#{mediaPlanImportController.mediaPlanImportLog.rejectRecord}" style="color: #0099FF">
+                                                                <f:convertNumber pattern="#,##0"/>
+                                                            </h:outputText>
+                                                            <f:param name="mode" value="fail" />
+                                                        </a4j:commandLink>
+                                                        <h:outputText value="#{mediaPlanImportController.mediaPlanImportLog.rejectRecord}" rendered="#{mediaPlanImportController.mediaPlanImportLog.rejectRecord eq 0}" />
+                                                    </td>
+                                                </tr>
+                                                <tr><td height="10"></td><td></td></tr>
+                                                <ui:remove>
+                                                    <tr>
+                                                        <td valign="top" align="right" style="color: #4cae4c">Total Loaded :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalLoaded ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getLoadedList}">
+                                                                <h:outputText value="#{marketingEditController.totalLoaded}" style="color: #4cae4c">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalLoaded eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td valign="top" align="right" style="color: #0099FF">Merge Customer :</td>
+                                                        <td valign="top" align="right">
+                                                            <a4j:commandLink  rendered="#{marketingEditController.totalMergeCustomer ne 0}"
+                                                                              oncomplete="#{rich:component('marketingList')}.show()"
+                                                                              render="popupMarketingList,dataList,marketingListPanel"
+                                                                              actionListener="#{marketingEditController.getMergeList}">
+                                                                <h:outputText value="#{marketingEditController.totalMergeCustomer}" style="color: #0099FF">
+                                                                    <f:convertNumber pattern="#,##0"/>
+                                                                </h:outputText>
+                                                            </a4j:commandLink>
+                                                            <h:outputText value="0" rendered="#{marketingEditController.totalMergeCustomer eq 0}"/>
+                                                        </td>
+                                                    </tr>
+                                                </ui:remove>
+                                            </table>
+                                            <br/><br/>
+                                            <table cellpadding="0" cellspacing="0" border="0"> 
+                                                <tr>
+                                                    <td valign="top" align="center">
+                                                        <a4j:commandButton id="btnSave2"
+                                                                           image="/img/b_proceed.png"
+                                                                           action="#{mediaPlanImportController.saveStep2Listener}"
+                                                                           render="panelGroupStep2"
+                                                                           rendered="#{mediaPlanImportController.mediaPlanImportLog.successRecord ne 0}"
+                                                                           style="margin: 3px"
+                                                                           onclick="if (!confirm('Confirm to Process?')) {
+                                                                                       return false;
+                                                                                       } else {
+                                                                           #{rich:component('waitPanel')}.show('', {height: '80px', width: '150px'});
+                                                                                       }"
+                                                                           oncomplete="#{rich:component('waitPanel')}.hide()"/>
+
+                                                        <a4j:commandButton image="/img/b_close.png" 
+                                                                           action="#{mediaPlanImportController.backAction()}"
+                                                                           style="margin: 3px"/> 
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>    
+                                <table cellpadding="8" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td valign="top">
+                                            <a4j:commandButton image="../img/b_back.png" 
+                                                               actionListener="#{mediaPlanImportController.previousStep2ToStep1}"
+                                                               render="panelGroupMediaPlanImport"/>
+                                        </td>
+                                        <td align="right"></td>
+                                    </tr>
+                                </table>       
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </a4j:region>
+
+                    <a4j:region id="regionStep3">
+                        <h:panelGroup id="panelGroupStep3">
+                            <h:panelGroup rendered="#{marketingEditController.step eq 3}" >
+                                <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+                                    <tr>
+                                        <td valign="top" align="center">
+                                            <br/><br/><br/>
+                                            <table cellpadding="3" cellspacing="0" border="0"> 
+                                                <tr>
+                                                    <td valign="top" align="right" width="150"><b>View Result</b></td>
+                                                    <td valign="top" width="50"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Total Records : </td>
+                                                    <td valign="top" align="right">
+
+                                                        <h:outputText value="#{marketingEditController.totalRecords}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Duplicate (Within) :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalDupWithin}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Duplicate (Yes Sale) :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalDupYes}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Duplicate (Customer) :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalDupCustomer}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Op-Out :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalOpOut}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Black List :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalBlacklist}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Invalid Telephone No. :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalWrongPhoneNo}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" align="right">Total Loaded :</td>
+                                                    <td valign="top" align="right">
+                                                        <h:outputText value="#{marketingEditController.totalLoaded}">
+                                                            <f:convertNumber pattern="#,##0"/>
+                                                        </h:outputText>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                            <br/><br/>
+                                            <table cellpadding="0" cellspacing="0" border="0" width="100%"> 
+                                                <tr>
+                                                    <td valign="top" align="left" width="33%">
+
+                                                        <a4j:commandButton image="../img/b_back.png" 
+                                                                           actionListener="#{marketingEditController.previousStep2ToStep1Edit}"
+                                                                           render="panelGroupMarketing"
+                                                                           style="margin: 3px"/>
+                                                    </td>
+                                                    <td valign="top" align="center" width="34%">
+
+                                                        <a4j:commandButton image="/img/b_close.png" 
+                                                                           action="#{marketingEditController.backAction}"
+                                                                           style="margin: 3px"/> 
+                                                    </td>
+                                                    <td valign="top" align="right" width="33%">
+
+
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>   
+                            </h:panelGroup>
+                        </h:panelGroup>
+                    </a4j:region>
+
+
+                </h:panelGroup>
+            </ui:define>
+            <ui:define name="popupModal">
+                <rich:popupPanel id="waitPanel" style="background-color: white; text-align:center">
+                    <h:outputText value="Please wait..." style="font-size:large" />
+                </rich:popupPanel>
+                <rich:popupPanel id="importHistory" autosized="true" shadowOpacity="0" width="800" height="600" style="padding: 0 0 0 0; border-style: none " >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Media Plan : Import History </h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('importHistory')}.hide();
+                                                    return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                                <rich:dataTable id="importHistoryList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                value="#{mediaPlanImportController.importHistories}" rows="10" var="imLog">
+                                    <f:facet name="header">
+                                        <rich:columnGroup>
+                                            <rich:column><h:outputText value="ID"/></rich:column>
+                                            <rich:column><h:outputText value="File Name"/></rich:column>
+                                            <rich:column><h:outputText value="Import Date"/></rich:column>
+                                            <rich:column><h:outputText value="Import By"/></rich:column>
+                                            <rich:column><h:outputText value="Total Records"/></rich:column>
+                                            <rich:column><h:outputText value="Success Records"/></rich:column>
+                                            <rich:column><h:outputText value="Reject records"/></rich:column>
+                                        </rich:columnGroup>
+                                    </f:facet>
+                                    <rich:column>
+                                        <h:outputText value="#{imLog.int1}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{imLog.fileName}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{imLog.importDate}">
+                                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" />
+                                        </h:outputText>                
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{imLog.importBy}"/>
+                                    </rich:column>
+                                    <rich:column style="text-align: center" >
+                                        <h:outputText value="#{imLog.totalRecord}">
+                                            <f:convertNumber pattern="#,##0"/>
+                                        </h:outputText>
+                                    </rich:column>
+                                    <rich:column style="text-align: center" >
+                                        <h:outputText value="#{imLog.successRecord}">
+                                            <f:convertNumber pattern="#,##0"/>
+                                        </h:outputText>
+                                    </rich:column>
+                                    <rich:column style="text-align: center" >
+                                        <h:outputText value="#{imLog.rejectRecord}">
+                                            <f:convertNumber pattern="#,##0"/>
+                                        </h:outputText>
+                                    </rich:column>
+                                    <f:facet name="footer">
+                                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                                    </f:facet>
+                                </rich:dataTable>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </rich:popupPanel>
+                <ui:include id="popupMediaPlanList"
+                            src="popupMediaPlanList.xhtml">                    
+                    <ui:param id="mParam" name="m" value="#{mediaPlanImportController}"/>
+                </ui:include> 
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

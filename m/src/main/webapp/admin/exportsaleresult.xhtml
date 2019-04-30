@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Export Pending Payment</ui:define>
+            <ui:define name="button"> 
+                <ui:remove>
+                <h:commandLink  action="/report/blank.xhtml" actionListener="#{exportSaleResultController.exportListener}" target="_blank">
+                                Export Yes Sale
+                </h:commandLink> <br/>
+                
+                <h:commandLink  action="/report/blank.xhtml" actionListener="#{exportSaleResultController.exportPendingListener}" target="_blank">
+                                Export Pending Payment Sale
+                </h:commandLink> <br/>
+                </ui:remove>
+                <ui:remove>
+                <h:commandLink  action="/report/blank.xhtml" actionListener="#{exportSaleResultController.exportMailMergeListener}" target="_blank">
+                                Export Application
+                            </h:commandLink>       
+                </ui:remove>
+             
+            </ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr><td width="150" align="right">Date:</td>
+                        <td align="left"><rich:calendar id="fromdate"
+                                                        value="#{exportSaleResultController.fromDate}"
+                                                        inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                        datePattern="#{msg.datePattern}"
+                                                        locale="#{msg.locale}"/>
+                            to <span style="width: 5px"/> <rich:calendar id="todate"
+                                                                         value="#{exportSaleResultController.toDate}"
+                                                                         inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                                                         datePattern="#{msg.datePattern}"
+                                                                         locale="#{msg.locale}"/>
+                           
+                        </td>
+                    </tr>
+                    <tr><td></td>
+                        <td>
+                            <h:commandLink  action="blank.xhtml" actionListener="#{exportSaleResultController.exportPendingListener}" target="_blank">
+                                                        <img alt="Report" src="../img/b_search.png"/>
+
+                            </h:commandLink>
+                            <ui:remove>
+                            <a4j:commandButton actionListener="#{exportSaleResultController.searchActionListener}" render="data" limitRender="true" image="/img/b_search.png"/>
+                            </ui:remove>
+                        </td>
+                    </tr>
+
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <ui:remove>
+                <rich:dataTable id="data" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{exportSaleResultController.list}"  var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 25%;text-align: left;">Ref No.</rich:column>
+                            <rich:column style="width: 15%;text-align: left;">Sales Date</rich:column>
+                            <rich:column style="width: 60%;text-align: left;">Customer Name</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        #{list.refNo}
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.saleDate}">
+                            <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        #{list.customerName}
+                    </rich:column>
+      
+                </rich:dataTable>
+                    </ui:remove>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

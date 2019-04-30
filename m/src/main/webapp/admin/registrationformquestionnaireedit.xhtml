@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Configuration</ui:define>
+    <ui:define name="title2">Registration Form : Questionnaire: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{registrationFormQuestionnaireEditController.mode}"/>
+        <h:inputHidden value="#{registrationFormQuestionnaireEditController.registrationForm.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top">&nbsp;</td>
+              </tr>
+             <tr>
+                <td width="200" align="right" valign="top">Registration Form Name:</td>
+                <td><h:outputText id="registrationFormName" value="#{registrationFormQuestionnaireEditController.registrationForm.name}"  />
+                </td>
+              </tr>
+      
+              <tr>
+                <td width="200" align="right" valign="top">Question 01:</td>
+                <td>
+                    <h:inputTextarea id="question01" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 02:</td>
+                <td>
+                    <h:inputTextarea id="question02" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 03:</td>
+                <td>
+                    <h:inputTextarea id="question03" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 04:</td>
+                <td>
+                    <h:inputTextarea id="question04" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 05:</td>
+                <td>
+                    <h:inputTextarea id="question05" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 06:</td>
+                <td>
+                    <h:inputTextarea id="question06" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 07:</td>
+                <td>
+                    <h:inputTextarea id="question07" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 08:</td>
+                <td>
+                    <h:inputTextarea id="question08" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 09:</td>
+                <td>
+                    <h:inputTextarea id="question09" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Question 10:</td>
+                <td>
+                    <h:inputTextarea id="question10" cols="40" rows="5"  value="">
+                    </h:inputTextarea>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:commandButton image="../img/b_save.png" action="#{registrationFormQuestionnaireEditController.saveAction}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{registrationFormQuestionnaireEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

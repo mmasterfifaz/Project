@@ -1,0 +1,93 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">Agent Performance Summary Report</ui:define>
+            <ui:define name="panel">             
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <ui:remove>
+                    <tr>
+                        <td width="150" align="right">Reference No. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{agentPerformanceSummaryReportController.refNo}"/>
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Campaign : </td>
+                        <td valign="top"><h:selectOneMenu id="campaign" value="#{agentPerformanceSummaryReportController.campaignId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceSummaryReportController.campaignList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Product : </td>
+                        <td valign="top"><h:selectOneMenu id="product" value="#{agentPerformanceSummaryReportController.productId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceSummaryReportController.productList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">QC Form : </td>
+                        <td valign="top"><h:selectOneMenu id="qcQaFormName" 
+                                                          value="#{agentPerformanceSummaryReportController.qaFormName}">
+                                <ui:remove><f:selectItem  itemValue="ALL" itemLabel="#{msg.all}"/></ui:remove>
+                                <f:selectItems value="#{agentPerformanceSummaryReportController.qaFormNameList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Approved Date : </td>
+                        <td>
+                            <rich:calendar value="#{agentPerformanceSummaryReportController.fromDate}" inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{agentPerformanceSummaryReportController.toDate}" inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">User Group : </td>
+                        <td valign="top">
+                            <h:selectOneMenu id="usergroup" value="#{agentPerformanceSummaryReportController.userGroupId}"
+                                                          valueChangeListener="#{agentPerformanceSummaryReportController.userGroupListener}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceSummaryReportController.usergroupList}"/>
+                                <a4j:ajax event="change" render="usergroup, user" execute="@this"/>
+                            </h:selectOneMenu>
+                            TMR :
+                            <h:selectOneMenu id="user" value="#{agentPerformanceSummaryReportController.userId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceSummaryReportController.usersList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">QC User : </td>
+                        <td valign="top"><h:selectOneMenu id="qcCreateBy" 
+                                                          value="#{agentPerformanceSummaryReportController.createBy}">
+                                <f:selectItem itemValue="All" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{agentPerformanceSummaryReportController.qcByList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>                  
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink  action="blank.xhtml" actionListener="#{agentPerformanceSummaryReportController.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png" style="display: inline"/>
+                            </h:commandLink>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

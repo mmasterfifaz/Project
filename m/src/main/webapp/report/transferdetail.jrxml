@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="TransferDetail" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="to" class="java.util.Date"/>
+	<parameter name="user_group_id" class="java.lang.Integer"/>
+	<parameter name="user_group_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_id" class="java.lang.Integer"/>
+	<parameter name="user_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="phone_category_id" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="phone_category_name" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select ct.unique_id as 'Unique ID',ct.request_date as 'Transfer Time',ct.create_by as 'User Name',ct.ani as 'Incoming Call',ct.ani_name as 'ANI Name',
+ct.call_count as 'Transfer Attempt',ct.dnis as 'Transfer To',ct.dnis_name as 'DNIS Name',pc.name as 'Category',result as 'Result',
+RIGHT('0' + CONVERT(varchar(2), (ch.talk_time % 3600) / 60), 2)+ ':' + RIGHT('0' + CONVERT(varchar(2), ch.talk_time % 60), 2) as 'Talk Time (Min.)'
+from contact_transfer ct
+left join phone_directory pd on  pd.name + ' ' + pd.surname = ct.dnis_name
+left join phone_directory_category pc on pd.phone_directory_category_id = pc.id
+left join contact_history ch on ct.contact_history_id = ch.id
+left join users u on u.id = ct.create_by_id
+left join user_group g on g.id = u.user_group_id
+group by ct.unique_id,ct.create_by,ct.request_date ,ct.call_count,ct.dnis,ct.dnis_name,pc.name
+,ct.result,ch.talk_time,ct.ani,ct.ani_name
+order by ct.request_date]]>
+	</queryString>
+	<field name="Unique ID" class="java.lang.String"/>
+	<field name="Transfer Time" class="java.sql.Timestamp"/>
+	<field name="User Name" class="java.lang.String"/>
+	<field name="Incoming Call" class="java.lang.String"/>
+	<field name="ANI Name" class="java.lang.String"/>
+	<field name="Transfer Attempt" class="java.lang.Integer"/>
+	<field name="Transfer To" class="java.lang.String"/>
+	<field name="DNIS Name" class="java.lang.String"/>
+	<field name="Category" class="java.lang.String"/>
+	<field name="Result" class="java.lang.String"/>
+	<field name="Talk Time (Min.)" class="java.lang.String"/>
+	<variable name="contactCount" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="unique">
+		<groupExpression><![CDATA[$F{Unique ID}]]></groupExpression>
+		<groupHeader>
+			<band height="2"/>
+		</groupHeader>
+		<groupFooter>
+			<band height="19">
+				<line>
+					<reportElement x="0" y="7" width="802" height="1" forecolor="#99CCFF"/>
+					<graphicElement>
+						<pen lineWidth="1.75" lineStyle="Double" lineColor="#FF6600"/>
+					</graphicElement>
+				</line>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="97" splitType="Stretch">
+			<image scaleImage="RetainShape" hAlign="Right" isUsingCache="false">
+				<reportElement x="685" y="0" width="117" height="37"/>
+				<imageExpression><![CDATA["maxarlogo.gif"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="419" height="31"/>
+				<textElement>
+					<font fontName="Browallia New" size="24" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Transfer Detail]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="37" width="802" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement x="0" y="41" width="802" height="52" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<line>
+				<reportElement x="0" y="96" width="802" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="15" y="45" width="92" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Contact Date From: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="65" width="92" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Contact Date To: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="41" width="54" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Group: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="452" y="41" width="144" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_group_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy">
+				<reportElement x="113" y="45" width="123" height="16"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy">
+				<reportElement x="113" y="65" width="123" height="16"/>
+				<textElement>
+					<font fontName="Cordia New" size="12" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{to}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="58" width="144" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="395" y="58" width="54" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="452" y="75" width="144" height="20"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{phone_category_name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="394" y="75" width="54" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Category:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="88" height="20" forecolor="#006666"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Transfer Time]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="88" y="2" width="56" height="20" forecolor="#006666"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="144" y="2" width="70" height="20" forecolor="#CC6600"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Incoming Call]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="214" y="2" width="108" height="20" forecolor="#CC6600"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="322" y="2" width="51" height="20" forecolor="#006600"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Attempt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="554" y="2" width="96" height="20" forecolor="#006600"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Category]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="372" y="2" width="70" height="20" forecolor="#006600"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Transfer To]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="441" y="2" width="114" height="20" forecolor="#006600"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="649" y="2" width="77" height="20" forecolor="#990066"/>
+				<textElement>
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Result]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="726" y="2" width="76" height="20" forecolor="#990066"/>
+				<textElement textAlignment="Right">
+					<font fontName="Cordia New" size="14" isBold="true" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Talk Time (Min.)]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="1" width="90" height="20" forecolor="#006666"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(new SimpleDateFormat("dd MMM yyyy HH:mm")).format($F{Transfer Time})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="88" y="1" width="56" height="20" printWhenGroupChanges="unique" forecolor="#006666"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{User Name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="144" y="1" width="70" height="20" printWhenGroupChanges="unique" forecolor="#CC6600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Incoming Call}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="214" y="1" width="108" height="20" printWhenGroupChanges="unique" forecolor="#CC6600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ANI Name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="322" y="1" width="50" height="20" forecolor="#006600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Transfer Attempt}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="373" y="1" width="70" height="20" forecolor="#006600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Transfer To}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="554" y="1" width="96" height="20" forecolor="#006600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Category}==null?"-":$F{Category}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="649" y="1" width="109" height="20" forecolor="#990066"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Result}.equals("busy")?"Busy":$F{Result}.equals("noAnswer")?"No Answer":$F{Result}.equals("wrongTransfer")?"Wrong Transfer":
+$F{Result}.equals("complete")?"Complete":$F{Result}.equals("blind")?"Blind":$F{Result}.equals("blindComplete")?"Blind Complete":
+$F{Result}.equals("blindHello")?"Blind Hello":$F{Result}.equals("blindNoAnswer")?"Blind No Answer":$F{Result}.equals("blindBusy")?"Blind Busy":
+$F{Result}.equals("blindNetworkAnnouncement")?"Blind Announcement":$F{Result}.equals("blindSITTone")?"Blind SIT Tone":
+$F{Result}.equals("blindWrongNumber")?"Blind Wrong Number":"-"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="441" y="1" width="114" height="20" forecolor="#006600"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DNIS Name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement isPrintRepeatedValues="false" x="758" y="1" width="44" height="20" printWhenGroupChanges="unique" forecolor="#990066"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="13" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Talk Time (Min.)}==null?"-":$F{Talk Time (Min.)}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="702" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+ String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="180" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed Date "+ (new SimpleDateFormat("dd MMM yyyy HH:mm")).format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="22" splitType="Stretch">
+			<elementGroup/>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement x="0" y="0" width="802" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="20" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

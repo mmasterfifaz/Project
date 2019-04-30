@@ -1,0 +1,382 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Social Configurations</ui:define>
+            <ui:define name="title2">Service Detail</ui:define>
+            <ui:define name="head">
+                
+            </ui:define>
+            <ui:define name="panel"><br/>
+                <h:panelGroup id="mainPanel">
+                    <h:panelGroup id="step1" rendered="#{socialServiceDetailController.step eq 1}">
+                        <a4j:region id="rg1">
+                            <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                <tr>
+                                    <td width="200" align="right" valign="top"><span style="color: red;">*</span> Name :</td>
+                                    <td><h:panelGrid columns="2">
+                                        <h:inputText id="serviceName" styleClass="textfield" 
+                                                     value="#{socialServiceDetailController.soService.name}" 
+                                                     required="true" requiredMessage="#{msg.require}" validatorMessage="#{msg.require}">
+                                            <f:validateRequired />
+                                            <rich:validator />
+                                        </h:inputText>
+                                        <rich:message for="serviceName" style="color:red" />
+                                        </h:panelGrid>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Enable :</td>
+                                    <td>
+                                        <h:selectBooleanCheckbox value="#{socialServiceDetailController.soService.enable}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Service Priority :</td>
+                                    <td>
+                                        <h:selectOneRadio id="servicePriority" value="#{socialServiceDetailController.soService.servicePriority}" >
+                                            <f:selectItems value="#{socialServiceDetailController.servicePriorityList}"/>
+                                        </h:selectOneRadio>
+                                    </td>
+                                </tr>
+                                <!--tr>
+                                    <td align="right" valign="top">Social Account :</td>
+                                    <td></td>
+                                </tr-->
+                                <tr>
+                                    <td align="right" valign="top">Incoming Email Account :</td>
+                                    <td>
+                                        <rich:pickList id="incoming" switchByDblClick="true" 
+                                                       listWidth="350px" listHeight="150px"
+                                                       value="#{socialServiceDetailController.selectedSoAccount}" 
+                                                       required="true" requiredMessage="Selected Account is required">
+                                            <f:selectItems value="#{socialServiceDetailController.soAccountList}" 
+                                                           var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                                        </rich:pickList>
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                        <a4j:commandButton image="../img/b_back.png" value="Previous" 
+                                           action="#{socialServiceDetailController.previous}" 
+                                           immediate="true"
+                                           style="margin-left: 10px"/>
+
+                            <a4j:commandButton image="../img/b_next.png" value="Next" 
+                                               actionListener="#{socialServiceDetailController.step1to2}" 
+                                               execute="@form" limitRender="true" render="mainPanel"
+                                               style="float: right; margin-right: 10px"/>
+                        </a4j:region>
+                    </h:panelGroup>
+                    <h:panelGroup id="step2" rendered="#{socialServiceDetailController.step eq 2}">
+                        <a4j:region id="rg2">
+                        <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                
+                                <tr>
+                                    <td align="right" valign="top">Message Priority :</td>
+                                    <td>
+                                        <h:selectManyCheckbox value="#{socialServiceDetailController.messagePriorityString}" layout="lineDirection" >
+                                            <f:selectItems value="#{socialServiceDetailController.messagePriorityList}"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message Sentimental :</td>
+                                    <td><table border="0" cellpadding="3" cellspacing="0">
+                                            <tr>
+                                                <td><h:graphicImage url="/img/social/emo_positive_small.png"/></td>
+                                                <td><h:graphicImage url="/img/social/emo_neutral_small.png"/></td>
+                                                <td><h:graphicImage url="/img/social/emo_negative_small.png"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td><input type="radio" id="msgSen" name="msgSen" value="positive" onclick="document.getElementById('frm:hMsgSen').value=this.value" checked="#{socialServiceDetailController.soService.sentimental eq 'positive' ? 'checked' : ''}"/></td>
+                                                <td><input type="radio" id="msgSen" name="msgSen" value="neutral" onclick="document.getElementById('frm:hMsgSen').value=this.value" checked="#{socialServiceDetailController.soService.sentimental eq 'neutral' ? 'checked' : ''}"/></td>
+                                                <td><input type="radio" id="msgSen" name="msgSen" value="negative" onclick="document.getElementById('frm:hMsgSen').value=this.value" checked="#{socialServiceDetailController.soService.sentimental eq 'negative' ? 'checked' : ''}"/></td>
+                                            </tr>
+                                        </table>
+                                        <h:inputHidden id="hMsgSen" value="#{socialServiceDetailController.soService.sentimental}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">
+                                        Feed Keyword :<br/>
+                                        Enter one keyword per line
+                                    </td>
+                                    <td>
+                                        <h:inputTextarea id="keyword" rows="10" cols="50"
+                                                         value="#{socialServiceDetailController.strKeyword}"/><br/>
+                                        
+                                        <h:selectOneRadio id="matchType" value="#{socialServiceDetailController.matchType}">
+                                            <f:selectItem itemValue="1" itemLabel="Match at least one word" />
+                                            <f:selectItem itemValue="2" itemLabel="Match all words" />
+                                        </h:selectOneRadio>
+                                        
+                                        <a4j:commandButton image="../img/b_add.png"
+                                                           render="fkwList,keyword,matchType"
+                                                           actionListener="#{socialServiceDetailController.addKeywordActionListener}"/>
+                                        
+                                        <h:panelGroup id="fkwList">
+                                            <rich:dataTable value="#{socialServiceDetailController.soService.soServiceKeywordCollection}" var="list" 
+                                                            styleClass="tableline01" style="width:500px"
+                                                            rowKeyVar="rowKey">
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column style="text-align: left;width: 3%" styleClass="subh01">&nbsp;</rich:column>
+                                                        <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="Keyword"/></rich:column>
+                                                        <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="Match Type"/></rich:column>
+
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:column style="border: 0; font-size: medium; border-bottom: 1px solid #f5f5f6;">
+                                                    <a4j:commandButton image="../img/b_subtract02.png"
+                                                                       render="fkwList"
+                                                                       actionListener="#{socialServiceDetailController.removeKeyword}"
+                                                                       execute="@this" limitRender="true" style="vertical-align: bottom"
+                                                                       onclick="return confirm('Are you sure you want to delete?')">
+                                                        <f:param name="orderId" value="#{rowKey+1}"/>
+                                                    </a4j:commandButton>
+                                                </rich:column>
+                                                <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                    <h:outputText value="#{list.keyword}"/>
+                                                </rich:column>
+                                                <rich:column style="width: 150px; border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                    <h:outputText value="Match at least one word" rendered="#{not list.matchAll}"/>
+                                                    <h:outputText value="Match all words" rendered="#{list.matchAll}"/>
+                                                </rich:column>
+                                            </rich:dataTable>
+                                        </h:panelGroup>
+                                        
+                                        <br/>    
+                                        
+                                        <a4j:jsFunction name="rmAction"
+                                                        immediate="true"
+                                                        render="fkwList">
+                                            <a4j:param name="param1" assignTo="#{socialServiceDetailController.tmpStr}"/>
+                                        </a4j:jsFunction>
+                                    </td>
+                                </tr>
+                            </table>
+                        <a4j:commandButton image="../img/b_back.png" value="Previous" 
+                                           actionListener="#{socialServiceDetailController.step2to1}" 
+                                           execute="@form" limitRender="true" render="mainPanel"
+                                           style="margin-left: 10px"/>
+                        <a4j:commandButton image="../img/b_next.png" value="Next" 
+                                         actionListener="#{socialServiceDetailController.step2to3}" 
+                                         execute="@form" limitRender="true" render="mainPanel"
+                                         style="float: right; margin-right: 10px"/>
+                        </a4j:region>
+                    </h:panelGroup>
+                    <h:panelGroup id="step3" rendered="#{socialServiceDetailController.step eq 3}">
+                        <a4j:region id="rg3">
+                            <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                                <tr>
+                                    <td align="right" valign="top">Routing Type :</td>
+                                    <td>
+                                        <h:selectOneRadio value="#{socialServiceDetailController.soService.routingType}">
+                                            <f:selectItem itemValue="roundrobin" itemLabel="Round Robin" />
+                                            <f:selectItem itemValue="average" itemLabel="Average" />
+                                            <f:selectItem itemValue="pooling" itemLabel="Pooling" />
+                                        </h:selectOneRadio>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Routing Option :</td>
+                                    <td>
+                                        <table border="0" cellpadding="3" cellspacing="0">
+                                            <tr>
+                                                <td><h:selectBooleanCheckbox id="routingOption" value="#{socialServiceDetailController.soService.routingOption}"/> </td>
+                                                <td>Continuous Distribution</td>
+                                            </tr>
+                                            <tr>
+                                                <td><h:selectBooleanCheckbox id="routingSameUser" value="#{socialServiceDetailController.soService.routingSameUser}"/> </td>
+                                                <td>Keep the conversation mail to the same user</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Routing to User :</td>
+                                    <td><a4j:commandButton image="/img/b_adduser.png" 
+                                                           oncomplete="#{rich:component('selectUser')}.show();"
+                                                           render="popupSelectUser"
+                                                           execute="@this" limitRender="true"
+                                                           style="padding-right: 5px"/> 
+                                        <a4j:commandButton image="/img/b_delete.png" 
+                                                           actionListener="#{socialServiceDetailController.deleteUserActionListener}"
+                                                           render="dtSelectedUser1"
+                                                           onclick="return checkDelete(this.form)"/>
+            
+                                        <rich:dataTable id="dtSelectedUser1" style="width: 500px" styleClass="tableline01" headerClass="subh01"
+                                                        value="#{socialServiceDetailController.userList}" var="list">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="text-align: left;width: 3%" styleClass="subh01"><input type="checkbox" name="allbox" onclick="checkAllToDelete()"/></rich:column>
+                                                    <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="User Name"/></rich:column>
+                                                    <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="Login Name"/></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:selectBooleanCheckbox id="userbox" value="#{socialServiceDetailController.selectedIds[list.id]}"
+                                                                         onclick="checkAllToDelete2()"/>
+                                            </rich:column>
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="#{list.name}"/> <h:outputText value="#{list.surname}"/>
+                                            </rich:column>
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="#{list.loginName}"/>
+                                            </rich:column>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                            </table>
+                            <a4j:commandButton image="../img/b_back.png" value="Previous" 
+                                           actionListener="#{socialServiceDetailController.step3to2}" 
+                                           execute="@form" limitRender="true" render="mainPanel"
+                                           style="padding-left: 10px"/>
+                            <a4j:commandButton image="../img/b_next.png" value="Next" 
+                                             actionListener="#{socialServiceDetailController.step3to4}" 
+                                             execute="@form" limitRender="true" render="mainPanel"
+                                             style="float: right; padding-right: 10px"/>
+                        </a4j:region>
+                    </h:panelGroup>
+                    <h:panelGroup id="step4" rendered="#{socialServiceDetailController.step eq 4}">
+                        <a4j:region id="rg4">
+                            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                                <tr>
+                                    <td width="200" align="right" valign="top"><span style="color: red;">*</span> Name :</td>
+                                    <td>
+                                        <h:outputText value="#{socialServiceDetailController.soService.name}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Service Priority :</td>
+                                    <td>
+                                        <h:outputText value="P1:Lowest" rendered="#{socialServiceDetailController.soService.servicePriority eq 1}"/>
+                                        <h:outputText value="P2:Low" rendered="#{socialServiceDetailController.soService.servicePriority eq 2}"/>
+                                        <h:outputText value="P3:Medium" rendered="#{socialServiceDetailController.soService.servicePriority eq 3}"/>
+                                        <h:outputText value="P4:High" rendered="#{socialServiceDetailController.soService.servicePriority eq 4}"/>
+                                        <h:outputText value="P5:Highest" rendered="#{socialServiceDetailController.soService.servicePriority eq 5}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Email Account :</td>
+                                    <td>
+                                        <rich:dataTable value="#{socialServiceDetailController.selectedSoAccountList}" var="list" 
+                                                        styleClass="tableline01" style="width:500px"
+                                                        rowKeyVar="rowKey">
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="#{list.name}"/>
+                                            </rich:column>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message Priority :</td>
+                                    <td>
+                                        <h:outputText value="#{socialServiceDetailController.messagePriorityString2}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Message Sentimental :</td>
+                                    <td><h:graphicImage url="/img/social/emo_positive_small.png" rendered="#{socialServiceDetailController.soService.sentimental eq 'positive'}"/>
+                                        <h:graphicImage url="/img/social/emo_neutral_small.png" rendered="#{socialServiceDetailController.soService.sentimental eq 'neutral'}"/>
+                                        <h:graphicImage url="/img/social/emo_negative_small.png" rendered="#{socialServiceDetailController.soService.sentimental eq 'negative'}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Feed Keyword :</td>
+                                    <td>
+                                        <rich:dataTable value="#{socialServiceDetailController.soService.soServiceKeywordCollection}" var="list" 
+                                                        styleClass="tableline01" style="width:500px"
+                                                        rowKeyVar="rowKey">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="Keyword"/></rich:column>
+                                                    <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="Match Type"/></rich:column>
+
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="#{list.keyword}"/>
+                                            </rich:column>
+                                            <rich:column style="width: 150px; border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="Match at least on word" rendered="#{not list.matchAll}"/>
+                                                <h:outputText value="Match all words" rendered="#{list.matchAll}"/>
+                                            </rich:column>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Routing Type :</td>
+                                    <td>
+                                        <h:outputText value="Round Robin" rendered="#{socialServiceDetailController.soService.routingType eq 'roundrobin'}"/>
+                                        <h:outputText value="Average" rendered="#{socialServiceDetailController.soService.routingType eq 'average'}"/>
+                                        <h:outputText value="Pooling" rendered="#{socialServiceDetailController.soService.routingType eq 'pooling'}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Routing Option :</td>
+                                    <td>
+                                        <table border="0" cellpadding="3" cellspacing="0">
+                                            <tr>
+                                                <td><h:selectBooleanCheckbox value="#{socialServiceDetailController.soService.routingOption}" disabled="true"/> </td>
+                                                <td>Continuous Distribution</td>
+                                            </tr>
+                                            <tr>
+                                                <td><h:selectBooleanCheckbox value="#{socialServiceDetailController.soService.routingSameUser}" disabled="true"/> </td>
+                                                <td>Keep the conversation mail to the same user</td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top">Routing to User :</td>
+                                    <td>
+                                        <rich:dataTable id="dtSelectedUser" style="width: 500px" styleClass="tableline01" headerClass="subh01"
+                                                        value="#{socialServiceDetailController.userList}" var="list">
+                                             <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="User Name"/></rich:column>
+                                                    <rich:column style="text-align: left;" styleClass="subh01"><h:outputText value="Login Name"/></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="#{list.name}"/> <h:outputText value="#{list.surname}"/>
+                                            </rich:column>
+                                            <rich:column style="border: 0; font-size: 13px; border-bottom: 1px solid #f5f5f6;">
+                                                <h:outputText value="#{list.loginName}"/>
+                                            </rich:column>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="right" valign="top"></td>
+                                    <td>
+                                        <a4j:commandButton image="../img/b_save.png" value="Save" 
+                                                           action="#{socialServiceDetailController.save}" 
+                                                           execute="@form" limitRender="true"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        <a4j:commandButton image="../img/b_back.png" value="Previous" 
+                                           actionListener="#{socialServiceDetailController.step4to3}" 
+                                           execute="@region" limitRender="true" render="mainPanel"
+                                           style="margin-left: 10px"/>
+                        </a4j:region>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </ui:define>
+            <ui:define name="popupModal">
+                <ui:include id="popupSelectUser"
+                            src="/social/popupSelectUser.xhtml">
+                    <ui:param name="m" value="#{socialServiceDetailController}"/>
+                </ui:include>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

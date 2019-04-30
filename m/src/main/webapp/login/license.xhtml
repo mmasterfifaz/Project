@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:head>
+        <title>Maxar</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <link rel="shortcut icon" href="../icon/favicon.ico"/>
+        <link href="../resources/css/maxelyz.css" rel="stylesheet" type="text/css" />
+        <link href="../css/scroll01.css" rel="stylesheet" type="text/css" />
+
+        <style>
+            .textred {
+                font-family: Tahoma, Geneva, sans-serif;
+                font-size: 14px;
+                color: #F00;
+            }
+            -->
+        </style>
+    </h:head>
+
+    <h:body style="background-color: #FFFFFF;margin: 0px">
+        <table id="Table_01" style="width: 100%;">
+            <tr>
+                <td align="center" style="vertical-align: middle;" class="textred">Invalid license usage. Please contact system administrator.
+                    <br/>System ID: <h:outputText value="#{licenseController.localKey}"/>
+                </td>
+            </tr>
+        </table>
+    </h:body>
+</html>

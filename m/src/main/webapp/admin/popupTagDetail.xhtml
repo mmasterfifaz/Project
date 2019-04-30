@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../social/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Tag Detail</ui:define>
+    <ui:param name="modalId" value="tagDetail"/>
+    <ui:param name="width" value="900"/>
+    <ui:param name="height" value="500"/>
+    
+    <ui:define name="popupHead">
+        <h:outputStylesheet library="css" name="maxelyz.css"/>
+        <h:outputStylesheet library="css" name="scroll01.css"/>
+        <h:outputStylesheet library="css" name="popbox.css"/>
+    </ui:define>
+    
+    <ui:define name="popupDetail">
+                                    <h:panelGroup id="pgTagDetail">
+                                    <table border="0" cellpadding="3" cellspacing="1" width="100%">
+                                        <tr>
+                                            <td valign="top">
+                                                <rich:dataTable id="tagFieldList" styleClass="tableline01" 
+                                                                value="#{m.tagFieldList}" rows="#{global.maxrows}" var="fieldList">
+                                                <f:facet name="header">
+                                                    <rich:columnGroup>
+                                                        <rich:column styleClass="subh01"><h:outputText value="Name"/></rich:column>
+                                                        <rich:column styleClass="subh01"><h:outputText value="Tag"/></rich:column>
+                                                    </rich:columnGroup>
+                                                </f:facet>
+                                                <rich:column>
+                                                    <h:outputText value="#{fieldList.name}"/>
+                                                </rich:column>
+                                                <rich:column rendered="#{m.tag eq 'description'}">
+                                                    <a4j:commandLink onclick="InsertDescription('#{fieldList.tagField}');">
+                                                        <h:outputText value="#{fieldList.tagField}"/>
+                                                    </a4j:commandLink>
+                                                </rich:column>
+                                                <rich:column rendered="#{m.tag eq 'confirmation'}">
+                                                    <a4j:commandLink onclick="InsertConfirmScript('#{fieldList.tagField}');">
+                                                        <h:outputText value="#{fieldList.tagField}"/>
+                                                    </a4j:commandLink>
+                                                </rich:column>
+                                                <f:facet name="footer">
+                                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                                </f:facet>
+                                            </rich:dataTable>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    </h:panelGroup>
+        
+    </ui:define>
+</ui:composition>

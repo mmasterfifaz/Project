@@ -1,0 +1,493 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Contact Record #{contactRecordEditController.title}</ui:define>
+            <ui:define name="panel">
+                <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="left" width="70" class="blue04">Contact Id:</td>
+                        <td align="left"><h:outputText value="#{contactRecordEditController.contactHistory.id}"/></td>
+                        <td align="right" width="100" class="blue04">Contact Date:</td>
+                        <td align="left"><h:outputText value="#{contactRecordEditController.contactHistory.contactDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText></td>
+                        <td align="right" width="150" class="blue04">Customer Name :</td>
+                        <td align="left"><h:outputText value="#{contactRecordEditController.customer.name}"/>&#160;&#160;<h:outputText value="#{contactRecordEditController.customer.surname}"/></td>
+                        <td align="right" width="100" class="blue04">Channel :</td>
+                        <td align="left"><h:outputText value="#{contactRecordEditController.contactHistory.channel.type}"/>&#160;:&#160;<h:outputText value="#{contactRecordEditController.contactHistory.channel.name}"/></td>
+                    </tr>
+                </table>
+                <h:panelGroup rendered="#{contactRecordEditController.contactHistorySaleResultList.size() ne 0}">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Sale Record</h2></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" height="130">
+                            <rich:dataTable id="purchaseOrderDetailList" value="#{contactRecordEditController.contactHistorySaleResultList}"
+                                                styleClass="tableline01 tb_contact_case_detail" 
+                                                rows="10" var="list" style="width: 100%" headerClass="subh01"
+                                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                    <f:facet name="header">
+                                        <rich:columnGroup>
+                                            <rich:column style="text-align: left;"><h:outputText value="#{msg.saleHistoryReferenceNo}" /></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="#{msg.saleResult}" /></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="#{msg.saleHistoryProductName}" /></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="Product Category"/></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="Product Plan"/></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="#{msg.saleHistoryQuantity}" /></rich:column>
+                                            <rich:column style="text-align: right"><h:outputText value="#{msg.saleHistoryAmount}"/></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="#{msg.saleHistoryLastUpdate}"/></rich:column>
+                                            <rich:column style="text-align: left;"><h:outputText value="#{msg.saleHistoryUpdateBy}"/></rich:column>
+                                        </rich:columnGroup>
+                                    </f:facet>
+                                   <rich:column>
+                                         <a4j:commandLink title="#{list.purchaseOrder.refNo == null ? list.purchaseOrder.id : list.purchaseOrder.refNo}"
+                                                    value="#{list.purchaseOrder.refNo == null ? list.purchaseOrder.id : list.purchaseOrder.refNo}"
+                                                    action="#{confirmationPoController.initialize}"  
+                                                    rendered="#{list.product.productCategory.categoryType eq 'life' || list.product.productCategory.categoryType eq 'nonlife' || list.product.productCategory.categoryType eq 'motor'}"
+                                                    limitRender="true" render="popupSaleHistory, saleHistory, detailHistory" execute="@this"
+                                                    oncomplete="#{rich:component('popupSaleHistory')}.show();">
+                                            <f:param name="productId" value="#{list.product.id}"/>
+                                            <f:param name="poId" value="#{list.purchaseOrder.id}"/>
+                                            <f:param name="mainPage" value="history"/>
+                                        </a4j:commandLink>
+                                         <a4j:commandLink title="#{list.purchaseOrder.refNo == null ? list.purchaseOrder.id : list.purchaseOrder.refNo}"
+                                                    value="#{list.purchaseOrder.refNo == null ? list.purchaseOrder.id : list.purchaseOrder.refNo}"
+                                                    action="#{confirmationPoController.initialize}"
+                                                    rendered="#{list.product.productCategory.categoryType eq 'retail'}"
+                                                    limitRender="true" render="popupSaleHistory, saleHistory, detailHistory" execute="@this"
+                                                    oncomplete="#{rich:component('popupSaleHistory')}.show();">
+                                            <f:param name="productId" value="#{list.product.id}"/>
+                                            <f:param name="poId" value="#{list.purchaseOrder.id}"/>
+                                            <f:param name="mainPage" value="history"/>
+                                        </a4j:commandLink>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="Yes" rendered="#{fn:contains(list.purchaseOrder.saleResult, 'Y')}" />
+                                        <h:outputText value="No" rendered="#{fn:contains(list.purchaseOrder.saleResult, 'N')}" />
+                                        <h:outputText value="Followup" rendered="#{fn:contains(list.purchaseOrder.saleResult, 'F')}" />
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.product.name}" />
+                                    </rich:column>
+                                   <rich:column>
+                                        <h:outputText value="#{list.product.productCategory.name}" />
+                                    </rich:column>
+                                   <rich:column>
+                                       <h:outputText value="#{list.productPlan.name}" />
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.quantity}" />
+                                    </rich:column>
+                                    <rich:column style="text-align: right">
+                                        <h:outputText value="#{list.purchaseOrder.totalAmount}">
+                                            <f:convertNumber pattern="#,##0.00"/>
+                                        </h:outputText>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.purchaseOrder.updateDate}" >
+                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                        </h:outputText>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{list.purchaseOrder.updateBy}" />
+                                    </rich:column>
+                                    <f:facet name="footer">
+                                       
+                                    </f:facet>
+                                </rich:dataTable>
+                        </td>
+                        <td width="4" class="bg_right"></td>
+                    </tr>
+                </table>
+                 <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{contactRecordEditController.contactCaseList.size() ne 0}">                         
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Case Record</h2></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" height="130">
+                           <rich:dataTable id="contactCaseList" style="width: 100%" headerClass="subh01"
+                                        value="#{contactRecordEditController.contactCaseList}"
+                                        styleClass="tableline01 tb_contact_case_detail" var="list"
+                                        onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="text-align: left;width: 8%"><h:outputText value="#{msg.channelTitle}" /></rich:column>
+                                    <rich:column style="text-align: left;width: 12%"><h:outputText value="#{msg.resultTitle}" /></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.contactToTitle}" /></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.createByTitle}" /></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.serviceTypeTitle}"/></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.caseTypeTitle}" /></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.statusTitle}"/></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.referenceNo}"/></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.activityTypeTitle}" /></rich:column>
+                                    <rich:column style="text-align: left;width: 10%"><h:outputText value="#{msg.activityDetailTitle}" /></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                             <rich:column style="vertical-align: top">
+                                <h:graphicImage library="icon" name="callcenter.png" style="display: inline;"/>
+                                <h:graphicImage library="icon" name="outbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Outbound'}" style="display: inline;" />
+                                <h:graphicImage library="icon" name="inbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Inbound'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_phone.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Phone Call'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_fax.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Fax'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_mail.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Email'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_document.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Document'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_postalmail.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Postal Mail'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_system.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'System'}" style="display: inline;" />
+                                <h:graphicImage library="img" name="channel_walkin.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Walk-in'}" style="display: inline;" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.chResult}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.chTelNo}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.chCsrName}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.serviceTypeName}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.caseType}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.status}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:panelGroup rendered="#{frontMenuController.caseViewPermitted and list.viewLocation}">
+                                    <a4j:commandLink value="#{list.code}"  title="View detail"
+                                                     actionListener="#{contactRecordEditController.popupListener}"
+                                                     limitRender="true" render="popupContactCase, contactCase" execute="@this"
+                                                     oncomplete="#{rich:component('popupContactCase')}.show();">
+                                        <f:param name="historyCode" value="#{list.code}"/>
+                                        <f:param name="from" value="caseHistory"/>
+                                    </a4j:commandLink>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{not frontMenuController.caseViewPermitted or not list.viewLocation}">
+                                    <h:outputText value="#{list.code}"/>
+                                </h:panelGroup>
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="#{list.activityTypeName}" />
+                            </rich:column>
+                            <rich:column style="vertical-align: top">
+                                <h:outputText value="-" rendered="#{list.activityDescription == ''}" />
+                                <h:outputText value="#{list.activityDescription}" />
+                            </rich:column>
+                            <f:facet name="footer">
+
+                            </f:facet>
+                        </rich:dataTable>
+                        </td>
+                        <td width="4" class="bg_right"></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+                </h:panelGroup>
+                <table width="100%" border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="left" width="100">
+                            <h:commandButton action="#{contactRecordController.selfAction}" image="/img/b_back.png" immediate="true">
+                                <f:param name="fromDate" value="#{contactRecordEditController.fromDate}"/>
+                                <f:param name="toDate" value="#{contactRecordEditController.toDate}"/>
+                                <f:param name="userGroupId" value="#{contactRecordEditController.userGroupId}"/>
+                                <f:param name="userId" value="#{contactRecordEditController.userId}"/>
+                                <f:param name="textSearch" value="#{contactRecordEditController.textSearch}"/>
+                                <f:param name="contactToSearch" value="#{contactRecordEditController.contactToSearch}"/>
+                            </h:commandButton>
+                        </td>
+                        <td align="center"></td>
+                        <td align="right"></td>
+                    </tr>
+                </table>
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <h:form id="editfr">
+                <rich:popupPanel id="popupContactCase" width="900"  height="900" style="padding: 0 0 0 0; border-style: none" domElementAttachment="parent" >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Case Handling</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('popupContactCase')}.hide();">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                            <h:panelGroup id="contactCase">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="8">
+                                <tr>
+                                    <td width="50%" valign="top">
+                                        <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                            <tr>
+                                                <td class="gray03" align="right" width="40%">#{msg.caseIdSearch}</td>
+                                                <td class="gray02" width="45%">#{contactRecordEditController.contactCase.code}</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingCaseType}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.caseDetailId.caseTopicId.caseTypeId.name}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingCaseTopic}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.caseDetailId.caseTopicId.name}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingCaseDetail}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.caseDetailId.name}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingReasonOfRequest}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.caseRequestId.name}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingServicesType}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.serviceType.name}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingBusinessUnit}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.businessUnit.name}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top"><h:outputLabel>#{msg.caseHandlingLocation}</h:outputLabel></td>
+                                                <td class="gray02" valign="top"><h:outputText value="#{contactRecordEditController.contactCase.locationName}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingContactPerson}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.contactPerson}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.relatedInfoAccountSearch}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.relationShipText}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingContactDate}</h:outputLabel></td>
+                                                <td class="gray02">                                                            
+                                                    <h:outputText id="createDate2" value="#{contactRecordEditController.contactCase.contactDate}">
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel>#{msg.caseHandlingChannel}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.channelId.name}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top"><h:outputLabel rendered="#{contactRecordEditController.contactCase.id ne null}">#{msg.createBy}</h:outputLabel></td>
+                                                <td class="gray02" valign="top">
+                                                    <h:outputText id="createBy" rendered="#{contactRecordEditController.contactCase.id ne null}" value="#{contactRecordEditController.contactCase.createBy}"></h:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top"><h:outputLabel rendered="#{contactRecordEditController.contactCase.id ne null}">#{msg.createDate}</h:outputLabel></td>
+                                                    <td class="gray02" valign="top">
+                                                        <h:outputText id="createDate" value="#{contactRecordEditController.contactCase.createDate}" rendered="#{contactRecordEditController.contactCase.id ne null}">
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top"><h:outputLabel rendered="#{contactRecordEditController.contactCase.id ne null}">#{msg.updateBy}</h:outputLabel></td>
+                                                    <td class="gray02" valign="top">
+                                                    <h:outputText id="updateBy" value="#{contactRecordEditController.contactCase.updateBy}" rendered="#{contactRecordEditController.contactCase.id ne null}"></h:outputText>
+                                                    </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top"><h:outputLabel rendered="#{contactRecordEditController.contactCase.id ne null}">#{msg.updateDate}</h:outputLabel></td>
+                                                    <td class="gray02" valign="top">
+                                                    <h:outputText id="updateDate" value="#{contactRecordEditController.contactCase.updateDate}" rendered="#{contactRecordEditController.contactCase.id ne null}">
+                                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                        </h:outputText>
+                                                    </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td width="50%" valign="top">
+                                        <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top" ><h:outputLabel >#{msg.caseHandlingDescription}</h:outputLabel></td>
+                                                <td class="gray02"> <h:outputText value="#{contactRecordEditController.contactCase.description}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top"><h:outputLabel > #{msg.caseHandlingRemark}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.remark}"/></td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="gray03" align="right" valign="top">#{msg.caseHandlingAttachment}</td>
+                                                <td class="gray02">
+                                                    <table border="0" cellspacing="0" cellpadding="0">
+                                                        <tr>
+                                                            <td valign="top">
+                                                        <h:panelGroup id="attachPanel">
+                                                            <rich:dataTable value="#{contactRecordEditController.attachFiles}" var="list">
+                                                                <rich:column>
+                                                                   <h:outputText value="#{list.filename}" />
+                                                                </rich:column>
+                                                            </rich:dataTable>    
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+
+                                                </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="gray03" align="right">#{msg.caseHandlingRelatedCase}</td>
+                                                <td class="gray02"><h:outputText  value="#{contactRecordEditController.contactCase.contactCase.code}"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03" align="right"><h:outputLabel >#{msg.caseHandlingPriority}</h:outputLabel></td>
+                                                <td class="gray02"><h:outputText value="#{contactRecordEditController.contactCase.priority}" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03"  align="right"><h:outputLabel>#{msg.caseHandlingSla}</h:outputLabel> </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03"  align="right">
+                                                    <h:outputLabel >#{msg.caseHandlingAcceptCase}</h:outputLabel>
+                                                </td>
+                                                <td class="gray02">
+                                                <h:outputText id="slaAcceptCase" value="#{contactRecordEditController.contactCase.slaAccept}">
+                                                    <f:convertNumber pattern="##0.00"/>
+                                                </h:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03"  align="right">
+                                                    <h:outputLabel >#{msg.caseHandlingCloseCase}</h:outputLabel>
+                                                </td>
+                                                <td class="gray02">
+                                                <h:outputText id="slaCloseCase" value="#{contactRecordEditController.contactCase.slaClose}">
+                                                    <f:convertNumber pattern="##0.00"/>
+                                                </h:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td class="gray03"  align="right">
+                                                    <h:outputLabel >#{msg.caseHandlingDueDate}</h:outputLabel>
+                                                </td>
+                                                <td class="gray02">
+                                                <h:outputText id="slaDueDate" value="#{contactRecordEditController.contactCase.slaCloseDate}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePatternDay}" locale="#{msg.locale}" timeZone="#{msg.timeZone}" />
+                                                </h:outputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="150" height="60" align="right" valign="middle" class="statusbg1">Status:</td>
+                                                <td width="270" valign="middle" class="statusbg2"><h:outputText  value="#{contactRecordEditController.contactCase.status}"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center">
+                                        <h:commandButton image="/resources/img/b_edit03.png"
+                                                        action="#{caseHandlingController.editCase}"
+                                                        rendered="#{contactRecordEditController.contactCase.status ne 'closed' and contactRecordEditController.caseEditPermitted}"
+                                                        style="margin-top: 5px; margin-bottom: 5px">
+                                            <f:param name="selectId" value="#{contactRecordEditController.contactCase.id}"/>
+                                            <f:param name="from" value="caseHistory"/>
+                                        </h:commandButton>
+                                        <h:commandButton image="/resources/img/b_close.png" 
+                                                        onclick="#{rich:component('popupContactCase')}.hide(); return false;"
+                                                        immediate="true"
+                                                        style="margin-top: 5px; margin-bottom: 5px"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            </h:panelGroup>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </rich:popupPanel>
+                </h:form>
+                
+                <rich:popupPanel id="popupSaleHistory" width="1100"  height="600" style="padding: 0 0 0 0; border-style: none " >
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Sale Approaching</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" 
+                                   onclick="#{rich:component('popupSaleHistory')}.hide();"
+                                   action="#{contactRecordEditController.clearCustomer()}">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                    <h:panelGroup id="saleHistory">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                            <td valign="top" bgcolor="#FFFFFF" >
+                                <h:panelGroup id="detail">
+                                    <ui:include src="popupContactRecord.xhtml"/>
+                                </h:panelGroup>
+                            </td>
+                            <td width="4" class="bg_right"></td>
+                        </tr>
+                    </table>
+                    </h:panelGroup>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                </rich:popupPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

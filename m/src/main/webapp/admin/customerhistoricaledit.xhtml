@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Customer Historical: Edit</ui:define>
+            <ui:define name="panel">
+
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{customerHistoricalEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Data Group Name:</td>
+                        <td><h:inputText id="name" value="#{customerHistoricalEditController.customerHistoricalGroup.name}" styleClass="textfield" 
+                                         required="true" 
+                                         requiredMessage="#{msg.require} ">
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top">
+                            <h:selectBooleanCheckbox value="#{customerHistoricalEditController.customerHistoricalGroup.enable}"/>Enable</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top" align="left"><br/><h:commandButton image="../img/b_save.png" action="#{customerHistoricalEditController.saveAction}"
+                                                                            rendered="#{customerHistoricalEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{customerHistoricalEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

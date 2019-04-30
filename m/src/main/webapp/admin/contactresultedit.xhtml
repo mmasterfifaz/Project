@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Contact Result: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{contactResultEditController.mode}"/>
+        <h:inputHidden value="#{contactResultEditController.contactResult.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="4">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:outputText value="#{contactResultEditController.message}" style="color:red"/>&nbsp;</td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">* Code:</td>
+                <td><h:inputText id="code" value="#{contactResultEditController.contactResult.code}" styleClass="textfield" size="10" 
+                                 maxlength="10" required="true" requiredMessage="Code is required">
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:inputText>
+                    <rich:message for="code" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td width="200" align="right" valign="top">Status ID:</td>
+                <td><h:inputText id="statusId" value="#{contactResultEditController.contactResult.statusId}" styleClass="textfield" size="10" 
+                                 maxlength="10">
+                    </h:inputText>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">* Name:</td>
+                <td valign="top">
+                    <h:inputText id="name" value="#{contactResultEditController.contactResult.name}" styleClass="textfield" size="50" 
+                                 required="true" requiredMessage="Name is required">
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:inputText>
+                    <rich:message for="name" style="color:red"/>
+                    <h:outputText value="#{contactResultEditController.messageDup}" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">* Type</td>
+                <td valign="top">
+                    <h:selectOneMenu id="contactstatus" value="#{contactResultEditController.contactResult.contactStatus}" 
+                                     required="true" requiredMessage="Type is required">
+                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                        <f:selectItem itemValue="#{msg.contactableValue}" itemLabel="#{msg.contactable}" />
+                        <f:selectItem itemValue="#{msg.uncontactableValue}" itemLabel="#{msg.uncontactable}" />
+                        <f:selectItem itemValue="#{msg.dmcValue}" itemLabel="#{msg.dmc}" />
+                        <f:selectItem itemValue="#{msg.inboundValue}" itemLabel="#{msg.inboundCS}" />
+                        <f:selectItem itemValue="#{msg.inboundTelesaleValue}" itemLabel="#{msg.inboundTelesale}" />
+                        <f:selectItem itemValue="#{msg.newContactValue}" itemLabel="#{msg.newContact}" />
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:selectOneMenu>
+                    <rich:message for="contactstatus" style="color: red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">* Seq No:</td>
+                <td valign="top">
+                    <h:inputText id="seqno" value="#{contactResultEditController.contactResult.seqNo}" styleClass="textfield" required="true" requiredMessage="Seq No is required">
+                        <f:convertNumber integerOnly="true"/>
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:inputText>
+                    <rich:message for="seqno" style="color: red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">* Group</td>
+                <td valign="top">
+                    <h:selectOneMenu id="contactresultgroup" value="#{contactResultEditController.contactResultGroupId}" 
+                                     required="true" requiredMessage="Group is required">
+                        <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                        <f:selectItems value="#{contactResultEditController.contactResultGroupList}"/>
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:selectOneMenu>
+                    <rich:message for="contactresultgroup" style="color: red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"></td>
+                <td valign="top">
+                    <h:selectBooleanCheckbox value="#{contactResultEditController.contactResult.closeAssignmentDetail}" /> Auto Close
+                </td>
+              </tr>
+            <tr>
+                <td align="right" valign="top"></td>
+                <td valign="top">
+                    <h:selectBooleanCheckbox value="#{contactResultEditController.contactResult.yesSaleRelated}" /> YES Sale Related
+                </td>
+              </tr>
+            <tr>
+                <td align="right" valign="top"></td>
+                <td valign="top">
+                    <h:selectBooleanCheckbox value="#{contactResultEditController.contactResult.systemContactResult}" /> System Field
+                </td>
+              </tr>
+              <ui:remove>
+              <tr>
+                <td align="right" valign="top">* EOC Result</td>
+                <td valign="top">
+                    <h:selectOneMenu id="eoccontactresult" value="#{contactResultEditController.contactResult.eocContactResult.id}" 
+                                     required="true" requiredMessage="EOC Result is required">
+                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:selectOneMenu>
+                    <rich:message for="eoccontactresult" style="color: red"/>
+                </td>
+              </tr>
+              </ui:remove>
+                <tr>
+                <td align="right" valign="top"></td>
+                <td valign="top">
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:commandButton image="../img/b_save.png" action="#{contactResultEditController.saveAction}" rendered="#{contactResultEditController.savePermitted}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{contactResultEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Objection Handling: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+                <h:inputHidden value="#{objectionEditController.mode}"/>
+                <h:inputHidden value="#{objectionEditController.objection.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{objectionEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Topic:</td>
+                        <td valign="top">
+                            <h:inputText id="name" value="#{objectionEditController.objection.topic}" styleClass="textfield" size="50" 
+                                         required="true" requiredMessage="Topic is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{objectionEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top">
+                            <h:inputTextarea id="description" value="#{objectionEditController.objection.description}"/>
+                            <script type="text/javascript">
+                                CKEDITOR.replace('frm:description'  ,{
+                                                filebrowserBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserImageBrowseUrl : '#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Image&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserFlashBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Flash&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/'}
+                                            );
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{objectionEditController.objection.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{objectionEditController.saveAction}" rendered="#{objectionEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{objectionEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

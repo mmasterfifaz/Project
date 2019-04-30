@@ -1,0 +1,162 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Media Plan</ui:define>
+            <ui:define name="search">
+                <table width="" border="0" cellpadding="3" cellspacing="0">
+                    <tr>
+                        <td align="right">Spot Ref ID :</td>
+                        <td>
+                            <h:inputText styleClass="textfield" value="#{mediaPlanController.spotRefIDKey}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Channel :</td>
+                        <td>
+                            <h:inputText styleClass="textfield" value="#{mediaPlanController.channelKey}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Program Name :</td>
+                        <td>
+                            <h:inputText styleClass="textfield" value="#{mediaPlanController.programNameKey}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Media Date :</td>
+                        <td>
+                            <h:panelGroup><rich:calendar id="dateFrom"
+                                                         value="#{mediaPlanController.mediaDatefromKey}"
+                                                         inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                                         datePattern="#{msg.dateTimePattern}"
+                                                         locale="#{msg.locale}"
+                                                         defaultTime="00:00"/>
+                                To <span style="width: 5px"/> 
+                                <rich:calendar id="dateTo"
+                                               value="#{mediaPlanController.mediaDatetoKey}"
+                                               inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                               datePattern="#{msg.dateTimePattern}"
+                                               locale="#{msg.locale}"
+                                               defaultTime="23:59"/>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right"></td>
+                        <td>
+                            <a4j:commandButton image="/img/b_search.png" 
+                                               actionListener="#{mediaPlanController.searchActionListener}" 
+                                               render="resultSearch,dataList"
+                                               limitRender="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{mediaPlanController.editAction}"  rendered="#{mediaPlanController.addPermitted}"
+                                 actionListener="#{mediaPlanController.initializeListener}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{mediaPlanController.deleteAction}" 
+                                 rendered="#{mediaPlanController.deletePermitted}"  
+                                 onclick="if (checkSelectData(this.form)) {
+                                             if (!confirm('Confirm to Delete Media Plan?')) {
+                                                 return false;
+                                             } else {#{rich:component('waitPopup')}.show('', {height: '80px', width: '150px'})
+                                             }
+                                         } else {
+                                             return false;
+                                         }" />
+                <h:commandButton image="../img/b_import.png" action="#{mediaPlanController.importAction}"  rendered="#{mediaPlanController.addPermitted}"
+                                 actionListener="#{mediaPlanController.initializeListener}"/>
+                <h:commandButton image="../img/bb_exportcus.png" actionListener="#{mediaPlanController.generateXLS}" rendered="#{mediaPlanController.addPermitted}" />
+            </ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="resultSearch">
+                    <h:panelGroup rendered="#{mediaPlanController.mediaplans eq null or mediaPlanController.mediaplans.size() eq 0}">
+                        <table width="100%">
+                            <tr>
+                                <td align="center">
+                                    <h:outputText value="No data" style="color: red;" />
+                                </td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{mediaPlanController.mediaplans ne null and mediaPlanController.mediaplans.size() ne 0}">
+                        <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                        value="#{mediaPlanController.mediaplans}" rows="#{global.maxrows}" var="list">
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                                    <rich:column style="width: 10%;text-align: left;"><h:outputText value="Spot Ref ID" /></rich:column>
+                                    <rich:column style="width: 8%;text-align: left;"><h:outputText value="Day of Spot"/></rich:column>
+                                    <rich:column style="width: 8%;text-align: left;"><h:outputText value="Spot Type"/></rich:column>
+                                    <rich:column style="width: 10%;text-align: left;"><h:outputText value="Phone No"/></rich:column>
+                                    <rich:column style="width: 7%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                                    <rich:column style="width: 17%;text-align: left;"><h:outputText value="Media Agency Remark"/></rich:column>
+                                    <rich:column style="width: 10%;text-align: left;"><h:outputText value="Net Cost per Spot"/></rich:column>
+                                    <rich:column style="width: 17%;text-align: left;"><h:outputText value="Product Assign"/></rich:column>
+                                    <rich:column style="text-align: left;"><h:outputText value="Product Code"/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+
+                            <rich:column >
+                                <h:selectBooleanCheckbox value="#{mediaPlanController.selectedIds[list.id]}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:commandLink title="View Detail" value="#{list.spotRefId}" action="#{mediaPlanController.editAction}"
+                                               actionListener="#{mediaPlanEditController.initializeListener}">
+                                    <f:param name="id" value="#{list.id}"/>
+                                </h:commandLink>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.dayOfSpot}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.spotType}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.spotTelephoneNumber}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.status}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.mediaAgencyRemark}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.netCostPerSpot}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.productAssign}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.productCode}"/>
+                            </rich:column>
+                            <f:facet name="footer">
+                                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                            </f:facet>
+                        </rich:dataTable>
+                    </h:panelGroup>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="5">
+                        <tr>
+                            <td class="gray03" width="100%" align="right">Total Records: <h:outputText id="totalRecord" styleClass="orange02" value="#{mediaPlanController.mediaplans.size()}" /></td>
+                        </tr>
+                    </table>  
+                </h:panelGroup>
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show();"
+                            onstop="#{rich:component('waitPopup')}.hide();" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<body>
+<ui:composition template="../templates/adminmainsearch.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Sequence Number File</ui:define>
+    <ui:define name="search">
+        <table>
+            <tr>
+                <td><h:outputText value="Sequence Number Name: "/></td>
+                <td>
+                    <h:selectOneMenu id="listSource" value="#{sequenceNoFileController.selectSequenceId}"
+                                     valueChangeListener="#{sequenceNoFileController.sequenceChangeListener}">
+                        <f:selectItem itemValue="-1" itemLabel="#{msg.pleaseSelect}"/>
+                        <f:selectItem  itemValue="0" itemLabel="All"/>
+                        <f:selectItems value="#{sequenceNoFileController.sequenceNoList}" var="list"
+                                       itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                        <a4j:ajax event="change" render="showData,result,message"/>
+                    </h:selectOneMenu>
+                    &nbsp;<h:outputText value="#{sequenceNoFileController.messageDup}" style="color: red" id="message"/>
+                </td>
+            </tr>
+        </table>
+    </ui:define>
+    <ui:define name="button">
+        <h:panelGroup id="result">
+            <table border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td><h:commandButton image="../img/b_add.png" action="#{sequenceNoFileController.editAction}"
+                                         rendered="#{sequenceNoFileController.addPermitted}"/></td>
+                    <td><h:commandButton image="../img/b_delete.png" action="#{sequenceNoFileController.deleteAction}"
+                                         rendered="#{sequenceNoFileController.deletePermitted}"
+                                         onclick="return checkDelete(this.form)"/></td>
+                    <td valign="middle" style="width: 10px"></td>
+                    <td valign="middle"><h:outputText value="Total :"
+                                                      style="color:#00aaaa;font-weight:bold;"/>&nbsp;<h:outputText
+                            value="#{sequenceNoFileController.total}"><f:convertNumber pattern="#,##0"/></h:outputText></td>
+                    <td valign="middle" style="width: 10px"></td>
+                    <td valign="middle"><h:outputText value="Available :" style="color: #00aaaa;font-weight:bold;"/>&nbsp;<h:outputText
+                            value="#{sequenceNoFileController.available}"> <f:convertNumber pattern="#,##0"/></h:outputText></td>
+                </tr>
+            </table>
+        </h:panelGroup>
+    </ui:define>
+    <ui:define name="panel">
+        <h:panelGroup id="showData">
+            <rich:dataTable style="width: 100%" headerClass="subh01" styleClass="tableline01"
+                            value="#{sequenceNoFileController.sequenceNoFileList}" rows="#{global.maxrows}" var="list">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Code"/></rich:column>
+                        <rich:column style="width: 20%;text-align: left;"><h:outputText
+                                value="Create Date"/></rich:column>
+                        <rich:column style="width: 20%;text-align: left;"><h:outputText
+                                value="Sequence Number Name"/></rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Total"/></rich:column>
+                        <rich:column style="width: 10%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                        <rich:column style="width: 27%;text-align: left;"><h:outputText value=""/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+
+                <rich:column>
+                    <h:selectBooleanCheckbox  value="#{sequenceNoFileController.selectedIds[list.id]}"/>
+                </rich:column>
+                <rich:column>
+                    <h:commandLink title="View Detail" value="#{list.code}"
+                                   action="#{sequenceNoFileController.editAction}">
+                        <f:param name="id" value="#{list.id}"/>
+                    </h:commandLink>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.createDate}"><f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/></h:outputText>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.fileName}"/>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="#{list.totalRecord}"><f:convertNumber pattern="#,##0"/></h:outputText>
+                </rich:column>
+                <rich:column>
+                    <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable"
+                                                                                          rendered="#{!list.status}"/>
+                </rich:column>
+                <rich:column>
+                    <a4j:commandButton oncomplete="#{rich:component('popupDetail')}.show()"
+                                       image="../img/b_view.png"
+                                       actionListener="#{sequenceNoFileController.detailAction(list.id,list.code)}"
+                                       render="showDetail">
+                    </a4j:commandButton>
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                </f:facet>
+            </rich:dataTable>
+        </h:panelGroup>
+        <!-- Pop up Link to Detail -->
+        <rich:popupPanel id="popupDetail" shadowOpacity="0" domElementAttachment="form" width="750" height="600"
+                         style="padding: 0 0 0 0; border-style: none;">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10"
+                                                     height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2
+                            class="style1">Reference Number List</h2></td>
+                    <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                        <a href="#" class="close_popup" style="cursor:pointer"
+                           onclick="#{rich:component('popupDetail')}.hide(); return false;">#{msg.close}</a></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10"
+                                                     height="48"/></td>
+                </tr>
+            </table>
+            <h:panelGroup id="showDetail">
+                <table width="98.5%" border="0" cellpadding="0" cellspacing="1" id="tableline01"
+                       style="margin: auto; background-color: #FFFFFF; text-align: center">
+                    <tr>
+                        <td align="center">
+                            <br/>
+                            <table border="0" width="20%" style="text-align: left;">
+                                <tr style="height: 50px;">
+                                    <td align="left" class="style1" style="white-space: nowrap;"><b>Code Name:</b></td>
+                                    <td align="right" class="style1"><b><h:outputText value="#{sequenceNoFileController.codeName}"/></b></td>
+                                </tr>
+                                <tr>
+                                    <td align="right" style="width: 50%;white-space: nowrap"><strong>View Result</strong></td>
+                                    <td align="right"></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Total:</td>
+                                    <td align="right">&nbsp;<h:outputText value="#{sequenceNoFileController.totalSequenceDetail}" >
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Used:</td>
+                                    <td align="right">&nbsp;<h:outputText value="#{sequenceNoFileController.usedSequenceDetail}">
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Available:</td>
+                                    <td align="right">&nbsp;<h:outputText value="#{sequenceNoFileController.availableSequenceDetail}">
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText></td>
+                                </tr>
+                                <tr>
+                                    <td align="right">Cancel:</td>
+                                    <td align="right">&nbsp;<h:outputText value="#{sequenceNoFileController.cancelSequenceDetail}">
+                                        <f:convertNumber pattern="#,##0"/>
+                                    </h:outputText></td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <div style="text-align: left">
+
+                                <table>
+                                    <tr>
+                                        <td>
+                                            &nbsp;&nbsp;<a4j:commandButton action="#{sequenceNoFileController.cancelAction}"
+                                                                           image="../img/b_disable.png"
+                                                                           render="massageDisable,showDetail,result" onclick="
+                                                    if(!confirm('confirm to disable')){return false;}"/> </td>
+                                        <td>
+                                            <h:outputText id="massageDisable" value="#{sequenceNoFileController.disableMassageDup}" style="color: red"/>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                            <rich:dataTable style="width: 100%" headerClass="subh01" styleClass="tableline01"
+                                            value="#{sequenceNoFileController.sequenceNoFileDetailList}"
+                                            rows="#{global.maxrows}" var="list">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column style="width: 140px;text-align: left;"></rich:column>
+                                        <rich:column style="width: 20px;text-align: left;">&nbsp;</rich:column>
+                                        <rich:column style="width: 30px;text-align: left;">&nbsp;</rich:column>
+                                        <rich:column style="width: 20px;text-align: left; font-size: 15px"><h:outputText
+                                                value="Reference Number" style="white-space: nowrap"/></rich:column>
+                                        <rich:column style="width: 20px;text-align: left;">&nbsp;</rich:column>
+                                        <rich:column style="width: 50px;text-align: left; font-size: 15px"><h:outputText value="Status   "/></rich:column>
+                                        <rich:column style="width: 240px">
+                                        </rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column>
+                                </rich:column>
+                                <rich:column>
+                                    <h:selectBooleanCheckbox
+                                            value="#{sequenceNoFileController.selectedSequenceNoFileDetailId[list.id]}" rendered="#{list.status eq 'Available'}"/>
+                                </rich:column>
+                                <rich:column>
+                                </rich:column>
+                                <rich:column style="text-align: center">
+                                    <h:outputText value="#{list.sequenceNo}"/>
+                                </rich:column>
+                                <rich:column style="text-align: center">
+                                </rich:column>
+                                <rich:column style="text-align: center">
+                                    <h:outputText value="#{list.status}"/>
+                                </rich:column>
+                                <rich:column>
+                                </rich:column>
+                                <f:facet name="footer">
+                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}"
+                                                       renderIfSinglePage="false"/>
+                                </f:facet>
+                            </rich:dataTable>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><br/>
+
+                            <div style="padding-top: 20px;text-align:center ;background-color: #FFFFFF;">
+                                <a4j:commandButton image="../img/b_ok.png" limitRender="true"
+                                                   onclick="#{rich:component('popupDetail')}.hide()"/>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </h:panelGroup>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img
+                            src="#{request.contextPath}/img/clear.gif"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+
+        </rich:popupPanel>
+    </ui:define>
+</ui:composition>
+</body>
+</html>

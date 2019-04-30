@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Flexfield Mapping</ui:define>
+            <ui:define name="panel">
+            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0" styleClass="tableline01">
+              <tr>
+                <td valign="top"><h4><h:outputText value="Field"/></h4></td>
+              </tr>
+              <ui:remove>
+              <tr>
+                  <td valign="top">
+                      <h:commandLink value="Customer" action="#{flexFieldController.editAction()}" rendered="#{flexFieldController.editPermitted}">
+                          <f:param name="selectedPage" value="customer" />
+                      </h:commandLink>
+                      <h:outputText value="Customer" rendered="#{not flexFieldController.editPermitted}"/>
+                  </td>
+              </tr>
+              </ui:remove>
+              <tr>
+                <td valign="top">
+                     <h:commandLink value="Product:Life" action="#{flexFieldController.editAction()}" rendered="#{flexFieldController.editPermitted}">
+                          <f:param name="selectedPage" value="product:life" />
+                     </h:commandLink>
+                     <h:outputText value="Product:Life" rendered="#{not flexFieldController.editPermitted}"/>
+                </td>
+              </tr>             
+             <tr>
+                <td valign="top">
+                    <h:commandLink value="Product:Non Life" action="#{flexFieldController.editAction()}" rendered="#{flexFieldController.editPermitted}">
+                          <f:param name="selectedPage" value="product:nonlife" />
+                    </h:commandLink>
+                    <h:outputText value="Product:Non Life" rendered="#{not flexFieldController.editPermitted}"/>
+                </td>
+              </tr>              
+             <tr>
+                <td valign="top">
+                    <h:commandLink value="Product:Motor" action="#{flexFieldController.editAction()}" rendered="#{flexFieldController.editPermitted}">
+                          <f:param name="selectedPage" value="product:motor" />
+                    </h:commandLink>
+                    <h:outputText value="Product:Motor" rendered="#{not flexFieldController.editPermitted}"/>
+                </td>
+              </tr>   
+             <tr>
+                <td valign="top">
+                    <h:commandLink value="Product:Retail" action="#{flexFieldController.editAction()}" rendered="#{flexFieldController.editPermitted}">
+                          <f:param name="selectedPage" value="product:retail" />
+                    </h:commandLink>
+                    <h:outputText value="Product:Retail" rendered="#{not flexFieldController.editPermitted}"/>
+                </td>
+              </tr>   
+            </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

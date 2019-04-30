@@ -1,0 +1,64 @@
+<ui:composition template="../templates/popupmodal.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:param name="modalId" value="objectionPopup"/>
+    <ui:define name="search1">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td ><h2><img src="#{request.contextPath}/icon/Objectionhandling02.png" width="32" height="32" hspace="5" align="absmiddle" style="display: inline;"/>Objection Handling</h2></td>
+                <td width="260" align="right">
+                    <table width="260" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="24"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image35','','#{request.contextPath}/img/sad02.png',1)">
+                                    <img src="#{request.contextPath}/img/sad01.png" name="Image35" width="24" height="24" border="0" id="Image35" /></a></td>
+                            <td width="205" align="left">
+                        <h:inputText value="#{objectionPopupController.keyword}" styleClass="textfield" size="30" >
+                            <a4j:ajax event="keyup" render="datatree" listener="#{objectionPopupController.searchListener}"/>
+                        </h:inputText></td>
+                <td width="24"><a4j:commandButton image="/img/b_search01.png"  render="datatree" actionListener="#{objectionPopupController.searchListener}"/></td>
+            <td width="7"><img src="#{request.contextPath}/img/sp.gif" width="5" height="5" /></td>
+            </tr>
+        </table>
+        </td>
+        <td width="60" align="right"><a href="#" class="close" onclick="#{rich:component('objectionPopup')}.hide()">Close X</a></td>
+        </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="leftcontent">
+        <rich:dataTable id="datatree"  value="#{objectionPopupController.list}" var="list">
+            <rich:column styleClass="treeline" style="width: 240px;">
+                <img src="#{request.contextPath}/img/bplus02.png" width="16" height="16" hspace="5" align="absmiddle" alt="" style="display: inline;"/>
+                <a4j:commandLink value="#{list.topic}"
+                                 render="detail"
+                                 limitRender="true"
+                                 styleClass="gray03">
+                    <f:param name="id" value="#{list.id}"/>
+                </a4j:commandLink>
+            </rich:column>
+        </rich:dataTable>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGroup id="detail">
+            <div class="scroll">
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr><td><h:outputText 
+                    style="color: #ec5a13;
+                    font-weight: bold;
+                    text-decoration: none;
+                    padding-top: 15px;
+                    padding-bottom: 15px;"
+                    value="#{objectionPopupController.objection.topic}"/>
+                </td></tr>
+                <tr><td valign="top"><div id="contentinfo"><h:outputText value="#{objectionPopupController.objection.description}" escape="false"/></div></td>
+                </tr>
+            </table>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+

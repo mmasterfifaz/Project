@@ -1,0 +1,217 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Sales Approval: Approval</ui:define>
+            <ui:define name="panel">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{saleApprovalEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <iframe width="100%" height="500" src="#{request.contextPath}/front/customerHandling/registrationforsaleapproval.jsf?page=saleapproval&amp;poId=#{saleApprovalEditController.purchaseOrder.id}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="background-color: lightgray">
+                            <h:panelGroup id="paymentToQc" rendered="#{saleApprovalEditController.flowApproval == 1}">
+                                <table border="0" cellpadding="3" cellspacing="0">
+                                    <tr>
+                                        <td align="right" width="200"><h:outputText id="psLabel1" value="Payment Status :"/></td>
+                                        <td>
+                                            <h:selectOneRadio id="approvalPaymentStatus1" value="#{saleApprovalEditController.approvalPaymentStatus}"
+                                                              required="true" requiredMessage="#{msg.require}"
+                                                              disabled="#{not saleApprovalEditController.showPaymentStatus}">
+                                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                                <a4j:ajax event="click" render="paymentToQc,qc1" execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneRadio>
+                                            <rich:message for="approvalPaymentStatus1" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"><h:outputText id="psReasonLabel1" 
+                                                                                     rendered="#{(saleApprovalEditController.showPaymentStatus eq true and saleApprovalEditController.showQcStatus eq false) or (saleApprovalEditController.showPaymentStatus eq true and saleApprovalEditController.approvalPaymentStatus ne 'approved')}"
+                                                                                     value="Reason :"/></td>
+                                        <td>
+                                            <h:inputTextarea id="reasonPayment1"
+                                                             value="#{saleApprovalEditController.comment}"
+                                                             required="true"
+                                                             requiredMessage="#{msg.require}"
+                                                             cols="50" rows="5"
+                                                             disabled="#{not saleApprovalEditController.showPaymentStatus}"
+                                                             rendered="#{(saleApprovalEditController.showPaymentStatus eq true and saleApprovalEditController.showQcStatus eq false) or (saleApprovalEditController.showPaymentStatus eq true and saleApprovalEditController.approvalPaymentStatus ne 'approved')}"/>
+                                            <rich:message for="reasonPayment1" style="color: red"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h:panelGroup id="qc1" rendered="#{(saleApprovalEditController.approvalPaymentStatus eq 'approved') and saleApprovalEditController.showQcStatus}">
+                                <table>
+                                    <tr>
+                                        <td align="right" width="200"><h:outputText id="qcLabel1" value="QC Status :"/></td>
+                                        <td>
+                                            <h:selectOneRadio id="approvalQcStatus1"
+                                                              value="#{saleApprovalEditController.approvalQcStatus}"
+                                                              required="true"
+                                                              requiredMessage="#{msg.require}"
+                                                              disabled="#{not saleApprovalEditController.showQcStatus}">
+                                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneRadio>
+                                            <rich:message for="approvalQcStatus1" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"><h:outputText id="qcReasonLabel1" value="Reason :"/></td>
+                                        <td>
+                                            <h:inputTextarea id="reasonQc1"
+                                                             value="#{saleApprovalEditController.comment}"
+                                                             required="true"
+                                                             requiredMessage="#{msg.require}"
+                                                             cols="50"
+                                                             rows="5"
+                                                             disabled="#{not saleApprovalEditController.showQcStatus}"
+                                                             rendered="#{saleApprovalEditController.showPaymentStatus eq true or saleApprovalEditController.showQcStatus eq true}"/>
+                                            <rich:message for="reasonQc1" style="color: red"/>
+                                        </td>
+                                    </tr>                                    
+                                </table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                            <h:panelGroup id="qcToPayment" rendered="#{saleApprovalEditController.flowApproval == 2}">
+                                <table border="0" cellpadding="3" cellspacing="0">
+                                    <tr>
+                                        <td align="right" width="200"><h:outputText id="qcLabel2" value="QC Status :"/></td>
+                                        <td><h:selectOneRadio id="approvalQcStatus2" value="#{saleApprovalEditController.approvalQcStatus}"
+                                                              required="true" requiredMessage="#{msg.require}"
+                                                              disabled="#{not saleApprovalEditController.showQcStatus}">
+                                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                                <a4j:ajax event="click" render="qcToPayment,qc2" execute="@this" limitRender="true"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneRadio>
+                                            <rich:message for="approvalQcStatus2" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"><h:outputText id="qcReasonLabel2"
+                                                                                     rendered="#{(saleApprovalEditController.showQcStatus eq true and saleApprovalEditController.showPaymentStatus eq false) or (saleApprovalEditController.showQcStatus eq true and saleApprovalEditController.approvalQcStatus ne 'approved')}"
+                                                                                     value="Reason :"/></td>
+                                        <td>
+                                            <h:inputTextarea id="reasonQc2"
+                                                             value="#{saleApprovalEditController.comment}"
+                                                             required="true"
+                                                             requiredMessage="#{msg.require}"
+                                                             cols="50" rows="5"
+                                                             disabled="#{not saleApprovalEditController.showQcStatus}"
+                                                             rendered="#{(saleApprovalEditController.showQcStatus eq true and saleApprovalEditController.showPaymentStatus eq false) or (saleApprovalEditController.showQcStatus eq true and saleApprovalEditController.approvalQcStatus ne 'approved')}"/>
+                                            <rich:message for="reasonQc2" style="color: red"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <h:panelGroup id="qc2" rendered="#{(saleApprovalEditController.approvalQcStatus eq 'approved') and saleApprovalEditController.showPaymentStatus}">
+                                <table>
+                                    <tr>
+                                        <td align="right" width="200"><h:outputText id="psLabel2" value="Payment Status :"/></td>
+                                        <td>
+                                            <h:selectOneRadio id="approvalPaymentStatus2"
+                                                              value="#{saleApprovalEditController.approvalPaymentStatus}"
+                                                              required="true"
+                                                              requiredMessage="#{msg.require}"
+                                                              disabled="#{not saleApprovalEditController.showPaymentStatus}">
+                                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                                                    
+                                                <rich:validator />
+                                            </h:selectOneRadio>
+                                            <rich:message for="approvalPaymentStatus2" style="color:red"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top"><h:outputText id="psReasonLabel2" value="Reason :"/></td>
+                                        <td>
+                                            <h:inputTextarea id="reasonPayment2"
+                                                             value="#{saleApprovalEditController.comment}"
+                                                             required="true"
+                                                             requiredMessage="#{msg.require}"
+                                                             cols="50"
+                                                             rows="5"
+                                                             disabled="#{not saleApprovalEditController.showPaymentStatus}"
+                                                             rendered="#{saleApprovalEditController.showQcStatus eq true or saleApprovalEditController.showPaymentStatus eq true}"/>
+                                            <rich:message for="reasonPayment2" style="color: red"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                     
+                                <table>
+                                    <tr>
+                                        <td align="right" width="200" valign="top">&nbsp;</td>
+                                        <td valign="top">
+                                            <h:commandButton image="../img/b_save.png"
+                                                             action="#{saleApprovalEditController.saveAction}"
+                                                             rendered="#{saleApprovalEditController.btnSave}"/>
+                                            <h:commandButton image="../img/b_back.png" action="#{saleApprovalEditController.backAction}" immediate="true"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            <table>
+                                <tr>
+                                    <td>
+                                        <h3>Approval History</h3>
+                                        <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                        value="#{saleApprovalEditController.purchaseOrderApprovalLogList}" var="list">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="text-align: left;">Date</rich:column>
+                                                    <rich:column style="text-align: left;">Approval User</rich:column>
+                                                    <rich:column style="text-align: left;">Payment</rich:column>
+                                                    <rich:column style="text-align: left;">QC</rich:column>
+                                                    <rich:column style="text-align: left;">Reason</rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column style="vertical-align: top">
+                                                <h:outputText value="#{list.createDate}" >
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </rich:column >
+                                            <rich:column style="vertical-align: top">
+                                                #{list.createBy}
+                                            </rich:column>
+                                            <rich:column style="vertical-align: top">
+                                                #{list.paymentStatus}
+                                            </rich:column>
+                                            <rich:column style="vertical-align: top">
+                                                #{list.approvalStatus}
+                                            </rich:column>
+                                            <rich:column style="vertical-align: top">
+                                                #{list.comment}
+                                            </rich:column>
+                                        </rich:dataTable>
+                                    </td></tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

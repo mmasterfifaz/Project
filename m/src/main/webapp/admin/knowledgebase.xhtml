@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich" >
+
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Knowledge Base</ui:define>
+            <ui:define name="head">
+                <style>
+                    div.rf-trn {
+                        overflow: visible;
+                    }
+                    .panelc { width:25%; }
+                    .valign { vertical-align:top; }
+                    .dropTargetPanel { width: 90%; }
+        
+                    .rf-ind {   
+                        font-size:11px;         
+                        cursor:pointer;         
+                        width:100px;         
+                        border:1px solid gray;         
+                        padding:2px
+                    }   
+                    .rf-ind-drag{
+                        padding-left:30px; 
+                        background-position: 5px;         
+                        background-repeat: no-repeat; 
+                    }
+                    .rf-ind-acpt {         
+                        border:2px solid green;
+                        background-position: 5px;        
+                        background-repeat: no-repeat;   
+                    }  
+                    .rf-ind-rejt {  
+                        border:2px solid red;         
+                        background-position: 5px;         
+                        background-repeat: no-repeat;  
+                    }  
+                </style>
+            </ui:define>
+            <ui:define name="search">
+                <span style="padding-left:2px"/>
+                Keyword:
+                <span style="padding-left:5px"/>
+                <h:inputText  value="#{knowledgebaseController.keyword}" 
+                              maxlength="50" size="20" styleClass="textfield"/>
+                <h:selectOneMenu value="#{knowledgebaseController.keyappv}" styleClass="select01">
+                    <f:selectItem itemLabel="All" itemValue="" />
+                    <f:selectItem itemLabel="Approved" itemValue="true" />
+                    <f:selectItem itemLabel="Not approved" itemValue="false" />
+                </h:selectOneMenu>
+                <span style="vertical-align: bottom">
+                    <h:commandButton image="../img/b_search.png" 
+                                     action="#{knowledgebaseController.searchAction}"/>
+
+                </span>
+            </ui:define>
+            <ui:define name="button">
+                <script type="text/javascript">
+                    function importopen() { 
+                        window.open('#{request.contextPath}/admin/knowledgebaseimport.jsf','_blank','width=600,height=520,left=0,top=100,scrollbars=1,resizable=1');
+                    } 
+                </script>
+                <table width="100%">
+                    <tr>
+                        <td>
+                            <h:commandButton image="../img/b_add.png" action="#{knowledgebaseController.editAction}"  rendered="#{knowledgebaseController.addPermitted}">
+                                <f:param name="mode" value="add"/>
+                            </h:commandButton>
+                        </td> 
+                        <td align="right">
+                            
+                        </td>                      
+                    </tr>
+                </table>
+
+            </ui:define> 
+            <ui:define name="panel">     
+                -Double Click on a topic to view context menu<br/>
+                -Drag&amp;Drop on Knowledge Base Tree to Rearrange Structure<br/>
+                <h:outputText value="#{knowledgebaseController.message}" id="msgDrag" style="color:red"/>
+                <rich:tree value="#{knowledgebaseController.root}" var="kb" id="tree" toggleType="ajax" toggleListener="#{knowledgebaseController.toggleListener}">
+                    <rich:treeNode id="leafTree">  
+                        
+                        <a4j:outputPanel>
+                            <rich:dragSource  type="item" dragValue="#{kb.id}" dragIndicator="ind"/>
+                            <rich:dropTarget  acceptedTypes="item" render="tree,msgDrag" execute="tree"
+                                              dropListener="#{knowledgebaseController.dropListener}" dropValue="#{kb.id}" /> 
+                            <rich:dragIndicator id="ind" acceptClass="accept" rejectClass="reject" draggingClass="default">
+                                <h:outputText value="#{kb.data}" />
+                            </rich:dragIndicator>
+                            <h:outputText value="#{kb}" />
+                        </a4j:outputPanel>
+                        
+                        <rich:contextMenu attached="true" target="leafTree" id="leafMenu" showDelay="1">
+                            <rich:menuItem label="Edit Node" action="#{knowledgebaseController.editAction}" rendered="#{knowledgebaseController.editPermitted}">
+                                <f:param name="selectedId" value="#{kb.id}"/>
+                                <f:param name="mode" value="edit"/>
+                            </rich:menuItem>
+                            <rich:menuItem label="Add Node" action="#{knowledgebaseController.editAction}" rendered="#{knowledgebaseController.addPermitted}">
+                                <f:param name="selectedId" value="#{kb.id}"/>
+                                <f:param name="mode" value="add"/>
+                            </rich:menuItem>
+                            <rich:menuItem label="Delete Node" action="#{knowledgebaseController.deleteAction}" rendered="#{knowledgebaseController.deletePermitted}" onclick="if (!confirm('Do you want to delete this knowledgebase?')) { return false; }">
+                                <f:param name="selectedId" value="#{kb.id}"/>
+                                <f:param name="mode" value="delete"/>
+                            </rich:menuItem>
+                            <rich:menuItem label="Set to Root Node" actionListener="#{knowledgebaseController.markAsRootListener}"  rendered="#{knowledgebaseController.editPermitted}">
+                                <f:param name="selectedId" value="#{kb.id}"/>
+                            </rich:menuItem>
+                        </rich:contextMenu>
+                        
+                    </rich:treeNode>
+                </rich:tree>
+                
+            </ui:define> 
+        </ui:composition>
+    </h:body>
+</html>

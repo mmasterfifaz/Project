@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Product Information</ui:define>
+                        <ui:define name="search">
+                <span style="padding-left:2px"/>Product Category <span style="padding-left:5px"/>
+                <h:selectOneMenu value="#{productController.productCategoryId}"
+                                 valueChangeListener="#{productController.productCategoryChangeListener}">
+                    <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                    <f:selectItems value="#{productController.productCateogryList}"/>
+                    <a4j:ajax event="change" render="table"/>
+                </h:selectOneMenu>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{productController.editAction}" rendered="#{productController.addPermitted}"/><h:commandButton image="../img/b_delete.png" action="#{productController.deleteAction}" rendered="#{productController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="table" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{productController.list}" var="list" rows="#{global.maxrows}"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 15%;text-align: left;">Product Code</rich:column>
+                            <rich:column style="width: 27%;text-align: left;">Product Name</rich:column>
+                            <rich:column style="width: 15%;text-align: left;">Product Category</rich:column>
+                            <rich:column style="width: 10%;text-align: left;"></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{productController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{productController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.productCategory.name}"/>
+                    </rich:column>
+                    <rich:column >
+                        <h:commandButton image="../img/b_product_sub_form.png" 
+                                         title="#{list.code}"
+                                         value="#{list.id}"
+                                         action="#{productController.selectProductchildreg}">
+                            <f:param name="productID" value="#{list.id}"/>
+                        </h:commandButton>
+                    </rich:column>
+                    <rich:column >
+                        <h:commandButton image="../img/b_product_document.png" 
+                                         title="#{list.code}"
+                                         value="#{list.id}"
+                                         action="#{productController.selectProductdocument}">
+                            <f:param name="productID" value="#{list.id}"/>
+                        </h:commandButton>
+                    </rich:column>
+                    <rich:column >
+                        <h:commandButton image="../img/b_productplan.png" 
+                                         title="#{list.code}"
+                                         value="#{list.id}"
+                                         action="#{productController.selectAction}"
+                                         rendered="#{list.productCategory.categoryType eq 'life' || list.productCategory.categoryType eq 'nonlife' || list.productCategory.categoryType eq 'motor' || list.productCategory.categoryType eq 'motoradvance'}">
+                       <f:param name="productID" value="#{list.id}"/>
+                        </h:commandButton>
+                       
+                    </rich:column>
+                    <rich:column style="text-align: left">
+                        <a4j:commandButton image="../img/b_copy.png" action="#{productController.copyAction()}" rendered="#{productController.addPermitted}"
+                                           onclick="if (!confirm('Do you want to copy this product?')) { return false; }">
+                            <f:param name="productID" value="#{list.id}"/>
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

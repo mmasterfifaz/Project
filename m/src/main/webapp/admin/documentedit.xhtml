@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Document: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{documentEditController.mode}"/>
+                <h:inputHidden value="#{documentEditController.document.id}"/>
+                <a4j:region id="region">
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:outputText value="#{documentEditController.message}" style="color:red"/>&nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Title : </td>
+                        <td>
+                            <h:inputText id="title" value="#{documentEditController.document.title}" styleClass="textfield" 
+                                         size="30" required="true" requiredMessage="Title is required">
+                                <rich:validator/>
+                            </h:inputText>
+                            &#160;<rich:message id="msgTitle" for="title" styleClass="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="400" align="right">Folder Name :</td>
+                        <td align="left">
+                             <h:selectOneMenu id="folderName" value="#{documentEditController.documentFolderId}"
+                                           required="true" requiredMessage="Folder Name is required">
+                                   <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                   <f:selectItems value="#{documentEditController.documentFolderList}"/>
+                                   <rich:validator/>
+                             </h:selectOneMenu>
+                                   &#160;<rich:message id="msgFolderName" for="folderName" styleClass="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="400" align="right">Assign To :</td>
+                        <td align="left">
+                             <h:selectOneMenu id="assignTo" value="#{documentEditController.userGroupId}"
+                                            required="true" requiredMessage="Assign To is required">
+                                    <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItems value="#{documentEditController.userGroupList}"/>
+                                    <rich:validator/>
+                             </h:selectOneMenu>
+                                    &#160;<rich:message id="msgAssignTo" for="assignTo" styleClass="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description : </td>
+                        <td valign="top">
+                              <h:inputTextarea  rows="7" cols="40" value="#{documentEditController.document.description}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{documentEditController.document.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Document Type :</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="documentType" styleClass="select08" value="#{documentEditController.documentUploadTypeId}"
+                                            required="true" requiredMessage="Document Type is required">
+                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{documentEditController.documentUploadTypeList}" />
+                                <rich:validator />
+                            </h:selectOneMenu>
+                                &#160;<rich:message id="msgDocumentType" for="documentType" styleClass="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Version : </td>
+                        <td>
+                            <h:inputText id="version" value="#{documentEditController.document.version}" styleClass="textfield" 
+                                         size="15" required="true" maxlength="15" requiredMessage="Version is required">
+                            </h:inputText>
+                            &#160;<rich:message id="msgVersion" for="version" styleClass="required"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">File Name :</td>
+                        <td valign="top" colspan="2">
+                            <h:panelGroup id="fileName">
+                            <rich:fileUpload id="fileUpload" fileUploadListener="#{documentEditController.uploadListener}"
+                                             maxFilesQuantity="1" rendered="#{documentEditController.document.fileName eq null}" 
+                                             immediateUpload="true" listHeight="63px" >
+                                <a4j:ajax event="clear" render="fileUpload"
+                                          listener="#{documentEditController.clearUploadData}"/>
+                            </rich:fileUpload>
+                            <h:panelGroup rendered="#{!(documentEditController.document.fileName eq null)}">
+                                    #{fn:substringBefore(documentEditController.document.fileName, ':')}
+                                    &nbsp;&nbsp;&nbsp;<a4j:commandButton image="../img/b_delete.png"
+                                                                         actionListener="#{documentEditController.deleteFileNameListener}"
+                                                                         render="fileName , fileUpload"
+                                                                         limitRender="true"/>
+                            </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" >
+                        </td>
+                        <td>
+                            <h:commandButton action="#{documentEditController.saveAction}" image="../img/b_save.png" rendered="#{documentEditController.savePermitted}"/>
+                            <h:commandButton action="#{documentEditController.backAction}" image="../img/b_back.png" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </a4j:region>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

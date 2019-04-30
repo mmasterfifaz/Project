@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">First Call Resolution</ui:define>
+            <ui:define name="panel">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date From:</td>
+                        <td><rich:calendar value="#{firstCallResolutionReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                           datePattern="#{msg.datePattern}" locale="#{msg.all}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{firstCallResolutionReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                           datePattern="#{msg.datePattern}" locale="#{msg.all}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Case Type:</td>
+                        <td><h:selectOneMenu value="#{firstCallResolutionReport.caseTypeId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{firstCallResolutionReport.caseTypeList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Service Type:</td>
+                        <td><h:selectOneMenu id="serviceType" value="#{firstCallResolutionReport.serviceTypeId}" styleClass="select08" valueChangeListener="#{firstCallResolutionReport.businessUnitListener}">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{firstCallResolutionReport.serviceTypeList}"/>
+                            <a4j:ajax event="change" render="businessUnit,location" limitRender="true" execute="@this"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                 <tr>
+                        <td width="200" align="right" valign="top">Location:</td>
+                        <td><h:selectOneMenu id="businessUnit" value="#{firstCallResolutionReport.businessUnitId}" styleClass="select08" valueChangeListener="#{firstCallResolutionReport.locationListener}">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{firstCallResolutionReport.businessUnitList}"/>
+                                <a4j:ajax event="change" render="location" limitRender="true" execute="@this"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top"></td>
+                        <td>
+                            <h:selectOneMenu  id="location" value="#{firstCallResolutionReport.locationId}" styleClass="select08" disabled="#{firstCallResolutionReport.showLocation}">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{firstCallResolutionReport.locationList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User Group:</td>
+                        <td valign="top"><h:selectOneMenu id="usergroup" value="#{firstCallResolutionReport.userGroupId}"
+                                                          valueChangeListener="#{firstCallResolutionReport.userGroupListener}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{firstCallResolutionReport.usergroupList}"/>
+                                <a4j:ajax event="change" render="usergroup, user" execute="@this"/>
+                            </h:selectOneMenu>
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User:</td>
+                        <td valign="top"><h:selectOneMenu id="user" value="#{firstCallResolutionReport.userId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{firstCallResolutionReport.usersList}"/>
+                            </h:selectOneMenu>
+
+                        </td>
+                    </tr>           
+                    <tr>
+                        <td align="right" valign="top">Output Type:</td>
+                        <td valign="top"><h:selectOneRadio value="#{firstCallResolutionReport.outputFormat}">
+                                <f:selectItems value="#{firstCallResolutionReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandLink  action="blank.xhtml" actionListener="#{firstCallResolutionReport.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png" style="display: inline"/>
+
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

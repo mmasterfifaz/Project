@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Configuration</ui:define>
+            <ui:define name="title2">Child Registration Type: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{childRegTypeEditController.mode}"/>
+                <h:inputHidden value="#{childRegTypeEditController.childRegType.id}"/>
+                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>   
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:outputText value="#{childRegTypeEditController.message}" style="color:red"/></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Child Registration Type Name:</td>
+                         <td><h:inputText id="name" value="#{childRegTypeEditController.childRegType.name}" styleClass="textfield" size="30" required="true"
+                                         requiredMessage="Type name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{childRegTypeEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Sequence Number:</td>
+                        <td><h:inputText id="seqno" value="#{childRegTypeEditController.childRegType.seqNo}" styleClass="textfield" size="30" onkeypress="if(event.which &lt; 48 || event.which &gt; 57 ) if(event.which != 8) return false;">                 
+                            </h:inputText>
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top"></td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{childRegTypeEditController.saveAction}" rendered="#{childRegTypeEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{childRegTypeEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

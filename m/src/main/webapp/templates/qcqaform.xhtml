@@ -1,0 +1,89 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <table border="0" cellpadding="3" cellspacing="1">
+        <tr>
+            <td valign="top">
+                <table id="qcQaForm" border="0" cellpadding="3" cellspacing="1">
+                    <tr>
+                        <td>
+                            <table width="100%">       
+                                <ui:repeat value="#{qaFormController.qcQaFormValueList}" var="questionList" >
+                                    <tr>
+                                        <td valign="top" class="blue04"><h:outputText value="#{questionList.qaQuestion.qaCategory.name}" rendered="#{questionList.qaQuestion.seqNo eq 1}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td valign="top" width="400"><h:outputText style="color:red" value="*" rendered="#{!questionList.qaQuestion.showNa}"/>#{questionList.qaQuestion.seqNo}. #{questionList.qaQuestion.name}</td>
+                                        <td valign="top" width="300">
+                                            <h:panelGroup rendered="#{questionList.qaQuestion.type eq 'dropdown'}">
+                                                <table><tr><td>
+                                                    <h:selectOneMenu id="dropdownItem" value="#{questionList.answer}"
+                                                                     required="#{!questionList.qaQuestion.showNa}"
+                                                                     requiredMessage="#{msg.require}">
+                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                        <f:selectItems value="#{questionList.answerSelectItems}"/>
+                                                    </h:selectOneMenu>
+                                                    <rich:message for="dropdownItem" style="color:red"/>
+                                                </td></tr></table>
+
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{questionList.qaQuestion.type eq 'checkbox'}">
+                                                <table><tr><td valign="top">
+                                                    <h:selectManyCheckbox id="chkBoxItem" value="#{questionList.answerCheckbox}" layout="pageDirection"
+                                                                  required="#{!questionList.qaQuestion.showNa}"
+                                                                  requiredMessage="#{msg.require}"> 
+                                                    <f:selectItems value="#{questionList.answerSelectItems}"/>
+                                                </h:selectManyCheckbox>   <rich:message for="chkBoxItem" style="color:red"/>
+                                                </td></tr></table>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{questionList.qaQuestion.type eq 'radio'}">
+                                                <table><tr><td valign="top">
+                                                <h:selectOneRadio id="radioitem" value="#{questionList.answer}" layout="pageDirection"
+                                                                  required="#{!questionList.qaQuestion.showNa}"
+                                                                  requiredMessage="#{msg.require}"> 
+                                                    <f:selectItems value="#{questionList.answerSelectItems}"/>
+                                                </h:selectOneRadio>   <rich:message for="radioitem" style="color:red"/>
+                                                </td></tr></table>
+                                            </h:panelGroup>
+                                            <h:panelGroup rendered="#{questionList.qaQuestion.type eq 'textfield'}">
+                                                <table><a4j:repeat value="#{questionList.qaQuestion.qaChoiceCollection}" var="choiceList"><tr><td valign="top">
+                                                        <h:inputText id="txtFieldItem"  size="15" styleClass="textfield" value="#{questionList.answer}" onkeypress="return isNumberKey(event)"
+                                                                     required="#{!questionList.qaQuestion.showNa}" requiredMessage="#{msg.require}"/><rich:message for="txtFieldItem" style="color:red"/>
+                                                </td></tr></a4j:repeat></table>
+                                            </h:panelGroup>
+                                        </td>
+                                        <td valign="top" width="500">
+                                            <h:outputText  value="Remark  " rendered="#{questionList.qaQuestion.showRemark}"/>
+                                            <h:inputTextarea id="rqaTxt" cols="30"  rows="5" value="#{questionList.remark}" rendered="#{questionList.qaQuestion.showRemark}"
+                                                             onblur="validateLength(this);"  >
+                                            </h:inputTextarea>
+                                            <br/>
+                                            <h:outputText id='rqaMsg' value='Remark must less than 500 charecters.' style="display:none;color:red;" />
+                                        </td>
+                                    </tr>
+                                </ui:repeat>
+                            </table>                           
+                        </td>
+                    </tr>
+                    <tr><td class="line01" width="100%"></td></tr>       
+                </table>
+            </td>
+        </tr>
+    </table>
+    <script type='text/javascript'>
+        function validateLength(o){
+            
+            if ( o!==null) {
+                var msgId = o.id.substring(0,o.id.length-3)+'Msg';
+                var msgObj = document.getElementById(msgId);
+                if (msgObj!==null){
+                    msgObj.style.display = (o.value.length>500 )?'':'none';
+                }
+            }
+        }
+         
+    </script>    
+</ui:composition>

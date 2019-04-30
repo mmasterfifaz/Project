@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Social Report</ui:define>
+            <ui:define name="title2">Statistic Monthly Message by Case</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainPanel1">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date Year:</td>
+                        <td><h:selectOneMenu styleClass="select01" id="fromYear" value="#{statisticMonthlyByCaseReport.fromYear}" style="width: 100px">
+                                <f:selectItem itemLabel="Select" />
+                                <f:selectItem itemValue="2014" itemLabel="2014" />
+                                <f:selectItem itemValue="2015" itemLabel="2015" />
+                                <f:selectItem itemValue="2016" itemLabel="2016" />
+                                <f:selectItem itemValue="2017" itemLabel="2017" />
+                                <f:selectItem itemValue="2018" itemLabel="2018" />
+                                <f:selectItem itemValue="2019" itemLabel="2019" />
+                                <f:selectItem itemValue="2020" itemLabel="2020" />
+                                <f:selectItem itemValue="2021" itemLabel="2021" />
+                                <f:selectItem itemValue="2022" itemLabel="2022" />
+                                <f:selectItem itemValue="2023" itemLabel="2023" />
+                                <f:selectItem itemValue="2024" itemLabel="2024" />
+                                <f:selectItem itemValue="2025" itemLabel="2025" />
+                                <f:selectItem itemValue="2026" itemLabel="2026" />
+                                <f:selectItem itemValue="2027" itemLabel="2027" />
+                                <f:selectItem itemValue="2028" itemLabel="2028" />
+                                <f:selectItem itemValue="2029" itemLabel="2029" />
+                                <f:selectItem itemValue="2030" itemLabel="2030" />
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Priority:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="priority" value="#{statisticMonthlyByCaseReport.soPriorityId}" styleClass="select08" >
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticMonthlyByCaseReport.soPriorityList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Status:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="status" value="#{statisticMonthlyByCaseReport.soCaseStatus}" styleClass="select08" >
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticMonthlyByCaseReport.soCaseStatusList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Grouping of User:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{statisticMonthlyByCaseReport.userOption}" valueChangeListener="#{statisticMonthlyByCaseReport.userOptionListener}">
+                                <f:selectItems value="#{statisticMonthlyByCaseReport.userOptionList}"/>
+                                <a4j:ajax event="click" render="mainPanel1" execute="@this"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="4">
+                            <h:panelGroup id="serviceTypePanel" rendered="#{statisticMonthlyByCaseReport.userOption eq 1}">
+                             <tr>
+                                <td width="200" align="right" valign="top">Social Service Type: </td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="soSevice" value="#{statisticMonthlyByCaseReport.soServiceId}"  
+                                                      valueChangeListener="#{statisticMonthlyByCaseReport.userServiceListener}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{statisticMonthlyByCaseReport.soServiceList}"/>
+                                    <a4j:ajax event="change" render="soSevice,user" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            <h:panelGroup id="userGroupPanel" rendered="#{statisticMonthlyByCaseReport.userOption eq 0}">
+                            <tr>
+                                <td width="200" align="right" valign="top">User Group:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="usergroup" value="#{statisticMonthlyByCaseReport.userGroupId}" 
+                                                     valueChangeListener="#{statisticMonthlyByCaseReport.userGroupListener}" styleClass="select08" >
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{statisticMonthlyByCaseReport.usergroupList}"/>
+                                        <a4j:ajax event="change" render="usergroup, user" execute="@this"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">User:</td>
+                        <td valign="top"><h:selectOneMenu id="user" value="#{statisticMonthlyByCaseReport.userId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticMonthlyByCaseReport.usersList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Output Type:</td>
+                        <td valign="top"><h:selectOneRadio value="#{statisticMonthlyByCaseReport.outputFormat}">
+                                <f:selectItems value="#{statisticMonthlyByCaseReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink action="blank.xhtml" actionListener="#{statisticMonthlyByCaseReport.reportListener}" target="_blank">
+                                    <img alt="Report" src="../img/b_report.png"/>
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+                </h:panelGroup> 
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

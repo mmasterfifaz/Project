@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">No File History</ui:define>
+            <ui:define name="search">
+                <span style="padding-left:2px"/>Create Date <span style="padding-left:5px"/>
+            </ui:define>
+            <ui:define name="button">
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="table" 
+                                style="width: 100%" 
+                                styleClass="tableline01" 
+                                value="#{noLogController.list}"
+                                rows="#{global.maxrows}" 
+                                var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column styleClass="subh01">Create Date</rich:column>
+                            <rich:column styleClass="subh01">Create By</rich:column>
+                            <rich:column styleClass="subh01">No File 1</rich:column>
+                            <rich:column styleClass="subh01">No File 2</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column>
+                        <h:outputText value="#{list.createDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.createBy}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a href="#{request.contextPath}#{list.yesFilepath}" target="_blank">#{list.yesFilename}</a>
+                    </rich:column>
+                    <rich:column>
+                        <a href="#{request.contextPath}#{list.appFilepath}" target="_blank">#{list.appFilename}</a>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                <br/>
+                <table width="100%"><tr>
+                        <td align="left"><a href="../admin/exportnofile.jsf" >..Back to Export No File Page</a></td>
+                    </tr></table>                
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

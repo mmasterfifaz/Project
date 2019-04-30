@@ -1,0 +1,343 @@
+<ui:composition template="../../includes/customerInfo.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="javascript">
+
+    </ui:define>
+    <ui:define name="title1">#{msg.customerHandling}</ui:define>
+    <ui:define name="title2">#{msg.caseManagement} / #{msg.caseHistory} / #{msg.activityInformation}</ui:define>
+    <ui:define name="type">#{msg.customerHandling}</ui:define>
+    <ui:define name="detail_1">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">#{msg.activityInformation}</h2></td>
+                <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"></td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td valign="top"><br/>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="50%" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td align="right" width="40%"> <span class="required">#{msg.requireMarker}</span> #{msg.activityDate}</td>
+                                        <td class="gray02" width="58%">
+                                            <rich:calendar id="activityDate"
+                                                           value="#{activityEditController.activity.activityDate}"
+                                                           locale="#{msg.locale}"
+                                                           popup="true"
+                                                           datePattern="#{msg.dateTimePattern}"
+                                                           required="true"
+                                                           requiredMessage="#{msg.require}"
+                                                           inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                                           disabled="#{activityEditController.activity.id ne null}">
+                                                <f:validator validatorId="DateValidator"/>   
+                                                <rich:validator />
+                                            </rich:calendar>
+                                            &#160;<h:message for="activityDate" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <ui:remove>
+                                        <tr>
+                                            <td align="right">#{msg.activityDueDate}</td>
+                                            <td class="gray02">
+                                                <rich:calendar value="#{activityEditController.activity.slaAcceptDate}"
+                                                               locale="#{msg.locale}"
+                                                               popup="true"
+                                                               datePattern="#{msg.dateTimePattern}"
+                                                               inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                                               resetTimeOnDateSelect="false"
+                                                               defaultTime="00:00"
+                                                               disabled="#{activityEditController.activity.id ne null}"/>
+                                            </td>
+                                        </tr>
+                                    </ui:remove>
+                                    <tr>
+                                        <td align="right">#{msg.activityChannel}</td>
+                                        <td class="gray02">
+                                            <h:selectOneMenu id="activityChannelId"
+                                                             styleClass="short_select"
+                                                             value="#{activityEditController.channelId}"
+                                                             required="false"
+                                                             requiredMessage="#{msg.require}"
+                                                             disabled="#{activityEditController.activity.id ne null}">
+                                                <f:selectItems value="#{activityEditController.channelList}"/>
+                                            </h:selectOneMenu>
+                                            &#160;<h:message for="activityChannelId" styleClass="required"/>
+                                        </td>
+                                    </tr>
+
+                                    <h:panelGroup rendered="#{activityEditController.activity.id eq null}">                      
+                                        <tr>
+                                            <td align="right"> <span class="required">#{msg.requireMarker}</span> #{msg.activityType}</td>
+                                            <td class="gray02">
+                                                <h:selectOneMenu id="activityTypeId"
+                                                                 styleClass="short_select"
+                                                                 value="#{activityEditController.activityTypeId}"
+                                                                 required="true"
+                                                                 requiredMessage="#{msg.require}"
+                                                                 disabled="#{activityEditController.activity.id ne null}">
+                                                    <f:selectItems value="#{activityEditController.activityTypeList}"/>
+                                                    <a4j:ajax event="change"
+                                                              listener="#{activityEditController.activityTypeListener}"
+                                                              render="userReceiverLabel,userReceiver,userReceiverEmailLabel,userReceiverPhoneLabel,userReceiverEmail,userReceiverPhone" execute="@this" limitRender="true"/>
+
+                                                    <f:validateRequired/>                  
+                                                    <rich:validator />
+                                                </h:selectOneMenu>
+                                                &#160;<h:message for="activityTypeId" styleClass="required"/>
+                                            </td>
+                                        </tr>
+                                    </h:panelGroup> 
+
+
+
+                                    <h:panelGroup rendered="#{activityEditController.activity.id ne null}">                      
+                                        <tr>
+                                            <td align="right"> <span class="required">#{msg.requireMarker}</span> #{msg.activityType}</td>
+                                            <td class="gray02">
+                                                <h:outputText value="#{activityEditController.activityType.name}"/>
+                                            </td>
+                                        </tr>
+                                    </h:panelGroup> 
+
+
+                                    <tr>
+                                        <td align="right"><h:panelGroup id="userReceiverLabel" >
+                                                <h:panelGroup rendered="#{activityEditController.activityType.taskDelegate and not activityEditController.contactCase.workflow}">
+                                                    <span class="required">#{msg.requireMarker}</span> #{msg.activityAssignTo}</h:panelGroup></h:panelGroup></td>
+                                        <td class="gray02">
+                                            <h:panelGroup id="userReceiver">
+                                                <h:panelGroup rendered="#{activityEditController.activityType.taskDelegate and not activityEditController.contactCase.workflow}">
+                                                    <h:inputHidden id="userReceiverId"
+                                                                   value="#{activityEditController.userReceiverId}"
+                                                                   required="#{activityEditController.activityType.taskDelegate}"
+                                                                   requiredMessage="#{msg.require}"/>
+                                                    <h:inputText id="userReceiverName"
+                                                                 readonly="true"
+                                                                 size="15"
+                                                                 styleClass="textfield"
+                                                                 value="#{activityEditController.userReceiverName}"
+                                                                 disabled="#{activityEditController.activity.id ne null}"/>
+                                                    &#160;<h:message for="userReceiverId" styleClass="required"/>
+                                                    <a4j:commandButton image="../../resources/img/b_search.png"
+                                                                       oncomplete="#{rich:component('selectUser')}.show();"
+                                                                       style="margin: 10px 0px 0px 10px; vertical-align: bottom"
+                                                                       render="popupSelectUser"
+                                                                       execute="@this" limitRender="true"
+                                                                       disabled="#{!activityEditController.activityType.taskDelegate}"
+                                                                       rendered="#{activityEditController.activity.id eq null}"/>
+                                                    <a4j:commandButton image="../../img/b_remove02.png"
+                                                                       render="userReceiver"
+                                                                       style="margin: 10px 0px 0px 10px; vertical-align: bottom"
+                                                                       actionListener="#{activityEditController.clearUserListener}"
+                                                                       execute="@this" limitRender="true"
+                                                                       disabled="#{!activityEditController.activityType.taskDelegate}"
+                                                                       rendered="#{activityEditController.activity.id eq null}">
+                                                    </a4j:commandButton>
+                                                </h:panelGroup>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:panelGroup  id="userReceiverEmailLabel">
+                                                <h:outputLabel rendered="#{activityEditController.activityType.taskDelegate and not activityEditController.contactCase.workflow}" 
+                                                               value="#{msg.email}"/>
+                                            </h:panelGroup>
+                                        </td>
+                                        <td class="gray02">
+                                            <h:panelGroup  id="userReceiverEmail">
+                                                <h:inputText styleClass="textfield"
+                                                             id="email"
+                                                             size="50"
+                                                             value="#{activityEditController.activity.userReceiverEmail}"
+                                                             rendered="#{activityEditController.activityType.taskDelegate and not activityEditController.contactCase.workflow}"
+                                                             disabled="#{activityEditController.activity.id ne null}"
+                                                             onblur="validateEmail(this)">
+                                                </h:inputText>
+                                            </h:panelGroup>
+                                            <!--onblur="checkEmail(this)"-->
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:panelGroup id="userReceiverPhoneLabel">
+                                                <h:outputLabel rendered="#{activityEditController.activityType.taskDelegate and not activityEditController.contactCase.workflow}" value="#{msg.telephone}"/>
+                                            </h:panelGroup>
+                                        </td>
+                                        <td class="gray02">
+                                            <h:panelGroup id="userReceiverPhone">
+                                                <h:inputText styleClass="textfield" 
+                                                             size="20"
+                                                             value="#{activityEditController.activity.userReceiverTelephone}"
+                                                             rendered="#{activityEditController.activityType.taskDelegate and not activityEditController.contactCase.workflow}"
+                                                             disabled="#{activityEditController.activity.id ne null}"/>
+                                            </h:panelGroup>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:outputLabel rendered="#{activityEditController.activity.id ne null}" value="#{msg.createBy}"/>
+                                        </td>
+                                        <td class="gray02">
+                                            <h:outputText rendered="#{activityEditController.activity.id ne null}" value="#{activityEditController.activity.createBy}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">
+                                            <h:outputLabel rendered="#{activityEditController.activity.id ne null}" value="#{msg.createDate}"/>
+                                        </td>
+                                        <td class="gray02">
+                                            <h:outputText rendered="#{activityEditController.activity.id ne null}" value="#{activityEditController.activity.createDate}">
+                                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                            </h:outputText>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="50%" valign="top">
+                                <table width="98%" border="0" cellspacing="0" cellpadding="4">
+                                    <tr>
+                                        <td align="right" valign="top"> <span class="required">#{msg.requireMarker}</span> #{msg.activityDescription}</td>
+                                        <td class="gray02">
+                                            <h:inputTextarea rows="10" cols="50"
+                                                             id="activityDescription"
+                                                             value="#{activityEditController.activity.description}"
+                                                             required="true"
+                                                             requiredMessage="#{msg.require}"
+                                                             disabled="#{activityEditController.activity.id ne null}"/>
+                                            &#160;<h:message for="activityDescription" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top">#{msg.caseHandlingAttachment}</td>
+                                        <td class="gray02">
+                                            <table border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td>
+                                                        <a4j:commandButton image="../../img/b_add.png"
+                                                                           oncomplete="#{rich:component('fileUpload')}.show();"
+                                                                           limitRender="true" execute="@this"
+                                                                           render="fileUpload"
+                                                                           rendered="#{activityEditController.activityId eq null}">
+                                                        </a4j:commandButton>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top">
+                                                        <a4j:jsFunction name="refreshAttach" render="attachPanel,attachFilePanel" execute="@this" immediate="true"/>
+                                                        <h:panelGroup id="attachPanel">
+                                                            <rich:dataTable value="#{activityEditController.activityAttachmentList}" var="list"
+                                                                            rendered="#{activityEditController.activityId ne null}">
+                                                                <rich:column>
+                                                                    <a href="../../upload/customer/#{list.activity.contactCase.customerId.id}/case/#{list.activity.contactCase.id}/activity/#{list.activity.id}/#{list.filename}" target="_blank">#{fn:substringAfter(list.filename, "_")}</a>
+                                                                </rich:column>
+                                                            </rich:dataTable>
+                                                            <rich:dataTable value="#{activityEditController.attachFiles}" var="list"
+                                                                            rendered="#{activityEditController.activityId eq null}">
+                                                                <rich:column>
+                                                                    <a href="../../upload/temp/#{list[2]}" target="_blank">#{list[0]}</a>
+                                                                </rich:column>
+                                                                <rich:column>
+                                                                    <a4j:commandButton image="../../img/b_subtract02.png"
+                                                                                       render="attachPanel"
+                                                                                       actionListener="#{activityEditController.removeFileTemp}"
+                                                                                       execute="@this" limitRender="true">
+                                                                        <f:param name="rmFile" value="#{list[1]}"/>
+                                                                    </a4j:commandButton>
+                                                                </rich:column>
+                                                            </rich:dataTable>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center">
+
+                                <h:commandButton image="/resources/img/b_save.png"
+                                                 action="#{activityEditController.saveAction}"
+                                                 style="margin-top: 5px; margin-bottom: 5px"
+                                                 rendered="#{frontMenuController.activityAddPermitted and activityEditController.activityId eq null}">
+                                    <f:param name="from" value="activity"/>
+                                    <f:param name="selectId" value="#{activityEditController.contactCaseId}"/>
+                                </h:commandButton>
+                                <h:commandButton image="/resources/img/b_back.png"
+                                                 actionListener="#{caseHandlingController.editCase}"
+                                                 immediate="true"
+                                                 style="margin-top: 5px; margin-bottom: 5px"
+                                                 action="#{activityEditController.back}">
+                                    <f:param name="from" value="activity"/>
+                                    <f:param name="selectId" value="#{activityEditController.contactCaseId}"/>
+                                </h:commandButton>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="4" class="bg_right"></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+    <ui:define name="popupModal">
+        <h:form id="frmUpAttach">
+            <rich:popupPanel id="fileUpload" width="410" height="320" style="padding: 0 0 0 0; border-style: none" domElementAttachment="parent">
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                        <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">File Upload</h2></td>
+                        <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png"><a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('fileUpload')}.hide();
+                                return false;">#{msg.close}</a></td>
+                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                        <td valign="top" bgcolor="#FFFFFF">
+                            <rich:fileUpload id="fileUploadAtt" fileUploadListener="#{activityEditController.uploadListener}"
+                                             style="border: none;" immediateUpload="true" render="attachPanel"
+                                             onfilesubmit="refreshAttach();#{rich:component('fileUpload')}.hide();">
+                            </rich:fileUpload>
+                        </td>
+                        <td width="4" class="bg_right"></td>
+                    </tr>
+                </table>
+                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                    <tr>
+                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                    </tr>
+                </table>
+            </rich:popupPanel>
+
+        </h:form>
+
+        <ui:include id="popupSelectUser"
+                    src="#{helperBean.postback ? '/front/customerHandling/popupSelectUser.xhtml' : '/share/empty.xhtml'}">
+            <ui:param name="m" value="#{activityEditController}"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="contactPerson"><span class="gray02">#{msg.caseHandlingContactPerson} </span><span class="blue04">#{activityEditController.contactCase.contactPerson}</span></ui:define>
+</ui:composition>

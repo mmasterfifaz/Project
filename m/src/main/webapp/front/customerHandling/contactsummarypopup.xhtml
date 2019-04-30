@@ -1,0 +1,255 @@
+<ui:composition template="/templates/popupmodal2.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:fn="http://java.sun.com/jsp/jstl/functions">
+    <ui:param name="modalId" value="contactSummaryPopup"/>
+
+    <ui:define name="searchcontent">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td width="260"><h2>Contact Summary</h2></td>
+                <td width="60" align="right"><a href="#" class="close" onclick="#{rich:component('contactSummaryPopup')}.hide();">Close X</a></td>
+            </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:panelGroup id="pgContacSummaryPopup">
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+            <tr>
+                <td width="260" align="right" valign="top"></td>
+                <td valign="top">#{contactSummaryController.message}</td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">Contact Date : </td>
+                <td valign="top"> <rich:calendar value="#{contactSummaryController.contactDate}" inputClass="textfield" inputSize="20"
+                                                 datePattern="#{msg.dateTimePattern}" locale="#{msg.locale}" buttonClass="rfcalbtn"
+                                                 required="true" disabled="true"
+                                                 requiredMessage="Contact Date is required"/>
+            <rich:message for="date" style="color:red"/></td>
+            </tr>
+            <ui:remove>
+            <tr>
+                <td align="right" valign="top">Channel : </td>
+                <td valign="top"><h:selectOneMenu value="#{contactSummaryController.channelId}">
+                <f:selectItems value="#{contactSummaryController.channelList}" var="list" itemValue="#{list.id}" itemLabel="#{list.type}:#{list.name}" />
+            </h:selectOneMenu></td></tr>
+            </ui:remove>
+
+            <tr>
+                <td align="right" valign="top"><h:outputText id="followupDateLabel" value="Follow Up Schedule :" rendered="#{contactSummaryController.showFollowupDate}"/></td>
+                <td><rich:calendar id="followupDate"
+                                   value="#{contactSummaryController.followupDate}"
+                                   locale="#{msg.locale}"
+                                   popup="true"
+                                   datePattern="#{msg.dateTimePattern}"
+                                   inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                   resetTimeOnDateSelect="false"
+                                   defaultTime="12:00"
+                                   rendered="#{contactSummaryController.showFollowupDate}"
+                                   disabled="#{contactSummaryController.contactClose}" /></td>
+            </tr>
+            <tr>
+                <td align="right" valign="top"><h:outputText value="Close List :"/> </td>
+                <td><h:selectBooleanCheckbox value="#{contactSummaryController.contactClose}" 
+                                             disabled="#{global.autoCloseAssignmentDetail or contactSummaryController.contactClose}" /></td>
+            </tr>
+            <tr>
+                <td align="right" valign="top">
+                    <h:outputText value="Reason :" rendered="#{contactSummaryController.contactClose}" />
+                </td>
+                <td>
+                    <h:outputText value="#{contactSummaryController.closeReason}" rendered="#{contactSummaryController.contactClose}" />
+                </td>
+            </tr>
+            <tr>
+               <td align="right" valign="top">Remark : </td>
+               <td><h:inputText value="#{contactSummaryController.remark}" size="50" maxlength="500" styleClass="textfield" /></td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" colspan="2">
+            <h:panelGroup id="saleResultGroup">
+                <h:panelGrid width="100%" columns="1" rendered="#{contactSummaryController.contactResult.contactStatus eq msg.dmcValue || contactSummaryController.contactResult.contactStatus eq msg.dmcNotOfferValue}">
+                    <ui:remove>
+                    <h:outputText value="Sale Result"/>
+                    </ui:remove>
+                    <!--Shopping Cart List-->
+                    <rich:dataTable var="list" styleClass="tableline01" value="#{contactSummaryController.shoppingCartList}">
+                        <rich:column style="vertical-align: top;width: 20%;">#{list.product.name}</rich:column>
+                        <rich:column style="vertical-align: top;width: 15%;">
+                            <h:selectOneMenu id="saleResult" value="#{list.purchaseOrder.saleResult}" required="true" requiredMessage="#{msg.require}">
+                                <f:selectItem itemValue="Y" itemLabel="Yes"/>
+                                <f:selectItem itemValue="N" itemLabel="No"/>
+                                <f:selectItem itemValue="F" itemLabel="Call Back"/>
+                                <a4j:ajax event="change" render="panalReason" execute="@this"/>
+                                                    
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="saleResult" style="color:red"/>
+                        </rich:column>
+                        <rich:column style="vertical-align: top">
+                            <h:panelGroup id="panalReason">
+                            <h:panelGroup id="nosale" rendered="#{(fn:contains(list.purchaseOrder.saleResult, 'N') ? true : false)}">
+                                    <h:outputText value="No Sale Reason :"/>
+                                    <h:selectOneMenu id="nosaleReasonId"
+                                                     value="#{list.nosaleReasonId}"
+                                                     required="true"
+                                                     requiredMessage="#{msg.require}"
+                                                     styleClass="select06">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{contactSummaryController.nosaleReasonList}" var="nosalelist" itemLabel="#{nosalelist.name}" itemValue="#{nosalelist.id}"/>
+                                                            
+                                <rich:validator />
+                                    </h:selectOneMenu>
+                                    <rich:message for="nosaleReasonId" style="color:red"/>
+                            </h:panelGroup>
+                                <h:panelGroup id="followup"  rendered="#{(fn:contains(list.purchaseOrder.saleResult, 'F') ? true : false)}">
+                                    <h:outputText value="Call Back Reason :"/>
+                                    <h:selectOneMenu id="followupsaleReasonId"
+                                                     value="#{list.followupsaleReasonId}"
+                                                     required="true"
+                                                     requiredMessage="#{msg.require}"
+                                                     styleClass="select06">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{contactSummaryController.followupsaleReasonList}" var="followuplist" itemLabel="#{followuplist.name}" itemValue="#{followuplist.id}"/>
+                                                            
+                                <rich:validator />
+                                    </h:selectOneMenu>
+                                    <rich:message for="followupsaleReasonId" style="color:red"/>
+                                    <span style="width: 3px"/>
+                                    <h:outputText value="Schedule :"/>
+                                    <rich:calendar value="#{list.purchaseOrder.followupsaleDate}"
+                                                   locale="#{msg.locale}"
+                                                   popup="true" buttonClass="rfcalbtn"
+                                                   datePattern="#{msg.dateTimePattern}"
+                                                   inputClass="textfield" inputSize="15"
+                                                   resetTimeOnDateSelect="false"
+                                                   defaultTime="12:00"/>
+                                </h:panelGroup>   
+                            </h:panelGroup>
+                        </rich:column>
+                    </rich:dataTable>
+                    <!--Assigned Product List-->
+                    <rich:dataTable var="list" styleClass="tableline01" value="#{contactSummaryController.assignedProductList}">
+                        <rich:column style="vertical-align: top;width: 20%;">#{list.product.name}</rich:column>
+                        <rich:column style="vertical-align: top;width: 15%;">
+                            <h:selectOneMenu id="saleResult" value="#{list.purchaseOrder.saleResult}" required="true" requiredMessage="#{msg.require}">
+                                <f:selectItem itemValue="N" itemLabel="No"/>
+                                <f:selectItem itemValue="F" itemLabel="Call Back"/>
+                                <a4j:ajax event="change" render="panalReason" execute="@this"/>
+                                                    
+                                <rich:validator />
+                            </h:selectOneMenu>
+                            <rich:message for="saleResult" style="color:red"/>
+                        </rich:column>
+                        <rich:column style="vertical-align: top">
+                            <h:panelGroup id="panalReason">
+                            <h:panelGroup id="nosale" rendered="#{(fn:contains(list.purchaseOrder.saleResult, 'N') ? true : false)}">
+                                    <h:outputText value="No Sale Reason :"/>
+                                    <h:selectOneMenu id="nosaleReasonId"
+                                                     value="#{list.nosaleReasonId}"
+                                                     required="true"
+                                                     requiredMessage="#{msg.require}"
+                                                     styleClass="select06">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{contactSummaryController.nosaleReasonList}" var="nosalelist" itemLabel="#{nosalelist.name}" itemValue="#{nosalelist.id}"/>
+                                                            
+                                    <rich:validator />
+                                    </h:selectOneMenu>
+                                    <rich:message for="nosaleReasonId" style="color:red"/>
+                            </h:panelGroup>
+                                <h:panelGroup id="followup"  rendered="#{(fn:contains(list.purchaseOrder.saleResult, 'F') ? true : false)}">
+                                    <h:outputText value="Call Back Reason :"/>
+                                    <h:selectOneMenu id="followupsaleReasonId"
+                                                     value="#{list.followupsaleReasonId}"
+                                                     required="true"
+                                                     requiredMessage="#{msg.require}"
+                                                     styleClass="select06">
+                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                        <f:selectItems value="#{contactSummaryController.followupsaleReasonList}" var="followuplist" itemLabel="#{followuplist.name}" itemValue="#{followuplist.id}"/>
+                                                            
+                                        <rich:validator />
+                                    </h:selectOneMenu>
+                                    <rich:message for="followupsaleReasonId" style="color:red"/>
+                                    <span style="width: 3px"/>
+                                    <h:outputText value="Schedule :"/>
+                                    <rich:calendar value="#{list.purchaseOrder.followupsaleDate}"
+                                                   locale="#{msg.locale}"
+                                                   popup="true" buttonClass="rfcalbtn"
+                                                   datePattern="#{msg.dateTimePattern}"
+                                                   inputClass="textfield" inputSize="15"
+                                                   resetTimeOnDateSelect="false"
+                                                   defaultTime="12:00"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </rich:column>
+                    </rich:dataTable>
+                </h:panelGrid>
+            </h:panelGroup>
+                </td>
+            </tr>     
+            <ui:remove>
+            <tr>
+                <td align="left" valign="top"><h3><h:outputText value="Product" rendered="#{userSession.hasProducts}"/></h3></td>
+                <td valign="top"></td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" colspan="2">
+                <rich:dataTable var="list" styleClass="tableline01" value="#{contactSummaryController.productInfoValues}">
+                    <rich:column style="text-align: left;width: 20%;">#{list.product.name}</rich:column>
+                    <rich:column style="text-align: left;width: 2%;"><h:selectBooleanCheckbox value="#{list.isUseful}"/></rich:column>
+                    <rich:column style="text-align: left;width: 25%;">Useful Information</rich:column>
+                    <rich:column style="text-align: left">Remark <h:inputText styleClass="textfield" value="#{list.remark}"/></rich:column>
+                </rich:dataTable>
+                </td>
+            </tr>
+            </ui:remove>
+            <tr>
+                <td align="left" valign="top">
+                    <h:panelGroup id="lblKbPanel">
+                        <h3><h:outputText value="Knowledge Base" rendered="#{contactSummaryController.knowledgebaseInfoValues.size() > 0}"/></h3>
+                    </h:panelGroup>
+                </td>
+                <td valign="top"></td>
+            </tr>
+            <tr>
+                <td align="left" valign="top" colspan="2">
+                <rich:dataTable id="kbpanel" var="list" styleClass="tableline01" value="#{contactSummaryController.knowledgebaseInfoValues}">
+                    <rich:column style="text-align: left;width: 20%;">#{list.knowledgebase.topic}</rich:column>
+                    <rich:column style="text-align: left;width: 2%;"><h:selectBooleanCheckbox value="#{list.isUseful}"/></rich:column>
+                    <rich:column style="text-align: left;width: 25%;">Useful Information</rich:column>
+                    <rich:column style="text-align: left">Remark <h:inputText styleClass="textfield" value="#{list.remark}"/></rich:column>
+                </rich:dataTable>
+            </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top"></td>
+                <td valign="top">
+                    <h:selectBooleanCheckbox value="#{contactSummaryController.callReady}" >
+                        <f:ajax event="click" execute="@this" />
+                    </h:selectBooleanCheckbox> Ready
+                </td>
+            </tr>
+            <tr>
+                <td align="right" valign="top"></td>
+                <td valign="top">
+                    <a4j:commandButton image="/img/btn_save_exit.png" 
+                                       action="#{contactSummaryController.saveAndExitAction}" 
+                                       actionListener="#{contactSummaryController.saveAndExitActionListener}" 
+                                       render="message,telephonyEdit" />
+                <ui:remove><a4j:commandButton image="/img/btn_save_cont.png" action="#{contactSummaryController.saveAndContinueAction}" /></ui:remove>
+                <ui:remove>
+                <a href="#"> <h:graphicImage value="/img/b_back.png" onclick="#{rich:component('contactSummaryPopup')}.hide()"/></a>
+                <h:commandButton image="/img/b_back.png" action="#{contactSummaryController.backAction}" immediate="true" />
+                </ui:remove>
+            </td>
+            </tr>
+        </table>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
+

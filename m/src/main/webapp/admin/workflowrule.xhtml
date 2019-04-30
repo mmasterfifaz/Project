@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Workflow Rule</ui:define>
+            <ui:define name="search">
+                <span style="padding-left:10px"/>
+                Name:
+                <span style="padding-left:5px"/>
+                <h:inputText  value="#{workflowRuleController.keyword}" 
+                            maxlength="50" size="20" styleClass="textfield"/>
+                <span style="vertical-align: bottom">
+                    <h:commandButton image="../img/b_search.png" 
+                                    action="#{workflowRuleController.searchAction}"/>
+
+                </span>
+            </ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{workflowRuleController.editAction}" rendered="#{workflowRuleController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{workflowRuleController.deleteAction}" rendered="#{workflowRuleController.deletePermitted}"  onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{workflowRuleController.workflowRuleList}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Name" /></rich:column>
+                            <rich:column style="width: 67%;text-align: left;"><h:outputText value="Delegate To"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:selectBooleanCheckbox value="#{workflowRuleController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="Title" value="#{list.name}" action="#{workflowRuleController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                     <h:panelGroup rendered="#{not empty list.workflowRuleDetailCollection}">
+                        <a4j:repeat value="#{list.workflowRuleDetailCollection}" var="list1" rowKeyVar="idx">
+                            <h:outputText value="#{list1.user.name} #{list1.user.surname}"/>
+                            <h:outputText value=", " rendered="#{list.workflowRuleDetailCollection.size()-1 > idx}"/>
+                        </a4j:repeat>
+                     </h:panelGroup>
+                    </rich:column>
+                    <rich:column >
+                        <h:outputText value="Enable" rendered="#{list.status}"/><h:outputText value="Disable" rendered="#{not list.status}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
+

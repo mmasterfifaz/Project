@@ -1,0 +1,100 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Social Priority : Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{socialPriorityEditController.mode}"/>
+                <h:inputHidden value="#{socialPriorityEditController.soPriority.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{socialPriorityEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Code:</td>
+                        <td>
+                            <h:inputHidden value="#{socialPriorityEditController.soPriority.code}" />
+                            <h:outputText value="#{socialPriorityEditController.soPriority.code}" />
+                            <ui:remove>
+                            <h:inputText id="code" value="#{socialPriorityEditController.soPriority.code}" styleClass="textfield" size="50" required="true" maxlength="50"
+                                         requiredMessage="Code is required">
+                            </h:inputText>
+                            </ui:remove>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{socialPriorityEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Name:</td>
+                        <td valign="top"><h:inputText id="name" value="#{socialPriorityEditController.soPriority.name}" styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Name is required">
+                                
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top"><h:inputText id="description" value="#{socialPriorityEditController.soPriority.description}" styleClass="textfield" size="50" required="false"
+                                                      requiredMessage="Description is required">
+                                
+                            </h:inputText>
+                            <rich:message for="description" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Keyword:</td>
+                        <td valign="top"><h:inputText id="keyword" value="#{socialPriorityEditController.soPriority.keyword}" styleClass="textfield" size="50" required="true"
+                                                      requiredMessage="Keyword is required">
+                                
+                            </h:inputText>
+                            <rich:message for="keyword" style="color:red"/>
+                        </td>
+                    </tr>
+                    <!--<tr>-->
+                        <!--<td align="right" valign="top">* Default Priority:</td>-->
+                        <!--<td valign="top"><h:inputText id="defaultPriority" value="#{socialPriorityEditController.soPriority.defaultPriority}" styleClass="textfield" size="50" required="true"-->
+                                                      <!--requiredMessage="Default Priority is required">-->
+                                <!---->
+                            <!--</h:inputText>-->
+                            <!--<rich:message for="defaultPriority" style="color:red"/>-->
+                        <!--</td>-->
+                    <!--</tr>-->
+                    <tr>
+                        <td align="right" valign="top">* Default Priority:</td>
+                        <td valign="top"><h:selectOneMenu id="defaultprioirty" value="#{socialPriorityEditController.soPriority.defaultPriority}" required="true" requiredMessage="#{msg.require}">
+                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                            <f:selectItem itemLabel="#{msg.low}" itemValue="#{msg.lowValue}"/>
+                            <f:selectItem itemLabel="#{msg.medium}" itemValue="#{msg.mediumValue}"/>
+                            <f:selectItem itemLabel="#{msg.high}" itemValue="#{msg.highValue}"/>
+                            <f:selectItem itemLabel="#{msg.immediate}" itemValue="#{msg.immediateValue}"/>
+                            
+                        </h:selectOneMenu>
+                            <rich:message for="defaultprioirty" style="color:red"/>
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{socialPriorityEditController.soPriority.status}"/> Enable
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandButton image="../img/b_save.png" action="#{socialPriorityEditController.saveAction}" rendered="#{socialPriorityEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{socialPriorityEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../social/dashboardtemplate.xhtml">
+            <ui:define name="title1">Dashboard</ui:define>
+            <ui:define name="title2">Social Static</ui:define>
+            <ui:define name="detailSub1">
+                <br/>
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <!-- ตารางแถวกลาง  -->
+                    <tr>
+                        <td width="33%" valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr style="height:290px" valign="top"><td>
+                                    <h2 class="style1">Social Static</h2>
+                                    <br/>
+                                    <rich:dataTable id="table1"
+                                                    style="width: 100%"
+                                                    styleClass="tableline01"
+                                                    value="#{dashboardSocialStaticController.data1lists}"
+                                                    rows="#{global.maxrows}"
+                                                    var="list"
+                                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                    onrowmouseout="this.style.backgroundColor='#ffffff'">
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column styleClass="subh01"></rich:column>
+                                                <rich:column styleClass="subh01"></rich:column>
+                                                <rich:column styleClass="subh01" style="text-align:center">Post</rich:column>
+                                                <rich:column styleClass="subh01" style="text-align:center">%</rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+                                        <rich:column width="10" style="height:30px">
+                                            <h:graphicImage url="/img/social/logo_FB_large.png" rendered="#{list.col1 eq 'Facebook'}"/>
+                                            <h:graphicImage url="/img/social/logo_PT_large.png" rendered="#{list.col1 eq 'Pantip'}"/>
+                                            <h:graphicImage url="/img/social/logo_TW_large.png" rendered="#{list.col1 eq 'Twitter'}"/>
+                                            <h:graphicImage url="/img/social/logo_IG_large.png" rendered="#{list.col1 eq 'Instagram'}"/>
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:outputText style="font-size:small;font-weight:bolder;color:#01a0c0" value="#{list.col1}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col1}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <rich:column style="text-align:center">
+                                            <h:outputText style="color:#696969" value="#{list.col2}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col2}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <rich:column style="text-align:center">
+                                            <h:outputText style="color:#696969" value="#{list.col3}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col3}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <f:facet name="footer">
+                                            <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                        </f:facet>
+                                    </rich:dataTable>
+                                    <br/>
+                                </td></tr>
+                                <tr><td>
+                                    <div id="socialstatic"  style="width: 400px; height: 200px;"></div>
+                                    <table  width="300" style="margin-left: auto;margin-right: auto; border:1px solid lightgrey"><tr><td><div id="socialstaticLegend"/></td></tr></table>
+                                </td></tr>
+                            </table>
+                            <p></p>
+                        </td>
+                        <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+                        <td width="33%" valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr style="height:290px" valign="top"><td>
+                                    <h2 class="style1">Post Type Static</h2>
+                                    <br/>
+                                    <rich:dataTable id="table2"
+                                                    style="width: 100%"
+                                                    styleClass="tableline01"
+                                                    value="#{dashboardSocialStaticController.data2lists}"
+                                                    rows="#{global.maxrows}"
+                                                    var="list"
+                                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                    onrowmouseout="this.style.backgroundColor='#ffffff'">
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column styleClass="subh01"></rich:column>
+                                                <rich:column styleClass="subh01"></rich:column>
+                                                <rich:column styleClass="subh01" style="text-align:center">Post</rich:column>
+                                                <rich:column styleClass="subh01" style="text-align:center">%</rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+                                        <rich:column width="10" style="height:30px">
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:outputText style="font-size:small;font-weight:bolder;color:#01a0c0" value="#{list.col1}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col1}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <rich:column style="text-align:center">
+                                            <h:outputText style="color:#696969" value="#{list.col2}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col2}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <rich:column style="text-align:center">
+                                            <h:outputText style="color:#696969" value="#{list.col3}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col3}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <f:facet name="footer">
+                                            <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                        </f:facet>
+                                    </rich:dataTable>
+                                    <br/>
+                                </td></tr>
+                                <tr><td>
+                                    <div id="posttypestatic"  style="width: 400px; height: 200px;"></div>
+                                    <table  width="300" style="margin-left: auto;margin-right: auto; border:1px solid lightgrey"><tr><td><div id="posttypestaticLegend"/></td></tr></table>
+                                </td></tr>
+                            </table>
+                            <p></p>
+                        </td>
+                        <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="30" height="480"/></td>
+                        <td width="33%" valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr style="height:290px" valign="top"><td>
+                                    <h2 class="style1">Customer Feel Static</h2>
+                                    <br/>
+                                    <rich:dataTable id="table3"
+                                                    style="width: 100%"
+                                                    styleClass="tableline01"
+                                                    value="#{dashboardSocialStaticController.data3lists}"
+                                                    rows="#{global.maxrows}"
+                                                    var="list"
+                                                    onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                    onrowmouseout="this.style.backgroundColor='#ffffff'">
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column styleClass="subh01"></rich:column>
+                                                <rich:column styleClass="subh01"></rich:column>
+                                                <rich:column styleClass="subh01" style="text-align:center">Post</rich:column>
+                                                <rich:column styleClass="subh01" style="text-align:center">%</rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+                                        <rich:column width="10" style="height:30px">
+                                            <h:graphicImage url="/img/social/emo_positive.png" rendered="#{list.col1 eq 'Positive'}"/>
+                                            <h:graphicImage url="/img/social/emo_neutral.png" rendered="#{list.col1 eq 'Neutral'}"/>
+                                            <h:graphicImage url="/img/social/emo_negative.png" rendered="#{list.col1 eq 'Negative'}"/>
+                                        </rich:column>
+                                        <rich:column>
+                                            <h:outputText style="font-size:small;font-weight:bolder;color:#01a0c0" value="#{list.col1}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col1}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <rich:column style="text-align:center">
+                                            <h:outputText style="color:#696969" value="#{list.col2}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col2}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <rich:column style="text-align:center">
+                                            <h:outputText style="color:#696969" value="#{list.col3}" rendered="#{list.col1 ne 'All'}"/>
+                                            <h:outputText style="font-size:medium;font-weight:bolder;color:#c73100" value="#{list.col3}" rendered="#{list.col1 eq 'All'}"/>
+                                        </rich:column>
+                                        <f:facet name="footer">
+                                            <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                        </f:facet>
+                                    </rich:dataTable>
+                                    <br/>
+                                    <!--<div id="simplechart" style="width: 400px; height: 200px;"></div>-->
+                                    <!--<table  width="50" style="margin-left: auto;margin-right: auto; border:1px solid lightgrey"><tr><td><div id="simplechartLegend"/></td></tr></table>-->
+                                    <!--===-->
+                                </td></tr>
+                                <tr><td>
+                                    <div id="customerfeelstatic"  style="width: 400px; height: 200px;"></div>
+                                    <table  width="200" style="margin-left: auto;margin-right: auto; border:1px solid lightgrey"><tr><td><div id="customerfeelstaticLegend"/></td></tr></table>
+                                </td></tr>
+                            </table>
+                            <p></p>
+                        </td>
+                    </tr>
+                </table>
+
+                <script type="text/javascript" src="#{request.contextPath}/includes/dojo/dojo.js"></script>
+                <script type="text/javascript">
+                    dojo.require("dojox.charting.Chart2D");
+                    dojo.require("dojox.charting.widget.Legend");
+                    dojo.require("dojox.charting.action2d.Tooltip");
+                    dojo.require("dojox.charting.action2d.Highlight");
+
+                    makeCharts = function() {
+//-------------------------Chart1--------------------------------
+                        var chart1 = new dojox.charting.Chart2D("socialstatic");
+                        chart1.addPlot("default", {
+                            type: "Columns",
+                            gap: 30,
+                            animate:{duration: 1500}
+                        })
+//                                .addSeries("Facebook",[#{dashboardSocialStaticController.chart1Data}], {stroke: {color:"#476cb2"}, fill: "#476cb2"})
+//                                .addSeries("Twitter",[#{dashboardSocialStaticController.chart1Data}], {stroke: {color:"#43c8f5"}, fill: "#43c8f5"})
+
+//                                .addSeries("Facebook",[15], {stroke: {color:"#476cb2"}, fill: "#476cb2"})
+//                                .addSeries("Twitter",[35], {stroke: {color:"#43c8f5"}, fill: "#43c8f5"})
+
+//                                .addSeries("Facebook",[95,0,0,0], {stroke: {color:"#476cb2"}, fill: "#476cb2"})
+//                                .addSeries("Twitter",[0,35,0,0], {stroke: {color:"#43c8f5"}, fill: "#43c8f5"})
+//                                .addSeries("Pantip",[0,0,65,0], {stroke: {color:"#3b3865"}, fill: "#3b3865"})
+//                                .addSeries("Instagram",[0,0,0,20], {stroke: {color:"#c73100"}, fill: "#c73100"})
+
+                                .addSeries("Facebook",[#{dashboardSocialStaticController.chart1Data1},0,0,0], {stroke: {color:"#476cb2"}, fill: "#476cb2"})
+                                .addSeries("Twitter",[0,#{dashboardSocialStaticController.chart1Data2},0,0], {stroke: {color:"#43c8f5"}, fill: "#43c8f5"})
+                                .addSeries("Pantip",[0,0,#{dashboardSocialStaticController.chart1Data3},0], {stroke: {color:"#3b3865"}, fill: "#3b3865"})
+                                .addSeries("Instagram",[0,0,0,#{dashboardSocialStaticController.chart1Data4}], {stroke: {color:"#c73100"}, fill: "#c73100"});
+
+                        var tip1 = new dojox.charting.action2d.Tooltip(chart1, "default");
+                        var highlight1 = new dojox.charting.action2d.Highlight(chart1, "default");
+
+                        chart1.addAxis("x", {
+                            majorTick: {length:3},
+                            minorTick: {length:3},
+                            minorTicks: false,
+                            minorLabels: false,
+                            microTicks: false,
+//                            labels: [{value: 0, text: ""},{value: 1, text: "Facebook"},{value: 2, text: "Twitter"},{value: 3, text: "Pantip",{value: 3, text: "Instagram"}]
+                            labels: [{value: 0, text: "0"} #{dashboardSocialStaticController.chart1Label}]
+                        });
+
+                        chart1.addAxis("y", {
+                            vertical: true,
+                            min: 0,
+                            majorTick: {length:3},
+                            minorTicks: false,
+                            minorLabels: false,
+                            microTicks: false
+                        });
+
+                        chart1.render();
+                        var legend1 = new dojox.charting.widget.Legend({chart: chart1}, "socialstaticLegend");
+
+//-------------------------Chart2--------------------------------
+                        var chart2 = new dojox.charting.Chart2D("posttypestatic");
+                        chart2.addPlot("default", {
+                            type: "Columns",
+                            gap: 20,
+                            animate:{duration: 1000}
+                        })
+                                .addSeries("ปัญหา",[#{dashboardSocialStaticController.chart2Data1},0,0,0,0], {stroke: {color:"#ff6600"}, fill: "#ff6600"})
+                                .addSeries("ข้อเสนอแนะ/ความคิดเห็น",[0,#{dashboardSocialStaticController.chart2Data2},0,0,0], {stroke: {color:"#fe9900"}, fill: "#fe9900"})
+                                .addSeries("ตำหนิ/ร้องเรียน",[0,0,#{dashboardSocialStaticController.chart2Data3},0,0], {stroke: {color:"#f06eaa"}, fill: "#f06eaa"})
+                                .addSeries("คำชม",[0,0,0,#{dashboardSocialStaticController.chart2Data4},0], {stroke: {color:"#999800"}, fill: "#999800"})
+                                .addSeries("อื่นๆ",[0,0,0,0,#{dashboardSocialStaticController.chart2Data5}], {stroke: {color:"#0272be"}, fill: "#0272be"});
+
+                        var tip2 = new dojox.charting.action2d.Tooltip(chart2, "default");
+                        var highlight2 = new dojox.charting.action2d.Highlight(chart2, "default");
+
+                        chart2.addAxis("x", {
+                            majorTick: {length:3},
+                            minorTick: {length:3},
+                            minorTicks: false,
+                            minorLabels: false,
+                            microTicks: false,
+                            labels: [{value: 0, text: "0"} #{dashboardSocialStaticController.chart2Label}]
+                        });
+
+                        chart2.addAxis("y", {
+                            vertical: true,
+                            min: 0,
+                            majorTick: {length:3},
+                            minorTicks: false,
+                            minorLabels: false,
+                            microTicks: false
+                        });
+
+                        chart2.render();
+                        var legend2 = new dojox.charting.widget.Legend({chart: chart2}, "posttypestaticLegend");
+
+//-------------------------Chart3--------------------------------
+                        var chart3 = new dojox.charting.Chart2D("customerfeelstatic");
+                        chart3.addPlot("default", {
+                            type: "Columns",
+                            gap: 45,
+                            animate:{duration: 1300}
+                        })
+                                .addSeries("Positive",[#{dashboardSocialStaticController.chart3Data1},0,0], {stroke: {color:"#39af73"}, fill: "#39af73"})
+                                .addSeries("Neutral",[0,#{dashboardSocialStaticController.chart3Data2},0], {stroke: {color:"#fe9900"}, fill: "#fe9900"})
+                                .addSeries("Negative",[0,0,#{dashboardSocialStaticController.chart3Data3}], {stroke: {color:"#ff1e2e"}, fill: "#ff1e2e"});
+
+                        var tip3 = new dojox.charting.action2d.Tooltip(chart3, "default");
+                        var highlight3 = new dojox.charting.action2d.Highlight(chart3, "default");
+
+                        chart3.addAxis("x", {
+                            majorTick: {length:3},
+                            minorTick: {length:3},
+                            minorTicks: false,
+                            minorLabels: false,
+                            microTicks: false,
+                            labels: [{value: 0, text: "0"} #{dashboardSocialStaticController.chart3Label}]
+                        });
+
+                        chart3.addAxis("y", {
+                            vertical: true,
+                            min: 0,
+                            majorTick: {length:3},
+                            minorTicks: false,
+                            minorLabels: false,
+                            microTicks: false
+                        });
+
+                        chart3.render();
+                        var legend3 = new dojox.charting.widget.Legend({chart: chart3}, "customerfeelstaticLegend");
+
+//-------------------------Chart Temp--------------------------------
+//                        var chart = new dojox.charting.Chart2D("simplechart");
+//                        chart.addPlot("default", {type: "Lines"});
+//                        chart.addPlot("other", {type: "Areas"});
+//                        chart.addAxis("x");
+//                        chart.addAxis("y", {vertical: true});
+//                        chart.addSeries("Series 1", [1, 2, 2, 3, 4, 5, 5, 7]);
+//                        chart.addSeries("Series 2", [1, 1, 4, 2, 1, 6, 4, 3],
+//                                {plot: "other", stroke: {color:"blue"}, fill: "lightblue"});
+//                        chart.render();
+
+                        var chart = new dojox.charting.Chart2D("simplechart");
+                        chart.addPlot("default", {type: "StackedBars"});
+                        chart.addAxis("x"
+//                                , {labels: [{value: 1, text: "Jan"}, {value: 2, text: "Feb"},
+//                                        {value: 3, text: "Mar"}, {value: 4, text: "Apr"},
+//                                        {value: 5, text: "May"}, {value: 6, text: "Jun"},
+//                                        {value: 7, text: "Jul"}, {value: 8, text: "Aug"},
+//                                        {value: 9, text: "Sep"}, {value: 10, text: "Oct"},
+//                                        {value: 11, text: "Nov"}, {value: 12, text: "Dec"}]
+//                                }
+                        );
+                        chart.addAxis("y", {vertical: true});
+                        chart.addSeries("Series 1", [0,2,3],
+                                {stroke: {color:"blue"}});
+                        chart.addSeries("Series 2", [4,5,6],
+                                {stroke: {color:"red"} });
+                        chart.render();
+                        var legend = new dojox.charting.widget.Legend({chart: chart}, "simplechartLegend");
+                    };
+                    dojo.addOnLoad(makeCharts);
+                </script>                
+            </ui:define>
+
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,1051 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Sale Performance by User" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="832" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="96385b8f-a32c-4786-8401-07602b7754c1">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="416"/>
+	<property name="ireport.y" value="96"/>
+	<style name="Crosstab Data Text" hAlign="Center"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="to" class="java.util.Date"/>
+	<parameter name="user_group_id" class="java.lang.Integer"/>
+	<parameter name="user_group_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_name" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="user_id" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Oat\\Documents\\NetBeansProjects\\MaxarCRM\\web\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="markeing_id" class="java.lang.Integer"/>
+	<parameter name="marketing_name" class="java.lang.String"/>
+	<parameter name="campaign_id" class="java.lang.Integer"/>
+	<parameter name="campaign_name" class="java.lang.String"/>
+	<parameter name="product_id" class="java.lang.Integer"/>
+	<parameter name="product_name" class="java.lang.String" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[select u.name+' '+u.surname as user_name,
+sum(list_assigned) as list_assigned,
+sum(list_used) as list_used,
+sum(list_new) as list_new,
+sum(list_old) as list_old,
+sum(list_opened) as list_opened,
+sum(list_followup) as list_followup,
+sum(list_closed_contactable) as list_closed_contactable,
+sum(list_closed_uncontactable) as list_closed_uncontactable,
+sum(list_closed_firstend) as list_closed_firstend,
+sum(list_closed_unreachable) as list_closed_unreachable,
+sum(list_closed_firstend) as list_closed_firstend,
+sum(call_attempt) as call_attempt,
+sum(call_success) as call_success,
+sum(call_fail) as call_fail,
+sum(list_yes_sale) as list_yes_sale,
+sum(product_yes_sale) as product_yes_sale,
+sum(product_yes_sale_today) as product_yes_sale_today,
+sum(product_yes_pending_sale) as product_yes_pending_sale,
+sum(list_no_sale) as list_no_sale,
+sum(product_no_sale) as product_no_sale,
+sum(list_followup_sale) as list_followup_sale,
+sum(product_followup_sale) as product_followup_sale,
+sum(total_amount) as total_amount,
+sum(total_pending_amount) as total_pending_amount,
+sum(total_amount_today) as total_amount_today
+from rpt_sale_performance1 rpt
+inner join users u on u.id = rpt.user_id
+where rpt.sale_date between  $P{from} and $P{to}
+group by u.name, u.surname
+order by u.name, u.surname]]>
+	</queryString>
+	<field name="user_name" class="java.lang.String"/>
+	<field name="list_assigned" class="java.lang.Integer"/>
+	<field name="list_used" class="java.lang.Integer"/>
+	<field name="list_new" class="java.lang.Integer"/>
+	<field name="list_old" class="java.lang.Integer"/>
+	<field name="list_opened" class="java.lang.Integer"/>
+	<field name="list_followup" class="java.lang.Integer"/>
+	<field name="list_closed_contactable" class="java.lang.Integer"/>
+	<field name="list_closed_uncontactable" class="java.lang.Integer"/>
+	<field name="list_closed_firstend" class="java.lang.Integer"/>
+	<field name="list_closed_unreachable" class="java.lang.Integer"/>
+	<field name="call_attempt" class="java.lang.Integer"/>
+	<field name="call_success" class="java.lang.Integer"/>
+	<field name="call_fail" class="java.lang.Integer"/>
+	<field name="list_yes_sale" class="java.lang.Integer"/>
+	<field name="product_yes_sale" class="java.lang.Integer"/>
+	<field name="product_yes_sale_today" class="java.lang.Integer"/>
+	<field name="product_yes_pending_sale" class="java.lang.Integer"/>
+	<field name="list_no_sale" class="java.lang.Integer"/>
+	<field name="product_no_sale" class="java.lang.Integer"/>
+	<field name="list_followup_sale" class="java.lang.Integer"/>
+	<field name="product_followup_sale" class="java.lang.Integer"/>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="total_pending_amount" class="java.math.BigDecimal"/>
+	<field name="total_amount_today" class="java.math.BigDecimal"/>
+	<variable name="conversionrate" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{product_yes_pending_sale}*100.0/$F{list_used}]]></variableExpression>
+	</variable>
+	<variable name="contactablerate" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{list_used}==0?0.0:($F{list_followup}+$F{list_closed_contactable})*100/$F{list_used}]]></variableExpression>
+	</variable>
+	<variable name="list_assigned_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_assigned}]]></variableExpression>
+	</variable>
+	<variable name="list_used_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_used}]]></variableExpression>
+	</variable>
+	<variable name="list_opened_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_opened}]]></variableExpression>
+	</variable>
+	<variable name="list_followup_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_followup}]]></variableExpression>
+	</variable>
+	<variable name="list_closed_contactable_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_closed_contactable}]]></variableExpression>
+	</variable>
+	<variable name="list_closed_uncontactable_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_closed_uncontactable}]]></variableExpression>
+	</variable>
+	<variable name="list_closed_unreachable_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_closed_unreachable}]]></variableExpression>
+	</variable>
+	<variable name="list_closed_firstend_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_closed_firstend}]]></variableExpression>
+	</variable>
+	<variable name="call_attempt_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{call_attempt}]]></variableExpression>
+	</variable>
+	<variable name="call_success_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{call_success}]]></variableExpression>
+	</variable>
+	<variable name="call_fail_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{call_fail}]]></variableExpression>
+	</variable>
+	<variable name="list_yes_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_yes_sale}]]></variableExpression>
+	</variable>
+	<variable name="product_yes_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{product_yes_sale}]]></variableExpression>
+	</variable>
+	<variable name="total_amount_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_amount}]]></variableExpression>
+	</variable>
+	<variable name="list_no_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_no_sale}]]></variableExpression>
+	</variable>
+	<variable name="product_no_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{product_no_sale}]]></variableExpression>
+	</variable>
+	<variable name="list_followup_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_followup_sale}]]></variableExpression>
+	</variable>
+	<variable name="product_followup_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{product_followup_sale}]]></variableExpression>
+	</variable>
+	<variable name="list_closed_firstend_2" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_closed_firstend}]]></variableExpression>
+	</variable>
+	<variable name="product_yes_pending_sale_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{product_yes_pending_sale}]]></variableExpression>
+	</variable>
+	<variable name="total_pending_amount_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_pending_amount}]]></variableExpression>
+	</variable>
+	<variable name="totalcontactablerate" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{list_used_1}==0?0.0:($V{list_followup_1}+$V{list_closed_contactable_1})*100.0/$V{list_used_1}]]></variableExpression>
+	</variable>
+	<variable name="totalconversionrate" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{product_yes_pending_sale_1}*100.0/$V{list_used_1}]]></variableExpression>
+	</variable>
+	<variable name="AARP" class="java.lang.Double">
+		<variableExpression><![CDATA[$F{product_yes_pending_sale}==0?0.0:$F{total_pending_amount}.doubleValue()/$F{product_yes_pending_sale}]]></variableExpression>
+	</variable>
+	<variable name="total_AARP" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{product_yes_pending_sale_1}==0?0.0:$V{total_pending_amount_1}.doubleValue()/$V{product_yes_pending_sale_1}]]></variableExpression>
+	</variable>
+	<variable name="dmc_conversion_rate" class="java.lang.Double">
+		<variableExpression><![CDATA[($F{list_followup}+$F{list_closed_contactable})==0?0.0:$F{product_yes_pending_sale}*100.0/($F{list_followup}+$F{list_closed_contactable})]]></variableExpression>
+	</variable>
+	<variable name="total_dmc_conversion_rate" class="java.lang.Double">
+		<variableExpression><![CDATA[($V{list_followup_1}+$V{list_closed_contactable_1})==0?0.0:$V{product_yes_pending_sale_1}*100.0/($V{list_followup_1}+$V{list_closed_contactable_1})]]></variableExpression>
+	</variable>
+	<variable name="list_new_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_new}]]></variableExpression>
+	</variable>
+	<variable name="list_old_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{list_old}]]></variableExpression>
+	</variable>
+	<variable name="product_yes_sale_today_1" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{product_yes_sale_today}]]></variableExpression>
+	</variable>
+	<variable name="total_amount_today_1" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_amount_today}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="80" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="1be795b9-2b12-4e39-a168-583f713b37e4" x="0" y="0" width="265" height="37"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Browallia New" size="24" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Sale Performance by User]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d56dbc47-1cb3-4cda-bc42-45960d289965" x="0" y="37" width="832" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<rectangle>
+				<reportElement uuid="2952ab0c-b099-4721-a536-bf740dbffbe4" x="0" y="41" width="832" height="32" forecolor="#FF9900" backcolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="0.0"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement uuid="206b413d-fd2b-482e-a6bb-21eed0d5dd34" x="15" y="57" width="92" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Marketing List Name: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="846e90e8-e797-4c86-8a60-eaae97abe213" x="15" y="41" width="91" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Campaign: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2c383a56-cc7b-4741-baa0-0c2a6be905ce" x="532" y="57" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a82f7b0d-7f83-4e23-89c1-a2d7bef5a0ca" x="532" y="41" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Group: ]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="8b7491b3-4cd4-4436-a840-000729d5585e" x="0" y="76" width="832" height="1" forecolor="#FF9900"/>
+				<graphicElement>
+					<pen lineWidth="3.0"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement uuid="2529b340-4584-4235-a685-ecb3d6103078" x="244" y="41" width="86" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[From Sale Date: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b52c800a-30ab-4ff6-9606-36e529e3c421" x="257" y="57" width="73" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="14" isBold="false" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[To Sale Date: ]]></text>
+			</staticText>
+			<textField pattern="dd MMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="d039bb4f-2df7-4b79-97c7-18f16399875f" x="331" y="41" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{from}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd MMM yyyy" isBlankWhenNull="false">
+				<reportElement uuid="f6951efc-e391-4767-bcf3-b47ab1bb3053" x="331" y="57" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{to}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="27be31b2-4b72-4daa-b57a-7829e5fac3f3" x="601" y="41" width="125" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_group_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="e6b4d96a-651f-45a6-8f1a-5b26f2d0366a" x="601" y="57" width="125" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{user_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="84107b73-dda7-4cab-ad26-aaff80d93feb" x="106" y="57" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{marketing_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0c2e477a-994a-4e8e-ba2f-d6b5df9203e1" x="107" y="41" width="100" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" pdfFontName="browa.ttf" pdfEncoding="Identity-H" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{campaign_name}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="69" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="bfe44661-60f8-44c8-82b8-ec0a5a12da94" x="0" y="0" width="76" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[User Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5a52bf1f-279d-4a35-b333-0c5aed682f62" x="320" y="21" width="25" height="48"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="9b2e1a95-e0da-4316-8b6f-1b5b5ee1c50d" x="399" y="20" width="358" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="706a41aa-cba1-4afa-a17f-eb62a69c329d" x="399" y="0" width="358" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Sales Attempt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2457c4c5-0b70-4b2f-ba8d-1c6fdc355499" x="734" y="41" width="22" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Qty]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3f46a105-7941-49a6-baa1-748fa9192a31" x="537" y="41" width="40" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Net
+Prem.]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="c1dab339-d40d-4212-8593-f07219bc67e1" x="711" y="40" width="45" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="eb8364eb-0289-4694-bf77-6c55eea20ac9" x="372" y="22" width="25" height="47"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Fail]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4b166295-1ffe-4e84-b498-dbd5f7a4b25d" x="289" y="22" width="30" height="47"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Contact Rate %]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3d80005d-e0ff-43e6-a05a-6f8df98d05b1" x="452" y="41" width="23" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Net Sale]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2814f004-f875-4645-9faa-bf95ad9a03c9" x="81" y="19" width="27" height="48"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Total
+Used]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="388438aa-ec21-410f-a1a2-e235f23d1b1f" x="185" y="40" width="25" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Follow]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7a22f100-888d-49e5-8695-7a00f315b994" x="109" y="19" width="24" height="48"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[New]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="3f621fc1-8161-4fe4-a94a-497b55336345" x="320" y="20" width="76" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="43aefede-f067-44e7-a5dd-c8ad8b37b66a" x="667" y="41" width="41" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[AARP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d560eee3-3278-4268-98c8-1b7056c801e0" x="263" y="39" width="25" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Unrea]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="3afbcc16-f04f-43ad-a044-22bce61c3a4e" x="81" y="0" width="238" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[List Attempt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="da3194a9-8488-4e95-b7ba-cf18ef7fa861" x="510" y="41" width="26" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Gross Sale]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9c31b09b-24af-4c0e-9b6e-da14d213441a" x="210" y="21" width="78" height="19"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[In-Active]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="8db7e668-8392-40f7-b5e6-e57152145b7e" x="434" y="40" width="274" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="7e066102-0ad7-43ea-8e40-7cc4364f9a38" x="159" y="40" width="25" height="28"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Open]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="5c8dcb5e-5ad4-432c-bdcb-c01065dec076" x="159" y="21" width="51" height="17"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Active]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="49961385-835d-490a-8464-f910177da6ef" x="434" y="22" width="274" height="17"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Yes]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7fdee937-8beb-4662-89e7-4c1f41af2e34" x="625" y="41" width="42" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Gross
+Prem.]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="d860f62f-fa6b-4a86-b930-6e95da868d0f" x="81" y="19" width="236" height="2"/>
+			</line>
+			<staticText>
+				<reportElement uuid="ec6c2911-04b4-4b99-bcec-1906f76f98f1" x="399" y="22" width="32" height="47"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[FirstCall
+YesSale]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8c347798-1f45-496f-86d5-4bd25e609fd2" x="346" y="22" width="25" height="47"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Found]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="924a02fb-696d-4c59-a078-5302988f880c" x="159" y="39" width="51" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="aaefd809-f8da-45b7-9285-e01102642472" x="710" y="41" width="22" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[List]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2e68b154-aac7-4975-9513-15ba18eb77f4" x="237" y="39" width="25" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Uncon]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="114166d7-914e-41a1-8f8c-aff081c69c41" x="320" y="0" width="77" height="20"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Call Attempt]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0e578545-5ca1-4b03-ab70-5da01a9c3748" x="796" y="1" width="36" height="68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[DMC Conv Rate (%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="0b2e7fd8-7c5e-439d-b84f-316bb42a0fdf" x="476" y="41" width="33" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Net Sale
+Today]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="687c1da3-81d6-4a34-8c15-5ca0980fbef4" x="758" y="1" width="36" height="68"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Conv Rate (%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="7dddb391-55b1-4893-aea2-7a4e9028b3e6" x="211" y="39" width="25" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Con]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4b129277-8337-45b8-ae97-e42a1163e743" x="709" y="22" width="47" height="19"/>
+				<textElement textAlignment="Center">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="4d070bda-3fd8-4ee7-9c5d-0c64d4dfe267" x="134" y="21" width="24" height="46"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Old]]></text>
+			</staticText>
+			<line>
+				<reportElement uuid="6057759b-7671-453a-9f26-304b5f2aa23e" x="212" y="39" width="76" height="1"/>
+			</line>
+			<staticText>
+				<reportElement uuid="a211901b-aad7-4657-8f81-05c99d182bf4" x="434" y="41" width="18" height="28"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[List]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="05c46df1-fb77-49cb-9c07-1617f36fe2d2" x="577" y="40" width="46" height="29"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Net Prem.
+Today]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="17" splitType="Stretch">
+			<textField>
+				<reportElement uuid="5487e720-10f9-42cd-95e1-5bb966e181d4" x="-1" y="1" width="82" height="16"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="558e3619-6bcb-442f-a7f3-67036df5a45a" x="81" y="1" width="27" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{list_used} != null) ? $F{list_used} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="72920a7c-e915-4f37-af11-49fdac474b61" x="159" y="1" width="24" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{list_opened}!=null) ? $F{list_opened} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="3d1ede3b-6e2b-4f7c-9f24-829e5e2fde04" x="184" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_followup} != null ? $F{list_followup} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="ca4823c5-6af9-4057-b158-62df50e4cb88" x="211" y="1" width="24" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_closed_contactable} != null ? $F{list_closed_contactable} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="fb491bfc-ec8a-4257-8a54-ca93994a5908" x="236" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{list_closed_uncontactable} != null) ? $F{list_closed_uncontactable} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="c0b7cb4d-0f90-45b5-8585-47a7174d983d" x="262" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_closed_unreachable} != null ? $F{list_closed_unreachable} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="459a12d6-cb0e-41b3-b86e-715183f26b8a" x="320" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{call_attempt} != null ? $F{call_attempt} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="bd3f5739-39c0-4023-b885-7d06f8887337" x="346" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{call_success}!= null ? $F{call_success} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="323dd01a-f2b4-49e7-94ac-0f77197b8fe5" x="372" y="1" width="25" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{call_fail} != null ? $F{call_fail} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="968b6a67-e0ec-433d-9d96-515639ecc2fc" x="432" y="1" width="20" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_yes_sale} != null ? $F{list_yes_sale} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="b294c0b5-992f-4ad1-a5e6-508bff1f045a" x="452" y="1" width="23" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_yes_sale} != null ? $F{product_yes_sale} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="e61ce2f5-cc0a-4ca6-abaf-4a1ead2941b5" x="537" y="1" width="40" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_amount} != null ? $F{total_amount} : BigDecimal.ZERO]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="4e6101ac-b37d-4eac-9128-6edadf712c9f" x="711" y="1" width="21" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_no_sale} != null ? $F{list_no_sale} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="false">
+				<reportElement uuid="352f356d-7cc8-4b9c-b86d-4b7b712e26f5" x="734" y="1" width="22" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_no_sale} != null ? $F{product_no_sale} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.0">
+				<reportElement uuid="70399880-3447-4bc1-8a43-e543e974ab63" x="758" y="1" width="36" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{conversionrate} != null ? $V{conversionrate} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="2a737686-749b-4891-a921-d926bf1676c1" x="398" y="1" width="32" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_closed_firstend} != null ? $F{list_closed_firstend} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="88c0e199-3ded-46a6-bd0e-05af5432683f" x="510" y="1" width="26" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_yes_pending_sale} != null ? $F{product_yes_pending_sale} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="f541396f-4208-4110-b441-6c885dc00371" x="625" y="1" width="42" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_pending_amount} != null ? $F{total_pending_amount} : BigDecimal.ZERO]]></textFieldExpression>
+			</textField>
+			<textField pattern="###0.00" isBlankWhenNull="true">
+				<reportElement uuid="a0b6677e-3966-40ff-a962-4651f68db738" x="289" y="1" width="29" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{contactablerate} != null ? $V{contactablerate} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="88849aac-d60a-47f2-b04c-7269739789fc" x="667" y="1" width="41" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{AARP}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="210b5f2c-eb05-4277-8fc5-5674e38dd8e9" x="798" y="1" width="33" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{dmc_conversion_rate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="27614549-a19f-4ab1-a49a-eef7721ea9b9" x="110" y="1" width="24" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_new} != null ? $F{list_new} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="b3564c25-a47c-42ce-9b32-fb04cdc4ba08" x="137" y="1" width="21" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{list_old} != null ? $F{list_old} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d7ed8ddf-3843-47a3-a8d0-b82c15645cab" x="476" y="1" width="33" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_yes_sale_today} != null ? $F{product_yes_sale_today} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="c87eeeb4-e139-411c-8b54-f153685e58c8" x="577" y="1" width="46" height="16"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_amount_today} != null ? $F{total_amount_today} : BigDecimal.ZERO]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3ef75b90-2298-4773-86f8-c4282fe3ce2a" x="0" y="0" width="180" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Printed Date "+ (new SimpleDateFormat("dd MMM yyyy HH:mm")).format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="608077c1-e812-4530-8565-252973e268d3" x="729" y="0" width="100" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+ String.valueOf($V{PAGE_NUMBER})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="308">
+			<staticText>
+				<reportElement uuid="ad446010-a6d3-49a8-8385-8d135ef5d2fe" x="0" y="0" width="81" height="20"/>
+				<textElement>
+					<font fontName="Browallia New" size="12" isBold="true" pdfFontName="browa.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[Grand Total]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement uuid="b1e0920c-aec1-4a1d-a10f-241721ea0a5c" x="81" y="0" width="28" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_used_1} != null ? $V{list_used_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="801687bc-47b5-4b49-af96-6686ce6240e7" x="159" y="0" width="24" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_opened_1} != null ? $V{list_opened_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="7e559bf5-e36e-45ed-ae10-02e0fdd8a38f" x="184" y="0" width="25" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_followup_1} != null ? $V{list_followup_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="bd31f2b5-f7cd-4172-a63f-019068423434" x="211" y="0" width="24" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_closed_contactable_1} != null ? $V{list_closed_contactable_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="7ba0e7db-95b1-44e2-acea-50b88d4fffe2" x="236" y="0" width="25" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_closed_uncontactable_1} != null ? $V{list_closed_uncontactable_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="c1c8bec1-5942-43d8-9ad1-905e7cfe5470" x="262" y="0" width="25" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_closed_unreachable_1} != null ? $V{list_closed_unreachable_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="a05cdec4-f4ad-4fa6-a005-b6ed4e5215bd" x="319" y="0" width="25" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{call_attempt_1} != null ? $V{call_attempt_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="b075b357-2e83-4949-9855-bb327340c635" x="345" y="0" width="25" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{call_success_1} != null ? $V{call_success_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="364ee321-606f-4dbc-9e0d-8babdb6f242a" x="372" y="0" width="25" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{call_fail_1} != null ? $V{call_fail_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="054b1b0c-e61e-4e01-9047-4d2c64a98846" x="432" y="0" width="20" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_yes_sale_1} != null ? $V{list_yes_sale_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="b3013f03-2c98-43ce-b406-535ca2b96ad7" x="452" y="0" width="23" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{product_yes_sale_1} != null ? $V{product_yes_sale_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="021e27c7-ea38-4ecb-93d6-e181ef3c7de7" x="537" y="0" width="40" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_amount_1} != null ? $V{total_amount_1} : BigDecimal.ZERO]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="a2148fac-d314-49ae-bf2a-4e0bdad0e54f" x="711" y="0" width="21" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_no_sale_1} != null ? $V{list_no_sale_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="0c7174a8-ee88-4040-b8a2-6debed7f5297" x="734" y="0" width="22" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{product_no_sale_1} != null ? $V{product_no_sale_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="aa54f5b4-9aaf-4a77-a0a3-eb4b62fcce58" x="398" y="0" width="32" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_closed_firstend_2} != null ? $V{list_closed_firstend_2} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="02497d18-e4e3-4ff1-bb22-c3be55b32263" x="511" y="0" width="26" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{product_yes_pending_sale_1} != null ? $V{product_yes_pending_sale_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0">
+				<reportElement uuid="3e5e1efe-da3d-4dc3-bda4-161d01e8e1a9" x="623" y="0" width="42" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_pending_amount_1} != null ? $V{total_pending_amount_1} : BigDecimal.ZERO]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00">
+				<reportElement uuid="2047a678-2281-4526-a732-4de7d27a23f2" x="288" y="0" width="29" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalcontactablerate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00">
+				<reportElement uuid="b000c30c-3019-47b7-bd0c-aa143b7cba53" x="758" y="0" width="36" height="19"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{totalconversionrate}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="4dce7466-e36f-4a3b-b635-09d858ca7591" x="667" y="0" width="41" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_AARP}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement uuid="f7e76eb0-d59b-4f98-a8cd-007ca9c19ea3" x="797" y="1" width="33" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_dmc_conversion_rate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="be7070b4-79b9-4b27-a533-c19c4a5f0135" x="112" y="0" width="21" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_new_1} != null ? $V{list_new_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="73e7cf7e-bc18-4c34-b05d-05e1c7a27ecf" x="137" y="0" width="21" height="18"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{list_old_1} != null ?$V{list_old_1} : 0]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c61c3934-3b20-4d66-aa9c-571b95da0cc2" x="476" y="0" width="33" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{product_yes_sale_today_1} != null ? $V{product_yes_sale_today_1}: 0]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="155283cc-d1be-458f-b5b5-7394a4a25a28" x="537" y="40" width="293" height="260"/>
+				<textElement>
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<text><![CDATA[จำนวนครั้งที่โทรทั้งหมด
+จำนวนครั้งที่โทรติดต่อได้ (ไม่ว่าใครจะรับสาย)
+จำนวนครั้งที่ติดต่อไม่ได้เลย (สายไม่ว่ง ไม่มีคนรับสาย ไม่มีสัญญาณ)
+
+จำนวนสินค้าที่ขายได้โดยโทรครั้งแรก
+ขายได้ - จำนวนูลูกค้าที่ซื้อ
+ขายได้ -  จำนวนสินค้าที่ขายได้และอนุมัติแล้ว (ตามวันที่อนุมัติ)
+ขายได้ - จำนวนสินค้าที่ขายได้และอนุมัติในวันเดียวกัน
+ขายได้ - จำนวนสินค้าที่ขายได้
+ขายได้ - จำนวนเงินที่ขายได้และอนุมัติแล้ว
+ขายได้ - จำนวนเงินที่ขายได้
+ขายได้ - จำนวนเงินเฉลี่ยที่ขายได้ (Gross Premium / Gross Sale)
+ขายไม่ได้ - จำนวนคนที่ไม่สนใจ
+ขายไม่ได้ - จำนวนสินค้าที่ไม่สนใจซื้อ
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="d76e8f14-1a77-4ee1-9ca2-edf7cb875205" x="434" y="40" width="100" height="260"/>
+				<textElement>
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<text><![CDATA[Total Call Attempt
+Found
+Failure
+
+First Call Yes Sale
+Yes - List
+Yes - Net Sale
+Yes - Net Sale Today
+Yes - Gross Sale
+Yes - Net Premium
+Yes - Gross Premium
+Yes - AARP
+No - List
+No - Qty
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="9c0d0e85-7d68-4bd5-a867-47fe5edc9010" x="2" y="39" width="108" height="260"/>
+				<textElement>
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<text><![CDATA[List Attempt
+Call Attempt
+Sales Attempt
+
+Total Used
+New List
+Old List
+Active - Opened
+Active - Follow-up
+In-active - Contactable
+In-active - Uncontactable
+In-active - Unreachable
+
+Conversion Rate
+Contactable Rate
+DMC Conversion Rate]]></text>
+			</staticText>
+			<textField pattern="#,##0">
+				<reportElement uuid="7684aa0b-3b3f-4b56-951d-8d69e4fbc560" x="577" y="1" width="46" height="19"/>
+				<textElement textAlignment="Right">
+					<font fontName="Browallia New" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{total_amount_today_1} != null ? $V{total_amount_today_1} : BigDecimal.ZERO]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement uuid="78fd05b8-a760-47f8-9c1c-a83f88f68f9e" mode="Opaque" x="110" y="41" width="311" height="259"/>
+				<textElement>
+					<font fontName="Browallia New" size="12"/>
+				</textElement>
+				<text><![CDATA[สถิติรายชื่อผู้มุ่งหวัง
+สถิติการโทร
+สถิติการขาย
+
+จำนวนรายชื่อที่ใช้แล้ว
+จำนวนรายชื่อที่ใช้แล้ว -  รายชื่อที่ยังไม่เคยโทร
+จำนวนรายชื่อที่ใช้แล้ว - รายชื่อที่เคยโทรแล้ว
+จำนวนรายชื่อที่อยู่ระหว่างการติดต่อ (ยังติดต่อไม่ได้)
+จำนวนรายชื่อที่อยู่ระหว่างการติดต่อ (เจอเจ้าตัวแล้ว)
+จำนวนรายชื่อที่ติดต่อได้ แต่ยุติการติดต่อแล้ว
+จำนวนรายชื่อที่ติดต่อได้ แต่ไม่เจอเจ้าตัว และยุติการติดต่อแล้ว
+จำนวนรายชื่อที่ติดต่อไม่ได้เลย
+
+อัตราผลการขาย ( Gross Sales/ Used * 100)
+อัตราการติดต่อได้ (Follow up+Contact)/ Used * 100)
+อัตราผลการขายเฉพาะที่ติดต่อเจ้าตัวได้ (Gross Sales/ (Follow-up+Contactable) * 100)
+]]></text>
+			</staticText>
+		</band>
+	</summary>
+	<noData>
+		<band height="50">
+			<staticText>
+				<reportElement uuid="08c49979-fbcf-4089-8c43-35a96e372362" x="0" y="0" width="802" height="50"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Browallia New" size="20" isBold="true" pdfFontName="browab.ttf" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[No Data Found]]></text>
+			</staticText>
+		</band>
+	</noData>
+</jasperReport>

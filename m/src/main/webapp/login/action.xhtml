@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <h:head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <script type="text/javascript">
+        function createContactHistory(phoneNo, callCategory, trackId){
+            //alert('Create : ' + trackId);
+            //setContactHistory(phoneNo, callCategory, trackId);
+            //setTimeout("actionContactHistory()", 1000);
+            var m = document.getElementById('mode');
+            var p = document.getElementById('phoneNo');
+            var c = document.getElementById('callCategory');
+            var t = document.getElementById('trackId');
+            m.value = "create";
+            p.value = phoneNo;
+            c.value = callCategory;
+            t.value = trackId;
+            //console.log('4.' + p.value + ',' + c.value + ',' + t.value);
+            //document.frmCreate.action = "../login/ActionServlet";
+            document.frmCreate.submit();
+        }
+
+        function setLineStatus(status){
+            console.log('003 : action.xhtml : setLineStatus : ' +  status);
+            var m = document.getElementById('mode');
+            var s = document.getElementById('status');
+            m.value = "status"
+            s.value = status;
+            document.frmCreate.submit();              
+        }
+
+        function setLineStatusTelephone(status){
+            var m = document.getElementById('mode');
+            var s = document.getElementById('status');
+            m.value = "statusTelephone"
+            s.value = status;
+            document.frmCreate.submit();              
+        }
+
+        function setTalkTime(trackId, talkTime){
+            //console.log('B.' + trackId + ' : ' +  talkTime);
+            var m = document.getElementById('mode');
+            var t = document.getElementById('talkTime');
+            var id = document.getElementById('trackId');
+            m.value = "talkTime";
+            id.value = trackId;
+            t.value = talkTime;
+            document.frmCreate.submit();          
+        }
+        
+        function setShowContactSummary(){
+            var m = document.getElementById('mode');
+            m.value = "showContactSummary";
+            document.frmCreate.submit();
+        }
+
+        function setDialNo(dialNo){
+            var m = document.getElementById('mode');
+            var d = document.getElementById('dialNo');
+            m.value = "dialNo";
+            d.value = dialNo;
+            document.frmCreate.submit();          
+        }
+
+        function setInboundStatus(){
+            var m = document.getElementById('mode');
+            m.value = "inbound";
+            document.frmCreate.submit();          
+        }
+        </script>
+    </h:head>
+    <h:body>
+        <form id="frmCreate" name="frmCreate" action="../login/ActionServlet">
+            <input type="hidden" id="mode" name="mode"/>
+            <input type="hidden" id="phoneNo" name="phoneNo"/>
+            <input type="hidden" id="callCategory" name="callCategory"/>
+            <input type="hidden" id="trackId" name="trackId"/>
+            <input type="hidden" id="status" name="status"/>
+            <input type="hidden" id="talkTime" name="talkTime"/>
+            <input type="hidden" id="dialNo" name="dialNo"/>
+        </form>
+    </h:body>
+</html>

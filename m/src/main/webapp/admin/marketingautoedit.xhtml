@@ -1,0 +1,240 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing Auto: Add / Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{marketingAutoEditController.mode}"/>
+                <h:inputHidden value="#{marketingAutoEditController.marketingAuto.id}"/>
+            <h:panelGroup id="page">
+                <table width="90%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="400" align="right" valign="top">&nbsp;</td>
+                        <td>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{marketingAutoEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">*Prefix Code:</td>
+                        <td>
+                            <h:inputText id="code" value="#{marketingAutoEditController.marketingAuto.prefixCode}" styleClass="textfield" size="10" 
+                                         maxlength="10" required="true" requiredMessage="Code is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                            <h:outputText value="#{marketingAutoEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">*Marketing Age:</td>
+                        <td>
+                            <h:inputText id="marketingAge" value="#{marketingAutoEditController.marketingAuto.marketingAge}" styleClass="textfield" size="10" 
+                                         maxlength="10" required="true" requiredMessage="Age is required"  onkeypress="return isNumberKey(event)">
+                                <f:validateRequired/>
+                                <f:convertNumber integerOnly="true"/>
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="marketingAge" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Description:</td>
+                            <td valign="top">
+                                <h:inputTextarea rows="5" cols="30" value="#{marketingAutoEditController.marketingAuto.description}"/>
+                            </td>
+                        </tr>
+
+                        <td colspan="2">
+                            <h:panelGroup id="datasource">
+                                <table border="0" width="100%" cellpadding="2" cellspacing="0">
+                                    <tr>
+                                        <td width="400" align="right" class="gray03">* Marketing List Source:</td>
+                                        <td align="left">
+                                            <h:selectOneMenu id="listSource" value="#{marketingAutoEditController.prospectlistSponsorId}" 
+                                                             required="true" requiredMessage="Marketing List Source is required">
+
+                                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItems value="#{marketingAutoEditController.prospeclistPponsorList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                <rich:validator/>
+                                            </h:selectOneMenu>
+                                            &#160;<rich:message id="msgListSource" for="listSource" styleClass="required"/>
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Customer Duplicate Period:</td>
+                                        <td valign="top">
+                                            <h:selectOneMenu id="custdupperiod" value="#{marketingAutoEditController.marketingAuto.periodCustomer}"
+                                                             required="true" requiredMessage="Duplicate Period is required">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="0" itemLabel="Do Not Check Duplicate"/>
+                                                <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                <f:selectItem itemValue="-1" itemLabel="Always Check Duplicate"/>
+                                            </h:selectOneMenu>
+                                            &#160;<rich:message for="custdupperiod" styleClass="required"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Opt-out Period:</td>
+                                        <td valign="top">
+                                            <h:selectOneMenu id="opoutperiod" value="#{marketingAutoEditController.marketingAuto.periodBlacklist}"
+                                                             required="true" requiredMessage="Opt-out Period is required">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="0" itemLabel="Do Not Check Opt Out"/>
+                                                <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                <f:selectItem itemValue="-1" itemLabel="Always Check Opt Out"/>
+                                            </h:selectOneMenu>
+                                            &#160;<rich:message for="opoutperiod" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Yes Sale Duplicate Period:</td>
+                                        <td valign="top">
+                                            <h:selectOneMenu id="yessaleperiod" value="#{marketingAutoEditController.marketingAuto.periodYessale}" 
+                                                             required="true" requiredMessage="Yes Sale Period is required">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="0" itemLabel="Do Not Check Duplicate"/>
+                                                <f:selectItem itemValue="90" itemLabel="3 months"/>
+                                                <f:selectItem itemValue="180" itemLabel="6 months"/>
+                                                <f:selectItem itemValue="270" itemLabel="9 months"/>
+                                                <f:selectItem itemValue="360" itemLabel="12 months"/>
+                                                <f:selectItem itemValue="450" itemLabel="15 months"/>
+                                                <f:selectItem itemValue="-1" itemLabel="Always Check Duplicate"/>
+                                            </h:selectOneMenu>
+                                            &#160;<rich:message for="yessaleperiod" styleClass="required"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right" class="gray03">* File Format:</td>
+                                        <td align="left">
+                                            <h:selectOneMenu id="fileFormat" value="#{marketingAutoEditController.fileTemplateId}" 
+                                                             required="true" requiredMessage="File Format is required">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/> 
+                                                <f:selectItems value="#{marketingAutoEditController.fileTemplates}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                <f:validateRequired/>                  
+                                                <rich:validator />
+                                            </h:selectOneMenu>
+                                            <rich:message id="msgFileFormat" for="fileFormat" styleClass="required"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Renew Period:</td>
+                                        <td valign="top">
+                                            <h:selectOneMenu id="renewPeriod" value="#{marketingAutoEditController.marketingAuto.renewPeriod}"
+                                                             required="true" requiredMessage="Renew Period is required">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="Daily" itemLabel="Daily"/>
+                                                <f:selectItem itemValue="Monthly" itemLabel="Monthly"/>
+                                                <f:selectItem itemValue="Quarterly" itemLabel="Quarterly"/>
+                                                <f:selectItem itemValue="Yearly" itemLabel="Yearly"/>
+                                            </h:selectOneMenu>
+                                            &#160;<rich:message for="renewPeriod" styleClass="required"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="right" valign="top" class="gray03">* Type:</td>
+                                        <td valign="top">
+                                            <h:selectOneMenu id="type" value="#{marketingAutoEditController.marketingAuto.type}"
+                                                             required="true" requiredMessage="Type is required">
+                                                <f:selectItem itemValue="#{null}" itemLabel="#{msg.pleaseSelect}"/>
+                                                <f:selectItem itemValue="1" itemLabel="Type 1"/>
+                                                <f:selectItem itemValue="2" itemLabel="Type 2"/>
+                                                <f:selectItem itemValue="3" itemLabel="Type 3"/>
+                                            </h:selectOneMenu>
+                                            &#160;<rich:message for="type" styleClass="required"/>
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td align="right" class="gray03">Check Format Telephone No.:</td>
+                                        <td align="left"><h:selectBooleanCheckbox id="checkTelNo" value="#{marketingAutoEditController.marketingAuto.checkFormatTelNo}"/></td>
+                                    </tr>
+
+                                </table>
+
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+
+                    <tr> 
+                        <td valign="top" align="center" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="4">
+                                <tr>
+                                    <td width="380" class="blue04" style="padding-left: 10px">Available Manager</td>
+                                    <td width="380" class="blue04" style="padding-left: 10px">Selected Manager</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <rich:pickList id="managerList" switchByDblClick="true" 
+                                                       listWidth="350px" listHeight="150px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{marketingAutoEditController.selectedUserGroup}" 
+                                                       required="true" requiredMessage="Selected Manager is required">
+                                            <f:selectItems value="#{marketingAutoEditController.userGroupList}"/>
+                                        </rich:pickList>
+                                        <span style="padding-left:10px"/><h:message for="managerList" style="color:red"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr> 
+                        <td valign="top" align="center" colspan="2">
+                            <table border="0" cellspacing="0" cellpadding="4">
+                                <tr>
+                                    <td width="380" class="blue04" style="padding-left: 10px">Available Product</td>
+                                    <td width="380" class="blue04" style="padding-left: 10px">Selected Product</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <rich:pickList id="productList" switchByDblClick="true" 
+                                                       listWidth="350px" listHeight="150px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{marketingAutoEditController.selectedProduct}" 
+                                                       required="true" requiredMessage="Selected Product is required">
+                                            <f:selectItems value="#{marketingAutoEditController.productList}"/>
+                                        </rich:pickList>
+                                        <span style="padding-left:10px"/><h:message for="productList" style="color:red"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>                            
+                <table cellpadding="8" cellspacing="0" border="0" width="100%"> 
+                    <tr>
+                        <td align="center" width="100%">
+                            <h:commandButton image="../img/b_back.png" action="#{marketingAutoEditController.backAction}" immediate="true"/>
+
+                            <a4j:commandButton image="../img/b_save.png"  action="#{marketingAutoEditController.saveAction}"
+                                               rendered="#{marketingAutoEditController.savePermitted}" onclick="this.disabled=true" render="page"/>
+                        </td>
+                    </tr>
+                </table>
+            </h:panelGroup>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

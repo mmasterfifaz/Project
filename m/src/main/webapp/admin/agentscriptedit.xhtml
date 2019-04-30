@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Agent Script: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{agentScriptEditController.mode}"/>
+        <h:inputHidden value="#{agentScriptEditController.agentScript.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top">&nbsp;</td>
+              </tr>
+                        <tr>
+                <td width="200" align="right" valign="top">Page:</td>
+                <td><h:outputText id="page" value="#{agentScriptEditController.agentScript.page}"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"> Agent Script:</td>
+                <td valign="top">
+                    <h:inputTextarea id="name" cols="40" rows="5" value="#{agentScriptEditController.agentScript.script}" validatorMessage="Length is greater than allowable maximum of 150 ">
+                        <f:validateLength maximum="150" />
+                    </h:inputTextarea>
+                    <rich:message for="name" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:commandButton image="../img/b_save.png" action="#{agentScriptEditController.saveAction}" rendered="#{agentScriptEditController.savePermitted}"/>
+                    <h:commandButton image="../img/b_back.png" action="#{agentScriptEditController.backAction}" immediate="true"/>
+                  </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

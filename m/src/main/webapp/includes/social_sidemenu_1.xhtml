@@ -1,0 +1,111 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/mainmenu01-3.png"  width="100%"></td>
+                    <td><img src="#{request.contextPath}/img/mainmenu01-4.png" alt="" width="40"/></td>
+                </tr>
+                <tr>
+                    <td width ="100%" style="background-color: white">                  
+                        <table width="100%" border="0" cellpadding="0" cellspacing="0" >
+                           <tr>
+                                <td height="40" colspan="2" style="color:green; padding-left: 1em" class="ping01" >Social Menu</td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <h:panelGrid columns="2" border="0">
+                                        <h:panelGroup rendered="#{socialSidemenuController.showMenuLeft}">   
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree2" class="tableMenuReport">
+                                                    <h:panelGroup rendered="#{socialSidemenuController.socialTodolistPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="../img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Agent</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/sclassignment.xhtml?faces-redirect=true"  value="Assignment List" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialTodolistPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{socialSidemenuController.socialPublisherPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Publisher</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/publisher.xhtml?faces-redirect=true"  value="Publisher" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialPublisherPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{socialSidemenuController.socialMonitorPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Monitor</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/monitorsocial?faces-redirect=true"  value="Monitor Social" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialMonitorPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/monitorpost?faces-redirect=true"  value="Monitor Post" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialMonitorPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{socialSidemenuController.socialDashboardPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Dashboard</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/dashboardagentperformance.xhtml?faces-redirect=true"  value="Dashboard Agent Performance" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialDashboardPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/dashboardsocialstatic.xhtml?faces-redirect=true"  value="Dashboard Social Static" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialDashboardPermitted}"/></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/dashboardproductstatic.xhtml?faces-redirect=true"  value="Dashboard Product Static" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialDashboardPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                    <h:panelGroup rendered="#{socialSidemenuController.socialReportPermitted}">
+                                                        <tr>
+                                                            <td height="25" colspan="2" class="treeline"><strong class="black01"><img src="#{request.contextPath}/img/b_subtract02.png" alt="" width="16" height="16" hspace="2" align="absmiddle" style="display: inline-block"/>Report</strong></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td width="31">&nbsp;</td>
+                                                            <td width="225"><h:commandLink action="/social/socialanalysisreport.xhtml?faces-redirect=true"  value="Social Analysis Report" immediate="true"  styleClass="black01" rendered="#{socialSidemenuController.socialReportPermitted}"/></td>
+                                                        </tr>
+                                                    </h:panelGroup>
+                                                </table></td>
+                                        </h:panelGroup>
+                                        
+                                        <h:panelGroup rendered="#{socialSidemenuController.showMenuRight}">
+                                            <td valign="top">
+                                                <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree3" class="tableMenuReport">
+                                                    <tr><td> </td></tr>
+                                                </table></td>
+                                        </h:panelGroup>
+                                    </h:panelGrid>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td background="#{request.contextPath}/img/mainmenu_bg-3.png" width="40" valign="top" align="left">
+                        <table cellpadding="3"><tr><td>
+                            <a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('ReportMenuImage1','','#{request.contextPath}/img/socialmenu02.png',1)" ><img src="#{request.contextPath}/img/socialmenu01.png" name="ReportMenuImage1" width="22" height="153" border="0" id="ReportMenuImage1" /></a>
+                        </td></tr></table>
+                    </td>
+                </tr>
+                <tr>
+                    <td background="#{request.contextPath}/img/mainmenu02-3.png"  width="100%" height="20"></td>
+                    <td><img src="#{request.contextPath}/img/mainmenu02-4.png" alt="" width="40" height="20" /></td>
+                </tr>
+            </table>
+        </ui:composition>
+    </body>
+</html>

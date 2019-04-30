@@ -1,0 +1,215 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">News : Add/Edit</ui:define>
+            <ui:define name="panel">
+
+                <h:inputHidden value="#{newsEditController.news.id}"/>
+                <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Title :</td>
+                        <td><h:inputText id="title" value="#{newsEditController.news.title}" styleClass="textfield" size="30" required="true"
+                                         requiredMessage="Title is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="title" style="color:red"/>
+                            <h:outputText value="#{newsEditController.messageDup}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Short Description :</td>
+                        <td valign="top">
+                            <h:inputTextarea cols="40" rows="5" value="#{newsEditController.news.shortDesc}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Description :</td>
+                        <td valign="top">
+                            <h:inputTextarea id="description" value="#{newsEditController.news.description}"/>
+                            <script type="text/javascript">
+                                CKEDITOR.replace('frm:description'  ,{
+                                                filebrowserBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserImageBrowseUrl : '#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Image&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserFlashBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Flash&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/'}
+                                            );
+                            </script>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Picture Thumbnail :</td>
+                        <td valign="top">
+                            <h:panelGroup id="picThumbnailPanel">
+                                <rich:fileUpload id="fileUploadBean"
+                                                 fileUploadListener="#{newsEditController.fileUploadBean.listener}"
+                                                 maxFilesQuantity="1"
+                                                 rendered="#{newsEditController.news.picThumbnail eq null}"
+                                                 immediateUpload="true"
+                                                 acceptedTypes="jpg, gif, png, bmp"
+                                                 listHeight="70px">
+                                    <a4j:ajax event="clear" render="fileUploadBean" listener="#{newsEditController.fileUploadBean.clearUploadData}"/>
+                                </rich:fileUpload>
+                                <h:panelGroup rendered="#{!(newsEditController.news.picThumbnail eq null)}">
+                                    <a href="../upload/news/#{newsEditController.news.id}/#{newsEditController.news.picThumbnail}" target="_blank">#{newsEditController.news.picThumbnail}</a>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <a4j:commandButton image="../img/b_delete.png" 
+                                                       actionListener="#{newsEditController.deletePicThumbnailListener}"
+                                                       render="picThumbnailPanel, fileUploadBean"  limitRender="true"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Picture Large :</td>
+                        <td valign="top">
+                            <h:panelGroup id="picLargePanel">
+                                <rich:fileUpload id="fileUploadBeanLarge"
+                                                 fileUploadListener="#{newsEditController.fileUploadBeanLarge.listener}"
+                                                 maxFilesQuantity="1"
+                                                 rendered="#{newsEditController.news.picLarge eq null}"
+                                                 immediateUpload="true"
+                                                 acceptedTypes="jpg, gif, png, bmp"
+                                                 listHeight="70px">
+                                    <a4j:ajax event="clear" render="fileUploadBeanLarge" listener="#{newsEditController.fileUploadBeanLarge.clearUploadData}"/>
+                                </rich:fileUpload>
+                                <h:panelGroup rendered="#{!(newsEditController.news.picLarge eq null)}">
+                                    <a href="../upload/news/#{newsEditController.news.id}/#{newsEditController.news.picLarge}" target="_blank">#{newsEditController.news.picLarge}</a>
+                                    &nbsp;&nbsp;&nbsp;
+                                      <a4j:commandButton image="../img/b_delete.png" 
+                                                           actionListener="#{newsEditController.deletePicLargeListener}"
+                                                           render="picLargePanel, fileUploadBeanLarge"  limitRender="true"/>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Date :</td>
+                        <td valign="top">
+                            <rich:calendar id="transDate" value="#{newsEditController.news.transDate}"
+                                           inputClass="textfield" inputSize="10" buttonClass="rfcalbtn"
+                                           locale="th_TH"
+                                           datePattern="d MMM yyyy"/>
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Display Date :</td>
+                        <td valign="top">
+                            <rich:calendar id="startdate"
+                                value="#{newsEditController.news.startDate}"
+                                inputClass="textfield" buttonClass="rfcalbtn"
+                                inputSize="10"
+                                datePattern="#{msg.datePattern}"
+                                required="true"
+                                requiredMessage="#{msg.require}"
+                                locale="#{msg.locale}">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </rich:calendar>
+                            <rich:message for="startdate" style="color:red"/>
+                            to <span style="width: 5px"/> <rich:calendar id="enddate"
+                                    value="#{newsEditController.news.endDate}"
+                                    inputSize="10"
+                                    inputClass="textfield" buttonClass="rfcalbtn"
+                                    required="true"
+                                    requiredMessage="#{msg.require}"
+                                    datePattern="#{msg.datePattern}"
+                                    locale="#{msg.locale}">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </rich:calendar>
+                            <rich:message for="enddate" style="color:red"/>
+                            <h:outputText value="#{newsEditController.message}" style="color:red"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color:red"/> Selecting User:</td>
+                        <td valign="top">
+                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                                <h:selectOneRadio id="selectingUser" value="#{newsEditController.selectingUser}" 
+                                                  required="true" requiredMessage="#{msg.require}"
+                                                  disabled="#{newsEditController.news.id ne null}">
+                                    <f:selectItem itemValue="all" itemLabel="All Users" />
+                                    <f:selectItem itemValue="group" itemLabel="User Group"/>
+                                    <a4j:ajax event="click" render="selectingUser, userGroupList, userList" 
+                                              execute="@this" listener="#{newsEditController.userSelectingChangeListener}"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                </h:selectOneRadio>
+
+                                <h:selectOneMenu id="userGroupList"
+                                                    value="#{newsEditController.userGroupId}"
+                                                    disabled="#{newsEditController.selectingUser ne 'group'}"
+                                                    required="#{newsEditController.selectingUser eq 'group'}"
+                                                    requiredMessage="#{msg.require}">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItems value="#{newsEditController.userGroupList}"/>
+                                    <f:validateRequired/>                  
+                                    <rich:validator />
+                                    <a4j:ajax event="change" render="userList" execute="@this" listener="#{newsEditController.userGroupChangeListener}"/>
+                                </h:selectOneMenu>
+                            </h:panelGrid>
+                            <rich:message for="selectingUser" style="color:red"/>
+                            <rich:message for="userGroupList" style="color:red"/>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top"><table width="70%" border="0" cellpadding="0" cellspacing="1" bgcolor="#dedfe0">
+                            <tr>
+                                <td bgcolor="#FFFFFF">
+                                <rich:dataTable id="userList" style="width: 100%;padding: 4em" styleClass="tableline01" headerClass="subh01"
+                                                value="#{newsEditController.userList}"  var="userList" 
+                                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                    <f:facet name="header">
+                                        <rich:columnGroup>
+                                            <rich:column style="width: 5%;text-align: left;"><input type="checkbox" name="allbox" onclick="checkUserAll()"/></rich:column>
+                                            <rich:column style="width: 95%;text-align: left;"><h:outputText value="User Name"/></rich:column>
+                                        </rich:columnGroup>
+                                    </f:facet>
+                                    <rich:column >
+                                        <h:selectBooleanCheckbox id="userbox" value="#{newsEditController.selectedUserIds[userList.id]}"
+                                                                 disabled="#{newsEditController.news.id ne null}"/>
+                                    </rich:column>
+                                    <rich:column>
+                                        <h:outputText value="#{userList.name}"/>
+                                    </rich:column>
+                                </rich:dataTable>
+                                </td>
+                            </tr>
+                        </table></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:selectBooleanCheckbox id="enable" value="#{newsEditController.news.status}"/> Enable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandButton image="../img/b_save.png" action="#{newsEditController.saveAction}" 
+                                             onclick="if (!checkSelectChkbox()) return false;" rendered="#{newsEditController.savePermitted}"/>
+                            <h:commandButton image="../img/b_back.png" action="#{newsEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

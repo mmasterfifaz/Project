@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">List Exclusion</ui:define>
+    <ui:define name="panel">
+        <style>
+            img.rf-cal-btn  {
+                display: inline;
+            }
+        </style>
+        <h:inputHidden value="#{opOutEditController.mode}"/>
+        <h:inputHidden value="#{opOutEditController.opOut.id}"/>
+        <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top"><h:outputText value="#{opOutEditController.message}" style="color:red"/>&nbsp;</td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">
+                    <h:selectBooleanCheckbox id="checkname" value="#{opOutEditController.opOut.checkName}" valueChangeListener="#{opOutEditController.checkNameListener}">
+                        <a4j:ajax event="click" render="panelname,panelaction" limitRender="true" oncomplete="#{rich:element('name')}.value=''"/>
+                    </h:selectBooleanCheckbox> Name:
+                </td>
+                <td valign="top">
+                    <h:panelGroup id="panelname">
+                    <h:inputText id="name" value="#{opOutEditController.opOut.name}" styleClass="textfield" size="50" 
+                                 required="#{opOutEditController.opOut.checkName}" requiredMessage="Name is required" disabled="#{!opOutEditController.opOut.checkName}">
+                        <f:validateRequired/>
+                        <rich:validator/>
+                    </h:inputText>
+                    <rich:message for="name" style="color:red"/>
+                    </h:panelGroup>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">
+                    <h:selectBooleanCheckbox id="checksurname" value="#{opOutEditController.opOut.checkSurname}" valueChangeListener="#{opOutEditController.checkSurnameListener}">
+                        <a4j:ajax event="click" render="panelsurname,panelaction" limitRender="true" oncomplete="#{rich:element('surname')}.value=''"/>
+                    </h:selectBooleanCheckbox> Surname:
+                </td>
+                <td valign="top">
+                    <h:panelGroup id="panelsurname">
+                    <h:inputText id="surname" value="#{opOutEditController.opOut.surname}" styleClass="textfield" size="50" 
+                                  required="#{opOutEditController.opOut.checkSurname}" requiredMessage="Surname is required" disabled="#{!opOutEditController.opOut.checkSurname}">
+                        <f:validateRequired/>
+                        <rich:validator/>
+                    </h:inputText>
+                    <rich:message for="surname" style="color:red"/>
+                    </h:panelGroup>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top">
+                    <h:selectBooleanCheckbox id="checktelephone" value="#{opOutEditController.opOut.checkTelephone}" valueChangeListener="#{opOutEditController.checkTelephoneListener}">
+                        <a4j:ajax event="click" render="paneltelephone,panelaction" limitRender="true" oncomplete="#{rich:element('telephone')}.value=''"/>
+                    </h:selectBooleanCheckbox> Telephone:
+                </td>
+                <td valign="top">
+                    <h:panelGroup id="paneltelephone">
+                    <h:inputText id="telephone" value="#{opOutEditController.opOut.telephone1}" styleClass="textfield" size="50" 
+                                  required="#{opOutEditController.opOut.checkTelephone}" requiredMessage="Telephone is required" disabled="#{!opOutEditController.opOut.checkTelephone}">
+                        <f:validateRequired/>
+                        <rich:validator/>
+                    </h:inputText>
+                    <rich:message for="telephone" style="color:red"/>
+                    </h:panelGroup>
+                </td>
+              </tr>
+              <ui:remove>
+              <tr>
+                <td align="right" valign="top">Date of Birth:</td>
+                <td valign="top">
+                    <ui:remove>
+                    <rich:calendar id="dob" value="#{opOutEditController.opOut.dob}"
+                                   inputClass="textfield" inputSize="10"
+                                   datePattern="#{msg.datePattern}"
+                                   locale="#{msg.locale}"
+                                   required="true"
+                                   requiredMessage="#{msg.require}" >
+                    </rich:calendar>
+                    <rich:message for="dob" style="color:red"/>
+                    </ui:remove>
+                    <rich:calendar id="dob" value="#{opOutEditController.opOut.dob}"
+                                   inputClass="textfield" inputSize="10"
+                                   datePattern="#{msg.datePattern}"
+                                   locale="#{msg.locale}" >
+                    </rich:calendar>
+                </td>
+              </tr>
+              </ui:remove>
+              <ui:remove>
+              <tr>
+                <td align="right" valign="top"> ID Card:</td>
+                <td valign="top">
+                    <h:inputText id="idcard" value="#{opOutEditController.opOut.idcard}" styleClass="textfield"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"> Telephone 2:</td>
+                <td valign="top">
+                    <h:inputText id="telephone2" value="#{opOutEditController.opOut.telephone2}" styleClass="textfield" size="50"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"> Telephone 3:</td>
+                <td valign="top">
+                    <h:inputText id="telephone3" value="#{opOutEditController.opOut.telephone3}" styleClass="textfield" size="50"/>
+                </td>
+              </tr>
+              </ui:remove>
+              <ui:remove>
+              <tr>
+                <td align="right" valign="top"> E-mail:</td>
+                <td valign="top">
+                    <h:panelGroup>
+                        <h:inputText id="email" value="#{opOutEditController.opOut.email}" styleClass="textfield" size="50"/>
+                        <h:message for="email" style="color:red"/>
+                    </h:panelGroup>
+                </td>
+              </tr>
+              </ui:remove>
+              <tr>
+                <td align="right" valign="top">* Type:</td>
+                <td valign="top">
+                    <h:selectOneMenu id="opoutperiod" value="#{opOutEditController.opOut.opOutPeriod}"
+                                   required="true"
+                                   requiredMessage="#{msg.require}">
+                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                        <f:selectItem itemValue="1" itemLabel="Op-Out"/>
+                        <f:selectItem itemValue="0" itemLabel="Blacklist"/>
+                    </h:selectOneMenu>
+                    <rich:message for="opoutperiod" style="color:red"/>
+                </td>
+              </tr>  
+              <tr>
+                <td align="right" valign="top">* Effective Date:</td>
+                <td valign="top">
+                    <rich:calendar id="lastavtivitydate" value="#{opOutEditController.opOut.lastActivityDate}"
+                                   inputClass="textfield" inputSize="10"
+                                   datePattern="#{msg.datePattern}"
+                                   locale="#{msg.locale}"
+                                   required="true"
+                                   requiredMessage="#{msg.require}" >
+                    </rich:calendar>   
+                    <rich:message for="lastavtivitydate" style="color:red"/>
+                </td>
+              </tr> 
+              <tr>
+                <td align="right" valign="top"> Source:</td>
+                <td valign="top">
+                    <h:inputText id="source" value="#{opOutEditController.opOut.source}" styleClass="textfield" size="50"/>
+                    <h:message for="source" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"> Effect:</td>
+                <td valign="top">
+                    <h:inputText id="effect" value="#{opOutEditController.opOut.effect}" styleClass="textfield" size="50"/>
+                    <h:message for="effect" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top"> Remark:</td>
+                <td valign="top">
+                    <h:inputText id="remark" value="#{opOutEditController.opOut.remark}" styleClass="textfield" size="50"/>
+                    <h:message for="remark" style="color:red"/>
+                </td>
+              </tr> 
+            
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top">
+                    <h:panelGroup id="panelaction">
+                        <h:commandButton image="../img/b_save.png" action="#{opOutEditController.saveAction}" rendered="#{opOutEditController.savePermitted and (opOutEditController.opOut.checkSurname or opOutEditController.opOut.checkTelephone)}"/>
+                        <h:commandButton image="../img/b_back.png" action="#{opOutEditController.backAction}" immediate="true"/>
+                    </h:panelGroup>
+                </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

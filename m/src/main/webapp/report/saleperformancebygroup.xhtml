@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">Sale Performance By User Group</ui:define>
+            <ui:define name="panel">
+                
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date From:</td>
+                        <td><rich:calendar value="#{salePerformanceByGroupReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{salePerformanceByGroupReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Campaign:</td>
+                        <td valign="top"><h:selectOneMenu id="campaign" value="#{salePerformanceByGroupReport.campaignId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{salePerformanceByGroupReport.campaignList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Marketing:</td>
+                        <td valign="top"><h:selectOneMenu id="marketing" value="#{salePerformanceByGroupReport.marketingId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{salePerformanceByGroupReport.marketingList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>       
+                    <tr>
+                        <td align="right" valign="top">Output Type:</td>
+                        <td valign="top"><h:selectOneRadio value="#{salePerformanceByGroupReport.outputFormat}">
+                                <f:selectItems value="#{salePerformanceByGroupReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:commandLink  action="blank.xhtml" actionListener="#{salePerformanceByGroupReport.reportListener}" target="_blank">
+                                                        <img alt="Report" src="../img/b_report.png" style="display: inline"/>
+
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

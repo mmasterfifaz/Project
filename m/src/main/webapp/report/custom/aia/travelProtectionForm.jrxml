@@ -1,0 +1,984 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Travel Protection" printOrder="Horizontal" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="3.0"/>
+	<property name="ireport.x" value="452"/>
+	<property name="ireport.y" value="1437"/>
+	<parameter name="fromDate" class="java.lang.String"/>
+	<parameter name="toDate" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select po.ref_no
+, po.purchase_date
+, users.name as user_name
+, users.surname as user_surname
+, por1.initial_text
+, por1.name
+, por1.surname
+, por1.age
+, por1.home_phone
+, por1.office_phone
+, por1.mobile_phone
+, por1.current_address_line1
+, subd1.name as subdistrict_name
+, dist1.name as district_name
+, prov1.name as province_name
+, subd1.postal_code
+, por1.idno
+, por1.idcard_issue_district
+, por1.idcard_issue_province
+, por1.dob
+, por1.height
+, por1.weight
+, por1.nationality
+, por1.occupation
+, por1.position
+, por1.jobdescription
+, por1.income
+, por1.fx1
+, por1.fx2
+, por1.fx11
+, por1.fx12
+, por1.fx13
+, por1.fx15
+, por1.fx19
+, por1.fx16
+, por1.fx20
+, por1.fx17
+, por1.fx21
+, DATEADD(day,1,po.purchase_date) as date1
+, DATEADD(year,1,DATEADD(day,1,po.purchase_date)) as year1
+, p.name as product_name
+, pp.code as product_code
+, po.net_premium
+, po.card_type
+, po.card_issuer
+, po.card_no
+, po.card_expiry_month
+, po.card_expiry_year
+, po.card_holder_name
+, pp.code as product_plan_code
+, pp.no as product_plan_no
+, pp.payment_mode as product_plan_payment_mode
+from purchase_order as po
+inner join users on users.id = po.create_by_id
+inner join purchase_order_detail as pod on po.id = pod.purchase_order_id
+inner join purchase_order_register as por1 on pod.id = por1.purchase_order_detail_id and por1.no = 1
+left join subdistrict as subd1 on subd1.id = por1.current_subdistrict_id
+inner join district as dist1 on dist1.id = subd1.district_id
+inner join province as prov1 on prov1.id = dist1.province_id
+inner join product as p on p.id = pod.product_id
+inner join product_plan as pp on pp.id = pod.product_plan_id
+where po.sale_result = 'Y'
+and po.approval_status = 'approved'
+and po.payment_status = 'approved'
+and po.qc_status = 'approved'
+and po.sale_date between $P{fromDate} and $P{toDate}]]>
+	</queryString>
+	<field name="ref_no" class="java.lang.String"/>
+	<field name="purchase_date" class="java.sql.Timestamp"/>
+	<field name="user_name" class="java.lang.String"/>
+	<field name="user_surname" class="java.lang.String"/>
+	<field name="initial_text" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="age" class="java.lang.Integer"/>
+	<field name="home_phone" class="java.lang.String"/>
+	<field name="office_phone" class="java.lang.String"/>
+	<field name="mobile_phone" class="java.lang.String"/>
+	<field name="current_address_line1" class="java.lang.String"/>
+	<field name="subdistrict_name" class="java.lang.String"/>
+	<field name="district_name" class="java.lang.String"/>
+	<field name="province_name" class="java.lang.String"/>
+	<field name="postal_code" class="java.lang.String"/>
+	<field name="idno" class="java.lang.String"/>
+	<field name="idcard_issue_district" class="java.lang.String"/>
+	<field name="idcard_issue_province" class="java.lang.String"/>
+	<field name="dob" class="java.sql.Timestamp"/>
+	<field name="height" class="java.math.BigDecimal"/>
+	<field name="weight" class="java.math.BigDecimal"/>
+	<field name="nationality" class="java.lang.String"/>
+	<field name="occupation" class="java.lang.String"/>
+	<field name="position" class="java.lang.String"/>
+	<field name="jobdescription" class="java.lang.String"/>
+	<field name="income" class="java.lang.String"/>
+	<field name="fx1" class="java.lang.String"/>
+	<field name="fx2" class="java.lang.String"/>
+	<field name="fx11" class="java.lang.String"/>
+	<field name="fx12" class="java.lang.String"/>
+	<field name="fx13" class="java.lang.String"/>
+	<field name="fx15" class="java.lang.String"/>
+	<field name="fx19" class="java.lang.String"/>
+	<field name="fx16" class="java.lang.String"/>
+	<field name="fx20" class="java.lang.String"/>
+	<field name="fx17" class="java.lang.String"/>
+	<field name="fx21" class="java.lang.String"/>
+	<field name="date1" class="java.sql.Timestamp"/>
+	<field name="year1" class="java.sql.Timestamp"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="product_code" class="java.lang.String"/>
+	<field name="net_premium" class="java.math.BigDecimal"/>
+	<field name="card_type" class="java.lang.String"/>
+	<field name="card_issuer" class="java.lang.String"/>
+	<field name="card_no" class="java.lang.String"/>
+	<field name="card_expiry_month" class="java.lang.Integer"/>
+	<field name="card_expiry_year" class="java.lang.Integer"/>
+	<field name="card_holder_name" class="java.lang.String"/>
+	<field name="product_plan_code" class="java.lang.String"/>
+	<field name="product_plan_no" class="java.lang.String"/>
+	<field name="product_plan_payment_mode" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="842" splitType="Stretch">
+			<image>
+				<reportElement x="0" y="-1" width="595" height="841"/>
+				<imageExpression><![CDATA["travel01.jpg"]]></imageExpression>
+			</image>
+			<break>
+				<reportElement x="0" y="836" width="595" height="1"/>
+			</break>
+			<textField>
+				<reportElement x="137" y="82" width="72" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no} == null ? "" : $F{ref_no}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="261" y="82" width="67" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMMMM yyyy", new Locale ( "th", "TH" )).format($F{purchase_date})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="504" y="100" width="77" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{user_name} == null ? "" : $F{user_name}) + ($F{user_surname} == null ? "" : (" " + $F{user_surname}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="176" y="131" width="134" height="20"/>
+				<textElement verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{initial_text} == null ? "" : $F{initial_text}) + ($F{name} == null ? "" : $F{name}) + ($F{surname} == null ? "" : (" " + $F{surname}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="330" y="131" width="28" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="376" y="132" width="52" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="8" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{home_phone} != null ? $F{home_phone}.trim() : "") + ($F{home_phone} != null && $F{office_phone}.trim() != null ? ", " : "") + ($F{office_phone} != null ? $F{office_phone}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="466" y="131" width="79" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{mobile_phone} != null ? $F{mobile_phone}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="170" y="148" width="280" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="10" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{current_address_line1} != null ? $F{current_address_line1}.trim() : "")
++ ($F{subdistrict_name} != null ? " " + $F{subdistrict_name}.trim() : "")
++ ($F{district_name} != null ? " " + $F{district_name}.trim() : "")
++ ($F{province_name} != null ? " " + $F{province_name}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="466" y="148" width="79" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{postal_code} != null ? $F{postal_code}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="146" y="182" width="86" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{idno} != null ? $F{idno}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="323" y="182" width="53" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="10" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{idcard_issue_district} != null ? $F{idcard_issue_district}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="402" y="182" width="60" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="10" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{idcard_issue_province} != null ? $F{idcard_issue_province}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="480" y="182" width="60" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[ไทย]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="94" y="231" width="62" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{age}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="231" width="95" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMMMM yyyy", new Locale ( "th", "TH" )).format($F{dob})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="272" y="231" width="81" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{height} != null ? new DecimalFormat("#,##0.00").format($F{height}) : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="363" y="231" width="81" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{weight} != null ? new DecimalFormat("#,##0.00").format($F{weight}) : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="454" y="231" width="81" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nationality} != null ? $F{nationality}.trim() : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="117" y="245" width="86" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{occupation} != null ? $F{occupation}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="234" y="245" width="65" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{position} != null ? $F{position}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="392" y="245" width="77" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{jobdescription} != null ? $F{jobdescription}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="146" y="262" width="46" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{income} != null ? $F{income}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="263" y="262" width="272" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx1} != null ? $F{fx1}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="141" y="279" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{fx2}.equals("C")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="252" y="279" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{fx2}.equals("O")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="69" y="343" width="141" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx11} != null ? $F{fx11}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="69" y="360" width="141" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx15} != null ? $F{fx15}.trim() : "") + ($F{fx19} != null && !$F{fx19}.equals("") ? ", " + $F{fx19}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="217" y="343" width="46" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx12} != null ? $F{fx12}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="217" y="360" width="46" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx16} != null ? $F{fx16}.trim() : "") + ($F{fx20} != null && !$F{fx20}.equals("") ? ", " + $F{fx20}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="272" y="343" width="72" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx13} != null ? $F{fx13}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="272" y="360" width="72" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{fx17} != null ? $F{fx17}.trim() : "") + ($F{fx21} != null && !$F{fx21}.equals("") ? ", " + $F{fx21}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="358" y="343" width="177" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[เหมือนผู้เอาประกัน]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="358" y="360" width="177" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[เหมือนผู้เอาประกัน]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="192" y="486" width="78" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMMMM yyyy", new Locale ( "th", "TH" )).format($F{date1})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="296" y="486" width="43" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("HH:mm", new Locale ( "th", "TH" )).format($F{date1})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="395" y="485" width="67" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMMMM yyyy", new Locale ( "th", "TH" )).format($F{year1})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="484" y="485" width="38" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[16:30]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="288" y="526" width="110" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="9" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{product_name} != null ? $F{product_name}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="392" y="526" width="36" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{product_plan_no} != null ? $F{product_plan_no}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="484" y="526" width="42" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new DecimalFormat("#,##0.00").format($F{net_premium})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="404" y="82" width="70" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[P909902296]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="76" y="169" width="18" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="194" y="563" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="564" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("2")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="294" y="564" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("3")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="345" y="563" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("4")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="563" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("5")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="447" y="563" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("6")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="500" y="563" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("7")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="193" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("1") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("1") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="243" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("2") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="268" y="750" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("2") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="293" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("3") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="318" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("3") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="344" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("4") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="369" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("4") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="394" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("5") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="420" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("5") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="444" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("6") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="470" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("6") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="525" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("7") ? ($F{product_plan_payment_mode}.equals("4") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="498" y="749" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("7") ? ($F{product_plan_payment_mode}.equals("1") ? true : false) : false]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="117" y="101" width="54" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[00308]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="245" y="101" width="55" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom" markup="none">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[996057]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="186" y="543" width="47" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("1")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="236" y="543" width="46" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("2")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="287" y="543" width="46" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("3")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="337" y="543" width="46" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("4")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="388" y="543" width="46" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("5")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="438" y="543" width="46" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("6")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="491" y="543" width="46" height="20">
+					<printWhenExpression><![CDATA[$F{product_plan_no}.equals("7")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="CordiaUPC" size="11" isBold="true" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_code}.trim() != null ? $F{product_plan_code} : ""]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="842">
+			<image>
+				<reportElement x="0" y="0" width="595" height="842"/>
+				<imageExpression><![CDATA["travel02.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="70" y="49" width="18" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="169" y="48" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{card_type}.equals("VISA")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="218" y="48" width="18" height="20">
+					<printWhenExpression><![CDATA[$F{card_type}.equals("MASTER")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="398" y="43" width="126" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{card_issuer} != null && !$F{card_issuer}.equals("")) ? $F{card_issuer}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="133" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 0, 1 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="143" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 1, 2 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="153" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 2, 3 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="163" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 3, 4 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="182" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 4, 5 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="192" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 5, 6 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="202" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 6, 7 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="212" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 7, 8 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="233" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 8, 9 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="243" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 9, 10 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="253" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 10, 11 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="263" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 11, 12 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="282" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 12, 13 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="292" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 13, 14 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="302" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 14, 15 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="312" y="62" width="10" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{card_no} != null && !$F{card_no}.equals("")) ? $F{card_no}.substring( 15, 16 ) : ""]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="420" y="59" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{card_expiry_month} != null && !$F{card_expiry_month}.equals("") && $F{card_expiry_month} != 0) ? $F{card_expiry_month} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="452" y="59" width="24" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{card_expiry_year} != null && !$F{card_expiry_year}.equals("") && $F{card_expiry_year} != 0) ? $F{card_expiry_year} : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="199" y="76" width="161" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{card_holder_name} != null && !$F{card_holder_name}.equals("")) ? $F{card_holder_name}.trim() : "")]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="299" y="110" width="225" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{initial_text} == null ? "" : $F{initial_text}) + ($F{name} == null ? "" : $F{name}) + ($F{surname} == null ? "" : (" " + $F{surname}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="89" y="641" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMM yy", new Locale ( "th", "TH" )).format($F{purchase_date})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="158" y="641" width="50" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="CordiaUPC" size="11" pdfFontName="D:\\Fonts\\CORDIAU.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("HH:mm", new Locale ( "th", "TH" )).format($F{purchase_date})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="195" y="112" width="18" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom" markup="none">
+					<font fontName="Wingdings" size="16" pdfFontName="D:\\Fonts\\WINGDING.TTF" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<paragraph lineSpacing="Single"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

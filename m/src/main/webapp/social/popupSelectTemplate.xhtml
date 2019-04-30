@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../social/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Message Template</ui:define>
+    <ui:param name="modalId" value="selectMessageTemplate"/>
+    <ui:param name="width" value="900"/>
+    <ui:param name="height" value="500"/>
+    
+    <ui:define name="popupHead">
+        <h:outputStylesheet library="css" name="maxelyz.css"/>
+        <h:outputStylesheet library="css" name="scroll01.css"/>
+        <h:outputStylesheet library="css" name="popbox.css"/>
+    </ui:define>
+    
+    <ui:define name="popupDetail">
+        
+        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+            <tr>
+                <td width="100%" align="left">
+                    <h:selectOneMenu value="#{popupSelectTemplate.groupId}" style="width:230px">
+                        <f:selectItem itemValue="" itemLabel="All Catagory"/>
+                        <f:selectItems value="#{popupSelectTemplate.groups}"/>
+                        <a4j:ajax event="change" listener="#{popupSelectTemplate.popupGroupChangeListener}" limitRender="true" 
+                                  execute="@this" render="datatree, data,pgScript"/>
+                    </h:selectOneMenu>
+                    <span style="padding-right: 10px"></span>
+                    <h:inputText id="searchKeyword" styleClass="textfield" value="#{popupSelectTemplate.keyword}" size="30"/>
+                    <a4j:commandButton image="/resources/img/b_search01.png" render="datatree, data,pgScript" 
+                                       actionListener="#{popupSelectTemplate.popupSearchAction}" style="vertical-align: baseline"/>
+                </td>
+            </tr>
+        </table>
+        <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+            <tr>
+                <td width="240" valign="top">
+                    <table width="100%" border="0" cellpadding="0" cellspacing="0" id="tree">
+                        <tr><td height="25">&nbsp;</td></tr>
+                        <tr><td width="240" height="400">
+                            <div class="scrollFaq" style="width:250px">
+                            <rich:dataTable id="datatree" style="width: 100%" styleClass="tableline01" 
+                                            value="#{popupSelectTemplate.lists}" var="list"
+                                            onrowmouseover="this.style.backgroundColor='#eedeff'"
+                                            onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                                <rich:column>
+                                  <a4j:commandButton title="View Detail" image="/img/istar.png"
+                                                     action="#{popupSelectTemplate.selectIdListener}" execute="@this"
+                                                     render="data,pgScript" limitRender="true">
+                                       <f:param name="id" value="#{list.id}"/>
+                                  </a4j:commandButton>&nbsp;
+                                  <a4j:commandLink title="View Detail" value="#{list.name}" 
+                                                   style="color: #735c8d;text-decoration: none;"
+                                                   action="#{popupSelectTemplate.selectIdListener}" execute="@this"
+                                                   render="data,pgScript" limitRender="true" styleClass="gray03">
+                                        <f:param name="id" value="#{list.id}"/>
+                                  </a4j:commandLink>                  
+                                </rich:column>
+                            </rich:dataTable>
+                            </div>
+                            </td></tr>
+                    </table>
+                </td>
+                <td width="20" valign="top"><img src="#{request.contextPath}/img/leftline.gif" width="20" height="400"/></td>
+                <td valign="top" height="400" align="right">
+                    <h:panelGroup id="data">
+                        <a4j:commandButton image="/img/btn_addtemplate.png"
+                                           style="vertical-align: baseline" 
+                                           execute="@this" rendered="#{popupSelectTemplate.messageTemplate ne null}"
+                                           limitRender="true"
+                                           onclick="clickInsertHtml(); #{rich:component('selectMessageTemplate')}.hide()">
+                            <f:param name="dlgReturnId" value="#{popupSelectTemplate.messageTemplate.id}"/>
+                            <f:param name="dlgReturnValue" value="#{popupSelectTemplate.messageTemplate.message}"/>
+                        </a4j:commandButton>
+                        <div class="scrollFaq">
+                            <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr><td align="left">
+                                    <h:outputText value="#{popupSelectTemplate.messageTemplate.name}"
+                                                  style="text-align:left;font-weight: bold;color: #735c8d; font-size: 15px"/><br/><br/>
+                                    <h:outputText value="#{popupSelectTemplate.messageTemplate.message}" escape="false" style="font-size: 14px"/> 
+                                    <h:inputHidden id="hMsg" value="#{popupSelectTemplate.messageTemplate.message}"/>
+                                </td></tr>
+                            </table>
+                        </div>
+                    </h:panelGroup>
+                    <h:panelGroup id="pgScript">
+                        <script type="text/javascript">
+                            function clickInsertHtml(){
+                                var oEditor = CKEDITOR.instances["frm:pBody:inp"];
+                                var html = document.getElementById('#{rich:clientId('hMsg')}').value;
+                                //alert(html);
+                                //var newElement = CKEDITOR.dom.element.createFromHtml( html, oEditor.document );
+                                //oEditor.insertElement( newElement );
+                                oEditor.insertHtml(html);
+                            }
+                        </script>
+                    </h:panelGroup>
+                </td>
+            </tr>
+        </table>
+        
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,637 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report2" pageWidth="595" pageHeight="842" orientation="Landscape" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<property name="ireport.zoom" value="1.948717100000018"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="912"/>
+	<parameter name="from" class="java.util.Date"/>
+	<parameter name="to" class="java.util.Date"/>
+	<parameter name="refNo" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT top 1
+     initial+name+'  '+surname AS full_name,
+     *
+FROM
+     motor_po
+where
+
+ref_no = $P{refNo}]]>
+	</queryString>
+	<field name="full_name" class="java.lang.String"/>
+	<field name="id" class="java.lang.Integer"/>
+	<field name="ref_no" class="java.lang.String"/>
+	<field name="sale_date" class="java.sql.Timestamp"/>
+	<field name="product_category_name" class="java.lang.String"/>
+	<field name="initial" class="java.lang.String"/>
+	<field name="name" class="java.lang.String"/>
+	<field name="surname" class="java.lang.String"/>
+	<field name="current_address_line1" class="java.lang.String"/>
+	<field name="current_address_line2" class="java.lang.String"/>
+	<field name="current_address_line3" class="java.lang.String"/>
+	<field name="current_address_line4" class="java.lang.String"/>
+	<field name="current_address_line5" class="java.lang.String"/>
+	<field name="current_address_line6" class="java.lang.String"/>
+	<field name="current_district_name" class="java.lang.String"/>
+	<field name="current_province_name" class="java.lang.String"/>
+	<field name="current_postal_code" class="java.lang.String"/>
+	<field name="driver1_initital" class="java.lang.String"/>
+	<field name="driver1_name" class="java.lang.String"/>
+	<field name="driver1_surname" class="java.lang.String"/>
+	<field name="driver1_dob" class="java.lang.String"/>
+	<field name="driver1_license_no" class="java.lang.String"/>
+	<field name="driver1_issue_date" class="java.lang.String"/>
+	<field name="driver1_issue_place" class="java.lang.String"/>
+	<field name="driver1_id_card" class="java.lang.String"/>
+	<field name="driver2_initital" class="java.lang.String"/>
+	<field name="driver2_name" class="java.lang.String"/>
+	<field name="driver2_surname" class="java.lang.String"/>
+	<field name="driver2_dob" class="java.lang.String"/>
+	<field name="driver2_license_no" class="java.lang.String"/>
+	<field name="driver2_issue_date" class="java.lang.String"/>
+	<field name="driver2_issue_place" class="java.lang.String"/>
+	<field name="driver2_id_card" class="java.lang.String"/>
+	<field name="beneficiary" class="java.lang.String"/>
+	<field name="insure_valid_from" class="java.lang.String"/>
+	<field name="insure_valid_to" class="java.lang.String"/>
+	<field name="insure_valid_time" class="java.lang.String"/>
+	<field name="act_valid_from" class="java.lang.String"/>
+	<field name="act_valid_to" class="java.lang.String"/>
+	<field name="register_date" class="java.lang.String"/>
+	<field name="coverage_type" class="java.lang.String"/>
+	<field name="usage_type" class="java.lang.String"/>
+	<field name="license_prefix" class="java.lang.String"/>
+	<field name="license_infix" class="java.lang.String"/>
+	<field name="lisence_postfix" class="java.lang.String"/>
+	<field name="product_plan_name" class="java.lang.String"/>
+	<field name="purchase_date" class="java.sql.Timestamp"/>
+	<field name="no_installment" class="java.lang.Integer"/>
+	<field name="inst1_no" class="java.lang.Integer"/>
+	<field name="inst1_due_date" class="java.sql.Timestamp"/>
+	<field name="inst1_installment_amount" class="java.math.BigDecimal"/>
+	<field name="inst1_payment_method" class="java.lang.String"/>
+	<field name="inst2_no" class="java.lang.Integer"/>
+	<field name="inst2_due_date" class="java.sql.Timestamp"/>
+	<field name="inst2_installment_amount" class="java.math.BigDecimal"/>
+	<field name="inst2_payment_method" class="java.lang.String"/>
+	<field name="inst3_no" class="java.lang.Integer"/>
+	<field name="inst3_due_date" class="java.sql.Timestamp"/>
+	<field name="inst3_installment_amount" class="java.math.BigDecimal"/>
+	<field name="inst3_payment_method" class="java.lang.String"/>
+	<field name="product_code" class="java.lang.String"/>
+	<field name="model_name" class="java.lang.String"/>
+	<field name="model_year" class="java.lang.String"/>
+	<field name="model_type_name" class="java.lang.String"/>
+	<field name="no_seat" class="java.lang.String"/>
+	<field name="car_weight" class="java.lang.String"/>
+	<field name="chassis_no" class="java.lang.String"/>
+	<field name="sum_insured" class="java.math.BigDecimal"/>
+	<field name="life_loss_person" class="java.lang.Integer"/>
+	<field name="life_loss_time" class="java.lang.Integer"/>
+	<field name="asset_loss_time" class="java.lang.Integer"/>
+	<field name="asset_deduct" class="java.lang.Integer"/>
+	<field name="motor_loss" class="java.lang.Integer"/>
+	<field name="motor_deduct" class="java.lang.Integer"/>
+	<field name="motor_damage" class="java.lang.Integer"/>
+	<field name="no_lost_driver" class="java.lang.Integer"/>
+	<field name="cost_lost_driver" class="java.lang.Integer"/>
+	<field name="no_lost_passenger" class="java.lang.Integer"/>
+	<field name="cost_lost_passenger" class="java.lang.Integer"/>
+	<field name="no_disable_driver" class="java.lang.Integer"/>
+	<field name="cost_disable_driver" class="java.lang.Integer"/>
+	<field name="no_disable_passenger" class="java.lang.Integer"/>
+	<field name="cost_disable_passenger" class="java.lang.Integer"/>
+	<field name="medical_expense" class="java.lang.Integer"/>
+	<field name="bail" class="java.lang.Integer"/>
+	<field name="act" class="java.math.BigDecimal"/>
+	<field name="net_premium" class="java.math.BigDecimal"/>
+	<field name="amount1" class="java.math.BigDecimal"/>
+	<field name="amount2" class="java.math.BigDecimal"/>
+	<field name="total_amount" class="java.math.BigDecimal"/>
+	<field name="payment_status" class="java.lang.String"/>
+	<field name="approval_status" class="java.lang.String"/>
+	<field name="settlement" class="java.lang.Boolean"/>
+	<field name="user_name" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="842" splitType="Stretch">
+			<image>
+				<reportElement stretchType="RelativeToBandHeight" x="0" y="0" width="595" height="842"/>
+				<imageExpression><![CDATA["motor_bg_registration.png"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="33" width="184" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_category_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="84" width="159" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_category_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="104" width="100" height="18"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="42" y="121" width="226" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="346" y="130" width="218" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{full_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="346" y="148" width="218" height="35"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{current_address_line1}==null || $F{current_address_line1}.isEmpty())?"":"หมู่บ้าน " + $F{current_address_line1}) + " " + (($F{current_address_line2}==null || $F{current_address_line2}.isEmpty())?"":"เลขที่ " + $F{current_address_line2}) + " " + (($F{current_address_line3}==null || $F{current_address_line3}.isEmpty())?"":"หมู่ " + $F{current_address_line3}) + " " + (($F{current_address_line4}==null || $F{current_address_line4}.isEmpty())?"":"ซอย " + $F{current_address_line4}) + " " + (($F{current_address_line5}==null || $F{current_address_line5}.isEmpty())?"":"ถนน " + $F{current_address_line5}) + " " + ($F{current_address_line6}==null?"":$F{current_address_line6}) + " " + ($F{current_district_name}==null?"":$F{current_district_name}) + " " + ($F{current_province_name}==null?"":$F{current_province_name}) + " " + ($F{current_postal_code}==null?"":$F{current_postal_code})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="46" y="185" width="137" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver1_initital}==null || $F{driver1_name}==null || $F{driver1_surname}==null)?"-":($F{driver1_initital}.isEmpty() || $F{driver1_name}.isEmpty() || $F{driver1_surname}.isEmpty() )?"-":($F{driver1_initital}==null?"":$F{driver1_initital}) + " " + ($F{driver1_name}==null?"":$F{driver1_name}) + " " + ($F{driver1_surname}==null?"":$F{driver1_surname})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="213" y="185" width="67" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver1_dob}.isEmpty() || $F{driver1_dob}==null?"-":$F{driver1_dob})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="310" y="185" width="41" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver1_license_no}.isEmpty() || $F{driver1_license_no}==null?"-":$F{driver1_license_no})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="393" y="185" width="66" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver1_issue_date}.isEmpty() || $F{driver1_issue_date}==null?"-":$F{driver1_issue_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="508" y="185" width="61" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver1_issue_place}.isEmpty() || $F{driver1_issue_place}==null?"-":$F{driver1_issue_place})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="101" y="216" width="199" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver1_id_card}==null || $F{driver1_id_card}.isEmpty()?"-":$F{driver1_id_card})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="46" y="201" width="137" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver2_initital}==null || $F{driver2_name}==null || $F{driver2_surname}==null)?"-":($F{driver2_initital}.isEmpty() || $F{driver2_name}.isEmpty() || $F{driver2_surname}.isEmpty() )?"-":($F{driver2_initital}==null?"":$F{driver2_initital}) + " " + ($F{driver2_name}==null?"":$F{driver2_name}) + " " + ($F{driver2_surname}==null?"":$F{driver2_surname})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="213" y="201" width="67" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver2_dob}.isEmpty() || $F{driver2_dob}==null?"-":$F{driver2_dob})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="310" y="201" width="41" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver2_license_no}.isEmpty() || $F{driver2_license_no}==null?"-":$F{driver2_license_no})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="393" y="201" width="66" height="20"/>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver2_issue_date}.isEmpty() || $F{driver2_issue_date}==null?"-":$F{driver2_issue_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="508" y="201" width="61" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver2_issue_place}.isEmpty() || $F{driver2_issue_place}==null?"-":$F{driver2_issue_place})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="391" y="217" width="164" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{driver2_id_card}==null || $F{driver2_id_card}.isEmpty()?"-":$F{driver2_id_card})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="76" y="233" width="312" height="20"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{beneficiary}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="88" y="249" width="180" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{insure_valid_from}==null?"":$F{insure_valid_from}) + " - " + ($F{insure_valid_to}==null?"":$F{insure_valid_to})]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm" isBlankWhenNull="true">
+				<reportElement x="497" y="249" width="66" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{insure_valid_time}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="332" y="249" width="135" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{act_valid_from}==null?"":$F{act_valid_from}) + " - " + ($F{act_valid_to}==null?"":$F{act_valid_to})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="321" y="267" width="233" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{register_date}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="16" y="310" width="12" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="39" y="310" width="25" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_code}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="72" y="304" width="87" height="33"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="355" y="310" width="41" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model_year}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="310" width="66" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{model_type_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="164" y="304" width="85" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{license_prefix}==null?"":$F{license_prefix}) + " " + ($F{license_infix}==null?"":$F{license_infix})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="164" y="317" width="85" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{lisence_postfix}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="252" y="310" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{chassis_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="483" y="310" width="34" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{no_seat}==null?"":$F{no_seat}) + "/"]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="13" y="549" width="160" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="183" y="549" width="122" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{amount2}.intValue()==0 || $F{amount2}==null?"-":$F{amount2})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="448" y="549" width="111" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_amount}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="320" y="549" width="115" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amount1}.add($F{amount2})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="76" y="569" width="224" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{product_plan_name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="300" y="568" width="134" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{coverage_type}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="81" y="586" width="238" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{usage_type}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd-MMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="407" y="587" width="144" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMM yyyy", new Locale ( "th", "TH" )).format($F{purchase_date})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="74" y="605" width="16" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{no_installment}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="33" y="636" width="15" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst1_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="74" y="636" width="60" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMM yyyy", new Locale ( "th", "TH" )).format($F{inst1_due_date})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="160" y="636" width="60" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst1_installment_amount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="238" y="636" width="62" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst1_payment_method}.equals("") || $F{inst1_payment_method}==null?"-":$F{inst1_payment_method}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="33" y="651" width="15" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst2_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="74" y="651" width="60" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMM yyyy", new Locale ( "th", "TH" )).format($F{inst2_due_date})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="160" y="651" width="60" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst2_installment_amount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="238" y="651" width="62" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst2_payment_method}.equals("") || $F{inst2_payment_method}==null?"-":$F{inst2_payment_method}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="33" y="666" width="15" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst3_no}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="74" y="666" width="60" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("d MMM yyyy", new Locale ( "th", "TH" )).format($F{inst3_due_date})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="160" y="666" width="60" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst3_installment_amount}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="238" y="666" width="62" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inst3_payment_method}.equals("") || $F{inst3_payment_method}==null?"-":$F{inst3_payment_method}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement isPrintRepeatedValues="false" x="388" y="651" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{user_name}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="34" y="383" width="67" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{life_loss_person}==0 || $F{life_loss_person}==null?"-":$F{life_loss_person})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="34" y="399" width="67" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{life_loss_time}==0 || $F{life_loss_time}==null?"-":$F{life_loss_time})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="33" y="450" width="67" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{asset_loss_time}==0 || $F{asset_loss_time}==null?"-":$F{asset_loss_time})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="33" y="480" width="67" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{asset_deduct}==0 || $F{asset_deduct}==null?"-":$F{asset_deduct})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="188" y="382" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{motor_loss}==0 || $F{motor_loss}==null?"-":$F{motor_loss})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="188" y="415" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{motor_deduct}==0 || $F{motor_deduct}==null?"-":$F{motor_deduct})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="188" y="451" width="80" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{motor_damage}==0 || $F{motor_damage}==null?"-":$F{motor_damage})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="405" y="396" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{no_lost_driver}==0 || $F{no_lost_driver}==null?"-":$F{no_lost_driver})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="446" y="396" width="51" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{cost_lost_driver}==0 || $F{cost_lost_driver}==null?"-":$F{cost_lost_driver})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="405" y="416" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{no_lost_passenger}==0 || $F{no_lost_passenger}==null?"-":$F{no_lost_passenger})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="446" y="416" width="51" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{cost_lost_passenger}==0 || $F{cost_lost_passenger}==null?"-":$F{cost_lost_passenger})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="405" y="450" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{no_disable_driver}==0 || $F{no_disable_driver}==null?"-":$F{no_disable_driver})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="446" y="450" width="51" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{cost_disable_driver}==0 || $F{cost_disable_driver}==null?"-":$F{cost_disable_driver})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="405" y="465" width="20" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{no_disable_passenger}==0 || $F{no_disable_passenger}==null?"-":$F{no_disable_passenger})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="446" y="465" width="51" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{cost_disable_passenger}==0 || $F{cost_disable_passenger}==null?"-":$F{cost_disable_passenger})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="441" y="482" width="56" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{medical_expense}==0 || $F{medical_expense}==null?"-":$F{medical_expense})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0" isBlankWhenNull="true">
+				<reportElement x="441" y="503" width="56" height="20"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{bail}==0 || $F{bail}==null?"-":$F{bail})]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="42" y="143" width="218" height="35"/>
+				<textElement verticalAlignment="Top">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[(($F{current_address_line1}==null || $F{current_address_line1}.isEmpty())?"":"หมู่บ้าน " + $F{current_address_line1}) + " " + (($F{current_address_line2}==null || $F{current_address_line2}.isEmpty())?"":"เลขที่ " + $F{current_address_line2}) + " " + (($F{current_address_line3}==null || $F{current_address_line3}.isEmpty())?"":"หมู่ " + $F{current_address_line3}) + " " + (($F{current_address_line4}==null || $F{current_address_line4}.isEmpty())?"":"ซอย " + $F{current_address_line4}) + " " + (($F{current_address_line5}==null || $F{current_address_line5}.isEmpty())?"":"ถนน " + $F{current_address_line5}) + " " + ($F{current_address_line6}==null?"":$F{current_address_line6}) + " " + ($F{current_district_name}==null?"":$F{current_district_name}) + " " + ($F{current_province_name}==null?"":$F{current_province_name}) + " " + ($F{current_postal_code}==null?"":$F{current_postal_code})]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement x="518" y="310" width="46" height="20"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Cordia New" size="11" pdfFontName="CORDIA.TTF" pdfEncoding="Identity-H"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{car_weight}==null?"":$F{car_weight})]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

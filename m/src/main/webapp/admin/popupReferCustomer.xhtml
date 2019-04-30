@@ -1,0 +1,163 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="popupTitle">Search Customer</ui:define>
+    <ui:param name="modalId" value="referCustomer"/>
+    <ui:param name="width" value="1000"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup id="referCustomerPanel">
+            <div style="height: 450px;width: 970px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">                
+                    <tr>
+                        <td valign="top">
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#eeeee5" id="bartool01">
+                                <tr bgcolor="#ffffff">
+                                    <td valign="top" class="line01">
+                                        <table width="100%">
+                                            <tr>
+                                                <td width="150" align="right">Customer Name :</td>
+                                                <td align="left">
+                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.custName}" >
+                                                        <a4j:ajax event="blur" execute="@this" />
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="150" align="right">Customer Surname :</td>
+                                                <td align="left">
+                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.custSurname}">
+                                                        <a4j:ajax event="blur" execute="@this" />
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td width="150" align="right">Mobile Phone :</td>
+                                                <td align="left">
+                                                    <h:inputText styleClass="textfield" value="#{campaignNewProspectController.mobilePhone}">
+                                                        <a4j:ajax event="blur" execute="@this" />
+                                                    </h:inputText>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right">Marketing List :</td>
+                                                <td align="left">
+                                                    <h:selectOneMenu id="marketingListSearch" value="#{campaignNewProspectController.marketingSearchId}" >
+                                                        <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                                        <f:selectItems value="#{campaignNewProspectController.marketingList}"/>
+                                                        <a4j:ajax event="blur" execute="@this" />
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td><a4j:commandButton image="/img/b_search.png" execute="@this" limitRender="true" actionListener="#{campaignNewProspectController.searchActionListener}" render="dataList" >
+
+                                                    </a4j:commandButton>
+                                                </td>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                        value="#{campaignNewProspectController.customerList}" rows="10" var="clist">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column><h:outputText value="Marketing"/></rich:column>
+                                                    <rich:column><h:outputText value="Customer Name"/></rich:column>
+                                                    <rich:column><h:outputText value="Spot Ref ID"/></rich:column>
+                                                    <rich:column><h:outputText value="Case No"/></rich:column>
+                                                    <rich:column><h:outputText value="Age"/></rich:column>
+                                                    <rich:column><h:outputText value="Disposition"/></rich:column>
+                                                    <rich:column><h:outputText value="Date of Birth"/></rich:column>
+                                                    <rich:column><h:outputText value="Description 1"/></rich:column>
+                                                    <rich:column><h:outputText value="Description 2"/></rich:column>
+                                                    <rich:column><h:outputText value="Description 3"/></rich:column>
+                                                    <rich:column><h:outputText value="Description 4"/></rich:column>
+                                                    <rich:column><h:outputText value="Description 5"/></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.marketing.name}"/> 
+                                            </rich:column>
+                                            <rich:column>
+                                                <a4j:commandLink value="#{clist.customer.name} #{clist.customer.surname}" actionListener="#{campaignNewProspectController.referCustomerAction}" execute="@this" 
+                                                                 oncomplete="#{rich:component('referCustomer')}.hide()" render="spotRefId,copyRefer,referCust" >
+                                                    <f:param name="marketingId" value="#{clist.marketing.id}" />
+                                                    <f:param name="customerId" value="#{clist.customer.id}" />
+                                                </a4j:commandLink>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield15 eq null or clist.customer.flexfield15 eq '' ? '-' : clist.customer.flexfield15}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield2 eq null or clist.customer.flexfield2 eq '' ? '-' : clist.customer.flexfield2}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield3 eq null or clist.customer.flexfield3 eq '' ? '-' : clist.customer.flexfield3}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield4 eq null or clist.customer.flexfield4 eq '' ? '-' : clist.customer.flexfield4}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield5 eq null or clist.customer.flexfield5 eq '' ? '-' : clist.customer.flexfield5}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield6 eq null or clist.customer.flexfield6 eq '' ? '-' : clist.customer.flexfield6}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield7 eq null or clist.customer.flexfield7 eq '' ? '-' : clist.customer.flexfield7}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield8 eq null or clist.customer.flexfield8 eq '' ? '-' : clist.customer.flexfield8}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield9 eq null or clist.customer.flexfield9 eq '' ? '-' : clist.customer.flexfield9}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{clist.customer.flexfield10 eq null or clist.customer.flexfield10 eq '' ? '-' : clist.customer.flexfield10}"/>
+                                            </rich:column>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller fastControls="hide" maxPages="5"/>
+                                            </f:facet>
+                                        </rich:dataTable>
+                                    </td>
+                                </tr>
+                            </table>
+
+                        </td>
+                    </tr>
+                </table>
+
+
+
+                <ui:remove>
+                    <rich:dataTable id="dataList2" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                    value="#{campaignNewProspectController.customerList}" rows="10" var="c">
+                        <c:forEach items="#{campaignNewProspectController.fxDetail}" var="column" begin="0" end="#{campaignNewProspectController.fxDetail.size() - 1}">                     
+                            <rich:column> 
+                                <f:facet name="header">
+                                    <h:outputText value="#{column.fxName}" />
+                                </f:facet>          
+                                <h:outputText value="test" />
+                            </rich:column>
+                        </c:forEach>               
+                        <f:facet name="footer">
+                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                        </f:facet>
+                    </rich:dataTable>
+                </ui:remove>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

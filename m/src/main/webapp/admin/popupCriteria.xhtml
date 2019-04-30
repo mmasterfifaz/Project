@@ -1,0 +1,542 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Criteria</ui:define>
+    <ui:param name="modalId" value="popupCriteria"/>
+    <ui:param name="width" value="800"/>
+    <ui:param name="height" value="1000"/>
+    <ui:define name="popupDetail">
+    <style>
+        <!--
+        .rich-tabhdr-side-cell { 
+            border: 5px;
+        }
+        .rich-tab-inactive {
+            border-width: 0px 0px 0px 0px;
+            width: 112px;
+            cursor: pointer;
+            background-image : url(../img/tb_01.png);
+            border: none;
+            height: 20px;
+            color: #000000;
+            font-size: 11px;
+        }
+        .rich-tab-active {
+            border-width: 0px 0px 0px 0px;
+            background-image : url(../img/tb_02.png);
+            border: none;
+            height: 20px;
+            width: 112px;
+            color: #FFFFFF;
+            font-size: 11px;
+        }
+        .rich-tabpanel-content {
+            border-width: 0px 0px 0px 0px;
+            background-color: transparent;
+        }
+        .rich-tab-bottom-line {
+            border-color: #75b8d1;
+            border-width: 2px;;
+        }
+        -->
+    </style>        
+        <h:panelGroup id="criteriaPanel" style="height: 500px">
+            <br/>
+            <h:panelGrid columns="3">
+                <h:outputText value="Criteria Name :"/>
+                <h:inputText id="name"
+                             styleClass="textfield" 
+                             value="#{marketingEditController.marketingCriteria.name}" 
+                             required="true" 
+                             requiredMessage="#{msg.require}">
+                    <rich:validator/>                    
+                </h:inputText>
+                <rich:message for="name" style="color:red"/>
+            </h:panelGrid>
+            
+            <rich:tabPanel switchType="ajax" id="tabs">
+                <rich:tab id="tabCustomerInformation" title="Customer Information" immediate="true"> 
+                    <a4j:region id="regionCustomerInformation">
+                        <h:panelGroup>
+                            <div style="height: 400px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                            <table border="0" cellpadding="3" cellspacing="1">
+                                <tr>
+                                    <td valign="" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectDob}"/></td>
+                                    <td valign="" align="left"><h:outputText value="Date of Birth"/></td>
+                                    <td valign="" align="left">
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.datePattern}"
+                                                       locale="#{msg.localeTh}"
+                                                       value="#{marketingEditController.marketingCriteria.dobFrom}"/>
+                                        To
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.datePattern}"
+                                                       locale="#{msg.localeTh}"
+                                                       value="#{marketingEditController.marketingCriteria.dobTo}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectGender}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Gender"/></td>
+                                    <td valign="" align="left">
+                                        <rich:pickList switchByDblClick="true" 
+                                                       listHeight="100px" listWidth="200px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{marketingEditController.selectedGenderList}" >
+                                            <f:selectItem itemLabel="Male" itemValue="male"/>
+                                            <f:selectItem itemLabel="Female" itemValue="female"/>
+                                        </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectProvince}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Province"/></td>
+                                    <td valign="" align="left">
+                                         <rich:pickList switchByDblClick="true" 
+                                                       listHeight="100px" listWidth="200px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{marketingEditController.selectedProvinceList}" >
+                                            <f:selectItems value="#{marketingEditController.provinceList}"/>
+                                        </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectOccupation}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Occupation"/></td>
+                                    <td valign="" align="left">
+                                        <rich:pickList switchByDblClick="true" 
+                                                       listHeight="100px" listWidth="200px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{marketingEditController.selectedOccupationList}"> 
+                                            <f:selectItems value="#{marketingEditController.occupationList}"/>
+                                        </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectSalary}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Salary"/></td>
+                                    <td valign="" align="left">
+                                        <h:inputText styleClass="textfield" value="#{marketingEditController.marketingCriteria.salaryFrom}"/> To <h:inputText styleClass="textfield" value="#{marketingEditController.marketingCriteria.salaryTo}"/>
+                                    </td>
+                                </tr>
+                                <!--
+                                <ui:remove>
+                                <tr>
+                                    <td valign="" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectApplicationDate}"/></td>
+                                    <td valign="" align="left"><h:outputText value="Application Date"/></td>
+                                    <td valign="" align="left">
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       value="#{marketingEditController.marketingCriteria.applicationDateFrom}"/>
+                                        To
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       value="#{marketingEditController.marketingCriteria.applicationDateTo}"/>
+                                    </td>
+                                </tr>
+                                </ui:remove>
+                                -->
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectTelephonePrefix}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Prefix Telephone"/></td>
+                                    <td valign="" align="left">
+                                        <h:inputText id="prefix" styleClass="textfield" 
+                                                     value="#{marketingEditController.prefix}"/> 
+                                        <a4j:commandButton image="/img/b_add.png" 
+                                                           style="vertical-align: bottom"
+                                                           actionListener="#{marketingEditController.addPrefixListener}"
+                                                           render="prefix,prefixList"/>
+                                        <br/><br/>
+                                        <h:selectManyListbox id="prefixList" size="5" 
+                                                             style="width: 100px"
+                                                             value="#{marketingEditController.selectedPrefixList}">
+                                            <f:selectItems value="#{marketingEditController.prefixList}"/>
+                                        </h:selectManyListbox>
+                                        <a4j:commandButton image="../img/b_delete.png"  style="margin: 2px;"
+                                                           actionListener="#{marketingEditController.deletePrefixListener}"
+                                                           limitRender="true"
+                                                           render="prefixList"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </h:panelGroup> 
+                    </a4j:region>
+                </rich:tab>
+                <rich:tab id="tabSaleInformation" title="Sale Information" immediate="true"> 
+                    <a4j:region id="regionSaleInformation">
+                        <h:panelGroup>
+                            <div style="height: 400px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                            <table border="0" cellpadding="3" cellspacing="1" width="100%">
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectProduct}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Product"/></td>
+                                    <td valign="" align="left">
+                                        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+                                            <tr>
+                                                <td valign="top">Product Category Type
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <h:panelGroup id="panelType">
+                                                        <h:selectOneRadio id="productCategoryType" 
+                                                                          value="#{marketingEditController.marketingCriteria.productCategoryType}" 
+                                                                          layout="lineDirection"
+                                                                          valueChangeListener="#{marketingEditController.productCategoryTypeListener}">
+                                                            <f:selectItems value="#{marketingEditController.productCategoryTypeList}"/>
+                                                            <a4j:ajax event="click" 
+                                                                         limitRender="true"
+                                                                         render="productPlanCategory,ppcId,pcId,psId,panelMotor,panelProduct"/>
+                                                        </h:selectOneRadio>
+                                                    </h:panelGroup>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                        <table border="0" cellspacing="0" cellpadding="3" width="100%">
+                                            <tr>
+                                                <td valign="top" width="33%">Product Plan Category</td>
+                                                <td valign="top" width="34%">Product Category</td>
+                                                <td valign="top" width="33%">Product Sponsor</td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top">
+                                                    <h:panelGroup id="productPlanCategory">
+                                                        <h:panelGroup rendered="#{marketingEditController.marketingCriteria.productCategoryType eq 'motor'}">
+                                                            <div style="height: 50px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                                                                <a4j:repeat value="#{marketingEditController.ppcList}" var="list">
+                                                                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                                        <h:selectBooleanCheckbox id="ppcId" value="#{marketingEditController.selectedPpcIds[list.id]}" >
+                                                                            <a4j:ajax event="click" 
+                                                                                         render="panelProduct" 
+                                                                                         limitRender="true"
+                                                                                         listener="#{marketingEditController.searchMotorListener1}"/>
+                                                                        </h:selectBooleanCheckbox>
+                                                                        <h:outputText value="#{list.name}"/>
+                                                                    </h:panelGrid>
+                                                                </a4j:repeat>
+                                                            </div>
+                                                        </h:panelGroup>
+                                                    </h:panelGroup>
+                                                </td>
+                                                <td valign="top">
+                                                    <div style="height: 50px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                                                        <a4j:repeat value="#{marketingEditController.productCategoryList}" var="list">
+                                                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                                <h:selectBooleanCheckbox id="pcId" value="#{marketingEditController.selectedProductCategoryIds[list.id]}">
+                                                                    <a4j:ajax event="click" 
+                                                                                 render="panelProduct" 
+                                                                                 limitRender="true"
+                                                                                 listener="#{marketingEditController.searchMotorListener1}"/>
+                                                                </h:selectBooleanCheckbox>
+                                                                <h:outputText value="#{list.name}"/>
+                                                            </h:panelGrid>
+                                                        </a4j:repeat>
+                                                    </div>
+                                                </td>
+                                                <td valign="top">
+                                                    <div style="height: 50px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                                                        <a4j:repeat value="#{marketingEditController.productSponsorList}" var="list">
+                                                            <h:panelGrid columns="2" cellpadding="0" cellspacing="0" border="0">
+                                                                <h:selectBooleanCheckbox id="psId" value="#{marketingEditController.selectedProductSponsorIds[list.id]}">
+                                                                    <a4j:ajax event="click" 
+                                                                                 render="panelProduct" 
+                                                                                 limitRender="true"
+                                                                                 listener="#{marketingEditController.searchMotorListener1}"/>
+                                                                </h:selectBooleanCheckbox>
+                                                                <h:outputText value="#{list.name}"/>
+                                                            </h:panelGrid>
+                                                        </a4j:repeat>
+                                                    </div>
+                                                </td>                                                            
+                                            </tr>                                                        
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"></td>
+                                    <td valign="top" align="left"></td>
+                                    <td valign="" align="left">
+                                        <h:panelGroup id="panelMotor">
+                                            <h:panelGroup rendered="#{marketingEditController.marketingCriteria.productCategoryType eq 'motor'}">
+                                        
+                                        <table border="0" cellspacing="0" cellpadding="3">
+                                            <tr>
+                                                <td valign="top" align="right">Model Type : </td>
+                                                <td valign="top">
+                                                    <h:selectOneMenu id="modelTypeId" 
+                                                                     value="#{marketingEditController.marketingCriteria.modelTypeId}"
+                                                                     styleClass="select08"
+                                                                     valueChangeListener="#{marketingEditController.modelTypeChangeListener}">
+                                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                                        <f:selectItems value="#{marketingEditController.modelTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                        <a4j:ajax event="change" 
+                                                                     render="brandId,modelId,modelFromYear,modelToYear,panelProduct" 
+                                                                     limitRender="true" />
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" align="right">Brand : </td>
+                                                <td valign="top">
+                                                    <h:selectOneMenu id="brandId"
+                                                                     styleClass="select08"
+                                                                     value="#{marketingEditController.brandId}"
+                                                                     valueChangeListener="#{marketingEditController.brandChangeListener}">
+                                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                                        <f:selectItems value="#{marketingEditController.brandList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                        <a4j:ajax event="change" 
+                                                                     render="modelId,modelFromYear,modelToYear,panelProduct" 
+                                                                     limitRender="true"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" align="right">Model : </td>
+                                                <td valign="top">
+                                                    <h:selectOneMenu id="modelId" 
+                                                                     value="#{marketingEditController.marketingCriteria.modelId}"
+                                                                     styleClass="select08"                                                                     
+                                                                     valueChangeListener="#{marketingEditController.searchMotorListener}">
+                                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                                        <f:selectItems value="#{marketingEditController.modelList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                                        <a4j:ajax event="change" 
+                                                                 render="modelFromYear,modelToYear,panelProduct" 
+                                                                 limitRender="true"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" align="right">From Year : </td>
+                                                <td valign="top">
+                                                    <h:selectOneMenu id="modelFromYear" 
+                                                                     value="#{marketingEditController.marketingCriteria.modelFromyear}"
+                                                                     styleClass="select08"
+                                                                     valueChangeListener="#{marketingEditController.searchMotorListener}">
+                                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                                        <f:selectItems value="#{marketingEditController.modelYearList}"/>
+                                                        <a4j:ajax event="change" 
+                                                                 render="panelProduct" 
+                                                                 limitRender="true"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top" align="right">To Year : </td>
+                                                <td valign="top">
+                                                    <h:selectOneMenu id="modelToYear" 
+                                                                     value="#{marketingEditController.marketingCriteria.modelToyear}"
+                                                                     styleClass="select08"
+                                                                     valueChangeListener="#{marketingEditController.searchMotorListener}">
+                                                        <f:selectItem itemLabel="All" itemValue="0"/>
+                                                        <f:selectItems value="#{marketingEditController.modelYearList}"/>
+                                                        <a4j:ajax event="change" 
+                                                                 render="panelProduct" 
+                                                                 limitRender="true"/>
+                                                    </h:selectOneMenu>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                                </h:panelGroup>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"></td>
+                                    <td valign="top" align="left"><h:outputText value=""/></td>
+                                    <td valign="" align="left">
+                                        <h:panelGroup id="panelProduct">
+                                            <rich:pickList switchByDblClick="true" 
+                                                           listHeight="100px" listWidth="200px"
+                                                           addText="" addAllText="" removeText="" removeAllText=""
+                                                           value="#{marketingEditController.selectedProductList}">
+                                                <f:selectItems value="#{marketingEditController.productList}"/>
+                                            </rich:pickList>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectContactDate}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Contact Date"/></td>
+                                    <td valign="" align="left">
+                                        
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="00:00"
+                                                       value="#{marketingEditController.marketingCriteria.contactDateFrom}"/>
+                                        To
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="23:59"
+                                                       value="#{marketingEditController.marketingCriteria.contactDateTo}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectSaleDate}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Sale Date"/></td>
+                                    <td valign="" align="left">
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="00:00"
+                                                       value="#{marketingEditController.marketingCriteria.saleDateFrom}"/>
+                                        To
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="23:59"
+                                                       value="#{marketingEditController.marketingCriteria.saleDateTo}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectEffectiveDate}"/></td>
+                                    <td valign="" align="left"><h:outputText value="Effective Date"/></td>
+                                    <td valign="" align="left">
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="00:00"
+                                                       value="#{marketingEditController.marketingCriteria.effectiveDateFrom}"/>
+                                        To
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="23:59"
+                                                       value="#{marketingEditController.marketingCriteria.effectiveDateTo}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectCancelDate}"/></td>
+                                    <td valign="" align="left"><h:outputText value="Cancel Date"/></td>
+                                    <td valign="" align="left">
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="00:00"
+                                                       value="#{marketingEditController.marketingCriteria.cancelDateFrom}"/>
+                                        To
+                                        <rich:calendar inputClass="textfield" buttonClass="rfcalbtn" 
+                                                       inputSize="15"
+                                                       datePattern="#{msg.dateTimePattern}"
+                                                       locale="#{msg.locale}"
+                                                       defaultTime="23:59"
+                                                       value="#{marketingEditController.marketingCriteria.cancelDateTo}"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectOpout}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Include Op-Out"/></td>
+                                    <td valign="" align="left">
+                                        <rich:pickList switchByDblClick="true" 
+                                                       listHeight="100px" listWidth="200px"
+                                                       addText="" addAllText="" removeText="" removeAllText="">
+                                            <f:selectItem itemValue="1" itemLabel="Opout-1"/>
+                                            <f:selectItem itemValue="2" itemLabel="Opout-2"/>    
+                                            <f:selectItem itemValue="3" itemLabel="Opout-3"/>                                              
+                                            
+                                        </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectNosaleReason}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="No Sale Reason"/></td>
+                                    <td valign="" align="left">
+                                        
+                                         <rich:pickList switchByDblClick="true" 
+                                                        listHeight="100px" listWidth="200px"
+                                                        addText="" addAllText="" removeText="" removeAllText=""
+                                                        value="#{marketingEditController.selectedNosaleReasonList}" >
+                                             <f:selectItems value="#{marketingEditController.nosaleReasonList}"/>
+                                         </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectQcReject}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="QC Reject Reason"/></td>
+                                    <td valign="" align="left">
+                                         <rich:pickList switchByDblClick="true" 
+                                                        listHeight="100px" listWidth="200px"
+                                                        addText="" addAllText="" removeText="" removeAllText=""
+                                                        value="#{marketingEditController.selectedQcRejectReasonList}" >
+                                             <f:selectItems value="#{marketingEditController.qcRejectReasonList}"
+                                                            var="list"
+                                                            itemLabel="#{list.name}"
+                                                            itemValue="#{list.id}"/>
+                                         </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectUwReject}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="UW Reject Reason"/></td>
+                                    <td valign="" align="left">
+                                         <rich:pickList switchByDblClick="true" 
+                                                        listHeight="100px" listWidth="200px"
+                                                        addText="" addAllText="" removeText="" removeAllText=""
+                                                        value="#{marketingEditController.selectedUwRejectReasonList}" >
+                                             <f:selectItems value="#{marketingEditController.uwRejectReasonList}"
+                                                            var="list"
+                                                            itemLabel="#{list.name}"
+                                                            itemValue="#{list.id}"/>
+                                         </rich:pickList>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="center"><h:selectBooleanCheckbox value="#{marketingEditController.marketingCriteria.selectPaymentReject}"/></td>
+                                    <td valign="top" align="left"><h:outputText value="Payment Reject Reason"/></td>
+                                    <td valign="" align="left">
+                                         <rich:pickList switchByDblClick="true" 
+                                                        listHeight="100px" listWidth="200px"
+                                                        addText="" addAllText="" removeText="" removeAllText=""
+                                                        value="#{marketingEditController.selectedPaymentRejectReasonList}" >
+                                             <f:selectItems value="#{marketingEditController.paymentRejectReasonList}"
+                                                            var="list"
+                                                            itemLabel="#{list.name}"
+                                                            itemValue="#{list.id}"/>
+                                         </rich:pickList>
+                                    </td>
+                                </tr>
+                            </table>
+                            </div>
+                        </h:panelGroup> 
+                    </a4j:region>
+                </rich:tab>
+            </rich:tabPanel>
+            <table width="100%" border="0" cellpadding="3" cellspacing="1">
+                <tr>
+                    <td valign="" align="center">
+                        <a4j:commandButton image="/img/b_save.png"
+                                           actionListener="#{marketingEditController.saveCriteriaListener}"
+                                           render="marketingCriteriaList"
+                                           oncomplete="if (#{facesContext.maximumSeverity == null}) {#{rich:component('popupCriteria')}.hide();}"/> 
+                        <a4j:commandButton image="/img/b_close.png"
+                                           render="marketingCriteriaList,criteriaPanel"
+                                           oncomplete="#{rich:component('popupCriteria')}.hide()"
+                                           immediate="true"/>
+                        
+                    </td>
+                </tr>
+            </table>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

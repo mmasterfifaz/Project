@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administrator</ui:define>
+            <ui:define name="title2">Inbox Quota: Edit</ui:define>
+            <ui:define name="panel">
+                <table style="width: 100%;background-color: #eeeee5" border="0" cellpadding="4" cellspacing="1">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{inboxQuotaEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr >
+                        <td align="right" valign="middle" class="blue04" style="width: 15%;">Quota Type:</td>
+                        <td valign="top" style="width: 70%;">
+                            <h:panelGrid columns="4" cellpadding="0" cellspacing="0">
+                                <h:selectOneRadio id="quotaType" value="#{inboxQuotaEditController.quotaType}" 
+                                                  required="true" requiredMessage="#{msg.require}" >
+                                    <f:selectItem itemValue="custom" itemLabel="Custom Quota per user" />
+                                    <f:selectItem itemValue="default" itemLabel="Default Inbox Quota for all users "/>
+                                    <a4j:ajax event="click" render="quotaType, quotaPanel, userList" execute="@this"
+                                              listener="#{inboxQuotaEditController.changeTypeListener}"/>
+                                    <rich:validator />
+                                </h:selectOneRadio>
+                            </h:panelGrid>
+                        </td>
+                    </tr>
+                    <tr >
+                        <td align="right" valign="middle" style="width: 15%;"></td>
+                        <td valign="top" style="width: 70%;">
+                            <h:panelGroup id="quotaPanel">
+                            <h:panelGroup id="defaultPanel" rendered="#{inboxQuotaEditController.quotaType eq 'default'}">
+                                <table border="0" cellpadding="5" cellspacing="1"><tr>
+                                    <td><h:outputText class="gray03" value="Inbox Quota Per User: "/></td>
+                                    <td><h:inputText id="defaultPerUser" maxlength="5" size="5" validatorMessage="Minimum Quota Per User is 1"
+                                                     onkeypress="return isNumberKey(event);" value="#{inboxQuotaEditController.defaultQuotaPerUser}">
+                                            <f:validateDoubleRange minimum="1" />
+                                            <rich:validator />
+                                        </h:inputText>
+                                        <h:outputText class="gray03" value=" messages"/></td>
+                                    <td><a4j:commandButton image="../img/b_simulate_list.png"
+                                                           limitRender="true" render="userList"
+                                                           actionListener="#{inboxQuotaEditController.quotaTypePerUserListener}"/></td>
+                                    <td><rich:message for="defaultPerUser" style="color:red"/></td>
+                                </tr>
+                                 <tr>
+                                    <td><h:outputText class="gray03" value="Inbox Quota Per Day: "/></td>
+                                    <td><h:inputText id="defaultPerDay" maxlength="5" size="5" validatorMessage="Minimum Quota Per Day is 1"
+                                                     onkeypress="return isNumberKey(event);" value="#{inboxQuotaEditController.defaultQuotaPerDay}">
+                                            <f:validateDoubleRange minimum="1" />
+                                            <rich:validator />
+                                        </h:inputText>
+                                        <h:outputText class="gray03" value=" messages"/></td>
+                                    <td><a4j:commandButton image="../img/b_simulate_list.png"
+                                                           limitRender="true" render="userList"
+                                                           actionListener="#{inboxQuotaEditController.quotaTypePerDayListener}"/></td>
+                                    <td><rich:message for="defaultPerDay" style="color:red"/></td>
+                                </tr></table>
+                            </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr style="height: 20px;">
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                </table>
+                     
+                <rich:dataTable id="userList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{inboxQuotaEditController.usersList}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;width: 3%;">&nbsp;</rich:column>
+                            <rich:column style="text-align: left;width: 30%;"><h:outputText value="Login Name"/></rich:column>
+                            <rich:column style="text-align: left;width: 20%;"><h:outputText value="Inbox Quota Per User"/></rich:column>
+                            <rich:column style="text-align: left;width: 20%;"><h:outputText value="Inbox Quota Per Day"/></rich:column>
+                            <rich:column style="text-align: left;width: 27%;">&nbsp;</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value=""/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.loginName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:inputText id="messageno" maxlength="5" size="5" disabled="#{inboxQuotaEditController.quotaType ne 'custom'}"
+                                     onkeypress="return isNumberKey(event);" value="#{list.soOnhandQuota}" 
+                                     validatorMessage="Minimum Quota Per User is 1">
+                             <f:validateDoubleRange minimum="1" />
+                             <rich:validator />
+                        </h:inputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:inputText id="messagenoperday" maxlength="5" size="5" disabled="#{inboxQuotaEditController.quotaType ne 'custom'}"
+                                     onkeypress="return isNumberKey(event);" value="#{list.soInboxQuota}" 
+                                     validatorMessage="Minimum Quota Per Day is 1">
+                             <f:validateDoubleRange minimum="1" />
+                             <rich:validator />
+                        </h:inputText>
+                    </rich:column>
+                    <rich:column>
+                        <rich:message for="messageno" style="color:red"/>
+                        <rich:message for="messagenoperday" style="color:red"/>
+                    </rich:column>
+                </rich:dataTable>
+                          
+                <table width="100%" border="0" cellpadding="0" cellspacing="15">
+                    <tr>
+                        <td valign="top" align="right">
+                            <h:commandButton image="../img/b_save.png" action="#{inboxQuotaEditController.saveAction}"/>
+                        </td>
+                        <td valign="top" align="left">
+                            <h:commandButton image="../img/b_back.png" action="#{inboxQuotaEditController.backAction}" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

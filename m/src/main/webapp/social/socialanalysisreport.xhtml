@@ -1,0 +1,164 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../social/reporttemplate.xhtml">
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">Social Analysis Report</ui:define>
+            <ui:define name="detailSub1">
+                <table width="100%" border="0" cellpadding="0" cellspacing="0" style="height:550px">
+                    <tr style="vertical-align: top;">
+                        <td width="20%" bgcolor="#e9e9e0">
+                            <br/>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td><h:outputText style="font-size:medium;font-weight:bolder;color:#000000" value="Post Date"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <rich:calendar id="fromdate"
+                                                       value="#{socialAnalysisReport.fromDate}"
+                                                       inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                                       datePattern="#{msg.datePattern}"
+                                                       locale="#{msg.locale}"/>
+                                        To <span style="width: 5px"/> <rich:calendar id="todate"
+                                                                                     value="#{socialAnalysisReport.toDate}"
+                                                                                     inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                                                                     datePattern="#{msg.datePattern}"
+                                                                                     locale="#{msg.locale}"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td><h:outputText style="font-size:medium;font-weight:bolder;color:#000000" value="Source of Social Media"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h:selectManyCheckbox id="selectBank"
+                                                              value="#{socialAnalysisReport.soAccountString}"
+                                                              layout="pageDirection">
+                                            <f:selectItems value="#{socialAnalysisReport.soAccountList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                        </h:selectManyCheckbox>
+                                    </td>
+                                </tr>
+
+                            </table>
+                            <br/>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td><h:outputText style="font-size:medium;font-weight:bolder;color:#000000" value="View"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                            <tr>
+                                                <td>
+                                                    <a4j:commandLink actionListener="#{socialAnalysisReport.graphActionListener}" render="graphMain">Total Post By Date
+                                                        <f:param value="totalpostbydate" name="graphNameLink" />
+                                                    </a4j:commandLink>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a4j:commandLink actionListener="#{socialAnalysisReport.graphActionListener}" render="graphMain">Account By Date
+                                                        <f:param value="accountbydate" name="graphNameLink" />
+                                                    </a4j:commandLink>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a4j:commandLink actionListener="#{socialAnalysisReport.graphActionListener}" render="graphMain">Sentimental By Date
+                                                        <f:param value="sentimentalbydate" name="graphNameLink" />
+                                                    </a4j:commandLink>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <a4j:commandLink actionListener="#{socialAnalysisReport.graphActionListener}" render="graphMain">Total Post By Account
+                                                        <f:param value="totalpostbyaccount" name="graphNameLink" />
+                                                    </a4j:commandLink>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td><h:outputText style="font-size:medium;font-weight:bolder;color:#000000" value="Report Type"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <h:selectOneRadio value="#{socialAnalysisReport.graphType}" layout="pageDirection">
+                                            <f:selectItem itemLabel="Bar" itemValue="ClusteredColumns"/>
+                                            <!--<f:selectItem itemLabel="Pie" itemValue="Pie"/>-->
+                                            <f:selectItem itemLabel="Lines" itemValue="Lines"/>
+                                        </h:selectOneRadio>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br/>
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                <tr>
+                                    <td align="center">
+                                        <h:commandButton image="/img/b_view.png" actionListener="#{socialAnalysisReport.graphActionListener}" reRender="graphMain">
+                                        </h:commandButton>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td align="left">
+                            <h:panelGroup id="graphMain">
+                                <h:panelGroup rendered="#{socialAnalysisReport.graphName eq 'totalpostbydate'}">
+                                    <a4j:region id="reg1">
+                                    <ui:include src="graphtotalpostbydate.xhtml"/>
+                                    </a4j:region>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{socialAnalysisReport.graphName eq 'accountbydate'}">
+                                    <a4j:region id="reg2">
+                                    <ui:include src="graphaccountbydate.xhtml"/>
+                                    </a4j:region>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{socialAnalysisReport.graphName eq 'sentimentalbydate'}">
+                                    <a4j:region id="reg3">
+                                    <ui:include src="graphsentimentalbydate.xhtml"/>
+                                    </a4j:region>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{socialAnalysisReport.graphName eq 'totalpostbyaccount'}">
+                                    <a4j:region id="reg4">
+                                    <ui:include src="graphtotalpostbyaccount.xhtml"/>
+                                    </a4j:region>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{socialAnalysisReport.graphName eq 'graphtest1'}">
+                                    <a4j:region id="reg5">
+                                    <ui:include src="graphtest1.xhtml"/>
+                                    </a4j:region>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                </table>
+
+
+            </ui:define>
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>
+                <a4j:status id="actionStatus"
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

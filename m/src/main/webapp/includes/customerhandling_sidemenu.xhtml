@@ -1,0 +1,27 @@
+<ui:composition template="../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="sidemenu">
+        <rich:togglePanel id="toggleMenu" activeItem="closed" switchType="client" cycledSwitching="closed, opened" styleClass="sideBar">
+            <rich:togglePanelItem name="closed"> 
+                <h:panelGrid>
+                    <h:commandLink> 
+                        <rich:toggleControl targetPanel="toggleMenu" targetItem="opened"/> 
+                        <img src="#{request.contextPath}/img/customer01.png" name="CustomerMenuImage" alt="" border="0" id="CustomerMenuImage" onmouseout="changeImage('CustomerMenuImage', '#{request.contextPath}/img/customer01.png')" onmouseover="changeImage('CustomerMenuImage', '#{request.contextPath}/img/customer02.png')" class="sideBarTab" />
+                    </h:commandLink> 
+                </h:panelGrid>
+            </rich:togglePanelItem>
+            <rich:togglePanelItem name="opened">
+                <h:panelGrid>
+                    <h:commandLink> 
+                        <rich:toggleControl targetPanel="toggleMenu" targetItem="closed"/> 
+                        <ui:include src="../includes/customerhandling_menu.xhtml"/>
+                    </h:commandLink> 
+                </h:panelGrid>
+            </rich:togglePanelItem>
+        </rich:togglePanel>
+    </ui:define>
+</ui:composition>

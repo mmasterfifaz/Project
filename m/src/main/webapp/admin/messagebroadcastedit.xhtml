@@ -1,0 +1,152 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+    <style>
+        .top{
+            vertical-align:top;
+        }
+        .pbody{
+            padding:0px;
+            height:120px;
+            width:150px;
+            overflow:auto;
+        }
+    </style>
+
+<ui:composition template="../templates/adminedit.xhtml">
+    <ui:define name="title1">Administration</ui:define>
+    <ui:define name="title2">Message Broadcast: Add/Edit</ui:define>
+    <ui:define name="panel">
+        <h:inputHidden value="#{messageBroadcastEditController.mode}"/>
+        <h:inputHidden value="#{messageBroadcastEditController.messageBroadcast.id}"/>
+       
+
+        <table width="80%" border="0"  align="center" cellpadding="4" cellspacing="0">
+              <tr>
+                <td align="right" valign="top">&nbsp;</td>
+                <td valign="top">&nbsp;</td>
+              </tr>
+              <tr>
+                  <td width="200" align="right" valign="top" class="gray03"><h:outputText value="*" style="color: red"/> Message (Max. 150 Characters):</td>
+                  <td><h:inputText id="name" value="#{messageBroadcastEditController.messageBroadcast.message}" 
+                                 styleClass="textfield" size="120" maxlength="150" 
+                                 required="true" requiredMessage="Message is required">
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </h:inputText>
+                    <rich:message for="name" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top" class="gray03">Priority:</td>
+                <td valign="top">
+                    <h:selectOneMenu id="remark" value="#{messageBroadcastEditController.messageBroadcast.priority}">
+                            <f:selectItem itemValue="1" itemLabel="Highest" />
+                            <f:selectItem itemValue="2" itemLabel="High" />
+                            <f:selectItem itemValue="3" itemLabel="Normal"/>
+                            <f:selectItem itemValue="4" itemLabel="Low"/>
+                            <f:selectItem itemValue="5" itemLabel="Lowest"/>
+                    </h:selectOneMenu>
+                </td>
+              </tr>
+            <!--tr>
+                <td align="right" valign="top">Display Type:</td>
+                <td valign="top">
+                    <h:selectOneRadio id="displayType" value="#{messageBroadcastEditController.messageBroadcast.displayType }">
+                         <f:selectItem itemLabel="Scrolling Text" itemValue="s"/>
+                         <f:selectItem itemLabel="Popup"  itemValue="p"/>
+                     </h:selectOneRadio>
+                </td>
+              </tr-->
+             <tr>
+                <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color: red"/> Display Date:</td>
+                <td valign="top">
+                   <rich:calendar id="startdate"
+                       value="#{messageBroadcastEditController.messageBroadcast.startDate}"
+                       inputClass="textfield" buttonClass="rfcalbtn"
+                       inputSize="10"
+                       datePattern="#{msg.datePattern}"
+                       required="true"
+                       requiredMessage="#{msg.require}"
+                       locale="#{msg.locale}">
+                       <f:validateRequired/>                  
+                       <rich:validator />
+                   </rich:calendar>
+                   <rich:message for="startdate" style="color:red"/>
+                   to <span style="width: 5px"/> <rich:calendar id="enddate"
+                         value="#{messageBroadcastEditController.messageBroadcast.endDate}"
+                         inputSize="10" buttonClass="rfcalbtn"
+                         inputClass="textfield"
+                         required="true"
+                         requiredMessage="#{msg.require}"
+                         datePattern="#{msg.datePattern}"
+                         locale="#{msg.locale}">
+                       <f:validateRequired/>                  
+                       <rich:validator />
+                   </rich:calendar>
+                   <rich:message for="enddate" style="color:red"/>
+                </td>
+              </tr>
+              <tr>
+                <td align="right" valign="top" class="gray03"><h:outputText value="*" style="color: red"/>Selecting User:</td>
+                <td valign="top">
+                    <h:panelGrid columns="2" cellpadding="0" cellspacing="0">
+                        <h:selectOneRadio id="selectingUser" value="#{messageBroadcastEditController.selectingUser}" 
+                                          layout="pageDirection" required="true" requiredMessage="#{msg.require}">
+                            <f:selectItem itemValue="all" itemLabel="All TMRs" />
+                            <f:selectItem itemValue="group" itemLabel="Select User Group"/>
+                            <f:selectItem itemValue="tmr" itemLabel="Select TMRs" />
+                            <a4j:ajax event="click" render="selectingUser, userGroupList, panelUser, userList" 
+                                      execute="@this" listener="#{messageBroadcastEditController.userSelectingChangeListener}"/>
+                        </h:selectOneRadio>
+                        
+                        <h:selectOneMenu id="userGroupList"
+                                        value="#{messageBroadcastEditController.userGroupId}"
+                                        disabled="#{messageBroadcastEditController.selectingUser ne 'group'}"
+                                        required="#{messageBroadcastEditController.selectingUser eq 'group'}"
+                                        requiredMessage="Selected User Group is required">
+                            <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                            <f:selectItems value="#{messageBroadcastEditController.userGroupList}"/>
+                            <f:validateRequired/>                  
+                            <rich:validator />
+                        </h:selectOneMenu>
+                    </h:panelGrid>      
+                    <rich:message for="selectingUser" style="color:red"/>
+                    <rich:message for="userGroupList" style="color:red"/>
+                    <rich:message for="userList" style="color:red"/>
+               </td>
+              </tr>
+            <tr><td  align="right" valign="top"> </td>
+                <td>
+                    <h:panelGrid id="panelUser" columns="2" columnClasses="top, top">
+                    <rich:pickList id="userList" switchByDblClick="true" 
+                                   listHeight="250px" listWidth="250px" 
+                                   addText="" addAllText="" removeText="" removeAllText=""
+                                   rendered="#{messageBroadcastEditController.selectingUser eq 'tmr'}"
+                                   required="#{messageBroadcastEditController.selectingUser eq 'tmr'}" 
+                                   requiredMessage="Selected User is required"
+                                   value="#{messageBroadcastEditController.selectedUser}">
+                        <f:selectItems value="#{messageBroadcastEditController.userList}"/>
+                        <f:validateRequired/>                  
+                        <rich:validator />
+                    </rich:pickList>
+                </h:panelGrid>
+              </td>
+              </tr>
+
+              <tr>
+                <td colspan="2" valign="top" align="center">
+                    <h:commandButton image="../img/b_back.png" action="#{messageBroadcastEditController.backAction}" immediate="true"/>
+                    <h:commandButton image="../img/b_save.png" action="#{messageBroadcastEditController.saveAction}"  rendered="#{messageBroadcastEditController.savePermitted}"/>
+                </td>
+              </tr>
+        </table>
+    </ui:define>
+</ui:composition>
+</h:body>
+</html>

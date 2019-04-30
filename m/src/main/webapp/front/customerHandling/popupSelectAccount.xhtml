@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+
+    <ui:define name="popupTitle">Select Account</ui:define>
+    <ui:param name="modalId" value="mpAccount"/>
+    <ui:param name="width" value="800"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup>
+            <h:column>#{msg.accountName}<h:inputText styleClass="textfield" value="#{popupSelectAccount.accountName}"/>
+            <a4j:commandButton image="../../resources/img/bb_search.png" render="accountList" actionListener="#{popupSelectAccount.searchPopupAccountAction}" style=""/></h:column>
+        </h:panelGroup>
+        <rich:dataTable style="width: 100%" id="accountList" styleClass="tableline01" 
+                        value="#{popupSelectAccount.searchAccountValues}" rows="10" var="list">
+            <rich:column>
+                <a4j:commandLink title="#{list.accountName}"
+                                 value="#{list.accountName}"
+                                 render="pAccount"
+                                 limitRender="true"
+                                 actionListener="#{n.selectAccountListener}"
+                                 onclick="#{rich:component('mpAccount')}.hide();">
+                    <f:param name="accountId" value="#{list.accountId}"/>
+                    <f:param name="accountName" value="#{list.accountName}"/>
+                </a4j:commandLink>
+            </rich:column>
+            <f:facet name="footer">
+                <rich:dataScroller fastControls="hide" maxPages="5"/>
+            </f:facet>
+        </rich:dataTable>
+    </ui:define>
+</ui:composition>

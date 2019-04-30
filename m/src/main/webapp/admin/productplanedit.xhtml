@@ -1,0 +1,1073 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administrator</ui:define>
+            <ui:define name="title2">Product Plan: Add/Edit</ui:define>
+            <ui:define name="head">
+
+            </ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{productPlanEditController.mode}"/>
+                <h:inputHidden value="#{productPlanEditController.productPlan.id}"/>
+                <h:inputHidden value="#{productPlanEditController.product.id}"/>
+                
+                <h:panelGroup id="mainData">                
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Product Code:</td>
+                        <td>
+                            <h:outputText value="#{productPlanEditController.product.code}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Product Name:</td>
+                        <td><h:outputText value="#{productPlanEditController.product.name}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">* Plan No:</td>
+                        <td><h:inputText id="no" value="#{productPlanEditController.productPlan.no}" onkeypress="return isNumberKey(event)" styleClass="textfield" size="30"
+                                         required="true" requiredMessage="#{msg.require}" >
+                                <f:validateRequired/>
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="no" style="color:red"/>
+                            <h:outputText id="msgErr" value="#{productPlanEditController.message}" style="color: red" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">* Plan Code:</td>
+                        <td><h:inputText id="code" value="#{productPlanEditController.productPlan.code}" styleClass="textfield" size="30"
+                                         required="true" requiredMessage="#{msg.require}">
+                                <f:validateRequired/>
+                                <rich:validator/>
+                            </h:inputText>
+                            <rich:message for="code" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">* Plan Name:</td>
+                        <td><h:inputText id="name" value="#{productPlanEditController.productPlan.name}" styleClass="textfield" size="30" 
+                                         required="true" requiredMessage="#{msg.require}">                
+                                <f:validateRequired/>
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">
+                            <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'motor'}">Category :</h:panelGroup></td>
+                        <td valign="top">
+                            <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'motor'}">
+                            <h:selectOneMenu id="category" 
+                                             value="#{productPlanEditController.productPlan.productPlanCategory.id}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItems value="#{productPlanEditController.productPlanCategoryList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">Description:</td>
+                        <td valign="top">
+                            <h:inputTextarea id="remark" cols="40" rows="5"  value="#{productPlanEditController.productPlan.description}" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">
+                            <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'life' or productPlanEditController.product.productCategory.categoryType eq 'nonlife' or productPlanEditController.product.productCategory.categoryType eq 'motoradvance'}">* Sum Insured:</h:panelGroup></td>
+                        <td valign="top">
+                            <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'life' or productPlanEditController.product.productCategory.categoryType eq 'nonlife' or productPlanEditController.product.productCategory.categoryType eq 'motoradvance'}">
+                            <h:inputText id="suminsured" 
+                                         label="Sum Insured" 
+                                         value="#{productPlanEditController.productPlan.sumInsured}" 
+                                         styleClass="textfield" 
+                                         size="15" 
+                                         required="true" 
+                                         requiredMessage="#{msg.require}">
+                                <f:convertNumber maxFractionDigits="2"/>       
+                                <f:validateRequired/>
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="suminsured" style="color:red"/>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top" class="gray03">
+                            <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'life' or productPlanEditController.product.productCategory.categoryType eq 'nonlife' or productPlanEditController.product.productCategory.categoryType eq 'motoradvance'}">* Payment Mode:</h:panelGroup></td>
+                        <td valign="top">
+                            <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'life' or productPlanEditController.product.productCategory.categoryType eq 'nonlife' or productPlanEditController.product.productCategory.categoryType eq 'motoradvance'}"> 
+                                <h:selectOneMenu id="paymentMode"  style="width: 120px;"
+                                                 value="#{productPlanEditController.productPlan.paymentMode}"
+                                                 required="true" requiredMessage="#{msg.require}">
+                                    <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                    <f:selectItems value="#{productPlanEditController.productPaymentMode}"/>
+                                    <f:validateRequired/>
+                                    <rich:validator />
+                                </h:selectOneMenu>
+                                <rich:message for="paymentMode" style="color:red"/>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                     <tr>
+                        <td align="right" valign="top" class="gray03">Main Insure:</td>
+                        <td valign="top">
+                            <h:selectBooleanCheckbox id="checkTelNo" value="#{productPlanEditController.productPlan.masterPlan}"/>
+                        </td>
+                    </tr>
+                    <!-- BEGIN FLEX FIELD -->
+                     <tr>
+                         <td colspan="2" style="padding-top:15px;">
+                            <table width="98%" border="0" cellspacing="0" cellpadding="3">
+                                <tr>
+                                    <td width="50%" style="padding-top:15px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                            <tr>
+                                                <td align="right" valign="top" style="text-align: center">Code</td>
+                                                <td valign="top" style="width: 30%;text-align: center">Description_TH</td>
+                                                <td valign="top" style="width: 30%;text-align: center">Description_ENG</td>
+                                                <td valign="top" style="width: 10%;text-align: center">Sum Insured</td>
+                                                <td valign="top" style="width: 10%;text-align: center">Deduct</td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code1}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH1}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG1}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured1}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct1}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code2}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH2}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG2}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured2}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct2}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code3}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH3}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG3}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured3}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct3}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code4}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH4}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG4}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured4}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct4}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code5}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH5}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG5}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured5}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct5}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code6}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH6}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG6}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured6}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct6}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code7}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH7}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG7}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured7}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct7}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code8}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH8}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG8}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured8}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct8}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code9}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH9}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG9}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured9}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct9}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.code10}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionTH10}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.descriptionENG10}" styleClass="textfield" maxlength="470"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.sumInsured10}" styleClass="textfield" maxlength="20"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.deduct10}" styleClass="textfield" maxlength="20"/></td>
+                                            </tr>
+         
+                                        </table>
+                                    </td>
+                                    <td width="50%" style="padding-top:15px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="3">
+                                            <tr>
+                                                <td style="height: 17px;">
+                                                </td>
+                                                <td>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field11:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx11}" styleClass="textfield" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field12:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx12}" styleClass="textfield" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field13:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx13}" styleClass="textfield" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field14:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx14}" styleClass="textfield"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field15:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx15}" styleClass="textfield" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field16:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx16}" styleClass="textfield" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field17:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx17}" styleClass="textfield" /></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field18:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx18}" styleClass="textfield"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field19:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx19}" styleClass="textfield"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td align="right" valign="top">Flex Field20:</td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.productPlan.fx20}" styleClass="textfield"/></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+<!-- END FLEX FIELD -->
+                </table>                
+                </h:panelGroup>
+                
+                <!-- Telesale Panel -->
+                <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'life' or productPlanEditController.product.productCategory.categoryType eq 'nonlife' or productPlanEditController.product.productCategory.categoryType eq 'motoradvance'}">
+                <table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">                  
+                          
+                    <tr><td><a4j:commandButton image="../img/b_add.png"
+                                               limitRender="true"
+                                               render="data, mainData"
+                                               actionListener="#{productPlanEditController.addProductPlanDetailListener}"/>
+                    </td></tr>
+                    <tr><td>  
+                        <rich:dataTable id="data" style="width: 100%;" styleClass="tableline01" headerClass="subh01"
+                                        value="#{productPlanEditController.productPlanDetails}" var="list">
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column style="text-align: left">No.</rich:column>
+                                    <rich:column style="text-align: left">Code</rich:column>
+                                    <rich:column style="text-align: left">From Age</rich:column>
+                                    <rich:column style="text-align: left">To Age</rich:column>
+                                    <rich:column style="text-align: left">
+                                        <h:panelGroup rendered="#{productPlanEditController.product.gender}">
+                                            <h:outputText value="Gender" />
+                                        </h:panelGroup>
+                                    </rich:column>
+                                    <rich:column style="text-align: left">Selling Price</rich:column>
+                                    <rich:column style="text-align: left">Stamp Duty</rich:column>
+                                    <rich:column style="text-align: left">Vat</rich:column>
+                                    <rich:column style="text-align: left">Net Premium</rich:column>
+                                    <rich:column style="text-align: left">Annual Net Premium</rich:column>
+                                    <rich:column style="text-align: left">Annual Selling Price</rich:column>
+                                    <rich:column style="text-align: left"></rich:column>
+                                    <rich:column style="text-align: left"></rich:column>
+                                    <rich:column style="text-align: left"></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+
+                            <rich:column style="text-align: left">
+                                <h:outputText value="#{list.seqNo}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="code" label="Code" value="#{list.code}" styleClass="textfield" size="7">
+                                </h:inputText>
+                                <rich:message for="fromval" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="fromval" label="From Age" value="#{list.fromVal}" styleClass="textfield" size="7" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber integerOnly="true"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="fromval" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="toval" label="To Age" value="#{list.toVal}" styleClass="textfield" size="7" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber integerOnly="true"/>                    
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="toval" style="color:red"/>
+                            </rich:column>
+
+                        <rich:column>
+                            <h:panelGroup rendered="#{productPlanEditController.product.gender}">
+                            <h:selectOneMenu id="gender" value="#{list.gender}" style="width: 90px;"
+                                             required="true" requiredMessage="#{msg.require}">
+                                <f:selectItem itemLabel="#{msg.pleaseSelect}"/>
+                                <f:selectItem itemValue="M" itemLabel="Male"/>
+                                <f:selectItem itemValue="F" itemLabel="Female"/>
+                                <rich:validator />
+                            </h:selectOneMenu>
+                             <rich:message for="gender" style="color:red"/>
+                            </h:panelGroup>
+                        </rich:column>
+
+                            <rich:column>
+                                <h:inputText id="price" label="Selling Price" value="#{list.price}" styleClass="textfield" size="15" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="price" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="stampduty" label="Stamp Duty" value="#{list.stampDuty}" styleClass="textfield" size="15" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="stampduty" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="vat" label="Vat" value="#{list.vat}" styleClass="textfield" size="15" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="vat" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="netpremium" label="Net Premium" value="#{list.netPremium}" styleClass="textfield" size="15" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="netpremium" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:inputText id="annualnetpremium" label="Annual Net Premium" value="#{list.annualNetPremium}" styleClass="textfield" size="15" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="annualnetpremium" style="color:red"/>
+                            </rich:column>
+                             <rich:column>
+                                 <h:inputText id="annualprice" label="Annual Selling Price" value="#{list.annualPrice}" styleClass="textfield" size="15" required="true" requiredMessage="#{msg.require}">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="annualprice" style="color:red"/>
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../img/b_insert.png" 
+                                                   limitRender="true"
+                                                   render="data, mainData" 
+                                                   actionListener="#{productPlanEditController.insertProductPlanDetailListener}">
+                                    <f:param name="seqNo" value="#{list.seqNo}"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                            <rich:column>
+                                <a4j:commandButton image="../img/b_delete.png"
+                                                   limitRender="true"
+                                                   render="data"
+                                                   immediate="true"
+                                                   actionListener="#{productPlanEditController.deleteProductPlanDetailListener}">
+                                    <f:param name="seqNo" value="#{list.seqNo}"/>
+                                </a4j:commandButton>
+                            </rich:column>
+                            <rich:column>
+                                    
+                                    <a4j:commandButton oncomplete="#{rich:component('flexFieldTable1')}.show()"
+                                             image="../img/b_fx_label.png" 
+                                             actionListener="#{productPlanEditController.onClickPopupFlexFieldListener}"
+                                             render="groupPopupFlexField">
+                                        <f:param name="seqNo1" value="#{list.seqNo}"/>
+                                    </a4j:commandButton>
+                            </rich:column>
+                        </rich:dataTable>
+                    </td></tr>   
+                    <tr>
+                        <td valign="top" align="center">
+                            <h:commandButton image="../img/b_save.png" action="#{productPlanEditController.saveAction}" 
+                                             actionListener="#{productPlanController.initinitialize()}" 
+                                             rendered="#{productPlanEditController.savePermitted}" >
+                                <f:param name="productID" value="#{productPlanEditController.product.id}"/>
+                            </h:commandButton>
+                            <h:commandButton image="../img/b_back.png" action="#{productPlanEditController.backAction}" immediate="true">
+                                <f:param name="productID" value="#{productPlanEditController.product.id}"/>
+                            </h:commandButton>
+                        </td>
+                    </tr>
+                </table>
+                </h:panelGroup>
+                <!-- Telesale Panel -->
+                
+                <!-- Motor Panel -->
+                <h:panelGroup rendered="#{productPlanEditController.product.productCategory.categoryType eq 'motor'}">
+                    <table width="80%" align="center" border="0" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td align="right" valign="top" width="200" class="gray03">Net Premium :</td>
+                            <td valign="top">
+                                <h:inputText id="netPremium" 
+                                         label="Net Premium" 
+                                         value="#{productPlanEditController.productPlan.netPremium}" 
+                                         styleClass="textfield" 
+                                         size="15">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="netPremium" style="color:red"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top" class="gray03">Act. :</td>
+                            <td valign="top">
+                                <h:inputText id="act" 
+                                         label="Act" 
+                                         value="#{productPlanEditController.productPlan.act}" 
+                                         styleClass="textfield" 
+                                         size="15">
+                                    <f:convertNumber maxFractionDigits="2"/>
+                                    <rich:validator />
+                                </h:inputText>
+                                <rich:message for="act" style="color:red"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="right" valign="top">&nbsp;</td>
+                            <td valign="top">&nbsp;</td>
+                        </tr>
+                    </table>
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="33%" valign="top">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                        <td valign="middle" background="#{request.contextPath}/img/box11.png">ความรับผิดชอบต่อบุคคลภายนอก<br/>Third Party Cover</td>
+                                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                        <td valign="top">
+                                            <table border="0" cellspacing="0" cellpadding="2" width="100%">
+                                                <tr>
+                                                    <td valign="top">1)</td>
+                                                    <td valign="top" colspan="2">ความเสียหายต่อชีวิต ร่างกาย หรืออนามัย เฉพาะส่วนเกินวงเงินสูงสุดตาม พ.ร.บ.<br/>Limit Liability for Bodity Injury of Death over CTPL Limit to</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" width="1%"></td>
+                                                    <td valign="top" width="60%" align="right">
+                                                        <h:inputText id="lifeLossPerson" 
+                                                                     label="Life Loss per Person" 
+                                                                     value="#{productPlanEditController.productPlan.lifeLossPerson}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="lifeLossPerson" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top" width="39%"> 
+                                                        บาท/คน<br/>Baht/Each Person
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" align="right">
+                                                        <h:inputText id="lifeLossTime" 
+                                                                     label="Life Loss per Time" 
+                                                                     value="#{productPlanEditController.productPlan.lifeLossTime}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="lifeLossTime" style="color:red"/>             </td>
+                                                    <td valign="top"> 
+                                                        บาท/ครั้ง<br/>Baht/Each Accident
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top">2)</td>
+                                                    <td valign="top" colspan="2">ความเสียหายต่อทรัพย์สิน<br/>Limit Liability for Property</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" width="1%"></td>
+                                                    <td valign="top" width="60%" align="right">
+                                                        <h:inputText id="assetLossTime" 
+                                                                     label="Asset Loss per Time" 
+                                                                     value="#{productPlanEditController.productPlan.assetLossTime}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="assetLossTime" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top" width="39%"> 
+                                                        บาท/ครั้ง<br/>Baht/Each Accident
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" colspan="2">
+                                                        2.1 ความเสียหายส่วนแรก<br/>Amount of Duductible
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" align="right">
+                                                        <h:inputText id="assetDeduct" 
+                                                                     label="Asset Deductible" 
+                                                                     value="#{productPlanEditController.productPlan.assetDeduct}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="assetDeduct" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top"> 
+                                                        บาท/ครั้ง<br/>Baht/Each Accident
+                                                    </td>
+                                                </tr>
+                                            </table></td>
+                                        <td width="4" class="bg_right"></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                    </tr>
+                                </table>                                
+                            </td>
+                            <td width="34%" valign="top">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                        <td valign="middle" background="#{request.contextPath}/img/box11.png">รถยนต์เสียหาย สูญหาย ไฟไหม้<br/>Own Damage Cover</td>
+                                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                        <td valign="top" height="130">
+                                            <table border="0" cellspacing="0" cellpadding="2" width="100%">
+                                                <tr>
+                                                    <td valign="top">1)</td>
+                                                    <td valign="top" colspan="2">ความเสียหายต่อรถยนต์<br/>Own Damage</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" width="1%"></td>
+                                                    <td valign="top" width="60%" align="right">
+                                                        <h:inputText id="motorLoss" 
+                                                                     label="Motor Loss per Time" 
+                                                                     value="#{productPlanEditController.productPlan.motorLoss}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="motorLoss" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top" width="39%"> 
+                                                        บาท/ครั้ง<br/>Baht/Each Accident
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" colspan="2">
+                                                        1.1 ความเสียหายส่วนแรก<br/>Amount of Duductible
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" align="right">
+                                                        <h:inputText id="motorDeduct" 
+                                                                     label="Motor Deductible" 
+                                                                     value="#{productPlanEditController.productPlan.motorDeduct}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="motorDeduct" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top"> 
+                                                        บาท/ครั้ง<br/>Baht/Each Accident
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top">2)</td>
+                                                    <td valign="top" colspan="2">รถยนต์สูญหาย/ไฟไหม้<br/>Fire and Theft</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" width="1%"></td>
+                                                    <td valign="top" width="60%" align="right">
+                                                        <h:inputText id="motorDamage" 
+                                                                     label="Motor Lost or Damage" 
+                                                                     value="#{productPlanEditController.productPlan.motorDamage}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="motorDamage" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top" width="39%"> 
+                                                        บาท<br/>Baht
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="4" class="bg_right"></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td width="33%" valign="top">
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                                        <td valign="middle" background="#{request.contextPath}/img/box11.png">ความคุ้มครองตามเอกสารแนบท้าย<br/>Additional Coverage Per Endorsement</td>
+                                        <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                                        <td valign="top" height="130">
+                                            <table border="0" cellspacing="0" cellpadding="2" width="100%">
+                                                <tr>
+                                                    <td valign="top">1)</td>
+                                                    <td valign="top" colspan="3">อุบัติเหตุส่วนบุคคล<br/>Personal Accident</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" colspan="3">
+                                                        1.1 เสียชีวิต สูญเสียอวัยวะ ทุพพลภาพถาวร<br/>Loss of life, Dismemberment, Permanent Total Disability
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top" width="1%"></td>
+                                                    <td valign="top" width="39%">
+                                                        ก. ผู้ขับขี่ 
+                                                        <h:inputText id="noLostDriver" 
+                                                                     label="Number of Lost Driver" 
+                                                                     value="#{productPlanEditController.productPlan.noLostDriver}" 
+                                                                     styleClass="textfield" style="text-align:center"
+                                                                     size="3">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="noLostDriver" style="color:red"/>
+                                                        คน<br/> A) Driver Person
+                                                    </td>
+                                                    <td valign="top" width="30%" align="right">
+                                                        <h:inputText id="costLostDriver" 
+                                                                     label="Cost of Lost Driver" 
+                                                                     value="#{productPlanEditController.productPlan.costLostDriver}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="costLostDriver" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top" width="30%"> 
+                                                        บาท<br/>Baht
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top">
+                                                        ข. ผู้โดยสาร 
+                                                        <h:inputText id="noLostPassenger" 
+                                                                     label="Number of Lost Passenger" 
+                                                                     value="#{productPlanEditController.productPlan.noLostPassenger}" 
+                                                                     styleClass="textfield" style="text-align:center"
+                                                                     size="3">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="noLostPassenger" style="color:red"/>
+                                                        คน<br/> B) Possenger Persons
+                                                    </td>
+                                                    <td valign="top" align="right">
+                                                        <h:inputText id="costLostPassenger" 
+                                                                     label="Cost of Lost Passenger" 
+                                                                     value="#{productPlanEditController.productPlan.costLostPassenger}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="costLostPassenger" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top"> 
+                                                        บาท/คน<br/>Baht/Person
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" colspan="3">
+                                                        1.2 ทุพพลภาพชั่วคราว<br/>Temporary Total Disability
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top">
+                                                        ก. ผู้ขับขี่ 
+                                                        <h:inputText id="noDisableDriver" 
+                                                                     label="Number of Disable Driver" 
+                                                                     value="#{productPlanEditController.productPlan.noDisableDriver}" 
+                                                                     styleClass="textfield" style="text-align:center"
+                                                                     size="3">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="noDisableDriver" style="color:red"/>
+                                                        คน<br/> A) Driver Person
+                                                    </td>
+                                                    <td valign="top" align="right">
+                                                        <h:inputText id="costDisableDriver" 
+                                                                     label="Cost of Disable Driver" 
+                                                                     value="#{productPlanEditController.productPlan.costDisableDriver}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="costDisableDriver" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top"> 
+                                                        บาท/สัปดาห์<br/>Baht/Week
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top">
+                                                        ข. ผู้โดยสาร 
+                                                        <h:inputText id="noDisablePassenger" 
+                                                                     label="Number of Disable Passenger" 
+                                                                     value="#{productPlanEditController.productPlan.noDisablePassenger}" 
+                                                                     styleClass="textfield" style="text-align:center"
+                                                                     size="3">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="noDisablePassenger" style="color:red"/>
+                                                        คน<br/> B) Possenger Persons
+                                                    </td>
+                                                    <td valign="top" align="right">
+                                                        <h:inputText id="costDisablePassenger" 
+                                                                     label="Cost of Disable Passenger" 
+                                                                     value="#{productPlanEditController.productPlan.costDisablePassenger}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="costDisablePassenger" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top"> 
+                                                        บาท/คน/สัปดาห์<br/>Baht/Person/Week
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top">2)</td>
+                                                    <td valign="top" colspan="2">ค่ารักษาพยาบาล<br/>Medical Expenses</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" align="right" colspan="2">
+                                                        <h:inputText id="medicalExpense" 
+                                                                     label="Medical Expense" 
+                                                                     value="#{productPlanEditController.productPlan.medicalExpense}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="medicalExpense" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top" width="39%"> 
+                                                        บาท/คน<br/>Baht/Each Person
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top">3)</td>
+                                                    <td valign="top" colspan="2">การประกันตัวผู้ขับขี่<br/>Ball Bond Insurance</td>
+                                                </tr>
+                                                <tr>
+                                                    <td valign="top"></td>
+                                                    <td valign="top" align="right" colspan="2">
+                                                        <h:inputText id="bail" 
+                                                                     label="Bail" 
+                                                                     value="#{productPlanEditController.productPlan.bail}" 
+                                                                     styleClass="textfield" 
+                                                                     size="15">
+                                                            <f:convertNumber maxFractionDigits="2"/>
+                                                            <rich:validator />
+                                                        </h:inputText>
+                                                        <rich:message for="bail" style="color:red"/>
+                                                    </td>
+                                                    <td valign="top"> 
+                                                        บาท/ครั้ง<br/>Baht/Each Accident
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                        <td width="4" class="bg_right"></td>
+                                    </tr>
+                                </table>
+                                <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <tr>
+                                        <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                        <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif" alt="" border="0"/></td>
+                                        <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>                    
+                    <table width="80%" align="center" border="0" cellpadding="4" cellspacing="0">
+                        <tr>
+                            <td align="right" valign="top" width="200">&nbsp;</td>
+                            <td valign="top">
+                                <h:commandButton image="../img/b_save.png" action="#{productPlanEditController.saveMotorAction}" 
+                                                 actionListener="#{productPlanController.initinitialize()}"
+                                                 rendered="#{productPlanEditController.savePermitted}">
+                                    <f:param name="productID" value="#{productPlanEditController.product.id}"/>
+                                </h:commandButton>
+                                <h:commandButton image="../img/b_back.png" action="#{productPlanEditController.backAction}" immediate="true">
+                                    <f:param name="productID" value="#{productPlanEditController.product.id}"/>
+                                </h:commandButton>
+                            </td>
+                        </tr>
+                    </table>                    
+                </h:panelGroup>
+                <!-- Motor Panel -->
+                
+            </ui:define>
+            
+            <!-- Popup -->
+            <ui:define name="popupModal">
+                <rich:popupPanel id="flexFieldTable1" width="1000" height="500" shadowOpacity="0" style="padding: 0 0 0 0; border-style: none; " domElementAttachment="form">
+                    <h:form id="searchDocumentPanel1">
+                        
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Flex Field</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('flexFieldTable1')}.hide(); return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+                        
+                    <h:panelGroup id="groupPopupFlexField">     
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="5" background="#{request.contextPath}/img/box08.png">
+                                <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+
+                                <td width="50%" style="padding-top:15px;" valign="top" bgcolor="#FFFFFF" >
+                                    <style>
+                                        .colStyle1 { width: 15%; text-align: right; }
+                                        .colStyle2 { width: 85%;}
+                                    </style>
+                                        <table width="50%" border="0" cellspacing="0" cellpadding="3" style="padding-top:15px;">
+                                            
+                                                
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td align="right" valign="top" style="text-align: center">Code</td>
+                                                <td valign="top" style="width: 40%;text-align: center">Net Premium</td>
+                                                <td valign="top" style="width: 40%;text-align: center">Sum Insured</td>
+                                                <td valign="top" style="width: 40%;text-align: center">Deduct</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode1}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium1}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured1}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct1}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode2}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium2}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured2}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct2}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode3}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium3}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured3}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct3}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode4}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium4}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured4}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct4}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode5}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium5}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured5}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct5}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode6}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium6}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured6}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct6}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode7}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium7}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured7}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct7}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode8}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium8}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured8}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct8}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode9}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium9}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured9}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct9}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left: 20px;"></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popCode10}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popNetPremium10}" styleClass="textfield" maxlength="150"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popSumInsured10}" styleClass="textfield" maxlength="50"/></td>
+                                                <td valign="top"><h:inputText value="#{productPlanEditController.popDeduct10}" styleClass="textfield" maxlength="150"/></td>
+                                            </tr>
+                                        </table>
+                                    <div style="padding-top: 20px;margin-left: 60%">
+                                     <a4j:commandButton image="../img/b_confirm.png" limitRender="true" actionListener="#{productPlanEditController.onClosePopupListener}" onclick="#{rich:component('flexFieldTable1')}.hide()"/>
+                                    </div>
+                            </td>
+                            <td width="50%" style="padding-top:47px;" valign="top" bgcolor="#FFFFFF" >
+                                <style>
+                                    .colStyle1 { width: 35%; text-align: right; }
+                                    .colStyle2 { width: 80%;}
+                                </style>
+                                            <h:panelGrid id="documentList" columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                                            <h:outputText value="FlexField11 :"/>
+                                            <h:inputText style="height: 21.4px;" value="#{productPlanEditController.popfx11}" styleClass="textfield">
+                                               
+                                            </h:inputText>
+                                            <h:outputText value="FlexField12 :"/>
+                                                <h:inputText style="height: 21.4px;" value="#{productPlanEditController.popfx12}" styleClass="textfield">
+                                               
+                                            </h:inputText>
+                                            <h:outputText value="FlexField13 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx13}" styleClass="textfield">
+                                            </h:inputText>
+                                            <h:outputText value="FlexField14 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx14}" styleClass="textfield">
+                                                
+                                            </h:inputText>
+                                            <h:outputText value="FlexField15 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx15}" styleClass="textfield">
+                                               
+                                            </h:inputText>
+                                            <h:outputText value="FlexField16 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx16}" styleClass="textfield">
+                                                
+                                            </h:inputText>
+                                            <h:outputText value="FlexField17 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx17}" styleClass="textfield">
+                                                
+                                            </h:inputText>
+                                            <h:outputText value="FlexField18 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx18}" styleClass="textfield">
+                                                
+                                            </h:inputText>
+                                            <h:outputText value="FlexField19 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx19}" styleClass="textfield">
+                                                
+                                            </h:inputText>
+                                            <h:outputText value="FlexField20 :"/>
+                                                <h:inputText style="height: 17px;" value="#{productPlanEditController.popfx20}" styleClass="textfield">
+                                                
+                                            </h:inputText>
+                                            </h:panelGrid>
+                                        
+                                      
+                            </td>
+                        </tr>
+                    </table>
+                        </h:panelGroup>   
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                            <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                            <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                        </tr>
+                    </table>
+                    </h:form>
+                </rich:popupPanel>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+
+</html>

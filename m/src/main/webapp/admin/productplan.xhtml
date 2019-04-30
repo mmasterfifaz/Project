@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Product Plan</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{productPlanController.editAction}" rendered="#{productPlanController.addPermitted}" actionListener="#{productPlanEditController.initListener}" >
+                    <f:param name="productID" value="#{productPlanController.product.id}"/>
+                </h:commandButton>
+                <h:commandButton image="../img/b_import.png" action="#{productPlanController.importAction}"  rendered="#{productPlanController.addPermitted}" >
+                    <f:param name="productID" value="#{productPlanController.product.id}"/>
+                </h:commandButton>
+                <h:commandButton image="../img/b_delete.png" action="#{productPlanController.deleteAction}" rendered="#{productPlanController.deletePermitted}" onclick="return checkDelete(this.form)">
+                    <f:param name="productID" value="#{productPlanController.product.id}"/>
+                </h:commandButton>
+                <span style="width: 30px;"/>
+                <h:commandButton image="../img/b_relation.png" action="#{productPlanController.relationAction}" rendered="#{productPlanController.checkFamily}" >
+                    <f:param name="productID" value="#{productPlanController.product.id}"/>
+                </h:commandButton>
+            </ui:define>
+            <ui:define name="panel">
+                <table width="100%" border="0" align="left" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="100" align="right" valign="top" class="gray03">Product Code:</td>
+                        <td align="left" valign="top"><h:outputText id="productCode" value="#{productPlanController.product.code}"  />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="100" align="right" valign="top" class="gray03">Product Name:</td>
+                        <td align="left" valign="top"><h:outputText id="productName" value="#{productPlanController.product.name}"  />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                </table>
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01" rows="#{global.maxrows}" 
+                                value="#{productPlanController.list}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Plan No."/></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Plan Code"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Plan Name"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;" rendered="#{productPlanController.product.productCategory.categoryType eq 'motor'}"><h:outputText value="Year" /></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Sum Insured"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Payment Mode"/></rich:column>
+                            <rich:column style="width: 27%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                            <rich:column style="text-align: left;"></rich:column>
+                            </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{productPlanController.selectedIds[list.id]}"/>
+                    </rich:column>
+                     <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.no}" action="#{productPlanController.editAction}" actionListener="#{productPlanEditController.initListener}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                            <f:param name="productID" value="#{productPlanController.product.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.code}" action="#{productPlanController.editAction}" actionListener="#{productPlanEditController.initListener}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                            <f:param name="productID" value="#{productPlanController.product.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{productPlanController.editAction}" actionListener="#{productPlanEditController.initListener}">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                            <f:param name="productID" value="#{productPlanController.product.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column rendered="#{productPlanController.product.productCategory.categoryType eq 'motor'}">
+                        <h:outputText value="#{list.product.modelYear}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.sumInsured}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                        <h:outputText value="#{list.motorLoss}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+ 
+                    <rich:column>
+                        <h:outputText value="#{list.paymentModeLabel}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.description}"/>
+                    </rich:column>
+                    <rich:column style="text-align: left">
+                        <a4j:commandButton image="../img/b_copy.png" actionListener="#{productPlanController.copyAction}" 
+                                           rendered="#{productPlanController.addPermitted}" render="dataList"
+                                           onclick="if (!confirm('Do you want to copy this product plan?')) { return false; }">
+                            <f:param name="selectedID" value="#{list.id}"/>
+                            <f:param name="productID" value="#{productPlanController.product.id}"/>
+                        </a4j:commandButton>
+                    </rich:column>
+                     <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+
+                <div style="text-align: center">
+                    <h:commandButton image="../img/b_back.png"
+                                     action="#{productPlanController.backAction}"
+                                     immediate="true"/></div>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

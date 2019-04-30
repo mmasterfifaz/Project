@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Campaign Management</ui:define>
+            <ui:define name="search">
+                <style>
+                    .colStyle1 { width: 15%; text-align: right; }
+                    .colStyle2 { width: 85%;}
+                </style>
+                <h:panelGrid columns="2" width="100%" columnClasses="colStyle1, colStyle2">
+                    <h:outputText value="Campaign Name :"/>
+                    <h:inputText styleClass="textfield" value="#{campaignController.name}"/>
+                    
+                    <h:outputText value="Effective Date From :"/>
+                    <h:panelGroup><rich:calendar id="dateFrom"
+                                           value="#{campaignController.dateFrom}"
+                                           inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.dateTimePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="00:00"/>
+                            To <span style="width: 5px"/> 
+                            <rich:calendar id="dateTo"
+                                           value="#{campaignController.dateTo}"
+                                           inputClass="textfield" inputSize="15" buttonClass="rfcalbtn"
+                                           datePattern="#{msg.dateTimePattern}"
+                                           locale="#{msg.locale}"
+                                           defaultTime="23:59"/>
+                    </h:panelGroup>
+                    <h:outputText value="Status :"/>
+                    <h:selectOneMenu value="#{campaignController.status}">
+                            <f:selectItem itemLabel="All" itemValue="all"/>
+                            <f:selectItem itemLabel="Enable" itemValue="enable"/>
+                            <f:selectItem itemLabel="Disable" itemValue="disable"/>
+                    </h:selectOneMenu>
+                    
+                    <h:outputText value=""/>
+                    <a4j:commandButton image="/img/b_search.png" 
+                                               actionListener="#{campaignController.searchActionListener}" 
+                                               render="dataList"
+                                               limitRender="true"/>
+                </h:panelGrid>
+                
+               
+                </ui:define>
+                <ui:define name="button">
+                    <h:commandButton image="../img/b_add.png" action="#{campaignController.editAction}" rendered="#{campaignController.addPermitted}"/>
+                    <h:commandButton image="../img/b_delete.png" action="#{campaignController.deleteAction}" rendered="#{campaignController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+                </ui:define>
+                <ui:define name="panel">
+                <rich:dataTable id="dataList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{campaignController.campaignList}" rows="#{global.maxrows}" var="list" 
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%">&nbsp;</rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Campaign Code" /></rich:column>
+                            <rich:column style="width: 13%;text-align: left;"><h:outputText value="Campaign Name" /></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Start Date"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="End Date"/></rich:column>
+                            <rich:column style="width: 8%;text-align: left;"><h:outputText value="Status"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Total List Assign"/></rich:column>
+                            <rich:column style="width: 8%;text-align: left;"><h:outputText value="List Used"/></rich:column>
+                            <rich:column style="width: 8%;text-align: left;"><h:outputText value="List Re-Used"/></rich:column>
+                            <rich:column style="width: 10%;text-align: left;"><h:outputText value="Description"/></rich:column>
+                            <rich:column style="width: 10%">&nbsp;</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:columnGroup>
+                        <rich:column>
+                            <h:selectBooleanCheckbox value="#{campaignController.selectedIds[list.id]}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.campaignCode}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:commandLink title="View Detail" action="#{campaignController.editAction}">
+                                <h:outputText value="#{list.campaignName}"/>
+                                <f:param name="id" value="#{list.id}"/>
+                            </h:commandLink>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.startDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.endDate}">
+                                <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                            </h:outputText>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="Enable" rendered="#{list.status}"/>
+                            <h:outputText value="Disable" rendered="#{not list.status}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.totalAssign}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.listUsed}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.listReused}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:outputText value="#{list.description}"/>
+                        </rich:column>
+                        <rich:column>
+                            <h:commandButton image="../img/b_manage_campaign.png" 
+                                             action="#{campaignController.summaryAction}" 
+                                             actionListener="#{campaignSummaryController.clearTab}"
+                                             rendered="#{campaignController.managePermitted and (list.endDate > campaignController.today)}">
+                                <f:param name="id" value="#{list.id}"/>
+                            </h:commandButton>
+                        </rich:column>
+
+                    </rich:columnGroup>
+                    <rich:columnGroup>
+                        
+                    </rich:columnGroup>
+
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                </ui:define>
+
+        </ui:composition>
+    </h:body>
+</html>

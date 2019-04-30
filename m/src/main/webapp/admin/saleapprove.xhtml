@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Sale Approval</ui:define>
+            <ui:define name="button"></ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr>
+                        <td width="150" align="right">Reference No. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{saleApproveController.refNo}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Policy No. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{saleApproveController.policyNo}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">ID Card. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{saleApproveController.idcard}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Customer Name. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{saleApproveController.customerName}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Campaign :</td>
+                        <td align="left">
+                            <h:selectOneMenu value="#{saleApproveController.campaignId}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{saleApproveController.campaignList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Product :</td>
+                        <td align="left">
+                            <h:selectOneMenu value="#{saleApproveController.productId}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{saleApproveController.productList}" var="prodlist" itemValue="#{prodlist.id}" itemLabel="#{prodlist.name}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Payment Channel :</td>
+                        <td align="left">
+                            <h:selectOneMenu value="#{saleApproveController.paymentMethodId}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{saleApproveController.paymentMethodList}" var="paymentList" itemValue="#{paymentList.id}" itemLabel="#{paymentList.name}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Purchase Date :</td>
+                        <td align="left"><rich:calendar id="fromsaledate"
+                                                        value="#{saleApproveController.fromDate}"
+                                                        inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                                        datePattern="#{msg.datePattern}"
+                                                        locale="#{msg.locale}"/>
+                            to <span style="width: 5px"/> <rich:calendar id="tosaledate"
+                                                                         value="#{saleApproveController.toDate}"
+                                                                         inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                                                         datePattern="#{msg.datePattern}"
+                                                                         locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Underwriting Status :</td>
+                        <td>
+                            <h:selectOneMenu value="#{saleApproveController.uwStatus}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItem itemValue="#{msg.approvalWaitingValue}" itemLabel="#{msg.approvalWaiting}"/>
+                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                <f:selectItem itemValue="#{msg.approvalRequestValue}" itemLabel="#{msg.approvalRequest}"/>
+                                <f:selectItem itemValue="#{msg.approvalReconfirmValue}" itemLabel="#{msg.approvalReconfirm}"/>
+                                <f:selectItem itemValue="#{msg.approvalResendValue}" itemLabel="#{msg.approvalResend}"/>
+                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Payment Status :</td>
+                        <td>
+                            <h:selectOneMenu value="#{saleApproveController.paymentStatus}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItem itemValue="#{msg.approvalWaitingValue}" itemLabel="#{msg.approvalWaiting}"/>
+                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                <f:selectItem itemValue="#{msg.approvalRequestValue}" itemLabel="#{msg.approvalRequest}"/>
+                                <f:selectItem itemValue="#{msg.approvalReconfirmValue}" itemLabel="#{msg.approvalReconfirm}"/>
+                                <f:selectItem itemValue="#{msg.approvalResendValue}" itemLabel="#{msg.approvalResend}"/>
+                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">QC Status :</td>
+                        <td>
+                            <h:selectOneMenu value="#{saleApproveController.qcStatus}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItem itemValue="#{msg.approvalWaitingValue}" itemLabel="#{msg.approvalWaiting}"/>
+                                <f:selectItem itemValue="#{msg.approvalPendingValue}" itemLabel="#{msg.approvalPending}"/>
+                                <f:selectItem itemValue="#{msg.approvalRequestValue}" itemLabel="#{msg.approvalRequest}"/>
+                                <f:selectItem itemValue="#{msg.approvalReconfirmValue}" itemLabel="#{msg.approvalReconfirm}"/>
+                                <f:selectItem itemValue="#{msg.approvalResendValue}" itemLabel="#{msg.approvalResend}"/>
+                                <f:selectItem itemValue="#{msg.approvalRejectedValue}" itemLabel="#{msg.approvalRejected}"/>
+                                <f:selectItem itemValue="#{msg.approvalApprovedValue}" itemLabel="#{msg.approvalApproved}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Confirmation :</td>
+                        <td>
+                            <h:selectOneMenu value="#{saleApproveController.confirmStatus}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue=""/>
+                                <f:selectItem itemValue="1" itemLabel="Confirmed"/>
+                                <f:selectItem itemValue="0" itemLabel="Not Confirm"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">User Group :</td>
+                        <td>
+                            <h:selectOneMenu id="userGroupId"
+                                             value="#{saleApproveController.userGroupId}"
+                                             valueChangeListener="#{saleApproveController.userGroupChangeListener}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{saleApproveController.userGroupList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                <a4j:ajax event="change"
+                                          render="userId"
+                                          limitRender="true"
+                                          execute="@this"/>
+                            </h:selectOneMenu>
+                            TMR :
+                            <h:selectOneMenu id="userId"
+                                             value="#{saleApproveController.userId}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{saleApproveController.userList}" var="list" itemLabel="#{list.name}&#160;&#160;#{list.surname}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Order By :</td>
+                        <td>
+                            <h:selectOneMenu id="orderBy"
+                                             value="#{saleApproveController.orderBy}">
+                                <f:selectItem itemLabel="Ref No." itemValue="po.refNo"/>
+                                <f:selectItem itemLabel="Cusomer Name" itemValue="cust.name"/>
+                                <f:selectItem itemLabel="Purchased Date" itemValue="po.purchaseDate"/>
+                            </h:selectOneMenu>
+                            Order Type :
+                            <h:selectOneMenu id="orderType"
+                                             value="#{saleApproveController.orderType}">
+                                <f:selectItem itemLabel="Ascending" itemValue="asc"/>
+                                <f:selectItem itemLabel="Descending" itemValue="desc"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a4j:commandButton actionListener="#{saleApproveController.searchActionListener}" 
+                                               onclick="#{rich:component('waitPopup')}.show('', {height: '80px', width: '150px'})"
+                                               oncomplete="#{rich:component('waitPopup')}.hide()"
+                                               render="data,totalRec,msgNotFound" limitRender="true" image="/img/b_search.png"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data" 
+                                style="width: 100%" 
+                                styleClass="tableline01" 
+                                headerClass="subh01" 
+                                value="#{saleApproveController.saleApprovalValues}" 
+                                var="list" rows="#{global.maxrows}" 
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column styleClass="subh01">Ref No.</rich:column>
+                            <rich:column styleClass="subh01">Family Ref No.</rich:column>
+                            <ui:remove>
+                            <rich:column styleClass="subh01">Policy No.</rich:column>
+                            <rich:column styleClass="subh01">Issue Date</rich:column>
+                            <rich:column styleClass="subh01">Reason</rich:column>
+                            </ui:remove>
+                            <ui:remove><rich:column styleClass="subh01">Customer ID</rich:column></ui:remove>
+                            <rich:column styleClass="subh01">Customer Name</rich:column>
+                            <rich:column styleClass="subh01">Insure Person</rich:column>
+                            <rich:column styleClass="subh01">Campaign</rich:column>
+                            <rich:column styleClass="subh01">Product</rich:column>
+                            <rich:column styleClass="subh01">Payment</rich:column>
+                            <rich:column styleClass="subh01">Purchased Date</rich:column>
+                            <rich:column styleClass="subh01">TMR</rich:column>
+                            <rich:column styleClass="subh01">Underwriting Status</rich:column>
+                            <rich:column styleClass="subh01">Payment Status</rich:column>
+                            <rich:column styleClass="subh01">QC Status</rich:column>
+                            <rich:column styleClass="subh01">Latest Status</rich:column>
+                            <rich:column styleClass="subh01">Policy No.</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column style="vertical-align: top">
+                        #{list.refNo}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        <h:panelGroup rendered="#{list.familyProduct}">
+                            <a4j:repeat value="#{saleApproveController.getFamilyPurchaseOrder(saleApproveController.getPurchaseOrder(list.id))}" var="familyPODList" rowKeyVar="rowNum">
+                                #{familyPODList.refNo}<br/>
+                            </a4j:repeat>
+                        </h:panelGroup>
+                    </rich:column>
+                    <ui:remove>
+                    <rich:column style="vertical-align: top">
+                        #{list.policyNo}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        <h:outputText value="#{list.issueDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.reasonCode} <h:outputText value="(C)" rendered="#{list.confirmFlag}"/>
+                    </rich:column>
+                    </ui:remove>
+                    <ui:remove>
+                        <rich:column style="vertical-align: top">
+                            #{list.customerId}
+                        </rich:column>
+                    </ui:remove>
+                    <rich:column style="vertical-align: top">
+                        <h:commandLink title="" value="#{list.customerName}" action="#{saleApproveController.editAction}" rendered="#{saleApproveController.editApprovalPermitted and (list.mainPoId ne null and list.mainPoId ne '')}">
+                            <f:param name="frompage" value="saleapproval"/>
+                            <f:param name="poId" value="#{list.id}"/>
+                            <f:param name="mainPoId" value ="#{list.mainPoId}"/>
+                            <f:param name="ckSpouse" value="spouse" />
+                            <f:param name="familyProduct" value="#{list.familyProduct}" />
+                        </h:commandLink>
+                        <h:commandLink title="" value="#{list.customerName}" action="#{saleApproveController.editAction}" rendered="#{saleApproveController.editApprovalPermitted and (list.mainPoId eq null or list.mainPoId eq '' )}">
+                            <f:param name="frompage" value="saleapproval"/>
+                            <f:param name="poId" value="#{list.id}"/>
+                            <f:param name="familyProduct" value="#{list.familyProduct}" />
+                        </h:commandLink> 
+                        <h:outputText value="#{list.customerName}" rendered="#{not saleApproveController.editApprovalPermitted}"/>
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.insurePerson}<br/>
+                        <h:outputText value="(#{list.relationMainInsured})" rendered="#{list.familyProduct}" style="color: orange"/>
+                    </rich:column>>
+                    <rich:column style="vertical-align: top">
+                        #{list.campaignName}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.productName}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.paymentMethodName}
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        <h:outputText value="#{list.purchaseDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        #{list.tmrName}
+                    </rich:column>
+
+                    <rich:column style="vertical-align: top">
+
+                        <h:outputText value="#{msg.approvalWaiting}" rendered="#{list.uwStatus eq msg.approvalWaiting}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalPending}" rendered="#{list.uwStatus eq msg.approvalPending}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalApproved}" rendered="#{list.uwStatus eq msg.approvalApproved}" style="color: green"/>
+                        <h:outputText value="#{msg.approvalRejected}" rendered="#{list.uwStatus eq msg.approvalRejected}" style="color: red"/>
+                        <h:outputText value="#{msg.approvalReconfirm}" rendered="#{list.uwStatus eq msg.approvalReconfirm}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalRequest}" rendered="#{list.uwStatus eq msg.approvalRequest}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalResend}" rendered="#{list.uwStatus eq msg.approvalResend}" style="color: orange"/><h:outputText value=" / #{list.approveBy}" rendered="#{list.approveBy ne ''}"/>
+                    </rich:column>
+
+                    <rich:column style="vertical-align: top">
+
+                        <h:outputText value="#{msg.approvalWaiting}" rendered="#{list.paymentStatus eq msg.approvalWaiting}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalPending}" rendered="#{list.paymentStatus eq msg.approvalPending}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalApproved}" rendered="#{list.paymentStatus eq msg.approvalApproved}" style="color: green"/>
+                        <h:outputText value="#{msg.approvalRejected}" rendered="#{list.paymentStatus eq msg.approvalRejected}" style="color: red"/>
+                        <h:outputText value="#{msg.approvalReconfirm}" rendered="#{list.paymentStatus eq msg.approvalReconfirm}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalRequest}" rendered="#{list.paymentStatus eq msg.approvalRequest}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalResend}" rendered="#{list.paymentStatus eq msg.approvalResend}" style="color: orange"/><h:outputText value=" / #{list.paymentBy}" rendered="#{list.paymentBy ne ''}"/>
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+
+                        <h:outputText value="#{msg.approvalWaiting}" rendered="#{list.qcStatus eq msg.approvalWaiting}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalPending}" rendered="#{list.qcStatus eq msg.approvalPending}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalApproved}" rendered="#{list.qcStatus eq msg.approvalApproved}" style="color: green"/>
+                        <h:outputText value="#{msg.approvalRejected}" rendered="#{list.qcStatus eq msg.approvalRejected}" style="color: red"/>
+                        <h:outputText value="#{msg.approvalReconfirm}" rendered="#{list.qcStatus eq msg.approvalReconfirm}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalRequest}" rendered="#{list.qcStatus eq msg.approvalRequest}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalResend}" rendered="#{list.qcStatus eq msg.approvalResend}" style="color: orange"/><h:outputText value=" / #{list.qcBy}" rendered="#{list.qcBy ne ''}"/>
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+
+                        <h:outputText value="#{msg.approvalWaiting}" rendered="#{list.latestStatus eq msg.approvalWaitingValue}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalPending}" rendered="#{list.latestStatus eq msg.approvalPendingValue}" style="color: blue"/>
+                        <h:outputText value="#{msg.approvalApproved}" rendered="#{list.latestStatus eq msg.approvalApprovedValue}" style="color: green"/>
+                        <h:outputText value="#{msg.approvalRejected}" rendered="#{list.latestStatus eq msg.approvalRejectedValue}" style="color: red"/>
+                        <h:outputText value="#{msg.approvalReconfirm}" rendered="#{list.latestStatus eq msg.approvalReconfirmValue}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalRequest}" rendered="#{list.latestStatus eq msg.approvalRequestValue}" style="color: orange"/>
+                        <h:outputText value="#{msg.approvalResend}" rendered="#{list.latestStatus eq msg.approvalResendValue}" style="color: orange"/>
+                        <h:outputText value="Saved Registration" rendered="#{list.latestStatus eq 'Saved Registration'}" style="color: green"/>
+                        / #{list.latestStatusBy} / <h:outputText value="#{list.latestStatusDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+
+                    </rich:column>
+                    <rich:column style="vertical-align: top">
+                        <h:outputText value="#{list.poFx2}"></h:outputText>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false" 
+                                           render="data" page="#{saleApproveController.page}"/>
+                    </f:facet>
+                </rich:dataTable>
+                <table border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td></td>
+                        <td width="100%" align="right">
+                            <h:outputText class="gray03" value="Total Records: "/>
+                            <h:outputText id="totalRec" style="color: orange;font-weight: bold" value="#{saleApproveController.saleApprovalValues.size()}"/>
+                        </td>
+                    </tr>
+                </table>
+                <h:panelGroup id="msgNotFound">
+                    <p align="center"><h:outputText value="No Data Found" rendered="#{empty saleApproveController.saleApprovalValues}"/></p>
+                </h:panelGroup>
+            </ui:define>
+
+            <ui:define name="popupModal">
+                <ui:include src="/share/waitpopup.xhtml"/>           
+                <a4j:status id="actionStatus" 
+                            onstart="#{rich:component('waitPopup')}.show()"
+                            onstop="#{rich:component('waitPopup')}.hide()" />
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

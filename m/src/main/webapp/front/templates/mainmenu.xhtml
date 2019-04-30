@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        <f:loadBundle basename="com.maxelyz.core.resource.messages" var="msg"/>
+        <title>#{msg.title} [<ui:insert name="title2"/>]</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+        <script src="#{request.contextPath}/resources/js/jquery.js" type="text/javascript"/>
+        <script src="#{request.contextPath}/resources/js/jquery.swapimage.js" type="text/javascript"/>
+        <script src="#{request.contextPath}/resources/js/jquery.selectedimage.js" type="text/javascript"/>
+        <script src="#{request.contextPath}/resources/js/front/main.js" type="text/javascript"/>
+        <ui:insert name="javascript"></ui:insert>
+    </h:head>
+    <h:body>
+        <h:outputStylesheet library="css" name="reset.css"/>
+        <h:outputStylesheet library="css" name="font.css"/>
+        <h:outputStylesheet library="css" name="mmax.css"/>
+        <h:outputStylesheet library="css" name="layout_iframe.css"/>
+        
+        <div id="top_wrapper">
+            <div id="title">
+                <h1><ui:insert name="title1">Title 1</ui:insert></h1>
+            </div>
+            <div id="main_menu">
+                <ul>
+                    <li><h:outputLink value="#{request.contextPath}/front/campaign/campaignAssignment.jsf"><h:graphicImage library="img" name="tb_campaign.png" styleClass="swap" alt="Campaign" /></h:outputLink></li>
+                    <li><h:outputLink value="#{request.contextPath}/front/todolist/incoming.jsf"><h:graphicImage library="img" name="tb_todolist.png" styleClass="swap" alt="To Do List"  /></h:outputLink></li>
+                    <li><h:outputLink value="#{request.contextPath}/front/search/searchCustomer.jsf"><h:graphicImage library="img" name="tb_search.png" styleClass="swap" alt="Search"/></h:outputLink></li>
+                    <li><h:outputLink value="#{request.contextPath}/front/customerHandling/customerDetail.jsf"><h:graphicImage library="img" name="tb_customer.png" styleClass="swap"  alt="Customer"/></h:outputLink></li>
+                    <li><h:graphicImage library="img" name="tb_report.png" styleClass="swap"  alt="Report"/></li>
+                    <li><h:graphicImage library="img" name="tb_admin.png" styleClass="swap" alt="Admin"/></li>
+                    <li><h:graphicImage library="img" name="icon_infoproduct.png" alt="Info product"/> </li>
+                    <li><h:graphicImage library="img" name="icon_infoknow.png" alt="Info know"/> </li>
+                    <li><h:graphicImage library="img" name="icon_infoobjection.png"  alt="Info objection"/></li>
+                </ul>
+            </div>
+        </div>
+        <div id="content_panel">
+            <h:form id="form">
+            <ui:insert name="panel">Body</ui:insert>
+            </h:form>
+        </div>
+       
+        <div class="popup">
+             
+        </div>
+        
+        <div id="divOrthogonal">
+
+        </div>
+        <div id="context_path">
+            #{request.contextPath}
+        </div>
+        
+    </h:body>
+</html>

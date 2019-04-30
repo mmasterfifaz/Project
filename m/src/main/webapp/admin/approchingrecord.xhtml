@@ -1,0 +1,135 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmainsearch.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Approaching Record</ui:define>
+            <ui:define name="button"></ui:define>
+            <ui:define name="search">
+                <table width="100%">
+                    <tr>
+                        <td width="150" align="right">Campaign :</td>
+                        <td align="left">
+                            <h:selectOneMenu value="#{appochingRecordController.campaignId}" styleClass="select08">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{appochingRecordController.campaignList}" var="list" itemValue="#{list.id}" itemLabel="#{list.name}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Reference No. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{appochingRecordController.refNo}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Customer Name :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{appochingRecordController.customerName}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Telephone No. :</td>
+                        <td align="left">
+                            <h:inputText styleClass="textfield" value="#{appochingRecordController.telephoneNo}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="150" align="right">Contact Status :</td>
+                        <td align="left">
+                            <table width="50%" border="0" cellpadding="0" cellspacing="0" id="tableline01">
+                                <tr>
+                                    <td valign="top" align="left" ><h:selectBooleanCheckbox value="#{appochingRecordController.contactStatusAssigned}"/>Assigned</td>
+                                    <td valign="top" align="left" ><h:selectBooleanCheckbox value="#{appochingRecordController.contactStatusViewed}"/>Viewed</td>
+                                    <td valign="top" align="left" ><h:selectBooleanCheckbox value="#{appochingRecordController.contactStatusOpened}"/>Opened</td>
+                                    <td valign="top" align="left" ><h:selectBooleanCheckbox value="#{appochingRecordController.contactStatusFollowup}"/>Follow Up</td>
+                                    <td valign="top" align="left" ><h:selectBooleanCheckbox value="#{appochingRecordController.contactStatusClosed}"/>Closed</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">User Group :</td>
+                        <td>
+                            <h:selectOneMenu id="userGroupId"
+                                             value="#{appochingRecordController.userGroupId}"
+                                             valueChangeListener="#{appochingRecordController.userGroupChangeListener}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{appochingRecordController.userGroupList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                                <a4j:ajax event="change"
+                                             render="userId"
+                                             limitRender="true"
+                                             execute="@this"/>
+                            </h:selectOneMenu>
+                            TMR :
+                            <h:selectOneMenu id="userId"
+                                             value="#{appochingRecordController.userId}">
+                                <f:selectItem itemLabel="All" itemValue="0"/>
+                                <f:selectItems value="#{appochingRecordController.userList}" var="list" itemLabel="#{list.name}&#160;&#160;#{list.surname}" itemValue="#{list.id}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><a4j:commandButton actionListener="#{appochingRecordController.searchActionListener}" render="data,totalRec" limitRender="true" image="/img/b_search.png"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="data"  style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{appochingRecordController.assignmentDetailList}" rows="#{global.maxrows}" var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="text-align: left;width: 20%;">Campaign</rich:column>
+                            <rich:column style="text-align: left;width: 20%;">Marketing List</rich:column>
+                            <rich:column style="text-align: left;width: 20%;">Reference No.</rich:column>
+                            <rich:column style="text-align: left;width: 20%;">Customer Name</rich:column>
+                            <rich:column style="text-align: left;width: 20%;">TMR</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value="#{list.campaignName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.marketingCode}: "/>
+                        <h:outputText value="#{list.assignmentId.marketing.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.customerId.referenceNo}"/>
+                    </rich:column>
+                    <rich:column>
+                         <h:commandLink title="View Detail" value="#{list.customerName}" 
+                                        action="#{appochingRecordController.editAction}">
+                             <f:param name="customerID" value="#{list.customerId.id}"/>
+                            <f:param name="selectedID" value="#{list.id}"/>
+                        </h:commandLink>   
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.users.name}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"
+                                           render="data" />
+                    </f:facet>
+                </rich:dataTable>
+                <table border="0" cellspacing="0" cellpadding="3">
+                    <tr>
+                        <td></td>
+                        <td width="100%" align="right">
+                            <h:outputText class="gray03" value="Total Records: "/>
+                            <h:outputText id="totalRec" style="color: orange;font-weight: bold" value="#{appochingRecordController.assignmentDetailList.size()}"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

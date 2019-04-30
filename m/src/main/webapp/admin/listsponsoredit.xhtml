@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Marketing Source</ui:define>
+            <ui:define name="title2">Marketing List Source: Add/Edit</ui:define>
+            <ui:define name="panel">
+                <h:inputHidden value="#{prospectlistSponsorEditController.mode}"/>
+                <h:inputHidden value="#{prospectlistSponsorEditController.prospectlistSponsor.id}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Marketing List Source Name:</td>
+                        <td> <h:inputText id="name" value="#{prospectlistSponsorEditController.prospectlistSponsor.name}" styleClass="textfield" size="30" 
+                                          required="true" requiredMessage="Sponsor name is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="name" style="color:red"/>
+                            <h:outputText value="#{prospectlistSponsorEditController.message}" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top">
+                            <h:inputTextarea styleClass="textfield03" cols="30" value="#{prospectlistSponsorEditController.prospectlistSponsor.remark}" />
+                        </td>
+                    </tr>
+                    <tr> 
+                        <td align="right" valign="top" class="gray03">&nbsp;</td>
+                        <td valign="top"><table width="39%" border="0" cellspacing="0" cellpadding="4">
+                                <tr>
+                                    <td width="50%" class="blue04">Available User Group</td>
+                                    <td width="10%">&nbsp;</td>
+                                    <td width="50%" class="blue04">Selected User Group</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="3">
+                                        <rich:pickList id="ugList" switchByDblClick="true" 
+                                                       listWidth="350px" listHeight="150px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{prospectlistSponsorEditController.selectedUserGroup}" 
+                                                       required="true" requiredMessage="Selected User Group is required">
+                                            <f:selectItems value="#{prospectlistSponsorEditController.userGroupList}"/>
+                                        </rich:pickList>
+                                        <span style="padding-left:10px"/><h:message for="ugList" style="color:red"/>
+                                    </td>
+                                </tr>
+                            </table></td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandButton action="#{prospectlistSponsorEditController.saveAction}" image="../img/b_save.png" rendered="#{prospectlistSponsorEditController.savePermitted}"/>
+                            <h:commandButton action="#{prospectlistSponsorEditController.backAction}" image="../img/b_back.png" immediate="true"/>
+                        </td>
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

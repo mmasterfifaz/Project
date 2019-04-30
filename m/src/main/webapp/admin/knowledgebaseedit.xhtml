@@ -1,0 +1,379 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminedit.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Knowledge Base: Add/Edit</ui:define>
+            <ui:define name="head"></ui:define>
+            <ui:define name="panel">
+                <script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
+                <h:inputHidden value="#{knowledgebaseEditController.mode}"/>
+                <h:inputHidden value="#{knowledgebaseEditController.knowledgebase.id}"/>
+                <h:inputHidden value="#{knowledgebaseEditController.refId}"/>
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top"><h:outputText value="#{knowledgebaseEditController.message}" style="color:red"/>&nbsp;</td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">* Topic:</td>
+                        <td><h:inputText id="topic" value="#{knowledgebaseEditController.knowledgebase.topic}" styleClass="textfield" size="60" required="true" maxlength="1000"
+                                         requiredMessage="Topic is required">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="topic" style="color:red"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">* Version:</td>
+                        <td valign="top">
+                            <h:inputText  styleClass="textfield" size="10" required="true" maxlength="1000"  
+                                          requiredMessage="Version is required" id="version"  value="#{knowledgebaseEditController.knowledgebase.version}" >
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </h:inputText>
+                            <rich:message for="version" style="color:red"/>
+                            <h:outputText value="#{knowledgebaseEditController.messageDup}" style="color:red"/>
+                            <br/><br/>
+                            <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{knowledgebaseEditController.knowledgebaseDivisionList}" rows="#{global.maxrows}" var="divisionlist">
+                                <f:facet name="header">
+                                    <rich:columnGroup > 
+                                        <rich:column style="text-align: left;"><h:outputText value="Version" /></rich:column>
+                                        <rich:column style="text-align: left;"><h:outputText value="Update Date"/></rich:column> 
+                                        <rich:column style="text-align: left;"><h:outputText value="Update By" /></rich:column> 
+                                    </rich:columnGroup>
+                                </f:facet>
+
+                                <rich:column style="text-align: left;">
+                                    <h:outputLink target="kb#{divisionlist.knowledgebaseDivisionPK.knowledgebaseId}_#{divisionlist.knowledgebaseDivisionPK.version}" value="#{request.contextPath}/admin/knowledgebaseversion.jsf"  >
+                                        <h:outputText value="#{divisionlist.knowledgebaseDivisionPK.version}" class="gray03"/> 
+                                        <f:param name="sid" value="#{divisionlist.knowledgebaseDivisionPK.knowledgebaseId}"/>
+                                        <f:param name="sver" value="#{divisionlist.knowledgebaseDivisionPK.version}"/>
+                                    </h:outputLink>
+                                </rich:column>
+                                <rich:column style="text-align: left;">
+                                    <h:outputText value="#{divisionlist.updateDate}">
+                                        <f:convertDateTime pattern="#{msg.datePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </rich:column>
+                                <rich:column style="text-align: left;">
+                                    <h:outputText value="#{divisionlist.updateBy}"/>
+                                </rich:column>
+
+                                <f:facet name="footer">
+                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                </f:facet>
+                            </rich:dataTable>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="200" align="right" valign="top">Type:</td>
+                        <td><h:selectBooleanCheckbox  value="#{knowledgebaseEditController.knowledgebase.faq}" /> FAQ
+
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Description:</td>
+                        <td valign="top">
+                            <h:inputTextarea id="description" value="#{knowledgebaseEditController.knowledgebase.description}"/>
+                            <script type="text/javascript">
+                                CKEDITOR.replace('frm:description'  ,{
+                                                filebrowserBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserImageBrowseUrl : '#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Image&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/',
+                                                filebrowserFlashBrowseUrl :'#{request.contextPath}/ckeditor/filemanager/browser/default/browser.html?Type=Flash&amp;Connector=#{request.contextPath}/fckeditor/editor/filemanager/connectors/'}
+                                            );
+                            </script>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="right" valign="top">Link :</td>
+                        <td valign="top"> 
+                            <a4j:region>
+                            <rich:dataTable id ="listKBurl" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{knowledgebaseEditController.urlList}" var="urllist">
+                                <f:facet name="header">  
+                                    <rich:columnGroup >  
+                                        <rich:column style="text-align: left;width: 30%;"><h:outputText value="Text" /></rich:column>
+                                        <rich:column style="text-align: left;width: 70%;"><h:outputText value="Url" /></rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column style="text-align: left;">
+                                    <h:inputText id="urltext" value="#{urllist.kburlText}" styleClass="textfield"
+                                                 required="#{knowledgebaseEditController.urlList.size() > 0}" requiredMessage="Text is required"> 
+                                        <f:validateRequired/>                  
+                                        <rich:validator />
+                                    </h:inputText>
+                                    <rich:message for="urltext" style="color:red"/>
+                                </rich:column> 
+                                <rich:column style="text-align: left;">
+                                    <h:inputText id="urllink" value="#{urllist.kburlLink}" styleClass="textfield" size="50" 
+                                                 required="#{knowledgebaseEditController.urlList.size() > 0}" requiredMessage="URL is required">
+                                        <f:validateRequired/>                  
+                                        <rich:validator />
+                                    </h:inputText>
+                                    <rich:message for="urllink" style="color:red"/>
+                                </rich:column>    
+                            </rich:dataTable>  
+                            <a4j:commandButton image="../img/bplus.png"  actionListener="#{knowledgebaseEditController.addUrlList}" 
+                                               render="listKBurl" limitRender="true" execute="@region"/>
+                            <a4j:commandButton image="../img/b_subtract.png"  actionListener="#{knowledgebaseEditController.delUrlList}" 
+                                               render="listKBurl" limitRender="true" immediate="true" execute="@region"/>
+                            </a4j:region>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="right" valign="top">Attachment Files:</td>
+                        <td valign="top"> 
+                            <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                            value="#{knowledgebaseEditController.knowledgebaseAttfileList}" rows="#{global.maxrows}" var="attlist">
+                                <f:facet name="header">
+                                    <rich:columnGroup > 
+                                        <rich:column style="text-align: left;"><h:outputText value="File" /></rich:column> 
+                                        <rich:column style="text-align: left;"><h:outputText value="Delete" /></rich:column> 
+                                    </rich:columnGroup>
+                                </f:facet>
+
+                                <rich:column style="text-align: left;">
+                                    <a href="../upload/knowledgebase/#{attlist.knowledgebaseId}/#{attlist.kbattfileFilename}" target="_blank"><h:outputText value="#{attlist.kbattfileFilename}"/></a>
+                                </rich:column>  
+                                <rich:column style="text-align: left;">
+                                    <h:selectBooleanCheckbox value="#{attlist.delbox}"/>
+                                </rich:column>
+                                <f:facet name="footer">
+                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                </f:facet>
+                            </rich:dataTable>
+                            <rich:fileUpload id="fileUpload"
+                                             fileUploadListener="#{knowledgebaseEditController.fileUploadBean.listener}"
+                                             maxFilesQuantity="10" 
+                                             immediateUpload="true" 
+                                             listHeight="70px">
+                                <a4j:ajax event="clear" render="fileUploadBean" listener="#{knowledgebaseEditController.fileUploadBean.clearUploadData}"/>
+                            </rich:fileUpload> 
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td align="right" valign="top">Related Information:</td>
+                        <td valign="top">   
+                                        <rich:pickList id="relatedList" switchByDblClick="true" 
+                                                       listWidth="350px" listHeight="150px"
+                                                       addText="" addAllText="" removeText="" removeAllText=""
+                                                       value="#{knowledgebaseEditController.selectedRelate}"  required="false">
+                                                        <f:selectItems value="#{knowledgebaseEditController.relateList}"/>
+                                        </rich:pickList>
+                                   
+                        </td>
+                    </tr> 
+                    <ui:remove>
+                    <tr>
+                        <td width="200" align="right" valign="top">User:</td>
+                        <td><h:selectOneMenu value="#{knowledgebaseEditController.knowledgebase.contentown}" disabled="#{userSession.roleKBDataEntry}">
+                                <f:selectItems value="#{knowledgebaseEditController.usersList}" var="usersList" itemValue="#{usersList.id}" itemLabel="#{usersList.name} #{usersList.surname}" /> 
+                            </h:selectOneMenu> 
+
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Display:</td>
+                        <td valign="top">
+                            <h:selectBooleanCheckbox id="schedule" value="#{knowledgebaseEditController.knowledgebase.schedule}" >
+                                <a4j:ajax event="click" render="schedulePanel" execute="@this" limitRender="true"/>
+                            </h:selectBooleanCheckbox> Schedule 
+                            <h:panelGroup id="schedulePanel">
+                            <rich:calendar  id="startdate" 
+                                            disabled="#{!knowledgebaseEditController.knowledgebase.schedule}"
+                                            value="#{knowledgebaseEditController.knowledgebase.startdate}"   
+                                            inputClass="textfield" inputSize="8" buttonClass="rfcalbtn"
+                                            datePattern="#{msg.datePattern}"
+                                            required="#{knowledgebaseEditController.knowledgebase.schedule}"
+                                            requiredMessage="Start date is require"
+                                            locale="#{msg.locale}">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </rich:calendar>
+                            <rich:message for="startdate" style="color:red"/>
+                            to 
+                            <rich:calendar  id="enddate"
+                                            disabled="#{!knowledgebaseEditController.knowledgebase.schedule}"
+                                            value="#{knowledgebaseEditController.knowledgebase.enddate}"
+                                            inputClass="textfield" inputSize="8" buttonClass="rfcalbtn"
+                                            datePattern="#{msg.datePattern}"
+                                            required="#{knowledgebaseEditController.knowledgebase.schedule}"
+                                            requiredMessage="End date is require"
+                                            locale="#{msg.locale}">
+                                <f:validateRequired/>                  
+                                <rich:validator />
+                            </rich:calendar>
+                            <rich:message for="enddate" style="color:red"/>
+                            <h:outputText value="#{knowledgebaseEditController.messageDate}" style="color:red"/>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                                        
+                    <tr>
+                        <td align="right" valign="top">Board:</td>
+                        <td valign="top">  
+                            <table  width="100%"   border="1"  bordercolor="#c7c7c7" >
+                                <tr  >
+                                    <td > 
+                                    <table class="tableline01" width="100%"  >
+
+                                <tr class="subh01">
+                                    <td  align="center">Rate</td> 
+                                    <td  align="center" >View</td>
+                                </tr>
+                                <tr  bgcolor="#ffffcc">
+                                    <td align="center"  >
+                                         <h:panelGroup id="voteResult">
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgebaseEditController.displayvote >= 0}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgebaseEditController.displayvote > 1}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgebaseEditController.displayvote > 2}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgebaseEditController.displayvote > 3}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgebaseEditController.displayvote > 4}"/>
+                                        </h:panelGroup>
+                                    </td> 
+                                    <td align="center">
+                                        <h:outputText class="blue04" value="#{knowledgebaseEditController.knowledgebase.viewcount}">
+                                            <f:convertNumber pattern="#,##0"/>
+                                        </h:outputText></td>
+                                </tr>
+                            </table> 
+                            <rich:dataTable id="kbboardList" style="width: 100%" var="boardlist" rows="10"
+                                            value="#{knowledgebaseEditController.knowledgebasesboard}"  
+                                            onrowmouseover="this.style.backgroundColor='#e9fcf8'"
+                                            onrowmouseout="this.style.backgroundColor='#FFFFFF'"
+                                            rendered="#{knowledgebaseEditController.knowledgebasesboard.size() > 0}">
+                                <rich:column styleClass="line01">
+                                    <table width="100%">
+                                        <tr>
+                                            <td align="center" width="20%"> 
+                                                <img src="#{request.contextPath}/img/guest.png" /><br/>
+                                            </td> 
+                                            <td align="left" valign="top">
+                                                <h:outputText value="Comment: " class="gray03"/><h:outputText value="#{boardlist.no}"/><br/><br/>
+                                                <h:outputText class="blue04" value="#{boardlist.kbboardComment}"/></td>
+                                        </tr> 
+                                        <tr>
+                                            <td align="center"><h:outputText value="By: " class="gray03"/><h:outputText value="#{boardlist.createBy}"/></td>
+                                            <td style="text-align: right"><br/>
+                                                <h:outputText value="Date: " class="gray03"/><h:outputText value="#{boardlist.createDate}">
+                                                   <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" locale="Locale.US" timeZone="Asia/Bangkok"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </rich:column>
+                                <f:facet name="footer">
+                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                </f:facet>
+                            </rich:dataTable>
+                                    </td> 
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Service Type:</td>
+                        <td valign="top">
+                          <h:panelGroup>  
+                            <table width="100%" border="0" cellpadding="0" cellspacing="0" id="bartool01">
+                                <tr>
+                                    <td  valign="top"><br/>
+                                        <h:panelGroup id="panelServiceType">
+                                        <table border="0" cellpadding="3" cellspacing="1">
+                                            <a4j:repeat value="#{knowledgebaseEditController.serviceTypeValueList}" var="list" rowKeyVar="rowNum">
+                                                <tr>
+                                                    <td valign="top">
+                                                        <h:selectBooleanCheckbox value="#{list.selected}">
+                                                            <a4j:ajax event="click" render="panelServiceType,panelBusinessUnit,panelLocation" 
+                                                                        listener="#{knowledgebaseEditController.serviceTypeListener}"
+                                                                        execute="@this" limitRender="true"/>
+                                                            <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                                                            <f:param name="serviceTypeStatus" value="#{list.selected}"/>
+                                                        </h:selectBooleanCheckbox>
+                                                    </td>
+                                                    <td><b><h:outputText value="#{list.serviceType.name}"/></b>
+                                                        <h:panelGroup id="panelBusinessUnit">
+                                                        <table border="0" cellpadding="3" cellspacing="1">
+                                                            <a4j:repeat value="#{list.businessUnitValueList}" var="list1">
+                                                                <tr>
+                                                                    <td valign="top">
+                                                                        <h:selectBooleanCheckbox value="#{list1.selected}">
+                                                                            <a4j:ajax event="click" 
+                                                                                        render="panelServiceType,panelBusinessUnit,panelLocation" 
+                                                                                        listener="#{knowledgebaseEditController.businessUnitListener}"
+                                                                                        execute="@this" limitRender="true"/>
+                                                                                <f:param name="businessUnitId" value="#{list1.businessUnit.id}"/>
+                                                                                <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                                                                                <f:param name="businessUnitStatus" value="#{list1.selected}"/>
+                                                                        </h:selectBooleanCheckbox>
+                                                                    </td>
+                                                                    <td><h:outputText value="#{list1.businessUnit.name}"/>
+                                                                        <h:panelGroup id="panelLocation">
+                                                                            <table border="0" cellpadding="3" cellspacing="1">
+                                                                                <a4j:repeat value="#{list1.locationValueList}" var="list2">
+                                                                                    <tr>
+                                                                                        <td>
+                                                                                            <h:selectBooleanCheckbox value="#{list2.selected}">
+                                                                                                <a4j:ajax event="click" 
+                                                                                                            render="panelServiceType,panelBusinessUnit,panelLocation" 
+                                                                                                            listener="#{knowledgebaseEditController.locationListener}"
+                                                                                                            execute="@this" limitRender="true"/>
+                                                                                                    <f:param name="locationId" value="#{list2.location.id}"/>
+                                                                                                    <f:param name="businessUnitId" value="#{list1.businessUnit.id}"/>
+                                                                                                    <f:param name="serviceTypeId" value="#{list.serviceType.id}"/>
+                                                                                                    <f:param name="locationStatus" value="#{list2.selected}"/>
+                                                                                            </h:selectBooleanCheckbox>                                                                            
+                                                                                        </td>
+                                                                                        <td><h:outputText value="#{list2.location.name}"/></td>
+                                                                                        <td></td>
+                                                                                    </tr>
+                                                                                </a4j:repeat>
+                                                                            </table>
+                                                                        </h:panelGroup>                                                        
+                                                                    </td>
+                                                                </tr>
+                                                            </a4j:repeat>
+                                                        </table>
+                                                        </h:panelGroup>
+                                                    </td>
+                                                </tr>
+                                            </a4j:repeat>
+                                        </table>
+                                        </h:panelGroup>
+                                    </td>
+                                </tr>
+                            </table>
+                            </h:panelGroup> 
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td align="center" colspan="2">
+                            <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                <tr>
+                                    <td align="left"> <h:commandButton image="../img/b_back.png" action="#{knowledgebaseEditController.backAction}" immediate="true"/></td>
+                                    <td align="enter"> <h:commandButton image="../img/b_save.png" action="#{knowledgebaseEditController.saveAction}" 
+                                             rendered="#{knowledgebaseEditController.savePermitted and (userSession.roleKBManager or userSession.roleKBDataEntry)}"/></td>
+                                    <td align="right"> <h:commandButton image="../img/b_approve.png" action="#{knowledgebaseEditController.ApprovalKB}"  
+                                             rendered="#{(userSession.roleKBManager or userSession.roleKBApproval) and not knowledgebaseEditController.knowledgebase.approval}"/></td>
+                                </tr>
+                            </table>
+                        </td>                         
+                    </tr>
+                </table>
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

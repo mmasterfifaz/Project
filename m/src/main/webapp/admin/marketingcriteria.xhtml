@@ -1,0 +1,105 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <h:body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Marketing List Upload : Criteria</ui:define>
+            <ui:define name="button">
+                <a4j:commandButton image="../img/b_add.png" style="margin: 2px;"
+                                 oncomplete="Richfaces.showModalPanel('popupCriteria')"
+                                 execute="@this"
+                                 limitRender="true">                    
+                </a4j:commandButton>
+                <h:commandButton image="../img/b_delete.png" style="margin: 2px;" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable id="criteriaList" 
+                                styleClass="tableline01" 
+                                rows="#{global.maxrows}" 
+                                value="#{marketingCriteriaController.marketingCriteriaList}"
+                                var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column>&nbsp;</rich:column>
+                            <rich:column><h:outputText value="Criteria Name"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:selectBooleanCheckbox value="#{marketingCriteriaController.selectedIds[list.id]}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                <rich:dataTable id="prospectList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column>&nbsp;</rich:column>
+                            <rich:column><h:outputText value="Status"/></rich:column>
+                            <rich:column><h:outputText value="Ref. No."/></rich:column>
+                            <rich:column><h:outputText value="Name"/></rich:column>
+                            <rich:column><h:outputText value="Surname"/></rich:column>
+                            <rich:column><h:outputText value="Home Phone"/></rich:column>
+                            <rich:column><h:outputText value="Office Phone"/></rich:column>
+                            <rich:column><h:outputText value="Mobile Phone"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        
+                    </rich:column>
+                    <rich:column>
+                                                   
+                    </rich:column>
+                    <rich:column>
+                        
+                    </rich:column>
+                    <rich:column>
+                        
+                    </rich:column>
+                    <rich:column>
+                        
+                    </rich:column>
+                    <rich:column>
+                        
+                    </rich:column>
+                    <rich:column>
+                        
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+                            <br/><br/><br/><br/><br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="50%" align="left">
+                        <h:commandButton action="marketingedit.jsf" image="/resources/img/b_back.png"/>
+                    </td>
+                    <td width="50%" align="right">
+                        <h:commandButton action="marketingsummary.jsf" image="/img/b_next.png" />
+                    </td>
+                </tr>
+            </table>
+                
+            </ui:define>
+            
+            <ui:define name="popupModal">
+                <rich:popupPanel id="waitPanel" style="background-color: white; text-align:center">
+                    <h:outputText value="Please wait..." style="font-size:large" />
+                </rich:popupPanel>
+                <ui:include id="criteria"
+                            src="popupCriteria.xhtml">
+                </ui:include>    
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

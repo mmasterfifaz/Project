@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+<h:body>
+    <ui:composition template="../templates/adminedit.xhtml">
+        <ui:define name="title1">Administration</ui:define>
+        <ui:define name="title2">Assignment List Monitoring Detail</ui:define>
+        <ui:define name="head">
+            <style>
+            </style>
+            <script type="text/javascript" src="campaignsummary.js"/>
+        </ui:define>
+        <ui:define name="panel">
+            <h:inputHidden value="#{assignmentListMonitorDetailController.agentID}"/>
+            <h:inputHidden value="#{assignmentListMonitorDetailController.campaignID}"/>
+            <h:inputHidden value="#{assignmentListMonitorDetailController.mode}"/>
+            <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                    <td valign="top">
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td bgcolor="#E8E7D5"><table width="100%" border="0" align="center" cellpadding="4" cellspacing="0">
+                                        <tr>
+                                            <td class="gray03" align="left">Agent Name:
+                                            <h:outputText styleClass="blue04" value="#{assignmentListMonitorDetailController.agent.name} #{assignmentListMonitorDetailController.agent.surname}"/></td>
+                                        </tr>
+                                    </table></td>
+                            </tr>
+                            <tr heigh="20"><td>&nbsp;</td></tr>
+                        </table>
+
+                        <rich:tabPanel switchType="ajax" id="tabs" activeItem="#{assignmentListMonitorDetailController.selectedTab}"
+                                       itemChangeListener="#{assignmentListMonitorDetailController.initialize}" >
+                            <rich:tab id="assignment" name="assignment">
+                                <f:facet name="header"><div class="tab-content"><h:outputText value= "Assignment List"/></div></f:facet>
+                                <h:panelGroup>
+                                    <h:panelGroup id="pooling">
+                                        <rich:dataTable id="assignmentList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                        value="#{assignmentListMonitorDetailController.assignmentDetailList}" var="assignmentList"
+                                                        rows="#{global.maxrows}" onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                        onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                            <f:facet name="header">
+                                                <rich:columnGroup>
+                                                    <rich:column style="width: 8%;text-align: left"><h:outputText value="Status" /></rich:column>
+                                                    <rich:column style="width: 12%;text-align: left"><h:outputText value="Campaign"/></rich:column>
+                                                    <rich:column style="width: 12%;text-align: left"><h:outputText value="Marketing"/></rich:column>
+                                                    <rich:column style="width: 15%;text-align: left"><h:outputText value="Customer"/></rich:column>
+                                                    <rich:column style="width: 12%;text-align: left"><h:outputText value="Followup Date"/></rich:column>
+                                                    <rich:column style="width: 15%;text-align: left"><h:outputText value="Contact Result" /></rich:column>
+                                                    <rich:column style="width: 15%;text-align: left"><h:outputText value="Remark"/></rich:column>
+                                                    <rich:column style="text-align: left"><h:outputText value="Contact History"/></rich:column>
+                                                </rich:columnGroup>
+                                            </f:facet>
+                                            <rich:columnGroup>
+                                                <rich:column>
+                                                    <h:outputText rendered="#{assignmentList.status eq 'assigned'}" value="Assigned"/>
+                                                    <h:outputText rendered="#{assignmentList.status eq 'viewed'}" value="Viewed"/>
+                                                    <h:outputText rendered="#{assignmentList.status eq 'opened'}" value="Opened"/>
+                                                    <h:outputText rendered="#{assignmentList.status eq 'followup'}" value="Followup"/>
+                                                    <h:outputText rendered="#{assignmentList.status eq 'closed'}" value="Closed"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{assignmentList.campaignName}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{assignmentList.assignmentId.marketing.name}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{assignmentList.customerName}"/>
+                                                </rich:column>
+
+                                                <rich:column>
+                                                    <h:outputText value="#{assignmentList.followupsaleDate}">
+                                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                    </h:outputText>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{assignmentList.contactResult}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <h:outputText value="#{assignmentList.contactRemark}"/>
+                                                </rich:column>
+                                                <rich:column>
+                                                    <a4j:commandButton image="/img/btn_contact_history.png"  value="Contact History"
+                                                                       title="Contact History"
+                                                                       oncomplete="#{rich:component('contactHistory')}.show()"
+                                                                       render="contactHistoryList"
+                                                                       actionListener="#{assignmentListMonitorDetailController.contactHistoryListener}">
+                                                        <f:param value="#{assignmentList.customerId.id}" name="customerId" />
+                                                        <f:param value="#{assignmentList.id}" name="adId" />
+                                                    </a4j:commandButton>
+                                                </rich:column>
+                                            </rich:columnGroup>
+                                            <f:facet name="footer">
+                                                <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                            </f:facet>
+                                        </rich:dataTable>
+                                        </h:panelGroup>
+                                </h:panelGroup> 
+                                <f:param name="agentId" value="#{assignmentListMonitorDetailController.agentID}"/>  
+                                <f:param name="campaignId" value="#{assignmentListMonitorDetailController.campaignID}"/>  
+                                <f:param name="mode" value="#{assignmentListMonitorDetailController.mode}"/>  
+                            </rich:tab>
+                            <rich:tab id="sale" name="sale">
+                                <f:facet name="header"><div class="tab-content"><h:outputText value= "Sale" /></div></f:facet>
+                                 <h:panelGroup>
+                                    <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                                    value="#{assignmentListMonitorDetailController.saleList}" var="saleList"
+                                                    rows="#{global.maxrows}" onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                    onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                                        <f:facet name="header">
+                                            <rich:columnGroup>
+                                                <rich:column style="width: 10%;text-align: left"><h:outputText value="Campaign" /></rich:column>
+                                                <rich:column style="width: 10%;text-align: left"><h:outputText value="Ref No."/></rich:column>
+                                                <rich:column style="width: 12%;text-align: left"><h:outputText value="Purchase Date"/></rich:column>
+                                                <rich:column style="width: 12%;text-align: left"><h:outputText value="Customer"/></rich:column>
+                                                <rich:column style="width: 10%;text-align: left"><h:outputText value="UW Status"/></rich:column>
+                                                <rich:column style="width: 10%;text-align: left"><h:outputText value="Payment Status" /></rich:column>
+                                                <rich:column style="width: 10%;text-align: left"><h:outputText value="QC Status"/></rich:column>
+                                                <rich:column style="width: 15%;text-align: left"><h:outputText value="Latest Reason"/></rich:column>
+                                                <rich:column style="text-align: left"><h:outputText value="Remark"/></rich:column>
+                                            </rich:columnGroup>
+                                        </f:facet>
+                                        <rich:columnGroup>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.assignmentDetail.campaignName}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.refNo}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.purchaseDate}">
+                                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                                </h:outputText>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.customer.name} #{saleList.customer.surname}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.approvalStatus}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.paymentStatus}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.qcStatus}"/>
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.latestReason}" />
+                                            </rich:column>
+                                            <rich:column>
+                                                <h:outputText value="#{saleList.remark}" />
+                                            </rich:column>
+                                        </rich:columnGroup>
+                                        <f:facet name="footer">
+                                            <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                        </f:facet>
+                                    </rich:dataTable>
+                                </h:panelGroup> 
+                                <f:param name="agentId" value="#{assignmentListMonitorDetailController.agentID}"/>  
+                                <f:param name="campaignId" value="#{assignmentListMonitorDetailController.campaignID}"/> 
+                                <f:param name="mode" value="#{assignmentListMonitorDetailController.mode}"/>  
+                            </rich:tab>
+                            <f:param name="agentId" value="#{assignmentListMonitorDetailController.agentID}"/>  
+                            <f:param name="campaignId" value="#{assignmentListMonitorDetailController.campaignID}"/>  
+                            <f:param name="mode" value="#{assignmentListMonitorDetailController.mode}"/>  
+                        </rich:tabPanel>
+
+                        <table width="100%" height="60" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td align="center" valign="bottom"><h:commandButton action="#{assignmentListMonitorDetailController.backAction}" image="../img/b_back.png" immediate="true"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                    </td>
+                </tr>
+            </table>
+        </ui:define>
+        <ui:define name="popupModal">
+            <rich:popupPanel id="contactHistory" autosized="true" shadowOpacity="0" width="800" height="600" style="padding: 0 0 0 0; border-style: none " >
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                    <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Contact History</h2></td>
+                    <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                        <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('contactHistory')}.hide(); return false;">#{msg.close}</a></td>
+                    <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="5" background="#{request.contextPath}/img/box08.png">
+                    <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                    <td valign="top" bgcolor="#FFFFFF" >
+                        <rich:dataTable id="contactHistoryList" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                        value="#{assignmentListMonitorDetailController.contactHistoryList}" rows="10" var="list">
+                            <f:facet name="header">
+                                <rich:columnGroup>
+                                    <rich:column><h:outputText value="Contact Date"/></rich:column>
+                                    <rich:column><h:outputText value="Contact By"/></rich:column>
+                                    <rich:column><h:outputText value="Contact To"/></rich:column>
+                                    <rich:column><h:outputText value="Contact Result"/></rich:column>
+                                    <rich:column><h:outputText value="Remark"/></rich:column>
+                                </rich:columnGroup>
+                            </f:facet>
+                            <rich:column>
+                                <h:outputText value="#{list.contactDate}">
+                                    <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                </h:outputText>                
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.createBy}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.contactTo}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.contactResult.name}"/>
+                            </rich:column>
+                            <rich:column>
+                                <h:outputText value="#{list.remark}"/>
+                            </rich:column>
+                            <f:facet name="footer">
+                                <rich:dataScroller fastControls="hide" maxPages="5"/>
+                            </f:facet>
+                        </rich:dataTable>
+                    </td>
+                    <td width="4" class="bg_right"></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                    <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                    <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                </tr>
+            </table>
+            </rich:popupPanel>
+            
+            <ui:include src="/share/waitpopup.xhtml"/>           
+            <a4j:status id="actionStatus" 
+                        onstart="#{rich:component('waitPopup')}.show();"
+                        onstop="#{rich:component('waitPopup')}.hide();" />
+        </ui:define>
+        
+    </ui:composition>
+</h:body>
+</html>

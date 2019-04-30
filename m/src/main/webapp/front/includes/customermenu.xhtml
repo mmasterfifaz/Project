@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <div id="customer_menu_wrapper">
+        <div id="customer_menu_top">
+            
+        </div>
+        <div id="customer_menu_body">
+            <div id="customer_menu_detail">
+                <span class="blue05">#{msg.customerHandling}</span>
+                <ul id="customer_menu_main">
+                    <li>
+                        <span class="customer_menu_title">#{msg.customerProfile}</span>
+                    </li>
+                    <li>
+                        <span class="customer_menu_title">#{msg.caseManagement}</span>
+                        <ul class="customer_menu_sub">
+                            <li id="case_handling">#{msg.caseHanding}</li>
+                            <li id="case_create_case">#{msg.createCase}</li>
+                            <li id="case_history">#{msg.caseHistory}</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <span class="customer_menu_title">#{msg.saleManagement}</span>
+                        <ul class="customer_menu_sub">
+                            <li>#{msg.saleApproach}</li>
+                            <li id="sale_history">#{msg.saleHistory}</li>
+                            <li>#{msg.shoppingCart}</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div id="cutomer_menu_image">
+                <h:graphicImage library="img" name="customer_menu.png" styleClass="swap" />
+            </div>
+        </div>
+        <div id="customer_menu_bottom">
+            
+        </div>
+    </div>
+</ui:composition>

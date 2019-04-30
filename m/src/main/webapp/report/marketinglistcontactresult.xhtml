@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Report</ui:define>
+            <ui:define name="title2">Marketing List Export</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="pgExport">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td align="right" valign="top">Export :</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="slExport" value="#{marketingListContactResult.export}" styleClass="select08"
+                                             valueChangeListener="#{marketingListContactResult.exportActionListener}">
+                                <f:selectItems value="#{marketingListContactResult.exportList}"/>
+                                <a4j:ajax event="change" render="pgExport"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Campaign:</td>
+                        <td valign="top">
+                            <h:selectOneMenu id="campaign" value="#{marketingListContactResult.campaignId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{marketingListContactResult.campaignList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Marketing:</td>
+                        <td valign="top"><h:selectOneMenu id="marketing" value="#{marketingListContactResult.marketingId}" styleClass="select08">
+                                <f:selectItems value="#{marketingListContactResult.marketingList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">
+                            <h:panelGroup rendered="#{marketingListContactResult.export eq 3}">Exclude:</h:panelGroup>
+                        </td>
+                        <td valign="top">
+                            <h:panelGroup rendered="#{marketingListContactResult.export eq 3}">
+                                <h:selectOneMenu id="exclude" value="#{marketingListContactResult.exclude}">
+                                    <f:selectItem itemValue="0" itemLabel="None"/>
+                                    <f:selectItem itemValue="1" itemLabel="Sales Success"/> 
+                                </h:selectOneMenu>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">
+                            <h:panelGroup id="panelExpiryLabel">
+                                <h:panelGroup rendered="#{marketingListContactResult.export eq 2}">Expiry Month:</h:panelGroup></h:panelGroup>
+                        </td>
+                        <td valign="top">
+                            
+                            <h:panelGroup id="pgExpiry">
+                                <h:panelGroup rendered="#{marketingListContactResult.export eq 2}">
+                                    <ui:remove>
+                                    <h:selectOneMenu id="expiryYear" value="#{marketingListContactResult.expiryYear}"
+                                                     valueChangeListener="#{marketingListContactResult.expYearListener}">
+                                        <f:selectItems value="#{marketingListContactResult.expiryYearList}"/>
+                                        <a4j:ajax event="change" render="slExport,pgExpiry"/>
+                                    </h:selectOneMenu>
+                                    </ui:remove>
+                                    
+                                    <h:selectOneMenu id="expiryMonth" value="#{marketingListContactResult.expiryMonth}"
+                                                     valueChangeListener="#{marketingListContactResult.expMonthListener}">
+                                        <f:selectItem itemValue="1" itemLabel="January"/>
+                                        <f:selectItem itemValue="2" itemLabel="February"/>
+                                        <f:selectItem itemValue="3" itemLabel="March"/>
+                                        <f:selectItem itemValue="4" itemLabel="April"/>
+                                        <f:selectItem itemValue="5" itemLabel="May"/>
+                                        <f:selectItem itemValue="6" itemLabel="June"/>
+                                        <f:selectItem itemValue="7" itemLabel="July"/>
+                                        <f:selectItem itemValue="8" itemLabel="August"/>
+                                        <f:selectItem itemValue="9" itemLabel="September"/>
+                                        <f:selectItem itemValue="10" itemLabel="October"/>
+                                        <f:selectItem itemValue="11" itemLabel="November"/>
+                                        <f:selectItem itemValue="12" itemLabel="December"/>
+                                        <a4j:ajax event="change" render="slExport,pgExpiry"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">
+                            <h:panelGroup id="pgGroupLabel">
+                                <h:panelGroup rendered="#{marketingListContactResult.export eq 1 || marketingListContactResult.export eq 5 || marketingListContactResult.export eq 3}">
+                                    User Group:
+                                </h:panelGroup>
+                            </h:panelGroup></td>
+                        <td valign="top">
+                            <h:panelGroup id="pgGroup">
+                                <h:panelGroup rendered="#{marketingListContactResult.export eq 1 || marketingListContactResult.export eq 5 || marketingListContactResult.export eq 3}">
+                                    <h:selectOneMenu id="usergroup" 
+                                                     value="#{marketingListContactResult.userGroupId}"
+                                                     valueChangeListener="#{marketingListContactResult.userGroupListener}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{marketingListContactResult.usergroupList}"/>
+                                        <a4j:ajax event="change" render="pgUser"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">
+                            <h:panelGroup id="pgUserLabel">
+                                <h:panelGroup rendered="#{marketingListContactResult.export eq 1 || marketingListContactResult.export eq 5 || marketingListContactResult.export eq 3}">
+                                    User:
+                                </h:panelGroup>
+                            </h:panelGroup></td>
+                        <td valign="top">
+                            <h:panelGroup id="pgUser">
+                                <h:panelGroup rendered="#{marketingListContactResult.export eq 1 || marketingListContactResult.export eq 5 || marketingListContactResult.export eq 3}">
+                                    <h:selectOneMenu id="user" value="#{marketingListContactResult.userId}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{marketingListContactResult.usersList}"/>
+                                    </h:selectOneMenu>
+                                </h:panelGroup>
+                            </h:panelGroup>
+                        </td>
+                    </tr>
+                    <ui:remove>
+                    <tr>
+                        <td align="right" valign="top">Output Type:</td>
+                        <td valign="top"><h:selectOneRadio value="#{marketingListContactResult.outputFormat}">
+                                <f:selectItem itemValue="2" itemLabel="Excel"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    </ui:remove>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink action="blank.xhtml" 
+                                           actionListener="#{marketingListContactResult.reportExportListener}" 
+                                           target="_blank">
+                                <img alt="Report" src="../img/b_report.png" style="display: inline"/>
+                            </h:commandLink>
+                            <a4j:jsFunction name="rfTable" actionListener="#{marketingListContactResult.refreshTable}" immediate="true" render="table"/>
+                        </td>
+                    </tr>
+                </table>
+                </h:panelGroup>
+                <a4j:commandButton image="../img/btn_refresh.png"
+                                   render="table" 
+                                   actionListener="#{marketingListContactResult.refreshTable}" 
+                                   immediate="true"/>
+                <rich:dataTable id="table" 
+                                style="width: 100%" 
+                                styleClass="tableline01" 
+                                value="#{marketingListContactResult.reportLogList}" 
+                                rows="#{global.maxrows}" 
+                                var="list"
+                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column styleClass="subh01">Date</rich:column>
+                            <rich:column styleClass="subh01">Name</rich:column>
+                            <rich:column styleClass="subh01">Marketing</rich:column>
+                            <rich:column styleClass="subh01">User Group</rich:column>
+                            <rich:column styleClass="subh01">User</rich:column>
+                            <rich:column styleClass="subh01">Year/Month</rich:column>
+                            <rich:column styleClass="subh01">Total Record</rich:column>
+                            <rich:column styleClass="subh01">Create By</rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column>
+                        <h:outputText value="#{list.createDate}">
+                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.marketing.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.userGroup.name}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.users.loginName}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="January" rendered="#{list.month eq 1}"/>
+                        <h:outputText value="February" rendered="#{list.month eq 2}"/>
+                        <h:outputText value="March" rendered="#{list.month eq 3}"/>
+                        <h:outputText value="April" rendered="#{list.month eq 4}"/>
+                        <h:outputText value="May" rendered="#{list.month eq 5}"/>
+                        <h:outputText value="June" rendered="#{list.month eq 6}"/>
+                        <h:outputText value="July" rendered="#{list.month eq 7}"/>
+                        <h:outputText value="August" rendered="#{list.month eq 8}"/>
+                        <h:outputText value="September" rendered="#{list.month eq 9}"/>
+                        <h:outputText value="October" rendered="#{list.month eq 10}"/>
+                        <h:outputText value="November" rendered="#{list.month eq 11}"/>
+                        <h:outputText value="December" rendered="#{list.month eq 12}"/>
+                    </rich:column>
+                    <rich:column style="text-align: right">
+                        <h:outputText value="#{list.noRecord}">
+                        <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.createBy}"/>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

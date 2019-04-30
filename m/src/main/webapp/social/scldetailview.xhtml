@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+    <h:head>
+        <style type="text/css">
+            <!--
+            .rich-tabhdr-side-cell {
+                border:none;
+            }
+            .rich-tab-inactive {
+                cursor: pointer;
+                background-image : url(../img/tb_01.png);
+                border:none;
+                height: 20px;
+                color: #000000;
+            }
+            .rich-tab-active {
+                background-image : url(../img/tb_02.png);
+                border:none;
+                height: 20px;
+                color: #FFFFFF;
+            }
+            .rich-tabpanel-content {
+                border-width: 0px 0px 0px 0px;
+                background-color: transparent;
+            }
+            .rich-tab-bottom-line {
+                border-color: #75b8d1;
+                border-width: 2px;
+            }
+            a.attach {
+                text-decoration: none;
+            }
+            a.attach:hover {
+                text-decoration: underline;
+            }
+            -->
+        </style>
+        <script type="text/javascript" >
+            function onLoad() {
+                //alert('onloaddd');
+            }
+
+            function clickTab31() {
+                var tab11 = document.getElementById('frm:tab11');
+                var tab12 = document.getElementById('frm:tab12');
+                var tab21 = document.getElementById('frm:tab21');
+                var tab22 = document.getElementById('frm:tab22');
+            }
+
+        function resizeIframe(obj)
+        {
+            {
+                obj.style.height = 0;
+            }
+            ;
+            {
+                obj.style.height = obj.contentWindow.document.body.scrollHeight + 'px';
+            }
+        }
+     </script>
+        <script type="text/javascript" src="#{request.contextPath}/includes/setcontrollerproperty.js"/>
+    </h:head>
+    <h:body>
+        
+        <h:outputStylesheet library="css" name="maxelyz.css"/>
+        <h:outputStylesheet library="css" name="scroll01.css"/>
+        <h:outputStylesheet library="css" name="popbox.css"/>
+        <h:form>
+        <table style="width: 100%">
+            <tr>
+                <td>
+                    <h:panelGroup id="panelListSelectsMain">
+                        <table width="100%" border="0" cellpadding="2" cellspacing="1">
+                            <tr>
+                                <td nowrap="nowrap" style="width: 8%">
+                                    <b><font size="2" color="#656565"><h:outputText value="Priority"/></font></b> 
+                                    <h:graphicImage url="/img/social/#{sclDetailViewController.soMessage.priority_enum_id}_large.png"
+                                                    style="display: inline; vertical-align: middle; padding-left: 3px"/>
+                                </td>
+                                <td valign="top" style="width: 92%">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                                        <tr>
+                                            <td>
+                                                <ui:remove><h:graphicImage url="/img/social/logo_#{sclDetailViewController.soMessage.source_type_enum_id}_large.png"/></ui:remove>
+                                                <font size="4" color="#01a0c0">
+                                                    <h:outputText value="#{sclDetailViewController.soMessage.source_id}" rendered="#{sclDetailViewController.soMessage.source_type_enum_id ne 'EM'}"/>
+                                                    <h:outputText value="#{sclDetailViewController.emailFrom}" rendered="#{sclDetailViewController.soMessage.source_type_enum_id eq 'EM'}"/>
+                                                </font>
+                                            </td>
+                                            <td align="right">
+                                                <a href="javascript:window.print()"><img src="../img/btn_printer.png" alt="print this page" id="print-button" /></a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td align="left" valign="top">
+                                    <ui:remove><h:outputText style="font-size:small;font-weight:bold;color:#01a0c0" value="#{sclDetailViewController.emailFrom}"/></ui:remove>
+                                </td>
+                                <td align="left" valign="top">
+                                    <h:outputText value="#{sclDetailViewController.emailDate}" >
+                                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                    </h:outputText>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">From : <h:outputText value="#{sclDetailViewController.emailFrom}"/></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">To : <h:outputText value="#{sclDetailViewController.emailTo}"/></td>
+                            </tr>
+                            <h:panelGroup rendered="#{not (sclDetailViewController.emailCc eq null)}">
+                                <tr>
+                                    <td></td>
+                                    <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Cc : <h:outputText value="#{sclDetailViewController.emailCc}"/></td>
+                                </tr>
+                            </h:panelGroup>
+                            <tr>
+                                <td></td>
+                                <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Subject : <h:outputText value="#{sclDetailViewController.soMessage.soEmailMessage.subject}"/></td>
+
+                            </tr>
+                            <h:panelGroup rendered="#{not (sclDetailViewController.attachmentList eq null)}">
+                                <tr>
+                                    <td></td>
+                                    <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Attachments : 
+                                        <a4j:repeat value="#{sclDetailViewController.attachmentList}" var="list1">
+                                            <a href="#{request.contextPath}/emailfiles/#{sclDetailViewController.soMessage.soAccount.id}/#{sclDetailViewController.soMessage.id}/#{list1}" target="_blank" styleClass="attach">
+                                                            #{list1}
+                                                        </a> &nbsp;
+                                        </a4j:repeat>
+                                    </td>
+                                </tr>
+                            </h:panelGroup>
+                            <tr>
+                                <td></td>
+                                <td style="height: 20px; vertical-align: middle"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td align="left">
+                                    <table width="100%" border="0" cellpadding="0" cellspacing="1">
+                                        <a4j:repeat value="#{sclDetailViewController.bodyList}" var="list">
+                                            <tr>
+                                                <td><h:outputText value="#{list}" escape="false"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; background-position: center; height: 20px; vertical-align: middle"></td>
+                                            </tr>
+                                        </a4j:repeat>
+                                    </table>
+                                </td>
+                            </tr>
+                            <h:panelGroup rendered="#{sclDetailViewController.soMessageParent ne null and sclDetailViewController.soMessage.soEmailMessage.direction ne 'OUT'}">
+                            
+                                <tr>
+                                    <td nowrap="nowrap" style="width: 8%">
+                                    </td>
+                                    <td valign="top" style="width: 92%">
+                                        <ui:remove><h:graphicImage url="/img/social/logo_#{sclDetailViewController.soMessageParent.source_type_enum_id}_large.png"/></ui:remove>
+                                        <font size="4" color="#01a0c0">
+                                            <h:outputText value="#{sclDetailViewController.soMessageParent.source_id}" rendered="#{sclDetailViewController.soMessageParent.source_type_enum_id ne 'EM'}"/>
+                                            <h:outputText value="#{sclDetailViewController.emailFromParent}" rendered="#{sclDetailViewController.soMessageParent.source_type_enum_id eq 'EM'}"/>
+                                        </font>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="left" valign="top">
+                                        <ui:remove><h:outputText style="font-size:small;font-weight:bold;color:#01a0c0" value="#{sclDetailViewController.emailFromParent}"/></ui:remove>
+                                    </td>
+                                    <td align="left" valign="top">
+                                        <h:outputText value="#{sclDetailViewController.emailDateParent}" >
+                                            <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">From : <h:outputText value="#{sclDetailViewController.emailFromParent}"/></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">To : <h:outputText value="#{sclDetailViewController.emailToParent}"/></td>
+                                </tr>
+                                <h:panelGroup rendered="#{not (sclDetailViewController.emailCcParent eq null)}">
+                                    <tr>
+                                        <td></td>
+                                        <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Cc : <h:outputText value="#{sclDetailViewController.emailCcParent}"/></td>
+                                    </tr>
+                                </h:panelGroup>
+                                <tr>
+                                    <td></td>
+                                    <td align="left" valign="top" style="font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Subject : <h:outputText value="#{sclDetailViewController.emailSubjectParent}"/></td>
+
+                                </tr>
+                                <h:panelGroup rendered="#{not (sclDetailViewController.attachmentListParent eq null)}">
+                                    <tr>
+                                        <td></td>
+                                        <td align="left" valign="top" style="white-space: nowrap; font-family: Arial, Helvetica, sans-serif, Tahoma; font-size: 14px">Attachments : 
+                                            <a4j:repeat value="#{sclDetailViewController.attachmentListParent}" var="list2">
+                                                <a href="#{request.contextPath}/emailfiles/#{sclDetailViewController.soMessageParent.soAccount.id}/#{sclDetailViewController.soMessageParent.id}/#{list2}" target="_blank" styleClass="attach">
+                                                            #{list2}
+                                                        </a> &nbsp;
+                                            </a4j:repeat>
+                                        </td>
+                                    </tr>
+                                </h:panelGroup>
+                                <tr>
+                                    <td></td>
+                                    <td style="height: 20px; vertical-align: middle"></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td align="left">
+                                        <table width="100%" border="0" cellpadding="0" cellspacing="1">
+                                        <a4j:repeat value="#{sclDetailViewController.bodyListParent}" var="list">
+                                            <tr>
+                                                <td><h:outputText value="#{list}" escape="false"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="background-image: url('#{request.contextPath}/img/dot.gif'); background-repeat: repeat-x; background-position: center; height: 20px; vertical-align: middle"></td>
+                                            </tr>
+                                        </a4j:repeat>
+                                        </table>
+                                    </td>
+                                </tr>
+                            
+                        </h:panelGroup>
+                        </table>
+
+
+
+
+                        
+
+
+
+
+                        
+                        
+
+                    </h:panelGroup>
+                </td>
+            </tr>
+        </table>
+        </h:form>
+    </h:body>
+</html>

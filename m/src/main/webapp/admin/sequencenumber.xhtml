@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Sequence Number</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{sequenceNumberController.editAction}" rendered="#{sequenceNumberController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{sequenceNumberController.deleteAction}" rendered="#{sequenceNumberController.deletePermitted}" 
+                                 onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable style="width: 100%" headerClass="subh01" styleClass="tableline01" 
+                                value="#{sequenceNumberController.sequenceNoList}" rows="#{global.maxrows}" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 3%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value="Description" /></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Format"/></rich:column>
+                            <rich:column style="width: 27%;text-align: left;"><h:outputText value="Value"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+
+                    <rich:column >
+                        <h:selectBooleanCheckbox value="#{sequenceNumberController.selectedIds[list.id]}" rendered="#{not list.system}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{sequenceNumberController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.description}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.format}" rendered="#{list.format ne  null}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{sequenceNumberController.createSample(list)}" rendered="#{list.format ne  null and list.yearEra ne null and list.abbr ne null and list.nextRunno ne null and list.runningLength ne null}"/>
+                    </rich:column>
+                   <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                    </f:facet>
+                </rich:dataTable>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

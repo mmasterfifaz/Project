@@ -1,0 +1,351 @@
+<ui:composition template="../../templates/main_01.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich">
+    <ui:define name="agentscript">
+        <ui:include src="/front/includes/agentscript.xhtml">
+            <ui:param name="pageId" value="12"/>
+        </ui:include>
+    </ui:define>
+    <ui:define name="javascript">
+        <script src="#{request.contextPath}/resources/js/front/search/searchCase.js" type="text/javascript"/>
+    </ui:define>
+    <ui:define name="title1">#{msg.search}</ui:define>
+    <ui:define name="title2">#{msg.caseSearch}</ui:define>
+    <ui:define name="type">#{msg.caseSearch}</ui:define>
+    <ui:define name="detail">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                <td valign="middle" background="#{request.contextPath}/img/box11.png">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="150" valign="middle"><h2>#{msg.caseSearch}</h2></td>
+                            <td valign="bottom" height="48"><table border="0" cellpadding="0" cellspacing="0" id="tab" style="margin-bottom:4px">
+                                    <tr>
+                                        <h:panelGroup rendered="#{searchTab.searchCustomerPermitted}"><td>
+                                          <a href="#{request.contextPath}/front/search/searchCustomer.jsf">
+                                            <img src="#{request.contextPath}/img/tb_customersearch01.png" id="sub01" name="sub01" border="0" 
+                                                 onmouseout="changeImage('sub01', '#{request.contextPath}/img/tb_customersearch01.png')" 
+                                                 onmouseover="changeImage('sub01', '#{request.contextPath}/img/tb_customersearch02.png')"/>
+                                            </a></td></h:panelGroup>
+                                        <h:panelGroup rendered="#{searchTab.searchCasePermitted}"><td>
+                                            <a href="#{request.contextPath}/front/search/searchCase.jsf">
+                                            <img src="#{request.contextPath}/img/tb_casesearch02.png" id="sub02" name="sub02"  border="0"/></a>
+                                            </td></h:panelGroup>
+                                        <h:panelGroup rendered="#{searchTab.searchAccountPermitted}"><td>
+                                            <a href="#{request.contextPath}/front/search/searchAccount.jsf">
+                                                <img src="#{request.contextPath}/img/tb_acc01.png" id="sub03" name="sub03" border="0" 
+                                                     onmouseout="changeImage('sub03', '#{request.contextPath}/img/tb_acc01.png')" 
+                                                     onmouseover="changeImage('sub03', '#{request.contextPath}/img/tb_acc02.png')"/></a>
+                                            </td></h:panelGroup>
+                                        <h:panelGroup rendered="#{searchTab.searchMessagePermitted}"><td>
+                                            <a href="#{request.contextPath}/front/search/searchMessage.jsf">
+                                            <img src="#{request.contextPath}/img/tb_msgsearch01.png" id="sub04" name="sub04" border="0" 
+                                                 onmouseout="changeImage('sub04', '#{request.contextPath}/img/tb_msgsearch01.png')" 
+                                                 onmouseover="changeImage('sub04', '#{request.contextPath}/img/tb_msgsearch02.png')"/></a>
+                                            </td></h:panelGroup>
+                                    </tr>
+                                </table></td>
+                        </tr>
+                    </table>
+                </td>
+                <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+            </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td width="5" background="#{request.contextPath}/img/box08.png"><img src="#{request.contextPath}/img/box08.png" width="5" height="5"/></td>
+                <td height="335" valign="top">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color:#e4e4d6">
+                        <tr>
+                            <td width="50%" align="center" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px; background-color: #CACAAB">
+                                    <tr>
+                                        <td width="1"><img src="../../img/b101.gif" alt="" width="12" height="12" /></td>
+                                        <td bgcolor="#CACAAB"><img src="../../img/clear.gif" alt="" width="1" height="1" /></td>
+                                        <td width="1"><img src="../../img/b102.gif" alt="" width="12" height="12" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td bgcolor="#CACAAB"></td>
+                                        <td bgcolor="#CACAAB"><table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                                <tr>
+                                                    <td align="left"><h4>#{msg.caseInformation}</h4></td>
+                                                </tr>
+                                            </table>
+                                            <table width="100%" border="0" cellspacing="0" cellpadding="2" class="customer_search">
+                                                <tr>
+                                                    <td align="right">#{msg.caseID}</td>
+                                                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCaseController.caseID}" size="15"/></td>
+                                        <td align="right"></td>
+                                        <td align="left"></td>
+                                    </tr>
+                                    <tr>
+                                        <td align="right">#{msg.contactDateSearch}</td>
+                                        <td align="left"><rich:calendar value="#{searchCaseController.contactDateFrom}"
+                                                                    locale="#{msg.locale}"
+                                                                    popup="true"
+                                                                    inputClass="textfield"
+                                                                    datePattern="#{msg.datePattern}" inputSize="10" buttonClass="rfcalbtn"/>
+                                    #{msg.to}
+                                    <rich:calendar value="#{searchCaseController.contactDateTo}"
+                                                   locale="#{msg.locale}"
+                                                   popup="true"
+                                                   inputClass="textfield"
+                                                   datePattern="#{msg.datePattern}" inputSize="10" buttonClass="rfcalbtn"/>
+                            </td>
+                            <td align="right">#{msg.descriptionSearch}</td>
+                            <td align="left"><h:inputText styleClass="textfield01" value="#{searchCaseController.description}"/></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.serviceType}</td>
+                <td align="left">
+                    <h:selectOneMenu id="serviceTypeId"
+                                     value="#{searchCaseController.serviceTypeId}"
+                                     styleClass="select08">
+                        <f:selectItem itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{searchCaseController.serviceTypeList}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}"/>
+                    </h:selectOneMenu>
+                </td>
+            <td align="right">#{msg.createBySearch}</td>
+            <td align="left"><h:inputText styleClass="textfield01" value="#{searchCaseController.createdBy}"/></td>
+            </tr>
+            <tr>
+                <td align="right">#{msg.caseType}</td>
+                <td align="left">
+                    <h:selectOneMenu  id="caseTypeId" value="#{searchCaseController.caseTypeId}" styleClass="select08">
+                        <f:selectItems value="#{searchCaseController.caseTypeList}"/>
+                        <a4j:ajax event="change" listener="#{searchCaseController.caseTypeListener}"
+                                  render="caseTypeId, caseTopicId, caseDetailId, caseRequestId" limitRender="true"/>
+                    </h:selectOneMenu>
+                </td>
+                <td align="right">#{msg.statusSearch}</td>
+                <td align="left">
+                    <h:selectOneMenu value="#{searchCaseController.caseStatus}" styleClass="select01">
+                        <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                        <f:selectItem itemValue="#{msg.pendingValue}" itemLabel="#{msg.pending}"/>
+                        <f:selectItem itemValue="#{msg.closedValue}" itemLabel="#{msg.closed}"/>
+                    </h:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Case Topic :</td>
+                <td align="left">
+                    <h:selectOneMenu  id="caseTopicId" value="#{searchCaseController.caseTopicId}" styleClass="select08">
+                        <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{searchCaseController.caseTopics}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}" />
+                        <a4j:ajax event="change" listener="#{searchCaseController.caseTopicListener}"
+                                  render="caseTopicId, caseDetailId, caseRequestId" limitRender="true"/>
+                    </h:selectOneMenu>
+                </td>
+                <td align="right">Activity :</td>
+                <td align="left">
+                   <h:selectOneMenu id="activityTypeId"
+                                     styleClass="select01"
+                                     value="#{searchCaseController.activityTypeId}">
+                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                        <f:selectItem itemValue="101" itemLabel="No Activity"/>
+                        <f:selectItems value="#{searchCaseController.activityTypeList}"/>
+                        <a4j:ajax event="change" listener="#{searchCaseController.activityTypeListener}"
+                                  render="delegateStatus" limitRender="true"/>
+                    </h:selectOneMenu>                    
+                </td>
+            </tr>
+           <tr>
+                <td align="right">Case Detail :</td>
+                <td align="left">
+                    <h:selectOneMenu id="caseDetailId" value="#{searchCaseController.caseDetailId}" styleClass="select08">
+                        <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{searchCaseController.caseDetails}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}" />
+                        <a4j:ajax event="change" listener="#{searchCaseController.caseDetailListener}" 
+                                  render="caseDetailId,caseRequestId" limitRender="true"/>
+                    </h:selectOneMenu>
+                </td>
+                <td align="right">Delegate Status :</td>
+                <td align="left">
+                    <h:selectOneMenu id="delegateStatus" 
+                                     value="#{searchCaseController.delegateStatus}" 
+                                     styleClass="select01"
+                                     disabled="#{searchCaseController.activityTypeId ne 1}">
+                        <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                        <f:selectItem itemValue="accepted" itemLabel="Accept"/>
+                        <f:selectItem itemValue="reject" itemLabel="Reject"/>
+                    </h:selectOneMenu>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">Case Request :</td>
+                <td align="left">
+                    <h:selectOneMenu id="caseRequestId" value="#{searchCaseController.caseRequestId}" styleClass="select08">
+                        <f:selectItem itemValue="" itemLabel="#{msg.all}"/>
+                        <f:selectItems value="#{searchCaseController.caseRequests}" var="list" itemLabel="#{list.name}" itemValue="#{list.id}" />
+                    </h:selectOneMenu>
+                </td>
+                <td align="right"></td>
+                <td align="left">
+                   
+                </td>
+            </tr>
+        </table></td>
+        <td bgcolor="#CACAAB"></td>
+        </tr>
+        <tr>
+            <td><img src="../../img/b103.gif" alt="" width="12" height="12" /></td>
+            <td bgcolor="#CACAAB"><img src="../../img/clear.gif" alt="" width="1" height="1" /></td>
+            <td><img src="../../img/b104.gif" alt="" width="12" height="12" /></td>
+        </tr>
+        </table></td>
+        <td width="10" valign="top" style="border-left: 1px dotted #cbcbc3;"></td>
+        <td width="50%" align="center" valign="top"><table width="98%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 5px">
+                <tr>
+                    <td height="12"></td>
+                </tr>
+                <tr>
+                    <td align="left"><h4>#{msg.relatedInfoAccountSearch}</h4></td>
+                </tr>
+            </table>
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td align="right">#{msg.customerNameSearch}</td>
+                    <td align="left"><h:inputText styleClass="textfield" value="#{searchCaseController.customerName}"/></td>
+        <td align="right">#{msg.genderSearch}</td>
+        <td align="left"><h:selectOneMenu  value="#{searchCaseController.gender}" styleClass="select01">
+            <f:selectItem itemLabel="#{msg.all}"/>
+            <f:selectItem itemValue="#{msg.male}" itemLabel="#{msg.male}"/>
+            <f:selectItem itemValue="#{msg.female}" itemLabel="#{msg.female}"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.identityNoSearch}</td>
+            <td align="left"><h:inputText styleClass="textfield" value="#{searchCaseController.idNo}"/></td>
+        <td align="right">#{msg.customerType}</td>
+        <td align="left"><h:selectOneMenu value="#{searchCaseController.customerTypeId}" styleClass="select01">
+            <f:selectItem itemLabel="#{msg.all}"/>
+            <f:selectItems value="#{searchCustomerController.customerTypeList}"/>
+        </h:selectOneMenu></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.addressSearch}</td>
+            <td align="left"><h:inputText styleClass="textfield" value="#{searchCaseController.address}"/></td>
+        <td align="right"></td>
+        <td align="left"></td>
+        </tr>
+        <tr>
+            <td align="right">#{msg.phoneSearch}</td>
+            <td align="left"><h:inputText styleClass="textfield" value="#{searchCaseController.phoneNo}"/></td>
+        <td align="right"></td>
+        <td align="left"></td>
+
+        </tr>
+        </table></td>
+        </tr>
+        <tr>
+            <td colspan="3" align="center"><h:commandButton image="/resources/img/bb_search.png" action="#{searchCaseController.searchCaseAction}" style="margin-top: 5px; margin-bottom: 5px" /></td>
+        </tr>
+        </table><br/>
+            <table width="100%" border="0" cellspacing="0" cellpadding="2">
+                <tr>
+                    <td bgcolor="#E0DED2" width="60%" style="padding-left: 4px"><h4>Case Information</h4></td>
+                    <td bgcolor="#E0DED2" width="40%" style="padding-left: 4px"><h4>Related Activity </h4></td>
+                </tr>
+            </table>
+            <rich:dataTable id="caseList" style="width: 100%" 
+                            value="#{searchCaseController.searchCaseValues}"
+                            var="list" rows="#{global.maxrows}"
+                            styleClass="tableline01 tb_contact_case_detail" 
+                            onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                            onrowmouseout="this.style.backgroundColor='#F8F8F8'">
+                <f:facet name="header">
+                    <rich:columnGroup>
+                        <rich:column styleClass="subh01" width="2%"></rich:column>
+                        <rich:column styleClass="subh01" width="6%"><h:outputText value="#{msg.channelTitle}" /></rich:column>
+                        <rich:column styleClass="subh01" width="9%"><h:outputText value="#{msg.caseTypeTitle}" /></rich:column>
+                        <rich:column styleClass="subh01" width="10%"><h:outputText value="#{msg.contactDateTitle}" /></rich:column>
+                        <rich:column styleClass="subh01" width="7%"><h:outputText value="#{msg.statusTitle}"/></rich:column>
+                        <rich:column styleClass="subh01" width="11%"><h:outputText value="#{msg.customerNameTitle}"/></rich:column>
+                        <rich:column styleClass="subh01" width="7%"><h:outputText value="#{msg.serviceTypeTitle}"/></rich:column>
+                        <rich:column styleClass="subh01" width="11%"><h:outputText value="#{msg.referenceNo}"/></rich:column>
+                        <rich:column styleClass="subh01" width="10%"><h:outputText value="#{msg.activityTypeTitle}" /></rich:column>
+                        <rich:column styleClass="subh01" width="20%"><h:outputText value="#{msg.activityDetailTitle}" /></rich:column>
+                        <rich:column styleClass="subh01" width="7%"><h:outputText value="#{msg.tableActivityAssignTo}"/></rich:column>
+                    </rich:columnGroup>
+                </f:facet>
+                <rich:column style="vertical-align: top">
+                 <h:graphicImage library="icon" name="p_immediate.png" title="Immediate" alt="Immediate" rendered="#{list.priority eq 'immediate'}" style="padding: 0px; border: 0px;"/>
+                 <h:graphicImage library="icon" name="p_high.png" title="High" alt="High" rendered="#{list.priority eq 'high'}" style="padding: 0px; border: 0px"/>
+                 <h:graphicImage library="icon" name="p_medium.png" title="Medium" alt="Medium" rendered="#{list.priority eq 'medium'}" style="padding: 0px; border: 0px"/>
+                 <h:graphicImage library="icon" name="p_low.png" title="Low" alt="Low" rendered="#{list.priority eq 'low'}" style="padding: 0px; border: 0px"/>
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:graphicImage library="icon" name="callcenter.png" style="display: inline;" />
+                    <h:graphicImage library="icon" name="outbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Outbound'}" style="display: inline;" />
+                    <h:graphicImage library="icon" name="inbound.png" title="#{list.channelType}" alt="#{list.channelType}" rendered="#{list.channelType == 'Inbound'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_phone.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Phone Call'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_fax.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Fax'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_mail.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Email'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_document.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Document'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_postalmail.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Postal Mail'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_system.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'System'}" style="display: inline;" />
+                    <h:graphicImage library="img" name="channel_walkin.png" title="#{list.channel}" alt="#{list.channel}" rendered="#{list.channel == 'Walk-in'}" style="display: inline;" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.caseType}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.contactDate}" >
+                        <f:convertDateTime pattern="#{msg.dateTimePattern}" locale="#{msg.locale}" timeZone="#{msg.timeZone}"/>
+                    </h:outputText>
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.status}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.customerName}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.serviceTypeName}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:panelGroup rendered="#{frontMenuController.caseViewPermitted and list.viewLocation}">
+                        <h:commandLink title="#{list.code}" value="#{list.code}" action="#{caseHandlingController.editCase}" >
+                            <f:param name="from" value="caseHistory"/>
+                            <f:param name="selectId" value="#{list.id}"/>
+                        </h:commandLink>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{not frontMenuController.caseViewPermitted or not list.viewLocation}">
+                        <h:outputText value="#{list.code}"/>
+                    </h:panelGroup>
+                    <h:graphicImage library="icon" name="clip.png" title="Attach File" alt="Attach File" rendered="#{list.attachFile}" width="16" height="16"  style="padding: 0px; border: 0px;display: inline"/>
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.activityTypeName}" />
+                </rich:column>
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="-" rendered="#{list.activityDescription == ''}" />
+                    <h:outputText value="#{list.activityDescription}" />
+                </rich:column>
+                <!--                <rich:column>
+                                    <h:outputText value="#{list.activityStatus}" />
+                                </rich:column>-->
+                <rich:column style="vertical-align: top">
+                    <h:outputText value="#{list.assignTo}" />
+                </rich:column>
+                <f:facet name="footer">
+                    <rich:dataScroller id="sc2" for="caseList" maxPages="#{global.maxpages}" renderIfSinglePage="false"  />
+                </f:facet>
+            </rich:dataTable>
+        </td>
+        <td width="5" background="#{request.contextPath}/img/box06.png"><img src="#{request.contextPath}/img/box06.png" width="5" height="5"/></td>
+        </tr>
+        </table>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <tr>
+                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                <td background="#{request.contextPath}/img/box07.png"></td>
+                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+            </tr>
+        </table>
+    </ui:define>
+</ui:composition>

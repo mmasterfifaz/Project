@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Social Report</ui:define>
+            <ui:define name="title2">SLA Report of Approval by Case Type</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainPanel1">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date From:</td>
+                        <td><rich:calendar value="#{slaApprovalByCaseTypeReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>to<span style="padding-left:2px"/>
+                            <rich:calendar value="#{slaApprovalByCaseTypeReport.toDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Grouping of User:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{slaApprovalByCaseTypeReport.userOption}" valueChangeListener="#{slaApprovalByCaseTypeReport.userOptionListener}">
+                                <f:selectItems value="#{slaApprovalByCaseTypeReport.userOptionList}"/>
+                                <a4j:ajax event="click" render="mainPanel1" execute="@this"/>                                
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="4">
+                            <h:panelGroup id="serviceTypePanel" rendered="#{slaApprovalByCaseTypeReport.userOption eq 1}">
+                             <tr>
+                                <td width="200" align="right" valign="top">Social Service Type:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="soSevice" value="#{slaApprovalByCaseTypeReport.soServiceId}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{slaApprovalByCaseTypeReport.soServiceList}"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            <h:panelGroup id="userGroupPanel" rendered="#{slaApprovalByCaseTypeReport.userOption eq 0}">
+                            <tr>
+                                <td width="200" align="right" valign="top">User Group:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="usergroup" value="#{slaApprovalByCaseTypeReport.userGroupId}" styleClass="select08" >
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{slaApprovalByCaseTypeReport.usergroupList}"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Account ID:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="account"  value="#{slaApprovalByCaseTypeReport.accountID}" styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{slaApprovalByCaseTypeReport.accountList}" />
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">Approval User: </td>
+                        <td valign="top">
+                            <h:selectOneMenu id="approveUser" value="#{slaApprovalByCaseTypeReport.supId}" styleClass="select08">
+                                <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{slaApprovalByCaseTypeReport.supervisorList}"/>
+                            </h:selectOneMenu>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Source Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="sorucetype" value="#{slaApprovalByCaseTypeReport.sourceTypeID}" valueChangeListener="#{slaApprovalByCaseTypeReport.soSourceTypeListener}"  styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{slaApprovalByCaseTypeReport.channelList}" />
+                                <a4j:ajax event="change" render="message" execute="@this"/>
+                            </h:selectOneMenu>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Message Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="message" value="#{slaApprovalByCaseTypeReport.soMessageId}" styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{slaApprovalByCaseTypeReport.soMessageList}" />
+                            </h:selectOneMenu>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Output Type:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{slaApprovalByCaseTypeReport.outputFormat}">
+                                <f:selectItems value="#{slaApprovalByCaseTypeReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink  action="blank.xhtml" actionListener="#{slaApprovalByCaseTypeReport.reportListener}" target="_blank">
+                                <img alt="Report" src="../img/b_report.png"/>
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+                </h:panelGroup> 
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

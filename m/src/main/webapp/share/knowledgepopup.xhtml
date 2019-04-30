@@ -1,0 +1,298 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popupblank.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                  xmlns:ui="http://java.sun.com/jsf/facelets"
+                  xmlns:h="http://java.sun.com/jsf/html"
+                  xmlns:f="http://java.sun.com/jsf/core"
+                  xmlns:a4j="http://richfaces.org/a4j"
+                  xmlns:rich="http://richfaces.org/rich" >
+    <ui:param name="modalId" value="knowledgePopup"/>
+    <ui:define name="title2">Knowledge Base</ui:define>
+    <ui:define name="search1">
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" id="hbox01">
+            <tr><td><h2><img src="#{request.contextPath}/icon/knowledge02.png" width="32" height="32" hspace="5" align="absmiddle" style="display: inline;"/>Knowledge</h2></td>
+                <td width="260" align="right">
+                    <table width="260" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="24"><a href="#" onmouseout="MM_swapImgRestore()" onmouseover="MM_swapImage('Image35','','#{request.contextPath}/img/sad02.png',1)">
+                                    <img src="#{request.contextPath}/img/sad01.png" name="Image35" width="24" height="24" border="0" id="Image35" style="display: inline;"/></a></td>
+                            <td width="205" align="left">
+                                <h:inputText value="#{knowledgePopupController.keyword}" styleClass="textfield" size="30">
+                                    <a4j:ajax event="keyup" render="datatree" listener="#{knowledgePopupController.searchAction}"/>
+                                </h:inputText></td>
+                            <td width="24"><a4j:commandButton image="/img/b_search01.png"  render="datatree" actionListener="#{knowledgePopupController.searchListener}"/></td>
+                            <td width="7"><img src="#{request.contextPath}/img/sp.gif" width="5" height="5" style="display: inline;"/></td>
+                        </tr>
+                    </table>
+                </td>
+             
+            </tr>
+        </table>
+    </ui:define>
+
+    <ui:define name="leftcontent">
+        <rich:tree id="datatree" value="#{knowledgePopupController.root}" var="kb"  >
+            <rich:treeNode id="leafTree">  
+                <a4j:outputPanel>
+                    <a4j:commandLink value="#{kb}"
+                                     render="detail" limitRender="true"
+                                     styleClass="gray03" actionListener="#{knowledgePopupController.selectIdListener}">
+                        <f:param name="id" value="#{kb.id}"/>
+                    </a4j:commandLink>
+                </a4j:outputPanel>
+            </rich:treeNode>
+        </rich:tree>
+    </ui:define>
+    <ui:define name="content">
+        <h:panelGroup id="detail">
+            <script type="text/javascript">
+                function mailopen() { 
+                    window.open('#{request.contextPath}/share/knowledgemailpopup.jsf?id=#{knowledgePopupController.knowledgebase.id}','_blank','width=600,height=400,left=0,top=100,scrollbars=1,resizable=1');
+                }
+                function faxopen() { 
+                    window.open('#{request.contextPath}/share/knowledgefaxpopup.jsf?id=#{knowledgePopupController.knowledgebase.id}','_blank','width=600,height=400,left=0,top=100,scrollbars=1,resizable=1');
+                }
+            </script>
+            <table width="95%" border="0" cellspacing="0" cellpadding="0">
+                <h:panelGroup rendered="#{knowledgePopupController.knowledgebase!=null}">
+                    <tr>
+                        <td align="Right" style="height: 10px">
+                            <ui:remove>
+                            <table> 
+                                <tr>
+                                    <td align="Right">
+                                        <a4j:commandButton image="/img/kb_btn_fax.png" onclick="faxopen();"></a4j:commandButton>
+                                    </td>
+                                    <td align="Right">
+                                        <a4j:commandButton image="/img/kb_btn_email.png" onclick="mailopen();"></a4j:commandButton>
+                                    </td>
+                                    <td align="Right">
+                                        <h:outputLink target="kb#{knowledgePopupController.knowledgebase.id}_#{knowledgePopupController.knowledgebase.version}" value="#{request.contextPath}/admin/knowledgebaseversion.jsf"  >
+                                            <h:graphicImage  url="/img/kb_btn_popup.png" /> 
+                                            <f:param name="sid" value="#{knowledgePopupController.knowledgebase.id}"/>
+                                            <f:param name="sver" value="#{knowledgePopupController.knowledgebase.version}"/>
+                                        </h:outputLink>
+                                    </td>
+                                </tr>
+                            </table> 
+                            </ui:remove>
+                        </td>
+                    </tr>
+                    <tr><td><h:outputText
+                                style="color: #ec5a13;
+                                font-weight: bold;
+                                text-decoration: none;
+                                padding-top: 15px;
+                                padding-bottom: 15px;"
+                                value="#{knowledgePopupController.knowledgebase.topic}"/>
+                    </td></tr>
+                    <tr><td valign="top"><div id="contentinfo"><h:outputText value="#{knowledgePopupController.knowledgebase.description}" escape="false"/></div></td>
+                    </tr>
+                    <tr>  <td valign="top" align="center" height="8" >  </td> </tr>
+                    <!--  Link  -->
+                    <h:panelGroup rendered="#{knowledgePopupController.knowledgebasesUrlList!=null and knowledgePopupController.knowledgebasesUrlList.size()>0}">
+
+                            <tr>
+                                <td bgcolor="#d9fbd7" height="30"> <h4 class="style2">Link</h4>
+                                    </td>  
+                            </tr>
+                            <tr>
+                                <td  height="2" bgcolor="#333333"> </td>  
+                            </tr>
+                            <tr>
+                                <td bgcolor="#d9fbd7">
+                                    <rich:list style="width: 50%" value="#{knowledgePopupController.knowledgebasesUrlList}" var="urllist">
+                                        <h:outputLink target="_blank" value="#{urllist.kburlLink}"  >
+                                            <h:outputText value="#{urllist.kburlText}" class="gray03"/> 
+                                        </h:outputLink>
+                                    </rich:list>
+                                </td>  
+                            </tr>
+                            <tr>  <td valign="top" align="center"  height="8"  >  </td> </tr>
+                    </h:panelGroup>               
+                    <!--  File  -->
+                    <h:panelGroup rendered="#{knowledgePopupController.knowledgebaseAttfileList!=null and knowledgePopupController.knowledgebaseAttfileList.size()>0}" >
+                        <tr>
+                                <td bgcolor="#ffffcc" height="30"> <h4 class="style2"> File</h4>
+                                    </td>  
+                            </tr>
+                            <tr>
+                                <td  height="2" bgcolor="#333333"> </td>  
+                            </tr>
+                        <tr><td bgcolor="#ffffcc"  >
+                                    <rich:list style="width: 50%"  value="#{knowledgePopupController.knowledgebaseAttfileList}" var="attlist">
+                                        
+                                        <a href="#{request.contextPath}/upload/knowledgebase/#{attlist.knowledgebaseId}/#{attlist.kbattfileFilename}" target="_blank">
+                                            <h:outputText value="#{attlist.kbattfileFilename}"  class="gray03"/>
+                                        </a>
+                                        
+                                    </rich:list> 
+                            </td>
+                        </tr>
+                        <tr>  <td valign="top" align="center"  height="8"  >  </td> </tr>
+                    </h:panelGroup>
+                    <!--  Ref  -->
+                    <h:panelGroup rendered="#{knowledgePopupController.relateknowledgebases!=null and knowledgePopupController.relateknowledgebases.size()>0}" >
+                            <tr>
+                                <td bgcolor="#ccffff" height="30"> <h4 class="style2">Related Information</h4>
+                                    </td>  
+                            </tr>
+                            <tr>
+                                <td  height="2" bgcolor="#333333"> </td>  
+                            </tr>
+                            <tr>
+                                <td    bgcolor="#ccffff">
+                                    <rich:list style="width: 50%"  value="#{knowledgePopupController.relateknowledgebases}" var="relatelist">
+                                        <h:outputLink target="kb#{relatelist.knowledgebase.id}_#{relatelist.knowledgebase.version}" value="#{request.contextPath}/admin/knowledgebaseversion.jsf"  >
+                                            <h:outputText value="#{relatelist.topic}" class="gray03"/> 
+                                            <f:param name="sid" value="#{relatelist.id}"/>
+                                            <f:param name="sver" value="#{relatelist.version}"/>
+                                        </h:outputLink>
+                                    </rich:list>
+                                </td>  
+                            </tr>
+                            <tr>  <td valign="top" align="center"  height="8"  >  </td> </tr>
+                    </h:panelGroup>
+                    <!--  Vote , Rate , View  -->
+                    <tr><td valign="top"><table class="tableline01" width="100%" >
+
+                                <tr class="subh01">
+                                    <td  align="center">Vote</td> 
+                                    <td  align="center">Rate</td> 
+                                    <td  align="center" >View</td>
+                                </tr>
+                                <tr  bgcolor="#ffffcc" >
+                                    <td align="center" style="height: 50px" >                                         
+                                        <h:selectOneRadio value="#{knowledgePopupController.vote}"  >
+                                            <f:selectItem itemLabel="1" itemValue="1"/>
+                                            <f:selectItem itemLabel="2" itemValue="2"/>
+                                            <f:selectItem itemLabel="3" itemValue="3"/>
+                                            <f:selectItem itemLabel="4" itemValue="4"/>
+                                            <f:selectItem itemLabel="5" itemValue="5"/>
+                                        </h:selectOneRadio>
+                                            <a4j:commandButton value="Vote" actionListener="#{knowledgePopupController.saveVote}" 
+                                                            image="../img/btn-vote.png"
+                                                            render="detail,voteResult"  rendered="#{!knowledgePopupController.disablevote}"/>
+                                    </td>
+                                    <td align="center" >
+                                        <h:panelGroup id="voteResult">
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgePopupController.displayvote >= 0}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgePopupController.displayvote > 1}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgePopupController.displayvote > 2}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgePopupController.displayvote > 3}"/>
+                                            <h:graphicImage value="../img/star.png"  rendered="#{knowledgePopupController.displayvote > 4}"/>
+                                        </h:panelGroup>
+                                    </td> 
+                                    <td align="center"><h:outputText class="blue04" value="#{knowledgePopupController.knowledgebase.viewcount}">
+                                            <f:convertNumber pattern="#,##0"/>
+                                        </h:outputText></td>
+                                </tr>
+                            </table></td>  </tr>
+                    <!--  Comment  -->
+                    <tr>
+                        <td valign="top" align="center" > <br/><br/>
+                            <rich:dataTable id="kbboardList" style="width: 100%" var="boardlist" rows="10"
+                                            value="#{knowledgePopupController.knowledgebasesboard}" 
+                                            onrowmouseover="this.style.backgroundColor='#e9fcf8'"
+                                            onrowmouseout="this.style.backgroundColor='#FFFFFF'"
+                                            rendered="#{knowledgePopupController.knowledgebasesboard.size() > 0}">
+                                <f:facet name="header">
+                                    <rich:columnGroup>
+                                        <rich:column styleClass="subh01" colspan="2"><h:outputText value="Board"/></rich:column>
+                                    </rich:columnGroup>
+                                </f:facet>
+                                <rich:column styleClass="line01">
+                                    <table width="100%">
+                                        <tr>
+                                            <td align="center" width="20%"> 
+                                                <img src="#{request.contextPath}/img/guest.png" /><br/>
+                                            </td> 
+                                            <td align="left" valign="top">
+                                                <h:outputText value="Comment: " class="gray03"/><h:outputText value="#{boardlist.no}"/><br/><br/>
+                                                <h:outputText class="blue04" value="#{boardlist.kbboardComment}"/></td>
+                                        </tr> 
+                                        <tr>
+                                            <td align="center"> <h:outputText value="By: " class="gray03"/><h:outputText value="#{boardlist.createBy}"/></td>
+                                            <td style="text-align: right"><br/>
+                                                <h:outputText value="Date: " class="gray03"/><h:outputText value="#{boardlist.createDate}">
+                                                    <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" locale="Locale.US" timeZone="Asia/Bangkok"/>
+                                                </h:outputText>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </rich:column>
+                                <f:facet name="footer">
+                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                </f:facet>
+                            </rich:dataTable>
+                        </td>  
+                    </tr>
+                    <tr style="height: 10px">
+                        <td valign="top" align="center"></td>  
+                    </tr>
+                    <!--  input Comment  -->
+                    <tr>
+                        <td valign="top"> 
+                            <table  width="100%" border="0" bgcolor="#ffffcc" > 
+                                <tr>
+                                    <td  height="30" colspan="2"><h4 class="style1">Comment</h4></td>  
+                                </tr>
+                                <tr>
+                                    <td  height="2" bgcolor="#333333" colspan="2"> </td>  
+                                </tr>
+                                <tr style="height: 100px">
+                                    <td align="center" width="20%" > 
+                                        <img src="#{request.contextPath}/img/guest.png" /><br/>
+                                        <h:outputText value="#{userSession.users.name} #{userSession.users.surname}"/>
+                                    </td> 
+                                    <td align="left"> 
+                                        <p><h:inputTextarea cols="50" rows="4" value="#{knowledgePopupController.comment}"/></p>
+                                        <p><a4j:commandButton image="/img/b_submit.png"  render="detail"
+                                                            actionListener="#{knowledgePopupController.saveComment}"/></p>
+                                    </td>
+                                </tr> 
+                            </table> 
+                        </td>  
+                    </tr>
+                    <tr><td valign="top" align="center" height="8"></td></tr>
+                    <tr>
+                        <td align="center"  >
+                            <table width="100%" > 
+                                <tr>
+                                    <td align="left" class="subh01">Version</td>
+                                    <td align="left" class="subh01">Content Owner</td>
+                                    <td align="left" class="subh01">Last Update</td>
+                                    <td align="left" class="subh01">Approve By</td>
+                                    <td align="left" class="subh01">Date</td>
+                                </tr>
+                                <tr>
+                                    <td align="left"  style="font-size: 8"><h:outputText value="#{knowledgePopupController.knowledgebase.version}" /></td>
+                                    <td align="left"  style="font-size: 8"><h:outputText value="#{knowledgePopupController.users.name} #{knowledgePopupController.users.surname}" /></td>
+                                    <td align="left"  style="font-size: 8">
+                                        <h:outputText value="#{knowledgePopupController.knowledgebase.updateDate}" >
+                                            <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" locale="Locale.US" timeZone="Asia/Bangkok"/>
+                                        </h:outputText></td>
+                                    <td align="left"  style="font-size: 8"><h:outputText value="#{knowledgePopupController.knowledgebase.approvalBy}" /></td>   
+                                    <td align="left"  style="font-size: 8">
+                                        <h:outputText value="#{knowledgePopupController.knowledgebase.approvalDate}" >
+                                            <f:convertDateTime pattern="dd MMM yyyy HH:mm:ss" locale="Locale.US" timeZone="Asia/Bangkok"/>
+                                        </h:outputText></td>
+                                </tr>
+                            </table>                                 
+                        </td>
+                    </tr>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{knowledgePopupController.knowledgebase eq null}">
+                    <h:outputText value="#{knowledgePopupController.message}" style="color:red"/>
+                </h:panelGroup>
+                <tr>
+                    <td valign="top" align="center" > <br/><br/><br/>
+                    </td>  
+                </tr>
+            </table>
+
+        </h:panelGroup>
+    </ui:define>
+
+</ui:composition>
+

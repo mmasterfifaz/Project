@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+    <body>
+        <ui:composition template="../templates/reportmain.xhtml">
+            <ui:define name="title1">Social Report</ui:define>
+            <ui:define name="title2">Statistic Report of Approval by Case</ui:define>
+            <ui:define name="panel">
+                <h:panelGroup id="mainPanel1">
+                <table width="80%" border="0" align="center" cellpadding="4" cellspacing="0">
+                    <tr>
+                        <td width="200" align="right" valign="top">Contact Date:</td>
+                        <td><rich:calendar value="#{statisticApprovalByCaseReport.fromDate}" inputClass="textfield" buttonClass="rfcalbtn" inputSize="10"
+                                   datePattern="#{msg.datePattern}" locale="#{msg.locale}"/><span style="padding-left:2px"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Grouping of User:</td>
+                        <td valign="top">
+                            <h:selectOneRadio value="#{statisticApprovalByCaseReport.userOption}" valueChangeListener="#{statisticApprovalByCaseReport.userOptionListener}">
+                                <f:selectItems value="#{statisticApprovalByCaseReport.userOptionList}"/>
+                                <a4j:ajax event="click" render="mainPanel1" execute="@this"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <table width="100%" border="0" align="center" cellpadding="0" cellspacing="4">
+                            <h:panelGroup id="serviceTypePanel" rendered="#{statisticApprovalByCaseReport.userOption eq 1}">
+                             <tr>
+                                <td width="200" align="right" valign="top">Social Service Type:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="soSevice" value="#{statisticApprovalByCaseReport.soServiceId}" styleClass="select08">
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{statisticApprovalByCaseReport.soServiceList}"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            <h:panelGroup id="userGroupPanel" rendered="#{statisticApprovalByCaseReport.userOption eq 0}">
+                            <tr>
+                                <td width="200" align="right" valign="top">User Group:</td>
+                                <td valign="top">
+                                    <h:selectOneMenu id="usergroup" value="#{statisticApprovalByCaseReport.userGroupId}" styleClass="select08" >
+                                        <f:selectItem itemValue="0" itemLabel="#{msg.all}"/>
+                                        <f:selectItems value="#{statisticApprovalByCaseReport.usergroupList}"/>
+                                    </h:selectOneMenu>
+                                </td>
+                            </tr>
+                            </h:panelGroup>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Source Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="sorucetype" value="#{statisticApprovalByCaseReport.sourceTypeID}" styleClass="select08">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticApprovalByCaseReport.channelList}" />
+                            </h:selectOneMenu>    
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Case Type:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="casetype" value="#{statisticApprovalByCaseReport.soCaseTypeId}" style="width: 350px;"
+                                             valueChangeListener="#{statisticApprovalByCaseReport.soCaseTypeListener}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticApprovalByCaseReport.soCaseTypeList}" />
+                                <a4j:ajax event="change" render="subcasetype" execute="@this"/>
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right">Case Topic:</td>
+                        <td align="left">
+                            <h:selectOneMenu id="subcasetype" value="#{performanceByUser.soSubCaseTypeId}" style="width: 350px;"
+                                             disabled="#{statisticApprovalByCaseReport.soSubCaseTypeList.size() eq 0}">
+                                <f:selectItem itemLabel="#{msg.all}"/>
+                                <f:selectItems value="#{statisticApprovalByCaseReport.soSubCaseTypeList}" />
+                            </h:selectOneMenu>   
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="middle">Output Type:</td>
+                        <td valign="top"><h:selectOneRadio value="#{statisticApprovalByCaseReport.outputFormat}">
+                                <f:selectItems value="#{statisticApprovalByCaseReport.outputFormatList}"/>
+                            </h:selectOneRadio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="right" valign="top">&nbsp;</td>
+                        <td valign="top">
+                            <h:commandLink action="blank.xhtml" actionListener="#{statisticApprovalByCaseReport.reportListener}" target="_blank">
+                                    <img alt="Report" src="../img/b_report.png"/>
+                            </h:commandLink></td>
+                    </tr>
+                </table>
+                </h:panelGroup> 
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

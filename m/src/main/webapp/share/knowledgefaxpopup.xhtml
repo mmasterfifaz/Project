@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"> 
+
+    <h:body >
+        <ui:composition template="../templates/blank.xhtml">
+            <ui:define name="title2">Fax</ui:define>
+            <ui:define name="panel"> 
+                <table width="550" border="0" bgcolor="#ffffcc"  >
+                    <tr>
+                        <td  height="30"><h2><img src="#{request.contextPath}/img/head_kb_fax.png" />Fax</h2>
+                        </td>  
+                    </tr>
+                    <tr>
+                        <td  height="2" bgcolor="#333333"> </td>  
+                    </tr>
+                    <tr>
+                        <td    > 
+                            <table width="100%" border="0"  >
+                                <tr>
+                                    <td valign="top"  width="30%" align="right">From (No.):</td>  
+                                    <td valign="top"  ><h:outputText  value="#{knowledgeFaxPopupController.faxfrom}" styleClass="subh01" style="background-color: #ffffcc"/></td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right">To (No.):</td>  
+                                    <td valign="top"  ><h:inputText  value="#{knowledgeFaxPopupController.faxto}" size="50" styleClass="textfield"/></td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right">Subject :</td>  
+                                    <td valign="top"  ><h:inputText  value="#{knowledgeFaxPopupController.faxsubj}" size="50" styleClass="textfield"/></td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right">File :</td>  
+                                    <td valign="top"  >
+                                        <rich:dataTable style="width: 100%;background-color: #ffffcc;"   
+                                                        value="#{knowledgeFaxPopupController.knowledgebaseAttfileList}" rows="#{global.maxrows}" var="attlist">
+                                            <rich:column style="background-color: #ffffcc">
+                                                <h:selectBooleanCheckbox value="#{attlist.delbox}"/><a href="#{request.contextPath}/upload/knowledgebase/#{attlist.knowledgebaseId}/#{attlist.kbattfileFilename}" target="_blank"><h:outputText value="#{attlist.kbattfileFilename}"/></a>
+                                            </rich:column>    
+                                        </rich:dataTable></td>
+                                </tr> 
+                                <tr> 
+                                    <td valign="top" align="right"> Message</td>  
+                                    <td valign="top"   ><h:inputTextarea id="description" value="#{knowledgeFaxPopupController.faxdesc}" rows="6" cols="38"/></td>
+                                </tr>
+                                <tr>
+                                    <td valign="top" align="right"> </td>  
+                                    <td valign="top"  ><h:commandButton image="../img/b_submit.png" actionListener="#{knowledgeFaxPopupController.sendFax}"  /> <h:commandButton image="../img/b_close.png" onclick="window.close();" /></td>
+                                </tr>
+                            </table>
+                        </td>  
+                    </tr>
+                </table>
+
+
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>

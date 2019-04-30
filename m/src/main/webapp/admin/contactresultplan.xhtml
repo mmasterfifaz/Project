@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:a4j="http://richfaces.org/a4j"
+      xmlns:rich="http://richfaces.org/rich">
+
+
+    <body>
+        <ui:composition template="../templates/adminmain.xhtml">
+            <ui:define name="title1">Administration</ui:define>
+            <ui:define name="title2">Contact Result Plan</ui:define>
+            <ui:define name="button">
+                <h:commandButton image="../img/b_add.png" action="#{contactResultPlanController.editAction}"  rendered="#{contactResultPlanController.addPermitted}"/>
+                <h:commandButton image="../img/b_delete.png" action="#{contactResultPlanController.deleteAction}" rendered="#{contactResultPlanController.deletePermitted}" onclick="return checkDelete(this.form)"/>
+            </ui:define>
+            <ui:define name="panel">
+                <rich:dataTable style="width: 100%" styleClass="tableline01" headerClass="subh01" value="#{contactResultPlanController.contactResultPlans}" rows="5" var="list">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column style="width: 5%;text-align: left;">&nbsp;</rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Name"/></rich:column>
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Default"/></rich:column>                            
+                            <rich:column style="width: 20%;text-align: left;"><h:outputText value="Modify Date"/></rich:column>
+                            <rich:column style="width: 30%;text-align: left;"><h:outputText value=""/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:selectBooleanCheckbox value="#{contactResultPlanController.selectedIds[list.id]}" disabled="#{list.isDefault.toString()}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:commandLink title="View Detail" value="#{list.name}" action="#{contactResultPlanController.editAction}">
+                            <f:param name="id" value="#{list.id}"/>                           
+                        </h:commandLink>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.isDefault.toString() == 'true'?'Yes':'No'}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{list.updateDate}"/>
+                    </rich:column>
+                    <rich:column>
+                        <a4j:commandButton oncomplete="#{rich:component('linkToProduct')}.show()"                                                
+                                           image="../img/b_link_to_product.png"
+                                           actionListener="#{contactResultPlanController.linkProductAction}"
+                                           rendered="#{contactResultPlanController.countProductName(list.id) gt 0}"
+                                           render="productField">
+                            <f:param name="id" value="#{list.id}"/>
+                        </a4j:commandButton>
+                    </rich:column>
+                    <f:facet name="footer">        
+                        <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>            
+                    </f:facet>      
+                </rich:dataTable>
+            </ui:define>
+
+            <!-- Pop up Link to Product -->
+            <ui:define name="popupModal">
+                <rich:popupPanel id="linkToProduct" autosized="true" style="padding: 0 0 0 0; border-style: none ">
+
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                        <tr>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box09.png" alt="" width="10" height="48"/></td>
+                            <td valign="middle" background="#{request.contextPath}/img/box11.png"><h2 class="style1">Link to Product</h2></td>
+                            <td valign="middle" align="right" background="#{request.contextPath}/img/box11.png">
+                                <a href="#" class="close_popup" style="cursor:pointer" onclick="#{rich:component('linkToProduct')}.hide(); return false;">#{msg.close}</a></td>
+                            <td width="10" valign="top"><img src="#{request.contextPath}/img/box10.png" alt="" width="10" height="48"/></td>
+                        </tr>
+                    </table>
+
+                    <h:panelGroup id="productField">
+
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td width="5" background="#{request.contextPath}/img/box08.png">
+                                    <img src="#{request.contextPath}/img/box08.png" width="5" height="5"/>
+                                </td>
+                                <td valign="top" bgcolor="#FFFFFF" align="center">
+                                    <table border="0" cellpadding="3" cellspacing="1" width="100%">
+                                        <tr>
+                                            <td valign="top">
+                                                <rich:dataTable styleClass="tableline01" value="#{contactResultPlanController.products}" var="listProduct"
+                                                                onrowmouseover="this.style.backgroundColor='#AFAF67'"
+                                                                onrowmouseout="this.style.backgroundColor='#FFFFFF'">
+
+                                                    <f:facet name="header">
+                                                        <rich:columnGroup >
+                                                            <rich:column styleClass="subh01"><h:outputText value="Product Name"/></rich:column>
+                                                        </rich:columnGroup>
+                                                    </f:facet>
+
+                                                    <rich:column>
+                                                        <h:outputText value="#{listProduct.name}"/>
+                                                    </rich:column>
+                                                </rich:dataTable>
+
+                                                <f:facet name="footer">
+                                                    <rich:dataScroller fastControls="hide" maxPages="#{global.maxpages}" renderIfSinglePage="false"/>
+                                                </f:facet>
+                                            </td>
+                                        </tr>
+                                        <td><br/></td>
+                                        <tr>
+                                            <td valign="top" align="center">
+                                                <a4j:commandButton image="../img/b_ok.png" limitRender="true" onclick="#{rich:component('linkToProduct')}.hide()"/>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td width="4" class="bg_right"></td>
+                            </tr>
+                        </table>
+
+                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                            <tr>
+                                <td background="#{request.contextPath}/img/box04.png" width="10" height="10"></td>
+                                <td background="#{request.contextPath}/img/box07.png"><img src="#{request.contextPath}/img/clear.gif"/></td>
+                                <td background="#{request.contextPath}/img/box03.png" width="10" height="10"></td>
+                            </tr>
+                        </table>
+                    </h:panelGroup>
+                </rich:popupPanel>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<ui:composition template="../templates/popup.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:a4j="http://richfaces.org/a4j"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <ui:define name="popupTitle">Product Plan Detail</ui:define>
+    <ui:param name="modalId" value="productPlanDetailList"/>
+    <ui:param name="width" value="1000"/>
+    <ui:param name="height" value="600"/>
+    <ui:define name="popupDetail">
+        <h:panelGroup id="productPlanDetailListPanel">
+            <div style="height: 450px;width: 970px;overflow: auto;border: 0px solid #666;background-color: #FFFFFF;padding: 0px;">
+                <rich:dataTable id="dataList2" style="width: 100%" styleClass="tableline01" headerClass="subh01"
+                                value="#{productPlanImportController.productPlanDetailSuccess}" rows="10" var="pdLog">
+                    <f:facet name="header">
+                        <rich:columnGroup>
+                            <rich:column><h:outputText value="Plan No"/></rich:column>
+                            <rich:column><h:outputText value="From Value"/></rich:column>
+                            <rich:column><h:outputText value="To Value"/></rich:column>
+                            <rich:column><h:outputText value="Gender"/></rich:column>
+                            <rich:column><h:outputText value="Price"/></rich:column>
+                            <rich:column><h:outputText value="Stamp Duty"/></rich:column>
+                            <rich:column><h:outputText value="Vat"/></rich:column>
+                            <rich:column><h:outputText value="Net Premium"/></rich:column>
+                            <rich:column><h:outputText value="Annual Net Premium"/></rich:column>
+                            <rich:column><h:outputText value="Annual Price"/></rich:column>
+                        </rich:columnGroup>
+                    </f:facet>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.planNo}"/>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.fromVal}">
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.toVal}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.gender}" />
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.price}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.stampDuty}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.vat}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.netPremium}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.annualNetPremium}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <rich:column>
+                        <h:outputText value="#{pdLog.annualPrice}" >
+                            <f:convertNumber pattern="#,##0"/>
+                        </h:outputText>
+                    </rich:column>
+                    <f:facet name="footer">
+                        <rich:dataScroller fastControls="hide" maxPages="5"/>
+                    </f:facet>
+                </rich:dataTable>
+            </div>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

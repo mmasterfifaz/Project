@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:rich="http://richfaces.org/rich"
+                xmlns:a4j="http://richfaces.org/a4j">
+    <h:head>
+        <ui:insert name="popupHead"/>
+    </h:head>
+    <h:body>
+        <h:form>
+            <rich:popupPanel id="sendComposeConfirm" autosized="true" width="423" height="237" shadowOpacity="0" style="width: 423px; height: 237px; padding: 0 0 0 0; border-style: none; background-image: url(#{request.contextPath}/img/popup_follow_bg.png)" >
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="text-align: right; height: 20px; vertical-align: middle">
+                            <a href="#" class="close_popup" style="cursor:pointer; color: gray; padding-top: 10px; padding-right: 10px" onclick="#{rich:component('sendComposeConfirm')}.hide(); return false;">#{msg.close}</a>
+                        </td>
+                    </tr>
+                </table>
+                <br/><br/><br/><br/><br/><br/><br/><br/>
+                <table width="100%" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td style="width: 20px"></td>
+                        <td style="text-align: center; font-size: 16px; font-weight: bold; color: #FFFFFF">Do you want to send this email?</td>
+                        <td style="width: 20px"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td style="text-align: center"><br/><br/>
+                            <a4j:commandButton value="Yes" image="/img/btn_yes.png"
+                                               limitRender="true" execute="@this"
+                                               action="#{m.sendAction}">
+                                <f:param name="statusEmail" value="CL"/>
+                            </a4j:commandButton>
+                            <span style="width: 10px"></span>
+                            <a4j:commandButton value="No" image="/img/btn_staypage.png"
+                                               onclick="#{rich:component('sendComposeConfirm')}.hide(); return false;">
+                            </a4j:commandButton>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+
+                
+            </rich:popupPanel>
+        </h:form>
+    </h:body>
+</ui:composition>
